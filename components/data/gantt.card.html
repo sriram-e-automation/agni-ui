@@ -1,0 +1,51 @@
+<!-- @dsCard group="Data" viewport="900x700" name="Gantt timeline" subtitle="GanttTimeline — group-by rows · navigator row (‹ Today › + day/week/month/quarter/year toggle) · status bars · today line · sizes" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:18px;background:var(--surface-page)}.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:18px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.cap:first-child{margin-top:0}</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { GanttTimeline } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+const Y = 2026;
+const ITEMS = [
+  { id:"REC-2402", label:"Purchase request",   sublabel:"Meera Krishnan",  requestType:"Purchase request",   application:"Procurement", start:"12 Jun", end:"16 Jun", status:"approvals" },
+  { id:"REC-2401", label:"Purchase request",   sublabel:"Karthik Reddy",   requestType:"Purchase request",   application:"Procurement", start:"13 Jun", end:"18 Jun", status:"todo" },
+  { id:"REC-2408", label:"Purchase request",   sublabel:"Aravind Prabhu",  requestType:"Purchase request",   application:"Procurement", start:"08 Jun", end:"20 Jun", status:"progress", progress:0.55 },
+  { id:"REC-2403", label:"Fabrication order",  sublabel:"Vikram Singh",    requestType:"Fabrication order",  application:"Fabrication", start:"09 Jun", end:"22 Jun", status:"progress", progress:0.4 },
+  { id:"REC-2414", label:"Fabrication order",  sublabel:"Rajesh Nambiar",  requestType:"Fabrication order",  application:"Fabrication", start:"28 May", end:"10 Jun", status:"overdue" },
+  { id:"REC-2410", label:"Fabrication order",  sublabel:"Arjun Nair",      requestType:"Fabrication order",  application:"Fabrication", start:"30 May", end:"06 Jun", status:"done" },
+  { id:"REC-2406", label:"Access request",     sublabel:"Meera Krishnan",  requestType:"Access request",     application:"IT",          start:"12 Jun", end:"17 Jun", status:"todo" },
+  { id:"REC-2416", label:"Access request",     sublabel:"Bala Krishnan",   requestType:"Access request",     application:"IT",          start:"02 Jun", end:"05 Jun", status:"rejected" },
+  { id:"REC-2419", label:"Service request",    sublabel:"Deepa Pillai",    requestType:"Service request",    application:"Facilities",  start:"07 Jun", end:"19 Jun", status:"progress", progress:0.7 },
+  { id:"REC-2420", label:"Service request",    sublabel:"Dhruv Malhotra",  requestType:"Service request",    application:"Facilities",  start:"26 May", end:"01 Jun", status:"done" },
+];
+const GROUPS = [
+  { key:"requestType", label:"Request type" },
+  { key:"application", label:"Application"  },
+  { key:"id",          label:"Request ID"   },
+];
+function Demo(){
+  return (<div>
+    <div className="cap">Interactive — group-by toolbar · navigator row: ‹ Today › (left) + day/week/month/quarter/year toggle (right) · hover a bar · today line</div>
+    <div style={{height:378, display:"flex"}}>
+      <GanttTimeline items={ITEMS} groupOptions={GROUPS} defaultGroupBy="requestType" defaultScale="week"
+        defaultYear={Y} onItemClick={()=>{}} style={{flex:1}} />
+    </div>
+    <div className="cap">Size sm — flat (no grouping), toolbar hidden — navigator row persists with the scale toggle (independent of showToolbar)</div>
+    <GanttTimeline items={ITEMS.slice(0,4)} defaultScale="month" groupBy={null} showToolbar={false} size="sm" defaultYear={Y} />
+    <div className="cap">Fully chromeless — showToolbar + showNavigator both false (host owns all paging/scale UI)</div>
+    <GanttTimeline items={ITEMS.slice(0,4)} scale="quarter" groupBy={null} showToolbar={false} showNavigator={false} size="sm" defaultYear={Y} />
+    <div className="cap">Usage</div>
+    <pre style={{fontFamily:"var(--font-data)",fontSize:"var(--text-xs)",background:"var(--surface-card)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:14,overflow:"auto"}}>{`<GanttTimeline items={items} groupOptions={GROUPS} defaultGroupBy="requestType" defaultScale="week" onItemClick={openRecord}/>`}</pre>
+    <div className="cap">Responsive</div>
+    <p style={{font:"var(--fw-regular) var(--text-xs)/1.5 var(--font-sans)",color:"var(--text-tertiary)",maxWidth:"74ch",margin:0}}>The timeline scrolls horizontally past its container width rather than reflowing — there is no column collapse, since a Gantt bar's meaning depends on the horizontal date axis. On tablet/phone give it a wrapper with <code>overflow-x:auto</code> and drop <code>defaultScale</code> to <code>"month"</code> or <code>"quarter"</code> so fewer columns need to be scrolled through.</p>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script></body></html>

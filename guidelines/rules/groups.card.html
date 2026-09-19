@@ -1,0 +1,123 @@
+<!-- @dsCard group="Chrome" viewport="1000x1220" name="Page blocks — the eight groups" subtitle="The composed blocks a module page is built from, and the one declarative action contract they share" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<style>
+body{margin:0;padding:28px 30px;background:var(--surface-page);font-family:var(--font-sans);color:var(--text-primary)}
+h1{font:var(--fw-bold) var(--text-2xl)/1.2 var(--font-display);margin:0 0 4px;letter-spacing:var(--tracking-tight)}
+.lede{font:var(--text-sm)/1.6 var(--font-sans);color:var(--text-secondary);margin:0 0 26px;max-width:76ch}
+h2{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:30px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}
+p{font:var(--text-sm)/1.6 var(--font-sans);color:var(--text-secondary);margin:0 0 10px;max-width:80ch}
+table{border-collapse:collapse;width:100%;margin:0 0 12px}
+th{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);text-align:left;padding:0 12px 8px 0;border-bottom:1px solid var(--border-subtle)}
+td{font:var(--text-sm)/1.55 var(--font-sans);color:var(--text-secondary);padding:10px 12px 10px 0;border-bottom:1px solid var(--border-subtle);vertical-align:top}
+td:last-child,th:last-child{padding-right:0}
+code{font-family:var(--font-data);font-size:var(--text-xs);background:var(--surface-sunken);padding:1px 5px;border-radius:var(--radius-xs);color:var(--text-primary)}
+td strong{color:var(--text-primary)}
+pre{font:var(--text-xs)/1.65 var(--font-data);background:var(--surface-sunken);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:14px 16px;overflow:auto;color:var(--text-secondary);margin:0 0 12px}
+.pull{border-left:3px solid var(--action-brand);padding:2px 0 2px 14px;margin:14px 0 18px;font:var(--fw-medium) var(--text-sm)/1.6 var(--font-sans);color:var(--text-primary);max-width:74ch}
+.anat{display:flex;flex-direction:column;gap:6px;background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:14px;margin-bottom:14px}
+.slab{border:1px dashed var(--border-default);border-radius:var(--radius-md);padding:10px 12px;font:var(--fw-semibold) var(--text-xs)/1.4 var(--font-sans);color:var(--text-secondary);background:var(--surface-soft)}
+.slab span{display:block;font:var(--text-2xs)/1.5 var(--font-sans);font-weight:var(--fw-regular);color:var(--text-tertiary);margin-top:3px}
+.row{display:grid;grid-template-columns:1fr 300px;gap:6px}
+a{color:var(--text-brand)}a:hover{text-decoration:underline}
+</style>
+</head><body>
+<h1>Page blocks — the eight groups</h1>
+<p class="lede">A module page in this ERP is assembled from eight composed components, not from forty primitives. Each one owns a region of the page, composes existing DS parts rather than redrawing them, and exposes everything inside it through props. Reach for a primitive only when a page genuinely does something no block covers.</p>
+
+<p class="pull">A group adds no new visual vocabulary. If a group draws something a component could have drawn, that is a missing component, not a group feature.</p>
+
+<h2>Page anatomy</h2>
+<div class="anat">
+  <div class="slab">PageHeader<span>the two rows below, in one card — mount this rather than the pair</span></div>
+  <div class="slab">PageTitleBar<span>back · icon + title + status badge · subtitle · scope tabs with counts · view switcher · export / secondary / primary actions</span></div>
+  <div class="slab">StatsOverview<span>heading + date range + actions · QuickStats click-to-filter strip · auto-fit ChartCard grid</span></div>
+  <div class="row">
+    <div class="slab">RecordTable<span>PageControls toolbar (search · facets · date · sort · columns · export · primary) → DataTable → row actions → selection bulk bar → Pagination</span></div>
+    <div class="slab">ApprovalPanel<span>stage + status · stepper · role-gated decisions + required note · audit trail</span></div>
+  </div>
+  <div class="row">
+    <div class="slab">RecordForm<span>the create / edit surface — FormSection grids, validation, review &amp; submit</span></div>
+    <div class="slab">RecordDetailModal<span>the dialog form of the record — the same approval parts, over a list</span></div>
+  </div>
+</div>
+
+<h2>The eight</h2>
+<table>
+<tr><th style="width:19%">Group</th><th style="width:9%">Family</th><th style="width:8%">Ver</th><th>Composes</th></tr>
+<tr><td><strong>PageTitleBar</strong></td><td>chrome</td><td><code>1.0.0</code></td><td>Cluster · Tag · Button (via ActionSpec) · Loading</td></tr>
+<tr><td><strong>PageControls</strong></td><td>data</td><td><code>1.0.0</code></td><td>Input · Select · FilterPanel · DateRangeFilter · BulkActionToolbar · Pagination · Button · Loading</td></tr>
+<tr><td><strong>PageHeader</strong></td><td>chrome</td><td><code>1.0.0</code></td><td>PageTitleBar · PageControls · QuickStats — the whole page top, with the card shell, the sticky wrapper and the quick-stats toggle</td></tr>
+<tr><td><strong>RecordTable</strong></td><td>data</td><td><code>1.0.0</code></td><td>PageControls · DataTable · Button · BulkActionToolbar · Pagination · DataState</td></tr>
+<tr><td><strong>StatsOverview</strong></td><td>data</td><td><code>1.0.0</code></td><td>QuickStats · ChartCard · DateRangeFilter · Button</td></tr>
+<tr><td><strong>ApprovalPanel</strong></td><td>workflow</td><td><code>1.0.0</code></td><td>Card · Tag · ApprovalStepper · Textarea · AuditTrail · Button · DataState</td></tr>
+<tr><td><strong>RecordForm</strong></td><td>workflow</td><td><code>1.0.0</code></td><td>FormSection · FormField · every forms control · ConfirmModal</td></tr>
+<tr><td><strong>RecordDetailModal</strong></td><td>workflow</td><td><code>1.0.0</code></td><td>Modal · ApprovalStepper · AuditTrail · DetailList · AttachmentRow · Button</td></tr>
+</table>
+<p>Each has its own card with a live instance and the full state matrix. <code>RecordForm</code> and <code>RecordDetailModal</code> are on the Workflow cards; the other six are here and on Data / Chrome.</p>
+
+<h2>ActionSpec — one action contract, every group</h2>
+<p>Every group takes <code>primaryAction</code>, <code>secondaryActions</code> and <code>exportAction</code> as data, not as JSX. That is what lets a group role-gate, size and disable its own actions instead of trusting each page to do it the same way. The <code>actions</code> ReactNode slot survives on every group as the escape hatch, rendered after the declarative set.</p>
+<pre>interface ActionSpec {
+  key?, label, icon?          // icon is a Phosphor class: "ph-plus"
+  kind?    // "primary" | "secondary" | "tertiary" | "ghost" | "danger" | "brand-soft"
+  size?    // "sm" | "md" | "lg"
+  iconOnly?, round?, active?
+  disabled?, disabledReason?  // reason becomes the tooltip while disabled
+  loading?, hidden?
+  items?                      // secondary choices → Button's split treatment
+  roles?                      // core/RoleGate contract; omit to always show
+  onClick?
+}</pre>
+<pre>interface ExportActionSpec {
+  enabled?   // default true. false → VISIBLE but disabled, with disabledReason
+  formats?   // 2+ → split menu; 1 → plain button; 0 → plain button, no format arg
+  loading?, label?, icon?, kind?, iconOnly?, roles?
+  onExport?(formatKey?)
+}</pre>
+
+<h2>Three decisions inside these props, and why</h2>
+<table>
+<tr><th style="width:32%">Decision</th><th>Reasoning</th></tr>
+<tr><td><strong>A withheld export is <em>disabled</em>, not hidden.</strong></td><td>A records page that changes shape per viewer looks broken to the person who asks why their colleague has a button they don't. <code>enabled: false</code> keeps it in place with a reason on hover. Omit the prop entirely only when the page genuinely has no export.</td></tr>
+<tr><td><strong>A withheld <em>row action column</em> is hidden.</strong></td><td>The opposite call, for the opposite reason: an action column that renders empty for every row is a column of whitespace advertising nothing. If a viewer's role matches no row action, <code>RecordTable</code> drops the whole trailing column.</td></tr>
+<tr><td><strong>Row actions may be a function of the row.</strong></td><td>Availability usually depends on the record, not only on the viewer — an approved request cannot be approved again. <code>rowActions={row =&gt; […]}</code> keeps that logic beside the action instead of in a wrapper.</td></tr>
+</table>
+
+<h2>Pairing rules</h2>
+<table>
+<tr><th style="width:32%">When</th><th>Then</th></tr>
+<tr><td>PageTitleBar and PageControls are both on screen</td><td>Mount <code>PageHeader</code>, which owns the card shell and enforces the next rule for you.</td></tr>
+<tr><td>Both rows carry a view switcher</td><td>The <strong>title bar</strong> owns it. PageHeader drops any <code>viewModes</code> passed to <code>controls</code>; mounting the pair by hand, do not pass it.</td></tr>
+<tr><td>The page has a quick-stats strip</td><td><code>PageHeader stats={…}</code> — the toggle renders in the toolbar's leading slot and the strip's open state is the header's, not the page's.</td></tr>
+<tr><td>Using RecordTable</td><td>Do not also mount PageControls or Pagination — RecordTable owns both. Pass them through <code>controls</code> and <code>pagination</code>.</td></tr>
+<tr><td>The approval sits on a record page</td><td><code>ApprovalPanel</code>. Over a list, <code>RecordDetailModal</code>. They read the same three parts, so they cannot drift.</td></tr>
+<tr><td>A page needs one bespoke control</td><td>Use the group's <code>actions</code> / <code>leading</code> slot. Do not fork the group.</td></tr>
+</table>
+
+<h2>A whole records page</h2>
+<pre>const { PageTitleBar, StatsOverview, RecordTable } =
+  window.AgniUIAgnikulERPDesignSystem_153d9e;
+
+&lt;PageTitleBar
+  icon="ph-clipboard-text" title="Requests" subtitle="312 records · updated 2 min ago"
+  tabs={SCOPES} tab={scope} onTabChange={setScope}
+  viewModes={VIEWS} viewMode={view} onViewModeChange={setView}
+  role={me.role}
+  secondaryActions={[{ label:"Settings", icon:"ph-gear", iconOnly:true }]}
+  primaryAction={{ label:"New request", icon:"ph-plus", onClick:openForm }} /&gt;
+
+&lt;StatsOverview stats={STATS} statValue={stat} onStatChange={setStat} charts={CHARTS} /&gt;
+
+&lt;RecordTable
+  columns={COLUMNS} rows={rows} role={me.role}
+  selectable selected={sel} onSelect={setSel} bulkActions={BULK}
+  rowActions={row =&gt; ACTIONS_FOR(row)}
+  controls={{ search, onSearch, filterSections, filterValue, onFilterChange,
+              sortOptions, sort, onSortChange,
+              exportAction:{ formats:FORMATS, onExport } }}
+  pagination={{ page, pageCount, onChange:setPage, totalLabel }}
+  loading={isLoading} error={err} onRetry={refetch} /&gt;</pre>
+</body></html>

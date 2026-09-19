@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Desk App Scaffold" description="Canonical Desk shell: rail nav + header (settings/accent) + workspace pane + app switcher + content region (table/card/kanban)." -->
+<helmet>
+  <script src="./ds-base.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/duotone/style.css" />
+  <script src="./data.js"></script>
+  <style>html,body{margin:0;height:100%;overflow:hidden;background:var(--surface-page)}</style>
+</helmet>
+<x-import component="AdminApp" from="./admin.app.tsx" form-columns="{{ formColumns }}" detail-columns="{{ detailColumns }}" hint-size="100%,100vh"></x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;formColumns&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[2,3],&quot;default&quot;:2,&quot;tsType&quot;:&quot;2 | 3&quot;},&quot;detailColumns&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[2,3],&quot;default&quot;:2,&quot;tsType&quot;:&quot;2 | 3&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      formColumns: Number(this.props.formColumns) === 3 ? 3 : 2,
+      detailColumns: Number(this.props.detailColumns) === 2 ? 2 : 3,
+    };
+  }
+}
+</script>
+</body>
+</html>

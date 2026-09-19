@@ -1,0 +1,117 @@
+<!-- @dsCard group="Chrome" viewport="1180x1500" name="Shell — header & footer" subtitle="ShellHeader: rail open · rail collapsed (monogram) · phone (hamburger) · dark — brand cell, module tile, bell, gear, presence, profile · ShellFooter" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:20px;background:var(--surface-page)}.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:26px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.lbl{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);margin:0 0 8px}.note{font:var(--fw-regular) var(--text-xs)/1.5 var(--font-sans);color:var(--text-tertiary);margin:8px 0 20px;max-width:70ch}.frame{border:1px solid var(--border-default);border-radius:var(--radius-lg);background:var(--surface-card);position:relative;margin-bottom:6px}.pt{border-collapse:collapse;width:100%;margin:0 0 14px;max-width:1000px}.pt th{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);text-align:left;padding:0 12px 8px 0;border-bottom:1px solid var(--border-subtle)}.pt td{font:var(--text-xs)/1.55 var(--font-sans);color:var(--text-secondary);padding:9px 12px 9px 0;border-bottom:1px solid var(--border-subtle);vertical-align:top}.pt td:last-child,.pt th:last-child{padding-right:0}.pt code{font-family:var(--font-data);font-size:var(--text-2xs);background:var(--surface-sunken);padding:1px 5px;border-radius:var(--radius-xs);color:var(--text-primary)}.pt td strong{color:var(--text-primary)}</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { ShellHeader, ShellFooter } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+const NOTIFS=[
+  {id:"n1",icon:"ph-seal-check",message:"Purchase request REC-2401 was approved by Aravind Prabhu.",time:"10:05",date:"Today",read:false},
+  {id:"n2",icon:"ph-user-switch",message:"Fabrication order REC-2403 assigned to Vikram Singh.",time:"09:18",date:"Today",read:false},
+];
+function Demo(){
+  const [dark,setDark]=React.useState(false);
+  const [accent,setAccent]=React.useState(null);
+  const [scale,setScale]=React.useState("md");
+  const [notifs,setNotifs]=React.useState(NOTIFS);
+  return (<div>
+    <div className="lbl">ShellHeader — rail-aligned brand cell, module tile + breadcrumb, bell, gear, presence, profile</div>
+    <div style={{border:"1px solid var(--border-default)",borderRadius:"var(--radius-lg)",overflow:"visible",background:"var(--surface-card)",marginBottom:20,position:"relative"}}>
+      <ShellHeader
+        logoSrc="../../assets/logos/agnikul-wordmark.svg" monogramSrc="../../assets/logos/agnikul-monogram-flame.svg" brandAlt="Agnikul"
+        moduleName="Procurement" moduleIcon="ph-shopping-cart" version="v2.3.1"
+        workspaceLabel="Workspace" pageTitle="Purchase requests"
+        user={{name:"Aravind Prabhu",role:"Workspace · Lead"}}
+        profileItems={[{icon:"ph-arrows-left-right",label:"Switch desk"},{icon:"ph-sign-out",label:"Log out",danger:true}]}
+        activeUsers={["Meera Krishnan","Vikram Singh","Priya Nair","S. Rao","Karthik Reddy"]}
+        notifications={notifs} onNotificationsChange={setNotifs}
+        dark={dark} onDarkChange={setDark} accent={accent} onAccentChange={setAccent} scale={scale} onScaleChange={setScale}
+        navOpen railW="220px"/>
+    </div>
+    <div className="lbl">Rail collapsed — the brand cell narrows to the monogram, breadcrumb and actions unchanged</div>
+    <div className="frame">
+      <ShellHeader
+        logoSrc="../../assets/logos/agnikul-wordmark.svg" monogramSrc="../../assets/logos/agnikul-monogram-flame.svg" brandAlt="Agnikul"
+        moduleName="Procurement" moduleIcon="ph-shopping-cart" version="v2.3.1"
+        workspaceLabel="Workspace" pageTitle="Purchase requests"
+        user={{name:"Aravind Prabhu",role:"Workspace · Lead"}}
+        activeUsers={["Meera Krishnan","Vikram Singh","Priya Nair"]}
+        notifications={notifs} onNotificationsChange={setNotifs}
+        dark={dark} onDarkChange={setDark}
+        navOpen={false} railW="64px"/>
+    </div>
+    <p className="note">The brand cell always matches the nav rail's width (<code>railW</code>), so the two never disagree — pass the same value you gave the rail.</p>
+    <div className="lbl">Phone — hamburger replaces the brand cell; presence and version drop away</div>
+    <div className="frame" style={{width:390}}>
+      <ShellHeader
+        monogramSrc="../../assets/logos/agnikul-monogram-flame.svg" brandAlt="Agnikul"
+        moduleName="Procurement" moduleIcon="ph-shopping-cart"
+        workspaceLabel="Workspace" pageTitle="Purchase requests"
+        user={{name:"Aravind Prabhu",role:"Lead"}}
+        notifications={notifs} onNotificationsChange={setNotifs}
+        dark={dark} onDarkChange={setDark}
+        isPhone onMenu={()=>{}}/>
+    </div>
+    <p className="note">At the phone breakpoint the rail becomes an overlay drawer, so the header takes the hamburger. Omit <code>activeUsers</code> and <code>version</code> there — they cost width the breadcrumb needs.</p>
+    <div className="lbl">Dark</div>
+    <div className="frame" data-theme="dark">
+      <ShellHeader
+        logoSrc="../../assets/logos/agnikul-wordmark.svg" monogramSrc="../../assets/logos/agnikul-monogram-flame.svg" brandAlt="Agnikul"
+        moduleName="Procurement" moduleIcon="ph-shopping-cart" version="v2.3.1"
+        workspaceLabel="Workspace" pageTitle="Purchase requests"
+        user={{name:"Aravind Prabhu",role:"Workspace · Lead"}}
+        activeUsers={["Meera Krishnan","Vikram Singh","Priya Nair"]}
+        notifications={notifs} onNotificationsChange={setNotifs}
+        dark onDarkChange={()=>{}}
+        navOpen railW="220px"/>
+    </div>
+    <p className="note">Dark is a token swap on an ancestor — the same component, no duplicated markup.</p>
+    <div className="lbl">ShellFooter — signature + copyright</div>
+    <div style={{border:"1px solid var(--border-default)",borderRadius:"var(--radius-lg)",overflow:"hidden",background:"var(--surface-card)"}}>
+      <ShellFooter signatureLogoSrc="../../assets/logos/automation-logo.svg" signatureAlt="Automation"/>
+    </div>
+    <div className="cap">Props</div>
+    <div className="lbl">ShellHeader</div>
+    <table className="pt"><tbody>
+      <tr><th style={{width:"24%"}}>Prop</th><th style={{width:"26%"}}>Type</th><th>Notes</th></tr>
+      <tr><td><strong>logoSrc · monogramSrc · brandAlt</strong></td><td><code>string</code></td><td>Wordmark while the rail is open; compact monogram when collapsed on phones.</td></tr>
+      <tr><td><strong>moduleName · moduleIcon · version</strong></td><td><code>string</code></td><td>The module tile. Icon defaults to "ph-squares-four".</td></tr>
+      <tr><td><strong>workspaceLabel · pageTitle</strong></td><td><code>string</code></td><td>Breadcrumb: workspace label › current page.</td></tr>
+      <tr><td><strong>user · profileItems</strong></td><td><code>ShellUser · ShellProfileItem[]</code></td><td>Signed-in identity and the rows of the profile dropdown beneath it.</td></tr>
+      <tr><td><strong>activeUsers</strong></td><td><code>string[]</code></td><td>Names shown as an overlapping AvatarStack presence group.</td></tr>
+      <tr><td><strong>notifications · onNotificationsChange</strong></td><td><code>NotificationItem[] · (items) =&gt; void</code></td><td>Controlled feed. Omit to hide the bell entirely.</td></tr>
+      <tr><td><strong>dark · accent · wallpaper · scale (+ their onChange)</strong></td><td><code>SettingsMenu pass-through</code></td><td>Each appearance section hides itself when its callback is omitted — pass onScaleChange only where display size is actually supported. Omit them all to hide the gear.</td></tr>
+      <tr><td><strong>navOpen · railW</strong></td><td><code>boolean · string</code></td><td>Rail geometry — the brand cell matches the nav rail width.</td></tr>
+      <tr><td><strong>isPhone · onMenu</strong></td><td><code>boolean · () =&gt; void</code></td><td>Phone layout and its hamburger callback.</td></tr>
+    </tbody></table>
+    <div className="lbl">ShellFooter</div>
+    <table className="pt"><tbody>
+      <tr><th style={{width:"24%"}}>Prop</th><th style={{width:"26%"}}>Type</th><th>Notes</th></tr>
+      <tr><td><strong>signatureText</strong></td><td><code>string</code></td><td>Text before the signature logo. Default "Designed &amp; developed by".</td></tr>
+      <tr><td><strong>signatureLogoSrc · signatureAlt</strong></td><td><code>string</code></td><td>Signature logo at the left edge.</td></tr>
+      <tr><td><strong>copyright</strong></td><td><code>string</code></td><td>Right-edge line. Defaults to "© &lt;year&gt; Agnikul Cosmos".</td></tr>
+      <tr><td><strong>children</strong></td><td><code>ReactNode</code></td><td>Replaces the default content entirely.</td></tr>
+    </tbody></table>
+    <div className="cap">Usage</div>
+    <pre style={{fontFamily:"var(--font-data)",fontSize:"var(--text-xs)",background:"var(--surface-sunken)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:14,overflow:"auto"}}>{`<ShellHeader logoSrc={logo} monogramSrc={monogram} moduleName="Procurement" moduleIcon="ph-shopping-cart"
+  user={user} notifications={items} onNotificationsChange={setItems}
+  navOpen={railOpen} railW={railOpen ? "220px" : "64px"}
+  isPhone={isPhone} onMenu={openDrawer}/>`}</pre>
+    <div className="cap">Responsive</div>
+    <table className="pt"><tbody>
+      <tr><th style={{width:"18%"}}>Breakpoint</th><th>Behavior</th></tr>
+      <tr><td><strong>Desktop ≥ 1024</strong></td><td>Full brand cell (wordmark), module tile + breadcrumb, presence stack, bell, gear, profile — pass <code>railW</code> to match the rail's current width exactly.</td></tr>
+      <tr><td><strong>Tablet 640–1023</strong></td><td>Same layout with the rail collapsed: <code>navOpen=false railW="64px"</code> narrows the brand cell to the monogram only; breadcrumb and actions are unchanged.</td></tr>
+      <tr><td><strong>Phone &lt; 640</strong></td><td>Pass <code>isPhone</code>: the brand cell is replaced by a hamburger (<code>onMenu</code>), and <code>activeUsers</code> / <code>version</code> should be omitted — they cost width the breadcrumb needs.</td></tr>
+    </tbody></table>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script></body></html>

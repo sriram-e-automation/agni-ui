@@ -1,0 +1,79 @@
+<!-- @dsCard group="Forms" viewport="900x1100" name="Form inputs — advanced" subtitle="Select (searchable · creatable · multiple · users) · QuantityStepper · RichTextEditor · FileUpload · EditableTable — closed, open menu, error & disabled" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>
+  body{margin:0;padding:18px;background:var(--surface-page)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .f{display:flex;flex-direction:column;gap:var(--field-label-gap)}
+  .lbl{font:var(--fw-medium) var(--text-sm)/1.2 var(--font-sans);color:var(--text-secondary)}
+  .lbl .req{color:var(--required-mark);margin-left:2px}
+  .span2{grid-column:1 / -1}
+</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const NS = window.AgniUIAgnikulERPDesignSystem_153d9e;
+const { Select, QuantityStepper, RichTextEditor, FileUpload, EditableTable } = NS;
+const PEOPLE=[
+  {id:"u1",name:"Aravind Prabhu",team:"Propulsion · Lead"},
+  {id:"u2",name:"Meera Krishnan",team:"Avionics · Engineer"},
+  {id:"u3",name:"Rohit Sharma",team:"Structures · Engineer"},
+  {id:"u4",name:"Priya Nair",team:"Quality · Reviewer"},
+];
+const CITIES=["Chennai","Bengaluru","Hyderabad","Sriharikota","Thiruvananthapuram"];
+function Field({label,req,children,span}){return <div className={"f"+(span?" span2":"")}><span className="lbl">{label}{req&&<span className="req">*</span>}</span>{children}</div>;}
+/* Open-state rows: each select is rendered pre-opened by clicking its trigger on mount,
+   so the card shows the menu — the state consumers actually need to see. */
+function Opened({children,h=250}){
+  const ref=React.useRef(null);
+  React.useEffect(()=>{
+    const t=setTimeout(()=>{
+      const el=ref.current&&ref.current.querySelector(':scope > div > div');
+      if(el){ el.dispatchEvent(new MouseEvent('mousedown',{bubbles:true})); el.click(); }
+    },120);
+    return ()=>clearTimeout(t);
+  },[]);
+  return <div ref={ref} style={{minHeight:h}}>{children}</div>;
+}
+function Demo(){
+  const [a,setA]=React.useState(null), [b,setB]=React.useState(null), [u,setU]=React.useState("u1"), [mu,setMu]=React.useState(["u2","u3"]), [qty,setQty]=React.useState(3);
+  const [files,setFiles]=React.useState([]);
+  const [rows,setRows]=React.useState([{item:"Bracket, Ti-6Al-4V",qty:4,unit:"Nos"},{item:"Fastener M6",qty:24,unit:"Nos"}]);
+  const [html,setHtml]=React.useState("<p>Mounting bracket for the stage-2 avionics bay.</p>");
+  return (<div className="grid">
+    <Field label="Search & select" req><Select searchable value={a} onChange={setA} options={CITIES} placeholder="Pick a site…"/></Field>
+    <Field label="Search, add new & select" req><Select creatable value={b} onChange={setB} options={["Procurement","Fabrication","Assembly"]} placeholder="Pick or add a stage…"/></Field>
+    <Field label="Assignee (user)" req><Select value={u} onChange={setU} users={PEOPLE}/></Field>
+    <Field label="Assign members (multi)" req><Select multiple value={mu} onChange={setMu} users={PEOPLE} placeholder="Assign members…"/></Field>
+    <Field label="Quantity"><QuantityStepper value={qty} onChange={setQty} min={0} max={999}/></Field>
+    <Field label="Line items" span><EditableTable rows={rows} onChange={setRows} addLabel="Add item"
+      columns={[{key:"item",label:"Item"},{key:"qty",label:"Qty",type:"number",width:90,align:"right"},{key:"unit",label:"Unit",type:"select",width:120,options:["Nos","kg","m","set"]}]}
+      newRow={{item:"",qty:1,unit:"Nos"}}/></Field>
+    <Field label="Attachments" span><FileUpload value={files} onChange={setFiles} accept={["pdf","png","jpg","step"]} maxSizeMB={10}/></Field>
+    <Field label="Description" span><RichTextEditor value={html} onChange={setHtml}/></Field>
+    <Field label="Open menu — Select" span><Opened><Select searchable value={null} onChange={()=>{}} options={CITIES} placeholder="Type to narrow…"/></Opened></Field>
+    <Field label="Open menu — Select (avatar + team rows)" span><Opened><Select value={null} onChange={()=>{}} users={PEOPLE} placeholder="Assign to…"/></Opened></Field>
+    <Field label="States — error · disabled" span>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
+        <Select searchable value={null} onChange={()=>{}} options={CITIES} placeholder="Required" error/>
+        <Select value="u1" onChange={()=>{}} users={PEOPLE} disabled/>
+      </div>
+    </Field>
+    <div className="span2" style={{font:"var(--fw-regular) var(--text-xs)/1.5 var(--font-sans)",color:"var(--text-tertiary)",maxWidth:"66ch"}}>The two rows above mount pre-opened so the menu is documented, not just the trigger. Every select in this family shares the same open behaviour: type to filter, ↑↓ to move, Enter to pick, Esc to close. Menus cap at <code>--max-h-menu</code> (320px) and scroll.</div>
+    <div className="span2" style={{marginTop:16}}>
+      <div style={{font:"var(--fw-bold) var(--text-2xs)/1 var(--font-sans)",letterSpacing:"var(--tracking-wider)",textTransform:"uppercase",color:"var(--text-brand)",marginBottom:10}}>Usage</div>
+      <pre style={{fontFamily:"var(--font-data)",fontSize:"var(--text-xs)",background:"var(--surface-card)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:14,overflow:"auto"}}>{`<Select multiple value={assignees} onChange={setAssignees} users={PEOPLE} placeholder="Assign members…"/>
+<EditableTable rows={lineItems} onChange={setLineItems} columns={COLUMNS} newRow={{item:"",qty:1,unit:"Nos"}}/>`}</pre>
+      <div style={{font:"var(--fw-bold) var(--text-2xs)/1 var(--font-sans)",letterSpacing:"var(--tracking-wider)",textTransform:"uppercase",color:"var(--text-brand)",margin:"14px 0 10px"}}>Responsive</div>
+      <p style={{font:"var(--fw-regular) var(--text-xs)/1.5 var(--font-sans)",color:"var(--text-tertiary)",maxWidth:"74ch",margin:0}}>All of these fill their container. <code>EditableTable</code> scrolls horizontally under its parent's min-content width rather than reflowing columns — give it a wrapper with <code>overflow-x:auto</code> on phone. <code>RichTextEditor</code>'s toolbar wraps its own buttons at narrow widths; nothing else here needs adjustment.</p>
+    </div>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script></body></html>

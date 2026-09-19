@@ -1,0 +1,76 @@
+<!-- @dsCard group="Chrome" viewport="1100x2250" name="NavRail — rail modes" subtitle="Drawer · icon rail · overlay — sub-groups, active item, footer logo, light + dark" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8"><title>NavRail</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:20px;background:var(--surface-page)}.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:20px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.cap:first-child{margin-top:0}.lbl{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);margin:0 0 8px}.note{font:var(--fw-regular) var(--text-xs)/1.5 var(--font-sans);color:var(--text-tertiary);margin:6px 0 0;max-width:60ch}.row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}.dk{background:var(--surface-page);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:14px}.pt{border-collapse:collapse;width:100%;margin:0 0 14px;max-width:1000px}.pt th{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);text-align:left;padding:0 12px 8px 0;border-bottom:1px solid var(--border-subtle)}.pt td{font:var(--text-xs)/1.55 var(--font-sans);color:var(--text-secondary);padding:9px 12px 9px 0;border-bottom:1px solid var(--border-subtle);vertical-align:top}.pt td:last-child,.pt th:last-child{padding-right:0}.pt code{font-family:var(--font-data);font-size:var(--text-2xs);background:var(--surface-sunken);padding:1px 5px;border-radius:var(--radius-xs);color:var(--text-primary)}.pt td strong{color:var(--text-primary)}</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { NavRail } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+const ITEMS=[{key:"quick",label:"Quick access",icon:"ph-lightning"},{key:"dashboard",label:"Dashboard",icon:"ph-chart-pie-slice"},{key:"records",label:"Records",icon:"ph-files",sub:[{key:"all",label:"All records"},{key:"mine",label:"Assigned to me"},{key:"drafts",label:"Drafts"}]},{key:"crew",label:"Crew",icon:"ph-users-three"},{key:"reports",label:"Reports",icon:"ph-chart-bar"}];
+function Frame({label,h=480,dark,children}){
+  return (<div>
+    <div className="lbl">{label}</div>
+    <div data-theme={dark?"dark":undefined} style={{position:"relative",height:h,background:dark?"var(--surface-page)":"var(--surface-page)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",overflow:"hidden",display:"flex"}}>{children}<div style={{flex:1}}></div></div>
+  </div>);
+}
+function Demo(){
+  const [a,setA]=React.useState("all");
+  const [openA,setOpenA]=React.useState(true);
+  const [b,setB]=React.useState("dashboard");
+  const [openB,setOpenB]=React.useState(false);
+  const [c,setC]=React.useState("records");
+  const [dk,setDk]=React.useState("all");
+  return (<div>
+    <div className="cap">Modes</div>
+    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:18}}>
+      <Frame label="Panel — expanded, group open, active sub-item">
+        <NavRail items={ITEMS} active={a} onSelect={setA} open={openA} onToggleOpen={setOpenA} defaultExpanded={["records"]} footerLogoSrc="../../assets/logos/automation-logo.svg"/>
+      </Frame>
+      <Frame label="Icon rail — collapsed, active item only">
+        <NavRail items={ITEMS} active={b} onSelect={setB} open={openB} onToggleOpen={setOpenB}/>
+      </Frame>
+    </div>
+    <div className="cap">Overlay — tablet & phone</div>
+    <Frame label="Overlay drawer: toggle becomes ×, selecting closes">
+      <div style={{position:"absolute",inset:0,background:"var(--scrim)"}}></div>
+      <NavRail items={ITEMS} active={c} onSelect={setC} open overlay onClose={()=>{}} defaultExpanded={["records"]} footerLogoSrc="../../assets/logos/automation-logo.svg"/>
+    </Frame>
+    <p className="note">The rail owns all three modes. Never hand-roll a scrim + drawer in a consuming app — pass <code>overlay</code>.</p>
+    <div className="cap">Dark</div>
+    <Frame label="Panel — dark theme" dark>
+      <NavRail items={ITEMS} active={dk} onSelect={setDk} open dark defaultExpanded={["records"]} footerLogoSrc="../../assets/logos/automation-logo.svg"/>
+    </Frame>
+    <div className="cap">Props</div>
+    <table className="pt"><tbody>
+      <tr><th style={{width:"24%"}}>Prop</th><th style={{width:"26%"}}>Type</th><th>Notes</th></tr>
+      <tr><td><strong>items</strong></td><td><code>NavRailItem[]</code></td><td>Each item is {"{"} key, label, icon, roles?, sub? {"}"}. A sub-item carries its own roles.</td></tr>
+      <tr><td><strong>active · onSelect</strong></td><td><code>string · (key) =&gt; void</code></td><td>Active page key — matches an item or sub-item key.</td></tr>
+      <tr><td><strong>open · onToggleOpen</strong></td><td><code>boolean · (open) =&gt; void</code></td><td>Drawer (expanded) vs icon rail (collapsed).</td></tr>
+      <tr><td><strong>overlay · onClose</strong></td><td><code>boolean · () =&gt; void</code></td><td>Tablet / phone mode — the toggle becomes ×, selecting closes.</td></tr>
+      <tr><td><strong>scrim</strong></td><td><code>boolean</code></td><td>Default true. In overlay mode the rail supplies its own scrim and slide-in panel; pass false only when a host already provides them.</td></tr>
+      <tr><td><strong>defaultExpanded</strong></td><td><code>string[]</code></td><td>Group keys expanded on first render.</td></tr>
+      <tr><td><strong>role</strong></td><td><code>string</code></td><td>Gates every item carrying a roles list. A parent whose sub-items are all withheld is withheld too, so the rail never shows an empty group.</td></tr>
+      <tr><td><strong>footerLogoSrc</strong></td><td><code>string</code></td><td>Small signature logo pinned at the bottom while open.</td></tr>
+      <tr><td><strong>dark</strong></td><td><code>boolean</code></td><td>Dark treatment for the panel.</td></tr>
+    </tbody></table>
+    <div className="cap">Usage</div>
+    <pre style={{fontFamily:"var(--font-data)",fontSize:"var(--text-xs)",background:"var(--surface-sunken)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:14,overflow:"auto"}}>{`<NavRail items={items} active={activeKey} onSelect={setActive}
+  open={open} onToggleOpen={setOpen}
+  overlay={isTabletOrPhone} onClose={closeDrawer} scrim/>`}</pre>
+    <div className="cap">Responsive</div>
+    <table className="pt"><tbody>
+      <tr><th style={{width:"18%"}}>Breakpoint</th><th>Behavior</th></tr>
+      <tr><td><strong>Desktop ≥ 1024</strong></td><td>Panel mode: expanded drawer (<code>open</code>) or icon rail (<code>!open</code>), both persistent in the layout — the shell reserves their width.</td></tr>
+      <tr><td><strong>Tablet 640–1023</strong></td><td>Switch to <code>overlay</code>: the rail floats above content with its own scrim; <code>onToggleOpen</code>'s trigger becomes a hamburger, selecting an item calls <code>onClose</code>.</td></tr>
+      <tr><td><strong>Phone &lt; 640</strong></td><td>Same <code>overlay</code> mode, full-height. The host never hand-rolls the scrim or slide-in — <code>NavRail</code> owns both.</td></tr>
+    </tbody></table>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script></body></html>

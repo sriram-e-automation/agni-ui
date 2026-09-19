@@ -1,0 +1,6 @@
+# Copy to .npmrc in a CONSUMING app (not in this repo — .npmrc is git-ignored here).
+# The ${GITHUB_TOKEN} form reads from the environment, which is why this file is
+# safe to commit. Never paste a literal token.
+
+@sriram-e-automation:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}

@@ -1,0 +1,9 @@
+/* ============================================================================
+   AgniUI — cascade layer order. MUST be imported before anything else.
+   ----------------------------------------------------------------------------
+   Later layers win. Tailwind's own layers (theme, base, components, utilities)
+   are named here so AgniUI's reset sits in `base` and every utility beats it.
+   Anything unlayered — a consuming app's CSS, or an inline style — still wins
+   over all of these, which is the intended override path.
+   ========================================================================== */
+@layer theme, base, components, utilities;

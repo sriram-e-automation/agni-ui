@@ -1,0 +1,94 @@
+<!-- @dsCard group="Data" viewport="760x540" name="Data — table, status, pagination" subtitle="DataTable · Tag · Pagination · FilterPanel · FilterBuilder · List · TreeView — States · Variants" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:18px;background:var(--surface-page)}.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:18px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.cap:first-child{margin-top:0}.lbl{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);margin:0 0 8px}.cols{display:grid;grid-template-columns:1.6fr 1fr;gap:18px}.chips{display:flex;gap:8px;flex-wrap:wrap}</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { DataTable, Tag, Pagination, TreeView, FilterPanel, FilterBuilder } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+const FILTER_SECTIONS=[
+  {key:"status",label:"Status",options:["Pending","Approved","In Review","Rejected"],dots:{Pending:"var(--status-warning)",Approved:"var(--status-success)","In Review":"var(--status-info)",Rejected:"var(--status-error)"}},
+  {key:"priority",label:"Priority",options:["High","Med","Low"]},
+];
+const ROWS=[
+  {id:"WO-00318",owner:"Meera Krishnan",status:"In Review",cost:"₹ 4,82,000"},
+  {id:"WO-00319",owner:"Rohit Sharma",status:"Approved",cost:"₹ 1,20,500"},
+  {id:"WO-00320",owner:"Priya Nair",status:"Awaiting Approval",cost:"₹ 8,15,000"},
+  {id:"WO-00321",owner:"Karthik Raman",status:"Blocked",cost:"₹ 2,40,000"},
+  {id:"WO-00322",owner:"Anjali Menon",status:"Rejected",cost:"₹ 95,000"},
+];
+const COLS=[
+  {key:"id",label:"Work order",width:130,render:v=><span style={{fontFamily:"var(--font-data)",color:"var(--text-secondary)"}}>{v}</span>},
+  {key:"owner",label:"Owner"},
+  {key:"status",label:"Status",render:v=><Tag status={v}/>},
+  {key:"cost",label:"Est. cost",align:"right",render:v=><span style={{fontFamily:"var(--font-data)"}}>{v}</span>},
+];
+function Demo(){
+  const [sel,setSel]=React.useState(new Set(["WO-00319"]));
+  const [page,setPage]=React.useState(2);
+  const [filters,setFilters]=React.useState({status:["Pending"]});
+  const [visible,setVisible]=React.useState(["id","owner","status","cost"]);
+  return (<div>
+    <div className="cap">States — Tag (one term per state)</div>
+    <div className="chips">
+      {["Approved","In Review","Awaiting Approval","Pending","Overdue","On Hold","Blocked","Rejected","Draft"].map(s=><Tag key={s} status={s}/>)}
+    </div>
+    <div className="cap">Variants — table · pagination · tree</div>
+    <div className="cols">
+      <div>
+        <div className="lbl">DataTable — sortable · selectable</div>
+        <DataTable columns={COLS} rows={ROWS} selectable selected={sel} onSelect={setSel}/>
+        <div style={{marginTop:12}}><Pagination page={page} pageCount={13} onChange={setPage} totalLabel="26–50 of 312"/></div>
+      </div>
+      <div>
+        <div className="lbl">FilterPanel — toolbar funnel (active · badge + clear)</div>
+        <div style={{display:"flex",gap:8,marginBottom:14}}><FilterPanel sections={FILTER_SECTIONS} value={filters} onChange={setFilters}/></div>
+        <div className="lbl">FilterBuilder — rules, not facets</div>
+        <div style={{marginBottom:14}}><FilterBuilder fields={[{key:"status",label:"Status"},{key:"owner",label:"Owner"},{key:"cost",label:"Est. cost"}]}/></div>
+        <div className="lbl">TreeView</div>
+        <TreeView defaultOpen={["agnibaan","stage2"]} selected="engine" nodes={[
+          {key:"agnibaan",label:"Agnibaan BOM",children:[
+            {key:"stage1",label:"Stage 1",children:[{key:"tank",label:"Propellant tank",icon:"ph-cylinder"}]},
+            {key:"stage2",label:"Stage 2",children:[{key:"engine",label:"Agnilet engine",icon:"ph-rocket"},{key:"avionics",label:"Avionics",icon:"ph-circuit-board"}]},
+          ]},
+        ]}/>
+      </div>
+    </div>
+    <div className="cap">States — loading · empty · error (every data component)</div>
+    <div className="cols">
+      <div>
+        <div className="lbl">DataTable — loading</div>
+        <DataTable columns={COLS} rows={[]} loading loadingRows={4}/>
+      </div>
+      <div>
+        <div className="lbl">DataTable — empty</div>
+        <DataTable columns={COLS} rows={[]} empty="No work orders match your filters"/>
+      </div>
+    </div>
+    <div style={{marginTop:14}}>
+      <div className="lbl">DataTable — error + onRetry</div>
+      <DataTable columns={COLS} rows={[]} error="The request service didn't respond in time." onRetry={()=>{}}/>
+    </div>
+    <div className="cap">DataTable — column picker · fillHeight · sortAccessor</div>
+    <div style={{height:260}}>
+      <DataTable columns={COLS} rows={ROWS} fillHeight
+        columnPicker={{visible, onChange:setVisible, max:4, defaults:["id","status"]}}
+        sortAccessor={(key,row)=>key==="cost"?Number(String(row.cost).replace(/[^0-9]/g,"")):row[key]}/>
+    </div>
+    <p className="note" style={{fontSize:"var(--text-xs)",color:"var(--text-tertiary)",marginTop:8}}><code>fillHeight</code> pins the header and scrolls the body inside a fixed-height parent. The ⋮ column chooser respects <code>max</code>; <code>sortAccessor</code> lets ₹-formatted cost sort numerically instead of lexically.</p>
+    <div className="cap">Usage</div>
+    <pre style={{fontFamily:"var(--font-data)",fontSize:"var(--text-xs)",background:"var(--surface-page)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:14,overflow:"auto"}}>{`<DataTable columns={columns} rows={rows} selectable selected={selected} onSelect={setSelected}
+  loading={loading} error={error} onRetry={retry} empty={!rows.length &amp;&amp; "No records"}
+  fillHeight columnPicker={{visible,onChange:setVisible}}/>`}</pre>
+    <div className="cap">Responsive</div>
+    <p className="note" style={{maxWidth:"78ch"}}>DataTable/TreeView scroll horizontally under their min-content width rather than reflowing columns — wrap in <code>overflow-x:auto</code> on tablet/phone. FilterPanel/FilterBuilder popovers clamp to the viewport and switch to a centered phone dialog below ~640px (same mechanism as DateRangeFilter). Pagination's total label hides first on narrow widths, keeping the page controls.</p>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script></body></html>

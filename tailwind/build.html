@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>AgniUI — build agniui.css</title>
+</head>
+<body style="font:13px ui-monospace,monospace;padding:20px;background:#0C1340;color:#EAEEF6">
+<div id="log" style="white-space:pre-wrap;line-height:1.6">compiling…</div>
+<!-- Class-name candidates are injected here as real class attributes so the
+     Tailwind browser compiler sees every utility the migrated components use. -->
+<div id="safelist" style="position:absolute;visibility:hidden;pointer-events:none;left:-9999px"></div>
+<script>
+/* ── AgniUI Tailwind build ───────────────────────────────────────────────────
+   Compiles the design system's utility CSS with the real Tailwind compiler and
+   exposes it on window.__AGNIUI_CSS for extraction to tailwind/agniui.css.
+
+   Preflight is deliberately EXCLUDED: AgniUI ships its own reset in
+   tokens/base.css (@layer base) and Tailwind's preflight would fight it.
+   Only the theme + utilities layers are emitted.                             */
+
+/* Every source file whose class strings must end up in the compiled CSS.
+   Add each component here as it is migrated.
+
+   Point at the file that literally CONTAINS the class strings, not the public
+   entry point. core/Button.tsx is a three-line dispatcher since the Aug merge —
+   its classes live in ButtonBase / IconButton / SplitButton, so listing
+   Button.tsx alone silently dropped every button utility. */
+const MIGRATED = [
+  /* core — tranche 1 */
+  "../components/core/ButtonBase.tsx",
+  "../components/core/IconButton.tsx",
+  "../components/core/SplitButton.tsx",
+  "../components/core/Tag.tsx",
+  "../components/core/Avatar.tsx",
+  "../components/core/AvatarStack.tsx",
+  "../components/core/Card.tsx",
+  "../components/core/DropdownMenu.tsx",
+  "../components/core/OptionRow.tsx",
+  "../components/core/ActionTile.tsx",
+  "../components/core/Rating.tsx",
+  /* forms — tranche 2 (the control family, migrated as ONE change) */
+  "../components/forms/Input.tsx",
+  "../components/forms/Textarea.tsx",
+  "../components/forms/SelectBasic.tsx",
+  "../components/forms/MultiSelect.tsx",
+  "../components/forms/SearchSelect.tsx",
+  "../components/forms/CreatableSelect.tsx",
+  "../components/forms/UserSelect.tsx",
+  "../components/forms/MultiUserSelect.tsx",
+  "../components/forms/DatePicker.tsx",
+  "../components/forms/QuantityStepper.tsx",
+  "../components/forms/Checkbox.tsx",
+  "../components/forms/Radio.tsx",
+  "../components/forms/Switch.tsx",
+  "../components/forms/FormField.tsx",
+  /* navigation — tranche 3. Tabs.tsx is a two-line dispatcher; the class
+     strings live in TabsStrip / SegmentedControl, so those are what get listed. */
+  "../components/navigation/TabsStrip.tsx",
+  "../components/navigation/SegmentedControl.tsx",
+  "../components/navigation/Breadcrumbs.tsx",
+  "../components/navigation/CommandPalette.tsx",
+  /* feedback — tranche 4. Notice / Skeleton / DataState are dispatchers with no
+     class strings of their own; Loading keeps inline styles by design (its 90
+     declarations are per-shape skeleton geometry — the rule-4 runtime-computed
+     exemption, same as chart SVG geometry). */
+  "../components/feedback/Banner.tsx",
+  "../components/feedback/Toast.tsx",
+  "../components/feedback/Tooltip.tsx",
+  "../components/feedback/Modal.tsx",
+  "../components/feedback/Progress.tsx",
+  "../components/feedback/EmptyState.tsx",
+  "../components/feedback/ErrorState.tsx",
+  /* containment + layout — tranche 5. Panel.tsx is a dispatcher; the classes are
+     in PanelBase / Sheet / Drawer. Cluster and Stack stay inline BY DESIGN:
+     their props (gap, align, justify, padding, overflow) are style VALUES the
+     caller passes through — a class table would either restrict the API or need
+     one entry per combination. */
+  "../components/containment/PanelBase.tsx",
+  "../components/containment/Accordion.tsx",
+  "../components/containment/Sheet.tsx",
+  "../components/containment/Drawer.tsx",
+  "../components/layout/AppShell.tsx",
+  "../components/layout/Bar.tsx",
+  /* chrome — tranche 6a, the shell FRAME. The four header menus (ShellHeader,
+     AppSwitcher, NotificationsMenu, SettingsMenu) are 6b: they are one
+     cohesive group of header overlays, and splitting there keeps each half
+     reviewable. Theme.tsx is token maps with no markup. */
+  "../components/chrome/ShellFooter.tsx",
+  "../components/chrome/PageTitleBar.tsx",
+  "../components/chrome/WorkspacePane.tsx",
+  "../components/chrome/PanelKit.tsx",
+  "../components/chrome/NavRail.tsx",
+  /* chrome — tranche 6b, the header overlays. */
+  "../components/chrome/ShellHeader.tsx",
+  "../components/chrome/SettingsMenu.tsx",
+  "../components/chrome/NotificationsMenu.tsx",
+  "../components/chrome/AppSwitcher.tsx",
+  /* data — tranche 7a, the record-detail rows. */
+  "../components/data/EventRow.tsx",
+  "../components/data/DetailSection.tsx",
+  "../components/data/Pagination.tsx",
+  "../components/data/BulkActionToolbar.tsx",
+  "../components/data/StatCard.tsx",
+  "../components/data/AttachmentRow.tsx",
+  "../components/data/DocumentPreview.tsx",
+  /* data — tranche 7b, the record lists. */
+  "../components/data/List.tsx",
+  "../components/data/TreeView.tsx",
+  "../components/data/EditableTable.tsx",
+  /* data — tranche 7c, filters. QuickStats stays inline (see README) — its
+     colours derive from a caller-supplied accent via color-mix at every
+     render, the same runtime-value exemption as chart SVG geometry. */
+  "../components/data/FilterPanel.tsx",
+  "../components/data/FilterBuilder.tsx",
+  /* data — tranche 7d. RecordCard is a dispatcher (see README); connector
+     geometry in OrgTree stays inline (per-node layout math). */
+  "../components/data/PersonCard.tsx",
+  "../components/data/OrgTree.tsx",
+  "../components/data/KanbanCard.tsx",
+  "../components/data/DateRangeFilter.tsx",
+  "../components/data/PageControls.tsx",
+  /* data — tranche 7e. KanbanBoard's tone lookups (bg/border/dot/label per
+     lane, dark-mode blur) stay inline — runtime values keyed by the column's
+     status group, not a fixed class set. */
+  "../components/data/KanbanBoard.tsx",
+  /* data — tranche 8, the schedule containers. Cell/bar geometry (widths,
+     offsets, the repeating-gradient grid rules, the month grid's row
+     template) and the --kanban-*-dot / tone-pair lookups stay inline. */
+  "../components/data/GanttTimeline.tsx",
+  "../components/data/Calendar.tsx",
+  /* data — tranche 9. DataTable completes the family: per-column widths, the
+     colgroup, the caller's headerStyle escape hatch, the dark picker surface
+     and the bottom-fade gradient stay inline. */
+  "../components/data/DataTable.tsx",
+  /* workflow — tranche 10a, the confirm-and-commit family. ConfirmModal is the
+     dispatcher (no classes of its own). */
+  "../components/workflow/DiscardConfirmModal.tsx",
+  "../components/workflow/SubmitConfirmModal.tsx",
+  "../components/workflow/ReviewSubmitModal.tsx",
+  "../components/workflow/BulkActionConfirm.tsx",
+  "../components/workflow/ImportRecordsModal.tsx",
+  /* workflow — tranche 10b, the record-history pair. */
+  "../components/workflow/ApprovalStepper.tsx",
+  "../components/workflow/AuditTrail.tsx",
+  /* workflow — tranche 10c. RecordForm is the dispatcher; RequestForm holds
+     the strings. */
+  "../components/workflow/RequestForm.tsx",
+  /* workflow — tranche 10d, the detail modal. RecordDetailModal is the
+     dispatcher; RequestDetailModal holds every string. */
+  "../components/workflow/RequestDetailModal.tsx",
+];
+
+const logEl = (m) => document.getElementById("log").textContent = m;
+
+(async () => {
+  const sources = await Promise.all(
+    MIGRATED.map(p => fetch(p).then(r => r.ok ? r.text() : "").catch(() => ""))
+  );
+
+  /* Pull every string literal out of the sources and hang it on a hidden node
+     as a real class attribute — the compiler scans the DOM, so this guarantees
+     each utility is seen even though the source is never otherwise on the page. */
+  const safe = document.getElementById("safelist");
+  const seen = new Set();
+  for (const raw of sources) {
+    /* Strip comments BEFORE harvesting. The scanner matches anything between
+       quote characters, and comment prose sits between the quoted strings around
+       it — so a doc comment that NAMES a utility ("written as an arbitrary
+       property, not backdrop-blur-[3px]") got compiled as if the component used
+       it, pulling nine --tw-backdrop-* custom properties into the output and an
+       empty phantom rule from an ellipsis. Migrated files legitimately discuss
+       utilities they avoid; the scanner must not read those as usage. */
+    const src = raw.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/(^|[^:])\/\/[^\n]*/g, "$1 ");
+    for (const m of src.matchAll(/["'`]([^"'`\n]{2,400})["'`]/g)) {
+      /* Strip ${...} interpolations FIRST. A className written as a template
+         literal (`${SIZE[size]} inline-block …`) always contains "${", so the
+         punctuation filter below used to discard the whole string — silently
+         dropping every utility in it. That is invisible at build time and
+         collapses the element at runtime with no error: it cost Tag's status
+         dot, Avatar's presence dot and Button's loading spinner. */
+      const s = m[1].replace(/\$\{[^}]*\}/g, " ");
+      if (!/[a-z]/.test(s) || /[<>{};]/.test(s)) continue;
+      if (seen.has(s)) continue;
+      seen.add(s);
+      const el = document.createElement("span");
+      el.className = s;
+      safe.appendChild(el);
+    }
+  }
+
+  const theme = await fetch("./agniui.theme.css").then(r => r.text());
+  const style = document.createElement("style");
+  style.type = "text/tailwindcss";
+  style.textContent =
+    '@layer theme, base, components, utilities;\n' +
+    '@import "tailwindcss/theme.css" layer(theme);\n' +
+    '@import "tailwindcss/utilities.css" layer(utilities);\n' +
+    theme;
+  document.head.appendChild(style);
+
+  await new Promise(done => {
+    const tw = document.createElement("script");
+    tw.src = "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4";
+    tw.onload = done; tw.onerror = done;
+    document.head.appendChild(tw);
+  });
+  await new Promise(r => setTimeout(r, 600));
+
+  /* Serialise whatever the compiler emitted.
+
+     Only Tailwind's own top-level rule kinds are kept: @layer blocks and
+     statements, @property registrations, and the @supports fallback. Anything
+     else in the document's style sheets belongs to the host page (the preview
+     shell injects `html,body{background:transparent}`), and shipping it inside
+     agniui.css would override a consumer's page background. */
+  const KEEP = new Set([
+    CSSRule.SUPPORTS_RULE,          // @supports
+  ]);
+  const keepRule = (r) => {
+    const n = r.constructor && r.constructor.name;
+    return n === "CSSLayerBlockRule" || n === "CSSLayerStatementRule"
+      || n === "CSSPropertyRule" || n === "CSSSupportsRule"
+      /* Keyframes can land at top level (animate-spin) — dropping them would
+         leave the animation utility referencing a name that does not exist. */
+      || n === "CSSKeyframesRule";
+  };
+
+  let out = "";
+  let dropped = 0;
+  for (const sheet of document.styleSheets) {
+    let owner = null;
+    try { owner = sheet.ownerNode; } catch (e) { continue; }
+    if (!owner || owner.tagName !== "STYLE") continue;
+    if (owner === style) continue;
+    try {
+      for (const r of sheet.cssRules) {
+        if (keepRule(r)) out += r.cssText + "\n";
+        else dropped++;
+      }
+    } catch (e) {}
+  }
+
+  window.__AGNIUI_CSS = annotate(out);
+
+  function annotate(css) {
+    /* styles.css @imports this file, so the DS compiler reads it as part of the
+       token closure and tries to classify Tailwind's internal plumbing as
+       design tokens. Mark them intentionally uncategorized. Done here, in the
+       generator, so it survives every regeneration. */
+    return css.replace(
+      /(--(?:tw-border-style|tw-outline-style|default-transition-duration|default-transition-timing-function|animate-[a-z-]+):\s*[^;}]+)(;|\s*\})/g,
+      (m, decl, tail) => decl + "; /* @kind other */" + (tail === ";" ? "" : tail)
+    );
+  }
+  /* Sanity check for the caller: no --tw-* plumbing should reach the output
+     unannotated, or the DS token compiler will flag it. */
+  window.__AGNIUI_TW_VARS = [...new Set(
+    (window.__AGNIUI_CSS.match(/--tw-[a-z-]+(?=:)/g) || [])
+  )].filter(v => !/border-style|outline-style/.test(v));
+  const openB = (window.__AGNIUI_CSS.match(/\{/g) || []).length;
+  const closeB = (window.__AGNIUI_CSS.match(/\}/g) || []).length;
+  logEl(`candidates: ${seen.size}\ncompiled bytes: ${out.length}\n` +
+      `braces: ${openB}/${closeB}${openB === closeB ? "" : "  \u26a0 UNBALANCED — a hand-patch ate a wrapper; regenerate, do not ship"}\n` +
+      `@property --tw-border-style: ${window.__AGNIUI_CSS.includes("@property --tw-border-style") ? "present" : "\u26a0 MISSING — every border utility will compute to none"}\n` +
+      `rules: ${(out.match(/\{/g) || []).length}\ndropped host rules: ${dropped}\n` +
+      `--tw-* plumbing: ${window.__AGNIUI_TW_VARS.length}` +
+      (/backdrop-blur/.test(out) ? "  \u26a0 backdrop-blur compiled — check for a comment naming it" : "") + "\n\n" +
+      [
+        [".bg-action-brand", "Button variant"],
+        [".bg-current", "Tag status dot"],
+        [".bg-status-success", "Avatar presence dot"],
+        ["-right-px", "Avatar presence dot corner"],
+        [".border-t-transparent", "Button spinner"],
+        ["@keyframes spin", "Button spinner motion"],
+        [".border-b-action-brand", "Tabs underline — active tab"],
+        [".border-0 ", "Tabs underline — width survives (border-none zeroes it)"],
+        [".border-t-fg-brand", "CommandPalette spinner arc"],
+        [".bg-surface-sunken", "Tabs segmented track bed"],
+        [".rounded-xs", "CommandPalette kbd chips"],
+        [".bg-status-warning-soft", "Banner/Toast tone table"],
+        [".border-l-status-error", "Toast tone edge"],
+        [".border-dashed", "Empty/ErrorState container"],
+        ["transform: translateX(-50%)", "Tooltip side positioning"],
+        ["box-shadow: var(--tooltip-shadow)", "Tooltip elevation"],
+        ["border-top-left-radius: var(--sheet-radius)", "Sheet top corners"],
+        ["padding: var(--sheet-pad-y) var(--sheet-pad-x)", "Sheet body padding"],
+        ["height: var(--bar-h)", "Bar top variant"],
+        ["background-color: var(--panel-bg)", "Panel shell"],
+        ["right: -8px", "WorkspacePane badge offset"],
+        ["scale: 1.1", "SettingsMenu accent swatch hover grow"],
+        ["grid-template-columns: repeat(auto-fill", "AppSwitcher tile grid"],
+        ["width: 380px", "NotificationsMenu panel"],
+        ["translate: 0px -2px", "AppTile hover lift"],
+        ["border-left-color: var(--status-pending)", "EventRow tone edge"],
+        ["background-color: var(--state-hover-on-inverse)", "BulkActionToolbar hover on inverse"],
+        ["border-style: dashed", "EditableTable add-row border"],
+        ["border-color: var(--border-brand)", "FilterPanel active trigger shell"],
+        ["border-color: var(--action-brand)", "FilterBuilder / pill selected border"],
+        ["scale: var(--press-scale,0.97)", "PersonCard press"],
+        ["border-radius: var(--radius-full)", "OrgTree legend chip / collapse button"],
+        ["var(--agni-green-600)", "NavRail active row (light)"],
+        ["transform: translateY(-50%)", "NavRail collapsed active tick"],
+        ["min(var(--rail-drawer-w-md), 84vw)", "NavRail overlay width"],
+        ["transition-property: box-shadow, border-color, opacity;", "KanbanCard shell transition"],
+        ["width: var(--density-control-h)", "DateRangeFilter square trigger"],
+      ].map(([needle, what]) =>
+        (out.includes(needle) ? "OK   " : "MISS ") + needle + "  — " + what
+      ).join("\n"));
+})();
+</script>
+</body></html>

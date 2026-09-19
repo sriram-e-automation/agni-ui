@@ -1,0 +1,275 @@
+/* ============================================================================
+   AgniUI — Tailwind v4 bridge
+   ----------------------------------------------------------------------------
+   The ONE file that exposes AgniUI's 3-layer tokens to Tailwind as utilities.
+   Layers 1-3 (brand → colors → components) are untouched and remain the source
+   of truth. This file only re-exports layer 2 under Tailwind's namespaces.
+
+   Consumer entry point:
+       @import "tailwindcss";
+       @import "../agniui/styles.css";          (layers 1-3, must come first)
+       @import "../agniui/tailwind/agniui.theme.css";
+       @source "../agniui/_ds_bundle.js";       (only if not linking agniui.css)
+
+   ── WHY `@theme inline` ──────────────────────────────────────────────────────
+   Plain `@theme { --color-surface-card: var(--surface-card) }` emits the
+   declaration into :root, so var(--surface-card) resolves ONCE, at :root, against
+   the light value. Every utility would then be frozen light and [data-theme=dark]
+   would do nothing.
+   `inline` instead bakes the reference into the utility itself —
+   `.bg-surface-card{background-color:var(--surface-card)}` — which resolves at
+   the USE site and therefore inherits from the nearest [data-theme] scope.
+   Result: dark mode, density and scale keep working by token swap, and NOT ONE
+   `dark:` variant is written anywhere in the system. Do not remove `inline`.
+
+   ── NAMING ───────────────────────────────────────────────────────────────────
+   Colours are re-exported because Tailwind reads colours from --color-*:
+       --surface-*        → bg-surface-card, bg-surface-page …
+       --text-*   (color) → text-fg-primary   ← renamed: --text-* is Tailwind's
+                                                 FONT-SIZE namespace and would
+                                                 collide with --text-sm etc.
+       --border-*         → border-line-subtle
+       --action-*         → bg-action-brand
+       --status-*         → bg-status-success-soft / text-status-success-ink
+   Shadows are re-exported as --shadow-e-* for the same collision reason
+   (--shadow-md is theme-varying and cannot self-reference).
+   Fonts, type sizes, leading, tracking and radii already sit on Tailwind's
+   namespaces, so they are declared with literal values (all theme-invariant).
+   ========================================================================== */
+
+@theme inline {
+  /* Clear Tailwind's stock shadow scale FIRST. Its --shadow-xs / --shadow-sm
+     defaults collide by name with AgniUI's elevation tokens. This reset must
+     precede the --shadow-e-* entries below, because --shadow-e-* matches the
+     same --shadow-* wildcard and a later reset silently deletes them. */
+  --shadow-*: initial;
+
+  /* ── Surfaces ─────────────────────────────────────────────────────────── */
+  --color-surface-page: var(--surface-page);
+  --color-surface-card: var(--surface-card);
+  --color-surface-soft: var(--surface-soft);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-surface-brand: var(--surface-brand);
+  --color-surface-brand-soft: var(--surface-brand-soft);
+  --color-surface-inverse: var(--surface-inverse);
+
+  /* ── Foreground (text) — renamed off the --text-* font-size namespace ─── */
+  --color-fg-primary: var(--text-primary);
+  --color-fg-secondary: var(--text-secondary);
+  --color-fg-tertiary: var(--text-tertiary);
+  --color-fg-disabled: var(--text-disabled);
+  --color-fg-brand: var(--text-brand);
+  --color-fg-on-brand: var(--text-on-brand);
+  --color-fg-inverse: var(--text-inverse);
+
+  /* ── Lines (borders) ──────────────────────────────────────────────────── */
+  --color-line-subtle: var(--border-subtle);
+  --color-line-default: var(--border-default);
+  --color-line-strong: var(--border-strong);
+  --color-line-control: var(--border-control);
+  --color-line-brand: var(--border-brand);
+
+  /* ── Actions ──────────────────────────────────────────────────────────── */
+  --color-action-brand: var(--action-brand);
+  --color-action-brand-hover: var(--action-brand-hover);
+  --color-action-brand-press: var(--action-brand-press);
+  --color-action-neutral: var(--action-neutral);
+  --color-action-neutral-hover: var(--action-neutral-hover);
+
+  /* ── Status: base fill · soft tint · -ink for status-coloured TEXT ────── */
+  --color-status-success: var(--status-success);
+  --color-status-success-soft: var(--status-success-soft);
+  --color-status-success-ink: var(--status-success-text);
+  --color-status-warning: var(--status-warning);
+  --color-status-warning-soft: var(--status-warning-soft);
+  --color-status-warning-ink: var(--status-warning-text);
+  --color-status-info: var(--status-info);
+  --color-status-info-soft: var(--status-info-soft);
+  --color-status-info-ink: var(--status-info-text);
+  --color-status-error: var(--status-error);
+  --color-status-error-hover: var(--status-error-hover);
+  --color-status-error-press: var(--status-error-press);
+  --color-status-error-soft: var(--status-error-soft);
+  --color-status-error-ink: var(--status-error-text);
+  --color-status-pending: var(--status-pending);
+  --color-status-pending-soft: var(--status-pending-soft);
+  --color-status-pending-ink: var(--status-pending-text);
+  --color-status-blocked: var(--status-blocked);
+  --color-status-blocked-soft: var(--status-blocked-soft);
+  --color-status-blocked-ink: var(--status-blocked-text);
+
+  /* ── State overlays ───────────────────────────────────────────────────── */
+  --color-state-hover: var(--state-hover-overlay);
+  --color-state-press: var(--state-press-overlay);
+
+  /* ── Chart series ─────────────────────────────────────────────────────── */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-chart-6: var(--chart-6);
+
+  /* ── Spacing — the whole numeric scale rides --u × --scale ────────────────
+     Tailwind derives p-4 / gap-2 / mt-8 as calc(var(--spacing) * N). Pointing
+     --spacing at --u × --scale makes EVERY numeric utility track [data-scale]
+     automatically, and keeps the 1:1 match with --space-N (both are 4px-based:
+     p-4 === var(--space-4) === 16px @ scale 1).                             */
+  --spacing: calc(var(--u) * var(--scale));
+}
+
+@theme {
+  /* Theme-INVARIANT tokens whose names already sit on Tailwind namespaces.
+     Declared with literal values because `--font-display: var(--font-display)`
+     would be self-referential. Values mirror tokens/typography.css +
+     tokens/spacing.css — keep the two in sync (see tailwind/README.md). */
+
+  /* Families → font-display · font-sans · font-data */
+  --font-display: "Plus Jakarta Sans", "Poppins", system-ui, sans-serif;
+  --font-sans: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-data: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  /* Type scale → text-2xs … text-display. Tailwind's defaults are cleared so
+     text-sm cannot silently mean 14px instead of AgniUI's 13px. */
+  --text-*: initial;
+  --text-2xs: 11px;
+  --text-xs: 12px;
+  --text-sm: 13px;
+  --text-base: 14px;
+  --text-md: 16px;
+  --text-lg: 18px;
+  --text-xl: 22px;
+  --text-2xl: 28px;
+  --text-3xl: 36px;
+  --text-display: 48px;
+
+  /* Line height → leading-* */
+  --leading-*: initial;
+  --leading-none: 1;
+  --leading-tight: 1.2;
+  --leading-snug: 1.35;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.65;
+
+  /* Tracking → tracking-* */
+  --tracking-*: initial;
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.04em;
+  --tracking-wider: 0.08em;
+
+  /* Radii → rounded-* */
+  --radius-*: initial;
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+  --radius-full: 999px;
+
+  /* Breakpoints → mirror tokens/spacing.css --bp-* */
+  --breakpoint-*: initial;
+  --breakpoint-tablet: 640px;
+  --breakpoint-desktop: 1024px;
+  --breakpoint-wide: 1440px;
+}
+
+/* ── Utilities the token system owns but Tailwind has no namespace for ─────
+   Motion lives here because Tailwind v4 has NO --duration-* or usable --ease-*
+   theme namespace for named values: duration utilities take bare numbers
+   (duration-150) and an --ease-* entry that references --ease-standard would be
+   self-referential. Declaring these as @utility is the only correct route. */
+
+/* ── Elevation ─────────────────────────────────────────────────────────────
+   Declared as utilities rather than --shadow-e-* theme entries. Tailwind's
+   generated shadow utilities compose through --tw-shadow / --tw-ring-shadow /
+   --tw-inset-shadow, which declares custom properties inside component-style
+   selectors — the DS token compiler flags those, and the ring/inset
+   composition is dead weight here because AgniUI's shadows are whole values.
+   Setting box-shadow directly is smaller and keeps the token registry clean. */
+@utility shadow-e-xs { box-shadow: var(--shadow-xs) }
+@utility shadow-e-sm { box-shadow: var(--shadow-sm) }
+@utility shadow-e-md { box-shadow: var(--shadow-md) }
+@utility shadow-e-lg { box-shadow: var(--shadow-lg) }
+@utility shadow-e-xl { box-shadow: var(--shadow-xl) }
+@utility shadow-e-2xl { box-shadow: var(--shadow-2xl) }
+
+@utility duration-fast { transition-duration: var(--dur-fast) }
+@utility duration-normal { transition-duration: var(--dur-normal) }
+@utility duration-slow { transition-duration: var(--dur-slow) }
+@utility ease-standard { transition-timing-function: var(--ease-standard) }
+@utility ease-spring { transition-timing-function: var(--ease-spring) }
+
+
+/* Control height — THE density contract. Every control (button, input, select)
+   must ride --density-control-h, never a hardcoded px and never a --spacing
+   step: spacing steps track --scale but NOT --density, so a button sized with
+   h-9.5 silently ignores compact/comfortable/spacious.
+   The ±6px rungs reproduce the historic 32 / 38 / 44 exactly at the default
+   comfortable density, while now responding to density and scale. */
+@utility h-control-sm { height: calc(var(--density-control-h) - 6px) }
+@utility h-control { height: var(--density-control-h) }
+@utility h-control-lg { height: calc(var(--density-control-h) + 6px) }
+@utility min-h-control-sm { min-height: calc(var(--density-control-h) - 6px) }
+@utility min-h-control { min-height: var(--density-control-h) }
+@utility min-h-control-lg { min-height: calc(var(--density-control-h) + 6px) }
+/* People pickers (UserSelect / MultiUserSelect) are two-line controls and ride a
+   +4px contract off the same token, so they stay in step with the family
+   instead of hardcoding 36 / 42 / 48. */
+@utility h-control-people-sm { height: calc(var(--density-control-h) - 2px) }
+@utility h-control-people { height: calc(var(--density-control-h) + 4px) }
+@utility h-control-people-lg { height: calc(var(--density-control-h) + 10px) }
+@utility min-h-control-people-sm { min-height: calc(var(--density-control-h) - 2px) }
+@utility min-h-control-people { min-height: calc(var(--density-control-h) + 4px) }
+@utility min-h-control-people-lg { min-height: calc(var(--density-control-h) + 10px) }
+@utility h-row { height: var(--density-row-h) }
+@utility py-cell { padding-block: var(--density-cell-pad) }
+@utility p-pane { padding: var(--pane-pad) }
+
+/* Focus — the one ring. Always paired with outline-none on the element. */
+@utility focus-ring {
+  outline: 2px solid var(--action-brand);
+  outline-offset: 2px;
+}
+@utility focus-ring-error {
+  outline: 2px solid var(--status-error);
+  outline-offset: 2px;
+}
+
+/* The box-shadow form of the same rings, for controls that ring their whole
+   shell (Input, Textarea, Select) rather than drawing an outline. Declared as
+   utilities for the same reason as shadow-e-*: Tailwind's `shadow-[…]` arbitrary
+   value composes through --tw-shadow, which declares custom properties inside a
+   component-style selector and the DS token compiler flags it. Setting
+   box-shadow directly keeps the token registry clean. */
+@utility ring-focus { box-shadow: var(--focus-ring) }
+@utility ring-focus-error { box-shadow: var(--focus-ring-error) }
+@utility ring-inset-line { box-shadow: inset 0 0 0 1px var(--border-default) }
+
+/* Press — the DS press-scale rungs (buttons 0.97, icon buttons 0.92). */
+@utility press { scale: var(--press-scale, 0.97) }
+@utility press-icon { scale: 0.92 }
+
+/* Stacking — the z token scale, so no component invents a z-index. */
+@utility z-sticky { z-index: 10 }
+@utility z-bar { z-index: 100 }
+@utility z-dropdown { z-index: 600 }
+@utility z-overlay { z-index: 700 }
+@utility z-modal { z-index: 800 }
+@utility z-popover { z-index: 850 }
+@utility z-toast { z-index: 900 }
+@utility z-tooltip { z-index: 950 }
+
+/* Icon sizing — rides control height, absolute stroke that never thickens. */
+@utility icon-sm { width: var(--icon-sm); height: var(--icon-sm) }
+@utility icon-md { width: var(--icon-md); height: var(--icon-md) }
+@utility icon-lg { width: var(--icon-lg); height: var(--icon-lg) }
+
+/* Pane container — components query their PANE, not the viewport.
+   Use with Tailwind's own @container variants: @max-[480px]:hidden etc. */
+@utility pane {
+  container-type: inline-size;
+  container-name: pane;
+  min-width: 0;
+}

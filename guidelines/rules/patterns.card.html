@@ -1,0 +1,101 @@
+<!-- @dsCard group="Guidelines" viewport="1120x1180" name="Patterns — how pages assemble" subtitle="Page anatomy · the five content views · record lifecycle · record-detail page — the four fixed compositions" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8"><title>Patterns</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<style>
+body{margin:0;padding:22px;background:var(--surface-page);color:var(--text-primary);font-family:var(--font-sans);font-size:var(--text-sm)}
+.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:26px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}
+.cap:first-child{margin-top:0}
+p.lead{color:var(--text-secondary);margin:0 0 16px;max-width:76ch}
+code{font-family:var(--font-data);font-size:var(--text-xs);background:var(--surface-soft);border-radius:4px;padding:1px 5px}
+.wire{background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-xs)}
+.z{background:var(--surface-soft);border:1px dashed var(--border-default);border-radius:var(--radius-sm);padding:8px 10px;font-size:var(--text-2xs);color:var(--text-secondary);display:flex;align-items:center;gap:7px;min-height:0}
+.z b{font-weight:var(--fw-semibold);color:var(--text-primary)}
+.z.brand{background:var(--surface-brand-soft);border-color:var(--border-brand)}
+.z.brand b{color:var(--text-brand)}
+.shell{display:grid;grid-template-columns:132px 1fr 56px;grid-template-rows:auto 1fr auto;gap:8px;padding:8px;height:330px}
+.stack{display:flex;flex-direction:column;gap:8px;min-height:0}
+.flow{display:flex;align-items:stretch;gap:10px;flex-wrap:wrap}
+.step{flex:1 1 180px;background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:12px 13px}
+.step .n{font-family:var(--font-data);font-size:var(--text-2xs);color:var(--text-brand);font-weight:var(--fw-semibold)}
+.step h4{margin:5px 0 5px;font-size:var(--text-sm);font-weight:var(--fw-semibold)}
+.step p{margin:0;font-size:var(--text-xs);color:var(--text-secondary);line-height:1.5}
+.step .c{margin-top:8px;display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-family:var(--font-data);font-size:10px;background:var(--surface-soft);border:1px solid var(--border-subtle);border-radius:var(--radius-full);padding:2px 7px;color:var(--text-secondary)}
+table{width:100%;border-collapse:collapse;background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);overflow:hidden}
+th{text-align:left;font:var(--fw-medium) var(--text-2xs)/1 var(--font-data);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);padding:10px 14px;border-bottom:1px solid var(--border-subtle)}
+td{padding:10px 14px;border-bottom:1px solid var(--border-subtle);font-size:var(--text-sm);vertical-align:top}
+tr:last-child td{border-bottom:none}
+td.k{font-weight:var(--fw-medium);white-space:nowrap}
+td.k i{color:var(--text-brand);margin-right:7px}
+.detail{display:grid;grid-template-columns:210px 1fr;gap:8px;padding:8px;height:300px}
+.note{font-size:var(--text-xs);color:var(--text-tertiary);margin:10px 0 0;max-width:76ch;line-height:1.55}
+</style>
+</head><body>
+
+<div class="cap">1 · Page anatomy</div>
+<p class="lead">Every desk page is the same five regions in the same order. The shell owns the frame; the page owns only what sits between the title bar and the footer. If a page needs a region that isn't here, that is a signal to reconsider the page, not to add a region.</p>
+<div class="wire">
+  <div class="shell">
+    <div class="z brand" style="grid-column:1/-1"><i class="ph ph-identification-badge"></i><span><b>ShellHeader</b> — brand cell · module tile + breadcrumb · bell · gear · presence · profile</span></div>
+    <div class="z brand" style="grid-row:2"><i class="ph ph-list"></i><span><b>NavRail</b><br>drawer ⇄ icon ⇄ overlay</span></div>
+    <div class="stack" style="grid-row:2">
+      <div class="z"><i class="ph ph-text-h"></i><span><b>PageTitleBar</b> — icon + title · scope Tabs with counts · view switcher · actions</span></div>
+      <div class="z"><i class="ph ph-sliders-horizontal"></i><span><b>PageControls</b> — search · filters · date range · sort · columns · primary action · pagination</span></div>
+      <div class="z" style="flex:1"><i class="ph ph-squares-four"></i><span><b>Content view</b> — list / card / kanban / timeline / calendar</span></div>
+    </div>
+    <div class="z brand" style="grid-row:2"><i class="ph ph-sidebar"></i><span><b>Workspace<br>Pane</b></span></div>
+    <div class="z brand" style="grid-column:1/-1"><i class="ph ph-copyright"></i><span><b>ShellFooter</b></span></div>
+  </div>
+</div>
+<p class="note">Two rules this encodes. <b>The title bar owns the view switcher</b> whenever both it and PageControls are on screen — the toolbar only carries the switcher on pages with no title bar. <b>QuickStats sits between them</b> when a page has one, because it is a filter that also summarises.</p>
+
+<div class="cap">2 · The five content views</div>
+<p class="lead">One record set, five renderings, one filter contract. Search, facet filters, date range and the quick-stat filter apply identically to all five — a view swap must never change what the user is looking at, only how.</p>
+<table>
+  <thead><tr><th>View</th><th>Component</th><th>Reach for it when</th></tr></thead>
+  <tbody>
+    <tr><td class="k"><i class="ph ph-list"></i>List</td><td><code>DataTable</code></td><td>Comparing many records on the same fields. The default, and the only view with a column chooser.</td></tr>
+    <tr><td class="k"><i class="ph ph-squares-four"></i>Card</td><td><code>RecordCard</code></td><td>Each record needs more than a row can hold — people, status and an action together.</td></tr>
+    <tr><td class="k"><i class="ph ph-kanban"></i>Kanban</td><td><code>KanbanBoard</code> + <code>RecordCard</code></td><td>Status is the thing being managed, and moving a record between states is the work.</td></tr>
+    <tr><td class="k"><i class="ph ph-chart-bar-horizontal"></i>Timeline</td><td><code>GanttTimeline</code></td><td>Duration and overlap matter — scheduling, load, what runs at once.</td></tr>
+    <tr><td class="k"><i class="ph ph-calendar-dots"></i>Calendar</td><td><code>Calendar</code></td><td>Records are keyed to a date and the question is "what falls on this day".</td></tr>
+  </tbody>
+</table>
+<p class="note">Every one of them takes the same <code>loading</code> · <code>empty</code> · <code>error</code> props, in the same precedence: <b>error → loading → empty → content</b>. A failed fetch must never read as an empty region.</p>
+
+<div class="cap">3 · Record lifecycle</div>
+<p class="lead">Creating, reviewing and resolving a record is a fixed sequence of components. A module supplies field catalogs and copy; it does not supply new dialogs.</p>
+<div class="flow">
+  <div class="step"><div class="n">01</div><h4>Create</h4><p>A slide-up sheet on the field grid. Validation is inline; closing a dirty form asks first.</p><div class="c"><span class="tag">Panel</span><span class="tag">RecordForm</span><span class="tag">FormSection</span><span class="tag">FormField</span></div></div>
+  <div class="step"><div class="n">02</div><h4>Review &amp; submit</h4><p>A summary of what is about to be committed, with a note field. The last point of retreat.</p><div class="c"><span class="tag">ConfirmModal</span><span class="tag">ConfirmModal</span></div></div>
+  <div class="step"><div class="n">03</div><h4>Confirm</h4><p>The new record id, announced once and copyable, plus a way straight into it.</p><div class="c"><span class="tag">ConfirmModal</span></div></div>
+  <div class="step"><div class="n">04</div><h4>Approve or reject</h4><p>Two panes: the request beside its workflow and audit trail. Bulk actions confirm the same way.</p><div class="c"><span class="tag">RecordDetailModal</span><span class="tag">ApprovalStepper</span><span class="tag">AuditTrail</span><span class="tag">ConfirmModal</span></div></div>
+  <div class="step"><div class="n">05</div><h4>Track</h4><p>Status becomes a chip on every view; effort logging lives on the task preset.</p><div class="c"><span class="tag">Tag</span><span class="tag">RecordCard preset="task"</span></div></div>
+</div>
+<p class="note">Bulk entry is the same flow with one substitution: <code>ConfirmModal</code> replaces steps 1–3, and lands rows in the same state a single create would.</p>
+
+<div class="cap">4 · Record-detail page</div>
+<p class="lead">Opening one record — a person, an asset, a request. Two columns: identity on the left, the record's own sections on the right. Only the field lists change between modules.</p>
+<div class="wire">
+  <div class="detail">
+    <div class="stack">
+      <div class="z brand"><i class="ph ph-user-circle"></i><span><b>Identity</b> — Avatar · name · role · Rating</span></div>
+      <div class="z" style="flex:1"><i class="ph ph-list-dashes"></i><span><b>DetailList</b> — key/value rows, copyable IDs in the data face</span></div>
+    </div>
+    <div class="stack">
+      <div class="z"><i class="ph ph-arrow-left"></i><span><b>Header</b> — back · title · Tag · DropdownMenu actions</span></div>
+      <div class="z"><i class="ph ph-squares-four"></i><span><b>Tabs</b> — the record's own sections</span></div>
+      <div class="z"><i class="ph ph-chart-bar"></i><span><b>StatCard strip</b> — the two or three figures that matter</span></div>
+      <div class="z" style="flex:1"><i class="ph ph-cards"></i><span><b>DetailSection</b> ×N — grouped fields, each with its own edit hand-off</span></div>
+      <div class="z"><i class="ph ph-paperclip"></i><span><b>AttachmentRow</b> ×N — inside a DetailSection</span></div>
+    </div>
+  </div>
+</div>
+<p class="note">The page is read-only by default. Editing is a hand-off, not a mode: a section's pencil opens the form that owns those fields (<code>RecordForm mode="edit"</code> or a scoped Panel). That keeps one component responsible for validating any given field.</p>
+
+<div class="cap">Using these</div>
+<p class="lead">A new module starts from the <b>Desk App Scaffold</b> template, which is these four patterns already assembled — swap <code>data.js</code> and the labels. Build a page by hand only when it genuinely doesn't fit one of them, and when that happens, say which region is wrong before adding a component.</p>
+
+</body></html>

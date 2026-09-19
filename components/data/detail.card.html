@@ -1,0 +1,163 @@
+<!-- @dsCard group="Data" viewport="1100x1000" name="Record detail — the read-only family" subtitle="DetailSection · DetailList / KeyValueRow / CopyButton · StatCard · AttachmentRow · plus the page pattern they assemble into" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8"><title>Record detail family</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:20px;background:var(--surface-page);font-family:var(--font-sans)}.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:22px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.cap:first-child{margin-top:0}.lbl{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);margin:0 0 8px}.note{font:var(--fw-regular) var(--text-xs)/1.5 var(--font-sans);color:var(--text-tertiary);margin:10px 0 0;max-width:68ch}.cols2{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}.cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;align-items:start}</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { DetailSection, DetailList, KeyValueRow, CopyButton, StatCard, AttachmentRow, OptionRow, Rating, Tag, Avatar, Button } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+
+const WORK = [
+  { icon:"ph-identification-badge", label:"Employee ID", value:"AGK-1180", copyable:true, mono:true },
+  { icon:"ph-briefcase", label:"Designation", value:"Senior Lead Engineer" },
+  { icon:"ph-users-three", label:"Team", value:"Propulsion" },
+  { icon:"ph-envelope-simple", label:"Work email", value:"meera.k@agnikul.com", copyable:true },
+  { icon:"ph-phone", label:"Work mobile", value:"+91 44 6697 4218", copyable:true, mono:true },
+  { icon:"ph-user", label:"Reports to", value:"Aravind Prabhu", onClick:()=>{} },
+];
+const IDS = [
+  { label:"PAN", value:"MKAPK4218F", copyable:true, mono:true },
+  { label:"Aadhaar", value:"XXXX XXXX 4218", mono:true },
+  { label:"PF number", value:"TN/MAS/48221/204", copyable:true, mono:true },
+  { label:"UAN", value:"100512480221", copyable:true, mono:true },
+  { label:"Bank", value:"HDFC Bank" },
+  { label:"IFSC", value:"HDFC0000241", copyable:true, mono:true },
+];
+
+function Demo(){
+  const [stars,setStars]=React.useState(4);
+  return (<div>
+    <div className="cap">DetailSection — the read-only counterpart to FormSection</div>
+    <div className="cols2">
+      <DetailSection icon="ph-identification-card" title="Employment" desc="Work identity and reporting line" onEdit={()=>{}}>
+        {WORK.slice(0,4).map(f=><KeyValueRow key={f.label} {...f}/>)}
+      </DetailSection>
+      <DetailSection icon="ph-file-text" title="Statutory" grid={false}>
+        <DetailList items={IDS} layout="row"/>
+      </DetailSection>
+    </div>
+    <p className="note">The section owns the grid; rows never set their own width. <code>grid={"{false}"}</code> gives a plain body for a nested list or table. <code>onEdit</code> adds the pencil — the section stays read-only, the pencil hands off to a form.</p>
+
+    <div className="cap">DetailList — three layouts, same items</div>
+    <div className="cols3">
+      <div><div className="lbl">bordered — divided card (default)</div><DetailList items={WORK.slice(0,4)}/></div>
+      <div><div className="lbl">row — label left, value right</div><DetailList items={IDS.slice(0,4)} layout="row"/></div>
+      <div><div className="lbl">grid — auto-fill field grid</div><DetailList items={WORK.slice(0,4)} layout="grid" minCol={150}/></div>
+    </div>
+    <p className="note">Values marked <code>copyable</code> get a <code>CopyButton</code> that confirms for 1.6s — use it on every ID a person will paste into another system. <code>mono</code> is not decoration: IDs, numbers and dates in the data face is a brand tell and makes mistyped values visible.</p>
+
+    <div className="cap">KeyValueRow — value kinds</div>
+    <DetailSection icon="ph-list" title="One of each" minCol={230}>
+      <KeyValueRow icon="ph-hash" label="Plain" value="Propulsion"/>
+      <KeyValueRow icon="ph-identification-badge" label="Mono + copyable" value="AGK-1180" mono copyable/>
+      <KeyValueRow icon="ph-user" label="Link — opens another record" value="Aravind Prabhu" onClick={()=>{}}/>
+      <KeyValueRow icon="ph-seal-check" label="Node value" value={<Tag status="Approved"/>}/>
+      <KeyValueRow icon="ph-star" label="Rating" value={<Rating value={5} showValue/>}/>
+      <KeyValueRow icon="ph-prohibit" label="Empty — falls back to an em dash" value=""/>
+      <KeyValueRow icon="ph-map-pin" label="Long value, full row" span value="No. 24, Kamaraj Avenue, Taramani, Chennai 600113 — gate 3, block B, second floor"/>
+    </DetailSection>
+
+    <div className="cap">StatCard</div>
+    <div className="cols3">
+      <StatCard label="Casual leave" value={6} total={12} remainingLabel="Remaining" tone="warning"/>
+      <StatCard label="Sick leave" value={2} total={8} remainingLabel="Remaining" tone="info"/>
+      <StatCard label="Loss of pay" value={1} tone="error" captions={[{label:"This year",value:1},{label:"Last year",value:0}]}/>
+      <StatCard label="Records approved" value={128} icon="ph-check-circle" tone="success" captions={[{label:"This quarter",value:41}]}/>
+      <StatCard label="Assets assigned" value={3} icon="ph-laptop" tone="brand"/>
+      <StatCard label="Open actions" value={2} icon="ph-warning" tone="pending" selected onClick={()=>{}}/>
+    </div>
+    <p className="note">Two different jobs, easy to confuse: <b>StatCard</b> is one standalone figure; <b>QuickStats</b> is a click-to-filter strip bound to a records region. If clicking should filter a list below it, you want QuickStats.</p>
+
+    <div className="cap">AttachmentRow — rest · uploading · failed</div>
+    <DetailSection icon="ph-paperclip" title="Documents" grid={false} pad={8}>
+      <AttachmentRow name="offer-letter-signed.pdf" meta="412 KB · 12 Feb 2026" onView={()=>{}} onDownload={()=>{}}/>
+      <AttachmentRow name="bracket-assembly.step" meta="8.1 MB · 04 Jul 2026" onView={()=>{}} onDownload={()=>{}} onRemove={()=>{}}/>
+      <AttachmentRow name="crew-roster.csv" meta="24 KB · today" onDownload={()=>{}}/>
+      <AttachmentRow name="site-photo.jpg" progress={62}/>
+      <AttachmentRow name="quarterly-report.xlsx" error="File exceeds the 10 MB limit" onRetry={()=>{}} onRemove={()=>{}}/>
+    </DetailSection>
+    <p className="note">The extension picks the icon, so a module never maps file types itself. Uploading swaps the meta line for a progress bar; failure swaps it for the reason plus retry.</p>
+
+    <div className="cap">Rating</div>
+    <div style={{display:"flex",gap:26,flexWrap:"wrap",alignItems:"center"}}>
+      <div><div className="lbl">Read-only</div><Rating value={4} showValue/></div>
+      <div><div className="lbl">Sizes</div><span style={{display:"inline-flex",gap:14,alignItems:"center"}}><Rating value={3} size="sm"/><Rating value={3} size="md"/><Rating value={3} size="lg"/></span></div>
+      <div><div className="lbl">Settable — hover then click</div><Rating value={stars} onChange={setStars} size="lg" showValue/></div>
+      <div><div className="lbl">Zero</div><Rating value={0}/></div>
+    </div>
+
+    <div className="cap">OptionRow — the tracker / support / settings row</div>
+    <div className="cols2">
+      <div>
+        <div className="lbl">variant="card" — a grid of trackers</div>
+        <div style={{display:"grid",gap:10}}>
+          <OptionRow icon="ph-user-plus" title="Onboarding" desc="Review onboarding information and joining details." note="Onboarded date:" value="12 Feb 2024" onClick={()=>{}}/>
+          <OptionRow icon="ph-receipt" title="Payslips" desc="Latest: Jun 2026." note="Latest payslip" value="Download Jun 2026" valueIcon="ph-download-simple" onClick={()=>{}}/>
+          <OptionRow icon="ph-sign-out" title="Exit process" desc="No exit process initiated." note="Status:" value="Initiate" valueIcon="ph-plus-circle" disabled/>
+        </div>
+      </div>
+      <div>
+        <div className="lbl">variant="row" — inside a panel</div>
+        <div style={{background:"var(--surface-card)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:6}}>
+          <OptionRow variant="row" icon="ph-chats-circle" title="Live chat" desc="Typical reply in 2 min" onClick={()=>{}}/>
+          <OptionRow variant="row" icon="ph-envelope-simple" title="Email support" desc="ops-support@agnikul.com" onClick={()=>{}}/>
+          <OptionRow variant="row" icon="ph-book-open" title="Documentation" desc="Guides and release notes" onClick={()=>{}}/>
+          <OptionRow variant="row" icon="ph-bell" title="Weekly digest" desc="Monday summary of your records" trailing={<Tag tone="done" size="sm">On</Tag>}/>
+        </div>
+      </div>
+    </div>
+    <div className="cols2" style={{marginTop:14}}>
+      <div>
+        <div className="lbl">selected · iconTone</div>
+        <div style={{display:"grid",gap:10}}>
+          <OptionRow icon="ph-user-plus" iconTone="var(--status-success)" title="Onboarding" desc="Selected — brand border + fill" note="Onboarded date:" value="12 Feb 2024" selected onClick={()=>{}}/>
+          <OptionRow icon="ph-receipt" iconTone="var(--status-warning)" title="Payslips" desc="iconTone overrides the brand default" note="Latest payslip" value="Download Jun 2026" valueIcon="ph-download-simple" onClick={()=>{}}/>
+        </div>
+      </div>
+    </div>
+    <p className="note">One component covers tracker cards, support options and settings choices — three shapes that used to be written three times. <code>ActionTile</code> is its sibling for module landing pages, where the tile is the primary way in rather than a row in a list.</p>
+
+    <div className="cap">The pattern — how a record-detail page assembles</div>
+    <div style={{display:"grid",gridTemplateColumns:"300px 1fr",gap:16,alignItems:"start"}}>
+      <div style={{display:"flex",flexDirection:"column",gap:12}}>
+        <DetailSection grid={false} pad={0}>
+          <div style={{padding:"18px 16px",display:"flex",flexDirection:"column",alignItems:"center",gap:9,borderBottom:"1px solid var(--border-subtle)"}}>
+            <Avatar name="Meera Krishnan" size="lg"/>
+            <div style={{textAlign:"center"}}>
+              <p style={{margin:0,fontSize:"var(--text-md)",fontWeight:"var(--fw-semibold)"}}>Meera Krishnan</p>
+              <p style={{margin:"2px 0 0",fontSize:"var(--text-xs)",color:"var(--text-tertiary)"}}>Senior Lead Engineer · Propulsion</p>
+            </div>
+            <Rating value={5} size="sm" label="Safety rating 5/5"/>
+          </div>
+          <DetailList items={WORK} style={{border:"none",borderRadius:0}}/>
+        </DetailSection>
+      </div>
+      <div style={{display:"flex",flexDirection:"column",gap:14}}>
+        <div className="cols3"><StatCard label="Casual leave" value={6} total={12} remainingLabel="Remaining" tone="warning"/><StatCard label="Sick leave" value={2} total={8} remainingLabel="Remaining" tone="info"/><StatCard label="Loss of pay" value={1} tone="error"/></div>
+        <DetailSection icon="ph-file-text" title="Statutory & banking" onEdit={()=>{}} minCol={210}>
+          {IDS.map(f=><KeyValueRow key={f.label} {...f}/>)}
+        </DetailSection>
+        <DetailSection icon="ph-paperclip" title="Documents" grid={false} pad={8}>
+          <AttachmentRow name="offer-letter-signed.pdf" meta="412 KB · 12 Feb 2026" onView={()=>{}} onDownload={()=>{}}/>
+          <AttachmentRow name="id-proof.pdf" meta="180 KB · 12 Feb 2026" onView={()=>{}} onDownload={()=>{}}/>
+        </DetailSection>
+      </div>
+    </div>
+    <p className="note">Left column: identity + <code>DetailList</code>. Right column: <code>StatCard</code> strip, then <code>DetailSection</code>s — statutory fields, then attachments. Every ERP record-detail page is this shape; only the field lists change.</p>
+    <div className="cap">Usage</div>
+    <pre style={{fontFamily:"var(--font-data)",fontSize:"var(--text-xs)",background:"var(--surface-soft)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:14,overflow:"auto"}}>{`<DetailSection icon="ph-identification-card" title="Employment" onEdit={openForm}>
+  <KeyValueRow icon="ph-envelope-simple" label="Work email" value={person.email} copyable/>
+</DetailSection>
+<StatCard label="Casual leave" value={6} total={12} remainingLabel="Remaining" tone="warning"/>`}</pre>
+    <div className="cap">Responsive</div>
+    <p className="note" style={{maxWidth:"78ch"}}>DetailList's <code>layout="grid"</code> and the StatCard strip both use <code>auto-fit</code> grids that drop columns as width shrinks, down to one on phone — no prop change needed. <code>layout="row"</code> keeps label-left/value-right at any width; on a very narrow panel switch to the default bordered layout instead, since a long value has nowhere to wrap next to a fixed label column. The two-column record-detail pattern above stacks to one column below ~900px.</p>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script></body></html>

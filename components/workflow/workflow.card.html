@@ -1,0 +1,75 @@
+<!-- @dsCard group="Workflow" viewport="760x600" name="Workflow" subtitle="ApprovalStepper · AuditTrail — the two components that know what an approval is. States · Variants" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:18px;background:var(--surface-page)}.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:18px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.cap:first-child{margin-top:0}.lbl{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);margin:0 0 10px}.sec{margin-bottom:18px}.cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}.card{background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:16px}</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { ApprovalStepper, AuditTrail } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+function Demo(){
+  return (<div>
+    <div className="cap">ApprovalStepper — states (done · current · pending · rejected)</div>
+    <div className="sec">
+      <div className="lbl">In progress · interactive (hover a stage)</div>
+      <div className="card"><ApprovalStepper interactive steps={[
+        {label:"Submitted",status:"done",actor:"Meera K.",ts:"12 Jun",detail:"Request raised."},
+        {label:"Finance review",status:"done",actor:"R. Sharma",ts:"13 Jun",detail:"Budget verified."},
+        {label:"Head approval",status:"current",actor:"A. Prabhu",detail:"Awaiting sign-off."},
+        {label:"PO issued",status:"pending"},
+      ]}/></div>
+    </div>
+    <div className="sec">
+      <div className="lbl">Rejected path</div>
+      <div className="card"><ApprovalStepper steps={[
+        {label:"Submitted",status:"done"},
+        {label:"Finance review",status:"done"},
+        {label:"Head approval",status:"rejected",actor:"A. Prabhu"},
+        {label:"PO issued",status:"pending"},
+      ]}/></div>
+    </div>
+    <div className="cap">Variants — vertical orientation</div>
+    <div className="sec"><div className="cols"><div className="card">
+      <ApprovalStepper orientation="vertical" steps={[
+        {label:"Submitted",status:"done",actor:"Meera K.",ts:"12 Jun"},
+        {label:"Finance review",status:"done",actor:"R. Sharma",ts:"13 Jun"},
+        {label:"Head approval",status:"current",actor:"Pending"},
+        {label:"PO issued",status:"pending"},
+      ]}/>
+    </div><div/></div></div>
+
+    <div className="cap">Supporting components</div>
+    <div className="cols">
+      <div><div className="lbl">AuditTrail</div>
+        <div className="card"><AuditTrail entries={[
+          {actor:"Priya N.",action:"created the work order",ts:"12 Jun 2025 · 09:12",icon:"ph-plus",tone:"info"},
+          {actor:"R. Sharma",action:"approved finance review",ts:"13 Jun 2025 · 14:30",icon:"ph-check",tone:"success"},
+          {actor:"System",action:"flagged missing cost-centre",ts:"13 Jun 2025 · 14:31",icon:"ph-warning",tone:"warning"},
+        ]}/></div>
+      </div>
+      <div>
+        <div className="lbl">Moved to the Data group</div>
+        <p style={{font:"var(--fw-regular) var(--text-xs)/1.5 var(--font-sans)",color:"var(--text-tertiary)",margin:0}}>
+          <b>BulkActionToolbar</b> and <b>DocumentPreview</b> moved to <code>data/</code> in the Aug 2026 re-org —
+          neither knows what an approval is. Their specimens now live on <b>Toolbar · documents · agenda rows</b> in
+          the Data group, with the role gating and every document type.
+        </p>
+      </div>
+    </div>
+    <div className="cap">Usage</div>
+    <pre style={{font:"var(--text-2xs)/1.6 var(--font-data)",background:"var(--surface-sunken)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:"12px 14px",overflow:"auto",color:"var(--text-secondary)"}}>{`<ApprovalStepper interactive steps={[
+  {label:"Submitted",status:"done",actor:"Meera K.",ts:"12 Jun"},
+  {label:"Head approval",status:"current",actor:"A. Prabhu"},
+]}/>
+<AuditTrail entries={[{actor:"R. Sharma",action:"approved finance review",ts:"13 Jun",icon:"ph-check",tone:"success"}]}/>`}</pre>
+    <div className="cap">Responsive</div>
+    <p style={{font:"var(--fw-regular) var(--text-xs)/1.5 var(--font-sans)",color:"var(--text-tertiary)",maxWidth:"70ch",margin:0}}>Horizontal orientation is for desktop-width panes; switch to <code>orientation="vertical"</code> once the host region drops below ~360px (a side pane on tablet, a phone-width dialog) — the stepper itself does not switch automatically, the host picks per breakpoint. AuditTrail's single column is already narrow-safe.</p>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script></body></html>

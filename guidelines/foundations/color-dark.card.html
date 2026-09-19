@@ -1,0 +1,25 @@
+<!-- @dsCard group="Colors" viewport="700x180" name="Dark mode surfaces" subtitle="Token-swap, not duplicated code. Page ≠ pure black; surfaces differ by tone." -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<style>
+body{margin:0;padding:0}
+.wrap{padding:18px;font-family:var(--font-sans)}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.sw{width:128px;height:64px;border-radius:var(--radius-md);border:1px solid var(--border-default);display:flex;align-items:flex-end;padding:8px;box-sizing:border-box}
+.n{font-size:var(--text-2xs);font-family:var(--font-data);font-weight:var(--fw-semibold)}
+.chips{display:flex;gap:8px;margin-top:10px}
+</style></head><body>
+<div class="wrap" data-theme="dark" style="background:var(--surface-page)">
+  <div class="row">
+    <div class="sw" style="background:var(--surface-page);color:var(--text-primary)"><span class="n">surface-page</span></div>
+    <div class="sw" style="background:var(--surface-card);color:var(--text-primary)"><span class="n">surface-card</span></div>
+    <div class="sw" style="background:var(--surface-soft);color:var(--text-primary)"><span class="n">surface-soft</span></div>
+    <div class="sw" style="background:var(--action-brand);color:#fff"><span class="n">action-brand</span></div>
+  </div>
+  <div class="chips">
+    <span style="font-size:var(--text-xs);font-weight:600;color:#fff;background:var(--status-success);padding:3px 9px;border-radius:var(--radius-full)">success</span>
+    <span style="font-size:var(--text-xs);font-weight:600;color:#fff;background:var(--status-warning);padding:3px 9px;border-radius:var(--radius-full)">warning</span>
+    <span style="font-size:var(--text-xs);font-weight:600;color:#fff;background:var(--status-error);padding:3px 9px;border-radius:var(--radius-full)">error</span>
+    <span style="font-size:var(--text-xs);font-weight:600;color:#16191D;background:var(--brand-accent);padding:3px 9px;border-radius:var(--radius-full)">accent</span>
+  </div>
+</div>
+</body></html>

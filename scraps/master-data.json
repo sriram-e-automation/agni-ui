@@ -1,0 +1,1204 @@
+{
+ "rows": [
+  {
+   "name": "BarChart",
+   "family": "charts",
+   "choices": [
+    "layout: vertical · horizontal"
+   ],
+   "states": [],
+   "purpose": "Categorical bar chart — grouped/stacked, vertical/horizontal, hover + legend."
+  },
+  {
+   "name": "ChartCard",
+   "family": "charts",
+   "choices": [],
+   "states": [],
+   "purpose": "Framing for one chart: title, subtitle, legend and body. Every dashboard chart sits in one of these so titles, spacing and legends stay identical across modules. Use Card for non-chart conte"
+  },
+  {
+   "name": "ChartKit",
+   "family": "charts",
+   "choices": [],
+   "states": [],
+   "purpose": "Blend two #rrggbb colours; t in [0,1]. Returns `b` if either isn't literal hex."
+  },
+  {
+   "name": "DonutChart",
+   "family": "charts",
+   "choices": [],
+   "states": [],
+   "purpose": "Responsive donut / proportion chart with legend (themes via --chart-* tokens)."
+  },
+  {
+   "name": "Gauge",
+   "family": "charts",
+   "choices": [],
+   "states": [
+    "showValue"
+   ],
+   "purpose": "Single-value arc gauge with a centred readout. Themes light + dark."
+  },
+  {
+   "name": "Heatmap",
+   "family": "charts",
+   "choices": [],
+   "states": [],
+   "purpose": "Grid heatmap — value→colour intensity ramp, scale bar, hover lift + tooltip."
+  },
+  {
+   "name": "LineChart",
+   "family": "charts",
+   "choices": [],
+   "states": [],
+   "purpose": "Line / area trend chart — multi-series, hover crosshair + interactive legend."
+  },
+  {
+   "name": "PieChart",
+   "family": "charts",
+   "choices": [],
+   "states": [],
+   "purpose": "Pie / donut proportion chart — hover highlight, interactive legend, centre total."
+  },
+  {
+   "name": "RadarChart",
+   "family": "charts",
+   "choices": [],
+   "states": [],
+   "purpose": "Polar radar/spider chart — multi-series, hover-to-highlight, toggle legend."
+  },
+  {
+   "name": "ScatterChart",
+   "family": "charts",
+   "choices": [],
+   "states": [],
+   "purpose": "Scatter / point chart — multiple x/y series, hover highlight + legend."
+  },
+  {
+   "name": "SparkLineChart",
+   "family": "charts",
+   "choices": [],
+   "states": [],
+   "purpose": "Compact, axis-less trend (line or bar) for inline KPI / table use."
+  },
+  {
+   "name": "AppSwitcher",
+   "family": "chrome",
+   "choices": [],
+   "states": [
+    "open"
+   ],
+   "purpose": "Full-screen ERP application launcher overlay."
+  },
+  {
+   "name": "NavRail",
+   "family": "chrome",
+   "choices": [],
+   "states": [
+    "open",
+    "dark",
+    "overlay",
+    "scrim"
+   ],
+   "purpose": "Desk-app left nav: items-driven with sub-groups, drawer ⇄ icon-rail collapse, overlay mode with its own scrim."
+  },
+  {
+   "name": "NotificationsMenu",
+   "family": "chrome",
+   "choices": [],
+   "states": [],
+   "purpose": "Notification-bell popover: Unread/Read tabs + date-grouped list + footer actions."
+  },
+  {
+   "name": "PageTitleBar",
+   "family": "chrome",
+   "choices": [],
+   "states": [
+    "loading",
+    "disabled",
+    "countsLoading"
+   ],
+   "purpose": "Page heading row: icon tile + title, segmented scope tabs with counts, icon view-mode switcher, actions slot."
+  },
+  {
+   "name": "PanelIconMenu",
+   "family": "chrome",
+   "choices": [
+    "type: radio · checkbox"
+   ],
+   "states": [
+    "active"
+   ],
+   "purpose": "Bundle object: { PanelIconMenu, MenuRow, PanelEmpty, panelMenuLabelStyle }."
+  },
+  {
+   "name": "MenuRow",
+   "family": "chrome",
+   "choices": [
+    "type: radio · checkbox"
+   ],
+   "states": [
+    "active"
+   ],
+   "purpose": "Bundle object: { PanelIconMenu, MenuRow, PanelEmpty, panelMenuLabelStyle }."
+  },
+  {
+   "name": "PanelEmpty",
+   "family": "chrome",
+   "choices": [
+    "type: radio · checkbox"
+   ],
+   "states": [
+    "active"
+   ],
+   "purpose": "Bundle object: { PanelIconMenu, MenuRow, PanelEmpty, panelMenuLabelStyle }."
+  },
+  {
+   "name": "PanelKit",
+   "family": "chrome",
+   "choices": [
+    "type: radio · checkbox"
+   ],
+   "states": [
+    "active"
+   ],
+   "purpose": "Bundle object: { PanelIconMenu, MenuRow, PanelEmpty, panelMenuLabelStyle }."
+  },
+  {
+   "name": "SettingsMenu",
+   "family": "chrome",
+   "choices": [],
+   "states": [
+    "dark"
+   ],
+   "purpose": "Appearance popover: dark-mode toggle + accent swatches + optional background picker."
+  },
+  {
+   "name": "ShellFooter",
+   "family": "chrome",
+   "choices": [],
+   "states": [],
+   "purpose": "Canonical Desk-app footer bar — signature left, copyright right. Pairs with ShellHeader."
+  },
+  {
+   "name": "ShellHeader",
+   "family": "chrome",
+   "choices": [],
+   "states": [
+    "dark",
+    "danger"
+   ],
+   "purpose": "Canonical Desk-app top bar: brand cell, module tile + breadcrumb, NotificationsMenu bell, SettingsMenu gear, AvatarStack presence, profile dropdown."
+  },
+  {
+   "name": "Theme",
+   "family": "chrome",
+   "choices": [],
+   "states": [
+    "dark"
+   ],
+   "purpose": "Runtime theming helper object (dark + accent)."
+  },
+  {
+   "name": "WorkspacePane",
+   "family": "chrome",
+   "choices": [],
+   "states": [
+    "open"
+   ],
+   "purpose": "Right-hand collapsible utility rail."
+  },
+  {
+   "name": "Accordion",
+   "family": "containment",
+   "choices": [],
+   "states": [
+    "multi"
+   ],
+   "purpose": "Collapsible stacked sections."
+  },
+  {
+   "name": "Drawer",
+   "family": "containment",
+   "choices": [
+    "side: right · left"
+   ],
+   "states": [
+    "open"
+   ],
+   "purpose": "Slide-in side panel over a scrim (detail / filters / edit)."
+  },
+  {
+   "name": "Panel",
+   "family": "containment",
+   "choices": [],
+   "states": [
+    "collapsible"
+   ],
+   "purpose": "Section container with header + optional collapse."
+  },
+  {
+   "name": "Sheet",
+   "family": "containment",
+   "choices": [],
+   "states": [
+    "open"
+   ],
+   "purpose": "Bottom slide-up form shell: sticky header + scrollable body + sticky footer."
+  },
+  {
+   "name": "ActionTile",
+   "family": "core",
+   "choices": [],
+   "states": [
+    "disabled"
+   ],
+   "purpose": "Launchpad tile: icon + title + description + arrow, with lift on hover. The unit of a module landing page (\"Quick access\"). Wrap in RoleGate, or pass `disabled`, to express permissions. Use "
+  },
+  {
+   "name": "Avatar",
+   "family": "core",
+   "choices": [
+    "size: xs · sm · md · lg"
+   ],
+   "states": [],
+   "purpose": "Initials/photo avatar with presence indicator."
+  },
+  {
+   "name": "AvatarStack",
+   "family": "core",
+   "choices": [
+    "size: xs · sm · md · lg"
+   ],
+   "states": [],
+   "purpose": "Overlapping identity avatars with a +N overflow chip."
+  },
+  {
+   "name": "Badge",
+   "family": "core",
+   "choices": [
+    "size: sm · md",
+    "tone: done · doing · todo · error · warning · pending · blocked · brand · neutral"
+   ],
+   "states": [],
+   "purpose": "Compact status / category pill."
+  },
+  {
+   "name": "Button",
+   "family": "core",
+   "choices": [
+    "variant: primary · secondary · tertiary · ghost · danger · brand-soft",
+    "size: sm · md · lg",
+    "type: button · submit · reset"
+   ],
+   "states": [
+    "loading",
+    "disabled"
+   ],
+   "purpose": "Primary action control for AgniUI desks. @startingPoint section=\"Core\" subtitle=\"Buttons in every category & size\" viewport=\"700x180\" /"
+  },
+  {
+   "name": "Card",
+   "family": "core",
+   "choices": [],
+   "states": [
+    "loading",
+    "empty",
+    "error"
+   ],
+   "purpose": "Surface container with optional header + actions."
+  },
+  {
+   "name": "DropdownMenu",
+   "family": "core",
+   "choices": [
+    "align: start · end"
+   ],
+   "states": [
+    "danger"
+   ],
+   "purpose": "Click-to-open action menu anchored to a trigger."
+  },
+  {
+   "name": "IconButton",
+   "family": "core",
+   "choices": [
+    "variant: solid · outline · ghost",
+    "size: sm · md · lg"
+   ],
+   "states": [
+    "disabled",
+    "active"
+   ],
+   "purpose": "Icon-only control — toolbars, headers, table row actions."
+  },
+  {
+   "name": "OptionRow",
+   "family": "core",
+   "choices": [
+    "variant: card · row"
+   ],
+   "states": [
+    "disabled",
+    "selected"
+   ],
+   "purpose": "Icon + title + description choice row, with an optional note/value footer. One component for tracker cards, support options, settings choices and launcher rows. Use ActionTile for a role-awa"
+  },
+  {
+   "name": "Rating",
+   "family": "core",
+   "choices": [
+    "size: sm · md · lg"
+   ],
+   "states": [
+    "showValue"
+   ],
+   "purpose": "Star scale — read-only by default (safety rating, review score); pass onChange to let the user set it. /"
+  },
+  {
+   "name": "RoleGate",
+   "family": "core",
+   "choices": [],
+   "states": [],
+   "purpose": "Role-based visibility wrapper."
+  },
+  {
+   "name": "SplitButton",
+   "family": "core",
+   "choices": [
+    "variant: primary · secondary · danger",
+    "size: sm · md · lg"
+   ],
+   "states": [
+    "disabled",
+    "danger"
+   ],
+   "purpose": "Primary action + caret menu of secondary actions."
+  },
+  {
+   "name": "Tag",
+   "family": "core",
+   "choices": [],
+   "states": [],
+   "purpose": "Removable filter / input chip."
+  },
+  {
+   "name": "ApprovalCard",
+   "family": "data",
+   "choices": [],
+   "states": [
+    "selected"
+   ],
+   "purpose": "Pending-approval card: department strip, status dot, metadata grid, ✗ reject + Approve & assign. Preset renderer for `<RecordCard preset=\"approval\">` — prefer RecordCard in new work so one r"
+  },
+  {
+   "name": "AttachmentRow",
+   "family": "data",
+   "choices": [
+    "kind: pdf · image · sheet · doc · cad · file"
+   ],
+   "states": [
+    "error"
+   ],
+   "purpose": "One attached file: type icon, name, meta, and hover actions — plus uploading (progress) and failed (retry) states. Sits between FileUpload / FileDropzone (getting files in) and DocumentPrevi"
+  },
+  {
+   "name": "BulkActionToolbar",
+   "family": "data",
+   "choices": [],
+   "states": [
+    "danger"
+   ],
+   "purpose": "Selection action bar for bulk operations over a table."
+  },
+  {
+   "name": "Calendar",
+   "family": "data",
+   "choices": [
+    "view: month · week · year"
+   ],
+   "states": [],
+   "purpose": "AgniUI · Calendar — the \"calendar\" view type for the Desk App Scaffold. Lays records on a month / week / year grid keyed by each record's date, tones per-day count chips by status (shared St"
+  },
+  {
+   "name": "DataTable",
+   "family": "data",
+   "choices": [
+    "align: left · center · right",
+    "density: compact · comfortable · spacious"
+   ],
+   "states": [
+    "loading",
+    "empty",
+    "error",
+    "dark"
+   ],
+   "purpose": "Sortable, selectable table with sticky header; fillHeight mode adds fixed header + scrolling body, column picker, action column."
+  },
+  {
+   "name": "DateRangeFilter",
+   "family": "data",
+   "choices": [
+    "gran: week · month · quarter · year · null"
+   ],
+   "states": [
+    "dark"
+   ],
+   "purpose": "Compute {start,end,lbl} for a granularity + offset from `now`."
+  },
+  {
+   "name": "CopyButton",
+   "family": "data",
+   "choices": [
+    "layout: stacked · row · bordered"
+   ],
+   "states": [
+    "copyable",
+    "mono"
+   ],
+   "purpose": "Stack of KeyValueRows — the read-only field display for record-detail pages."
+  },
+  {
+   "name": "KeyValueRow",
+   "family": "data",
+   "choices": [
+    "layout: stacked · row · bordered"
+   ],
+   "states": [
+    "copyable",
+    "mono"
+   ],
+   "purpose": "Stack of KeyValueRows — the read-only field display for record-detail pages."
+  },
+  {
+   "name": "DetailList",
+   "family": "data",
+   "choices": [
+    "layout: stacked · row · bordered"
+   ],
+   "states": [
+    "copyable",
+    "mono"
+   ],
+   "purpose": "Stack of KeyValueRows — the read-only field display for record-detail pages."
+  },
+  {
+   "name": "DetailSection",
+   "family": "data",
+   "choices": [],
+   "states": [],
+   "purpose": "Read-only counterpart to FormSection: titled card + auto-fill field grid. The record-detail page container — pair with DetailList / KeyValueRow. Use FormSection when the fields are editable "
+  },
+  {
+   "name": "DocumentPreview",
+   "family": "data",
+   "choices": [
+    "type: pdf · doc · xls · img · cad · zip · file"
+   ],
+   "states": [],
+   "purpose": "Attachment / document preview row with actions."
+  },
+  {
+   "name": "EditableTable",
+   "family": "data",
+   "choices": [
+    "align: left · center · right",
+    "type: text · number · select"
+   ],
+   "states": [
+    "empty"
+   ],
+   "purpose": "Inline-editable rows with add / edit / delete under fixed columns."
+  },
+  {
+   "name": "EventRow",
+   "family": "data",
+   "choices": [
+    "tone: brand · success · warning · error · info · pending · neutral"
+   ],
+   "states": [],
+   "purpose": "One agenda entry: tone bar + label + time/meta. Panels and day views group these under a date heading. Tones come from the shared status vocabulary — never map event types to ad-hoc colours."
+  },
+  {
+   "name": "FilterBuilder",
+   "family": "data",
+   "choices": [],
+   "states": [],
+   "purpose": "Compact AND-chained query / filter builder — the RULES half of the filter pair. Use FilterPanel for quick facet narrowing, FilterBuilder for precise or saved queries. Both mount inside PageC"
+  },
+  {
+   "name": "FilterPanel",
+   "family": "data",
+   "choices": [],
+   "states": [
+    "dark"
+   ],
+   "purpose": "Toolbar funnel filter — compact trigger + popover of multi-select option pills per section. The FACETS half of the filter pair; FilterBuilder is the RULES half. Both mount inside PageControl"
+  },
+  {
+   "name": "GanttTimeline",
+   "family": "data",
+   "choices": [
+    "size: md · sm"
+   ],
+   "states": [],
+   "purpose": "Horizontal scheduling (Gantt) view: collapsible group rows in a sticky left column, a two-tier sticky time header, status-toned bars (shared kanban tokens), a today line, hover tooltips and "
+  },
+  {
+   "name": "KanbanBoard",
+   "family": "data",
+   "choices": [],
+   "states": [
+    "loading",
+    "empty",
+    "error",
+    "dark"
+   ],
+   "purpose": "Kanban lane layout: tone-tinted sticky headers + count pills, scrolling lane bodies, DS KanbanCard by default."
+  },
+  {
+   "name": "KanbanCard",
+   "family": "data",
+   "choices": [
+    "status: · Approvals · Yet to start · In progress · Overdue · Completed · Rejected"
+   ],
+   "states": [
+    "disabled",
+    "busy",
+    "selected"
+   ],
+   "purpose": "Generic Kanban board card for any process / request / application. Four sections; the status selects the footer variant and opens the DS confirmation modal on Approve / Reject. Preset render"
+  },
+  {
+   "name": "List",
+   "family": "data",
+   "choices": [],
+   "states": [],
+   "purpose": "Vertical record list with leading/trailing slots."
+  },
+  {
+   "name": "OrgTree",
+   "family": "data",
+   "choices": [],
+   "states": [
+    "collapsible"
+   ],
+   "purpose": "AgniUI · OrgTree Reporting line-up as a horizontal bracket tree: the root (e.g. Director) on the left, reports fanning right through elbow connectors — PersonCard nodes, collapsible branches"
+  },
+  {
+   "name": "PageControls",
+   "family": "data",
+   "choices": [],
+   "states": [
+    "loading",
+    "disabled",
+    "dark",
+    "searching"
+   ],
+   "purpose": "AgniUI · PageControls The one toolbar above a records region — search, filters, date range, sort, column chooser, optional view switcher, primary action and pagination. Composes FilterPanel "
+  },
+  {
+   "name": "Pagination",
+   "family": "data",
+   "choices": [],
+   "states": [],
+   "purpose": "Windowed pager with prev/next."
+  },
+  {
+   "name": "PersonCard",
+   "family": "data",
+   "choices": [
+    "size: sm · md · lg"
+   ],
+   "states": [
+    "selected"
+   ],
+   "purpose": "AgniUI · PersonCard A crew-member card: avatar + name + crew · team, with the role level as an uppercase eyebrow. The node unit of OrgTree; also usable in directories and detail panes. State"
+  },
+  {
+   "name": "QuickStats",
+   "family": "data",
+   "choices": [],
+   "states": [
+    "showShare"
+   ],
+   "purpose": "Click-to-filter stat card strip for list pages."
+  },
+  {
+   "name": "RecordCard",
+   "family": "data",
+   "choices": [
+    "preset: kanban · approval · task"
+   ],
+   "states": [
+    "disabled",
+    "busy",
+    "selected"
+   ],
+   "purpose": "AgniUI · RecordCard The single card entry point for a record. One contract, three presets: kanban (status-driven footer) · approval (department strip + approve/reject) · task (app strip + ef"
+  },
+  {
+   "name": "StatCard",
+   "family": "data",
+   "choices": [
+    "tone: brand · success · warning · error · info · pending · neutral · string"
+   ],
+   "states": [
+    "selected"
+   ],
+   "purpose": "One measured value with an optional denominator and footer captions — leave balances, quota, per-record counts. Not the same as QuickStats: that is a click-to-filter strip bound to a list, t"
+  },
+  {
+   "name": "StatusChip",
+   "family": "data",
+   "choices": [
+    "size: sm · md",
+    "tone: done · doing · todo · pending · blocked · warning · error · brand · neutral"
+   ],
+   "states": [],
+   "purpose": "Record-status pill with a shared status→tone mapping."
+  },
+  {
+   "name": "TaskCard",
+   "family": "data",
+   "choices": [],
+   "states": [
+    "selected"
+   ],
+   "purpose": "Assignment card with effort logging: app strip + lane chip, metadata grid, running banner, ✓ complete + start/stop logging. Preset renderer for `<RecordCard preset=\"task\">` — prefer RecordCa"
+  },
+  {
+   "name": "TreeView",
+   "family": "data",
+   "choices": [],
+   "states": [],
+   "purpose": "Nested expandable tree (BOM, categories, file hierarchy)."
+  },
+  {
+   "name": "Banner",
+   "family": "feedback",
+   "choices": [
+    "tone: info · success · warning · error · brand"
+   ],
+   "states": [],
+   "purpose": "Full-width inline alert banner."
+  },
+  {
+   "name": "EmptyState",
+   "family": "feedback",
+   "choices": [
+    "size: sm · md · lg"
+   ],
+   "states": [],
+   "purpose": "Empty-state block — text + action, never a bare illustration."
+  },
+  {
+   "name": "ErrorState",
+   "family": "feedback",
+   "choices": [
+    "size: sm · md · lg"
+   ],
+   "states": [],
+   "purpose": "AgniUI · ErrorState The failure counterpart to EmptyState — what failed, and the way back. Consumed internally by DataTable, KanbanBoard, Card and RequestDetailModal through their `error` pr"
+  },
+  {
+   "name": "LoadingShapes",
+   "family": "feedback",
+   "choices": [
+    "shape: · text · heading · paragraph · button · iconButton · tag · badge · avatar · input · select · textarea · checkbox · switch · form · filterPanel · fileDropzone · card · panel · accordion · modal · banner · toast · emptyState · stat · quickStats · list · table · editableTable · pagination · tree · calendar · gantt · chart · barChart · lineChart · donut · gauge · sparkline · heatmap · kanban · kanbanCard · taskCard · personCard · approvalCard · approvalStepper · auditTrail · orgTree · documentPreview · requestForm · navRail · shellHeader · pageTitleBar · pageControls · page"
+   ],
+   "states": [
+    "loading",
+    "overlay"
+   ],
+   "purpose": "One loading state for every component family, via shape-matched skeletons."
+  },
+  {
+   "name": "Spinner",
+   "family": "feedback",
+   "choices": [
+    "shape: · text · heading · paragraph · button · iconButton · tag · badge · avatar · input · select · textarea · checkbox · switch · form · filterPanel · fileDropzone · card · panel · accordion · modal · banner · toast · emptyState · stat · quickStats · list · table · editableTable · pagination · tree · calendar · gantt · chart · barChart · lineChart · donut · gauge · sparkline · heatmap · kanban · kanbanCard · taskCard · personCard · approvalCard · approvalStepper · auditTrail · orgTree · documentPreview · requestForm · navRail · shellHeader · pageTitleBar · pageControls · page"
+   ],
+   "states": [
+    "loading",
+    "overlay"
+   ],
+   "purpose": "One loading state for every component family, via shape-matched skeletons."
+  },
+  {
+   "name": "LoadingOverlay",
+   "family": "feedback",
+   "choices": [
+    "shape: · text · heading · paragraph · button · iconButton · tag · badge · avatar · input · select · textarea · checkbox · switch · form · filterPanel · fileDropzone · card · panel · accordion · modal · banner · toast · emptyState · stat · quickStats · list · table · editableTable · pagination · tree · calendar · gantt · chart · barChart · lineChart · donut · gauge · sparkline · heatmap · kanban · kanbanCard · taskCard · personCard · approvalCard · approvalStepper · auditTrail · orgTree · documentPreview · requestForm · navRail · shellHeader · pageTitleBar · pageControls · page"
+   ],
+   "states": [
+    "loading",
+    "overlay"
+   ],
+   "purpose": "One loading state for every component family, via shape-matched skeletons."
+  },
+  {
+   "name": "Loading",
+   "family": "feedback",
+   "choices": [
+    "shape: · text · heading · paragraph · button · iconButton · tag · badge · avatar · input · select · textarea · checkbox · switch · form · filterPanel · fileDropzone · card · panel · accordion · modal · banner · toast · emptyState · stat · quickStats · list · table · editableTable · pagination · tree · calendar · gantt · chart · barChart · lineChart · donut · gauge · sparkline · heatmap · kanban · kanbanCard · taskCard · personCard · approvalCard · approvalStepper · auditTrail · orgTree · documentPreview · requestForm · navRail · shellHeader · pageTitleBar · pageControls · page"
+   ],
+   "states": [
+    "loading",
+    "overlay"
+   ],
+   "purpose": "One loading state for every component family, via shape-matched skeletons."
+  },
+  {
+   "name": "Modal",
+   "family": "feedback",
+   "choices": [
+    "size: sm · md · lg"
+   ],
+   "states": [
+    "open",
+    "danger"
+   ],
+   "purpose": "Centered modal dialog over a scrim (Esc + scrim-click close)."
+  },
+  {
+   "name": "Progress",
+   "family": "feedback",
+   "choices": [
+    "size: sm · md · lg",
+    "tone: brand · success · warning · error · info"
+   ],
+   "states": [
+    "indeterminate",
+    "showValue"
+   ],
+   "purpose": "Linear progress / loading bar."
+  },
+  {
+   "name": "Skeleton",
+   "family": "feedback",
+   "choices": [
+    "variant: line · block · circle"
+   ],
+   "states": [],
+   "purpose": "Shimmer loading placeholder."
+  },
+  {
+   "name": "Toast",
+   "family": "feedback",
+   "choices": [
+    "tone: info · success · warning · error"
+   ],
+   "states": [],
+   "purpose": "Inline notification toast."
+  },
+  {
+   "name": "TipBubble",
+   "family": "feedback",
+   "choices": [
+    "side: top · bottom · left · right"
+   ],
+   "states": [
+    "open"
+   ],
+   "purpose": "Open state + handlers for an anchored tooltip (spread `bind` onto the anchor)."
+  },
+  {
+   "name": "Tooltip",
+   "family": "feedback",
+   "choices": [
+    "side: top · bottom · left · right"
+   ],
+   "states": [
+    "open"
+   ],
+   "purpose": "Open state + handlers for an anchored tooltip (spread `bind` onto the anchor)."
+  },
+  {
+   "name": "Checkbox",
+   "family": "forms",
+   "choices": [
+    "size: sm · md"
+   ],
+   "states": [
+    "disabled",
+    "indeterminate"
+   ],
+   "purpose": "Controlled checkbox with optional label + indeterminate state."
+  },
+  {
+   "name": "CreatableSelect",
+   "family": "forms",
+   "choices": [
+    "size: sm · md · lg"
+   ],
+   "states": [
+    "error",
+    "disabled"
+   ],
+   "purpose": "Search-select that can add a new option inline when nothing matches."
+  },
+  {
+   "name": "DatePicker",
+   "family": "forms",
+   "choices": [
+    "size: sm · md · lg"
+   ],
+   "states": [
+    "error",
+    "disabled",
+    "dark"
+   ],
+   "purpose": "Custom calendar date picker, fully themed with DS tokens. onChange → Date | null."
+  },
+  {
+   "name": "FileDropzone",
+   "family": "forms",
+   "choices": [],
+   "states": [
+    "disabled"
+   ],
+   "purpose": "Drag-drop file input with format/size guidance, previews and reject states."
+  },
+  {
+   "name": "FileUpload",
+   "family": "forms",
+   "choices": [],
+   "states": [],
+   "purpose": "Drag-and-drop file dropzone."
+  },
+  {
+   "name": "FormField",
+   "family": "forms",
+   "choices": [],
+   "states": [
+    "error",
+    "required"
+   ],
+   "purpose": "Label + control + hint/error wrapper on the --field-* grid rhythm."
+  },
+  {
+   "name": "FormSection",
+   "family": "forms",
+   "choices": [
+    "cols: 2 · 3"
+   ],
+   "states": [],
+   "purpose": "Brand-rule section heading + fixed-column FormField grid."
+  },
+  {
+   "name": "Input",
+   "family": "forms",
+   "choices": [
+    "size: sm · md · lg"
+   ],
+   "states": [
+    "error",
+    "disabled"
+   ],
+   "purpose": "Text field with prefix/suffix icons + focus ring."
+  },
+  {
+   "name": "MultiSelect",
+   "family": "forms",
+   "choices": [
+    "size: sm · md · lg"
+   ],
+   "states": [
+    "error",
+    "disabled"
+   ],
+   "purpose": "Multi-value picker with removable chips."
+  },
+  {
+   "name": "MultiUserSelect",
+   "family": "forms",
+   "choices": [
+    "size: sm · md · lg"
+   ],
+   "states": [
+    "empty",
+    "error",
+    "disabled"
+   ],
+   "purpose": "Searchable multi-select for people. Trigger shows stacked avatar chips; dropdown stays open with checkbox rows. onChange receives the updated array of selected user ids. /"
+  },
+  {
+   "name": "QuantityStepper",
+   "family": "forms",
+   "choices": [
+    "size: sm · md · lg"
+   ],
+   "states": [
+    "disabled"
+   ],
+   "purpose": "Numeric stepper: − / + tickers plus a directly-editable, clamped value."
+  },
+  {
+   "name": "Radio",
+   "family": "forms",
+   "choices": [
+    "size: sm · md"
+   ],
+   "states": [
+    "disabled"
+   ],
+   "purpose": "Managed group of radios."
+  },
+  {
+   "name": "RadioGroup",
+   "family": "forms",
+   "choices": [
+    "size: sm · md"
+   ],
+   "states": [
+    "disabled"
+   ],
+   "purpose": "Managed group of radios."
+  },
+  {
+   "name": "RichTextEditor",
+   "family": "forms",
+   "choices": [],
+   "states": [
+    "error",
+    "disabled"
+   ],
+   "purpose": "Long-text editor: formatting toolbar over a contentEditable surface."
+  },
+  {
+   "name": "SearchSelect",
+   "family": "forms",
+   "choices": [
+    "size: sm · md · lg"
+   ],
+   "states": [
+    "empty",
+    "error",
+    "disabled"
+   ],
+   "purpose": "Single-select with an inline search box for long option lists."
+  },
+  {
+   "name": "Select",
+   "family": "forms",
+   "choices": [
+    "size: sm · md · lg"
+   ],
+   "states": [
+    "error",
+    "disabled"
+   ],
+   "purpose": "Custom dropdown select with themed menu."
+  },
+  {
+   "name": "Switch",
+   "family": "forms",
+   "choices": [
+    "size: sm · md"
+   ],
+   "states": [
+    "disabled"
+   ],
+   "purpose": "Boolean toggle switch."
+  },
+  {
+   "name": "Textarea",
+   "family": "forms",
+   "choices": [],
+   "states": [
+    "error",
+    "disabled"
+   ],
+   "purpose": "Multi-line text field."
+  },
+  {
+   "name": "UserSelect",
+   "family": "forms",
+   "choices": [
+    "size: sm · md · lg"
+   ],
+   "states": [
+    "empty",
+    "error",
+    "disabled"
+   ],
+   "purpose": "Searchable people picker — avatar + crew name + team/role subtext."
+  },
+  {
+   "name": "AppShell",
+   "family": "layout",
+   "choices": [],
+   "states": [],
+   "purpose": "Full-height desk frame: header · sidebar · content · footer. @startingPoint section=\"Layout\" subtitle=\"Full desk frame: header, rail, content, footer\" viewport=\"1280x720\" /"
+  },
+  {
+   "name": "Bar",
+   "family": "layout",
+   "choices": [
+    "position: top · footer"
+   ],
+   "states": [],
+   "purpose": "Horizontal header / footer chrome bar."
+  },
+  {
+   "name": "Cluster",
+   "family": "layout",
+   "choices": [],
+   "states": [],
+   "purpose": "Vertical flex column with token gaps."
+  },
+  {
+   "name": "Stack",
+   "family": "layout",
+   "choices": [],
+   "states": [],
+   "purpose": "Vertical flex column with token gaps."
+  },
+  {
+   "name": "Breadcrumbs",
+   "family": "navigation",
+   "choices": [],
+   "states": [],
+   "purpose": "Breadcrumb trail; last item is the current page."
+  },
+  {
+   "name": "CommandPalette",
+   "family": "navigation",
+   "choices": [],
+   "states": [
+    "open"
+   ],
+   "purpose": "⌘K command launcher overlay with keyboard nav."
+  },
+  {
+   "name": "SegmentedControl",
+   "family": "navigation",
+   "choices": [],
+   "states": [],
+   "purpose": "Pill-track scope tabs / view-mode toggle (text+count or icon-only segments)."
+  },
+  {
+   "name": "Tabs",
+   "family": "navigation",
+   "choices": [
+    "variant: underline · segmented",
+    "size: sm · md"
+   ],
+   "states": [],
+   "purpose": "Controlled tab strip — underline (page) or segmented (filter)."
+  },
+  {
+   "name": "ApprovalStepper",
+   "family": "workflow",
+   "choices": [
+    "status: done · current · pending · rejected",
+    "orientation: horizontal · vertical"
+   ],
+   "states": [],
+   "purpose": "Multi-stage approval progress indicator."
+  },
+  {
+   "name": "AuditTrail",
+   "family": "workflow",
+   "choices": [
+    "tone: default · success · warning · error · info"
+   ],
+   "states": [],
+   "purpose": "Read-only chronological activity / audit log."
+  },
+  {
+   "name": "BulkActionConfirm",
+   "family": "workflow",
+   "choices": [
+    "tone: default · danger"
+   ],
+   "states": [
+    "open"
+   ],
+   "purpose": "Confirmation for a bulk action on N rows — optional remark + assignee, with validation."
+  },
+  {
+   "name": "DiscardConfirmModal",
+   "family": "workflow",
+   "choices": [
+    "tone: brand · danger"
+   ],
+   "states": [
+    "open"
+   ],
+   "purpose": "Unsaved-work confirmation — choice rows + single dismiss action."
+  },
+  {
+   "name": "ImportRecordsModal",
+   "family": "workflow",
+   "choices": [],
+   "states": [
+    "open"
+   ],
+   "purpose": "Bulk-import dialog: format callout, expected-columns table, template download, dropzone with success state."
+  },
+  {
+   "name": "RequestDetailModal",
+   "family": "workflow",
+   "choices": [
+    "tone: default · success · warning · error · info",
+    "status: Pending · In Review · Awaiting Approval · Approved · Yet to start · In Progress · Overdue · Completed · Rejected",
+    "type: pdf · doc · xls · img · cad · zip · file"
+   ],
+   "states": [
+    "loading",
+    "error",
+    "busy",
+    "open"
+   ],
+   "purpose": "Full-record \"View request\" dialog for approval workflows — two-pane shell (detail column + collapsible audit trail) with approve / reject actions and a remarks-capturing confirmation step. A"
+  },
+  {
+   "name": "REQUEST_FORM_DEFAULTS",
+   "family": "workflow",
+   "choices": [
+    "category: string · null",
+    "cols: 2 · 3",
+    "mode: create · edit · view"
+   ],
+   "states": [
+    "open",
+    "submitting",
+    "submitError"
+   ],
+   "purpose": "Maps an in-progress form value to ReviewSubmitModal summary rows."
+  },
+  {
+   "name": "RequestForm",
+   "family": "workflow",
+   "choices": [
+    "category: string · null",
+    "cols: 2 · 3",
+    "mode: create · edit · view"
+   ],
+   "states": [
+    "open",
+    "submitting",
+    "submitError"
+   ],
+   "purpose": "Maps an in-progress form value to ReviewSubmitModal summary rows."
+  },
+  {
+   "name": "ReviewSubmitModal",
+   "family": "workflow",
+   "choices": [],
+   "states": [
+    "open"
+   ],
+   "purpose": "Pre-submit review dialog — summary card + optional note + confirm."
+  },
+  {
+   "name": "SubmitConfirmModal",
+   "family": "workflow",
+   "choices": [],
+   "states": [],
+   "purpose": "Post-submit confirmation: success mark, record id, summary grid, Done / View request."
+  }
+ ]
+}

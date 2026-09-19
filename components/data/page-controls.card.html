@@ -1,0 +1,109 @@
+<!-- @dsCard group="Data" viewport="880x1000" name="PageControls — the records toolbar" subtitle="Search · filters · date · sort · columns · view · export · actions · bulk — States: idle · filtered · searching · selection · disabled · loading" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:18px;background:var(--surface-page)}.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:20px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.cap:first-child{margin-top:0}.lbl{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);margin:0 0 8px}.state{margin-bottom:18px}.note{font:var(--text-xs)/1.5 var(--font-sans);color:var(--text-tertiary);margin:6px 0 0}</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { PageControls, Button, Tag } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+const SECTIONS=[
+  {key:"status",label:"Status",options:["Pending","Approved","In Review","Rejected"],dots:{Pending:"var(--status-warning)",Approved:"var(--status-success)","In Review":"var(--status-info)",Rejected:"var(--status-error)"}},
+  {key:"priority",label:"Priority",options:["High","Med","Low"]},
+  {key:"category",label:"Category",options:["Avionics","Propulsion","Structures","Ground systems"]},
+];
+const SORTS=[{value:"recent",label:"Newest first"},{value:"oldest",label:"Oldest first"},{value:"priority",label:"Priority"}];
+const COLUMNS=[{key:"id",label:"Request ID"},{key:"owner",label:"Raised by"},{key:"category",label:"Category"},{key:"status",label:"Status"},{key:"date",label:"Created"},{key:"priority",label:"Priority"}];
+const VIEWS=[{key:"table",icon:"ph-rows",title:"Table"},{key:"card",icon:"ph-squares-four",title:"Cards"},{key:"kanban",icon:"ph-kanban",title:"Kanban"}];
+const NewRecord=()=>(
+  <Button category="primary" icon={<i className="ph ph-plus"/>} items={[{label:"Import records",icon:"ph-upload-simple"},"divider",{label:"Download template",icon:"ph-file-arrow-down"}]}>New request</Button>
+);
+const Count=({n})=>(<span style={{display:"inline-flex",alignItems:"center",gap:7,fontSize:"var(--text-sm)",color:"var(--text-tertiary)"}}><i className="ph ph-list-checks" style={{fontSize:15}}/>{n} requests</span>);
+
+function Demo(){
+  const [q,setQ]=React.useState("");
+  const [filters,setFilters]=React.useState(null);
+  const [range,setRange]=React.useState(null);
+  const [sort,setSort]=React.useState("recent");
+  const [cols,setCols]=React.useState(["id","owner","status","date"]);
+  const [view,setView]=React.useState("table");
+  const [page,setPage]=React.useState(1);
+  const shared={filterSections:SECTIONS,sortOptions:SORTS,columns:COLUMNS,maxColumns:5,dateRange:range,onDateRangeChange:setRange};
+  return (<div>
+    <div className="cap">Idle — live instance</div>
+    <div className="state">
+      <PageControls {...shared} search={q} onSearch={setQ} filterValue={filters} onFilterChange={setFilters}
+        sort={sort} onSortChange={setSort} visibleColumns={cols} onColumnsChange={setCols}
+        viewModes={VIEWS} viewMode={view} onViewModeChange={setView}
+        leading={<Count n={312}/>}
+        exportAction={{formats:[{key:"csv",label:"CSV",icon:"ph-file-csv"},{key:"xlsx",label:"Excel"},{key:"pdf",label:"PDF"}]}}
+        primaryAction={{label:"New request",icon:"ph-plus",items:[{label:"Import records",icon:"ph-upload-simple"},{label:"Download template",icon:"ph-file-arrow-down"}]}}
+        pagination={{page:page,pageCount:13,onChange:setPage,totalLabel:"1–25 of 312"}}/>
+      <p className="note">Everything is optional: omit <code>onSearch</code>, <code>filterSections</code>, <code>sortOptions</code>, <code>columns</code> or <code>viewModes</code> and that control disappears. When a PageTitleBar is on screen it owns the view switcher — pass <code>viewModes</code> here only without one.</p>
+    </div>
+
+    <div className="cap">Actions — declarative, not JSX</div>
+    <div className="state">
+      <PageControls leading={<span style={{font:"var(--text-xs)/1 var(--font-sans)",color:"var(--text-tertiary)"}}>export split menu · icon-only secondary · danger · primary</span>}
+        exportAction={{formats:[{key:"csv",label:"CSV"},{key:"pdf",label:"PDF"}]}}
+        secondaryActions={[
+          {key:"refresh",label:"Refresh",icon:"ph-arrows-clockwise",iconOnly:true,kind:"ghost"},
+          {key:"archive",label:"Archive",icon:"ph-archive",kind:"tertiary"},
+          {key:"purge",label:"Purge",icon:"ph-trash",kind:"danger",roles:["admin"]},
+        ]}
+        primaryAction={{label:"New request",icon:"ph-plus"}} role="admin"/>
+      <p className="note">Each action carries its own <code>kind</code>, <code>size</code>, <code>iconOnly</code>, <code>disabled</code> + <code>disabledReason</code>, <code>loading</code>, <code>items</code> (split treatment) and <code>roles</code>. The <code>actions</code> ReactNode slot still works and renders after this group.</p>
+    </div>
+
+    <div className="cap">Export — the four treatments</div>
+    <div className="state">
+      <PageControls leading={<span style={{font:"var(--text-xs)/1 var(--font-sans)",color:"var(--text-tertiary)"}}>one format</span>} exportAction={{formats:[{key:"csv",label:"CSV"}]}}/>
+      <PageControls style={{marginTop:10}} leading={<span style={{font:"var(--text-xs)/1 var(--font-sans)",color:"var(--text-tertiary)"}}>producing the file</span>} exportAction={{loading:true}}/>
+      <PageControls style={{marginTop:10}} leading={<span style={{font:"var(--text-xs)/1 var(--font-sans)",color:"var(--text-tertiary)"}}>withheld from this role</span>} exportAction={{enabled:false,disabledReason:"Export is restricted to approvers"}}/>
+      <p className="note"><code>enabled: false</code> keeps the button <strong>visible and disabled</strong> with the reason as its tooltip. A records page should not change shape per viewer — hiding it makes the layout look broken to whoever asks about it. Omit <code>exportAction</code> entirely only when the page has no export at all.</p>
+    </div>
+
+    <div className="cap">Filtered — count pill clears facets, search and date in one action</div>
+    <div className="state">
+      <PageControls {...shared} search="tank" onSearch={()=>{}} filterValue={{status:["Pending","In Review"],priority:["High"]}} onFilterChange={()=>{}}
+        sort="priority" onSortChange={()=>{}} visibleColumns={cols} onColumnsChange={()=>{}} leading={<Count n={14}/>} actions={<NewRecord/>}/>
+    </div>
+
+    <div className="cap">Searching — results in flight</div>
+    <div className="state">
+      <PageControls {...shared} search="agnilet" onSearch={()=>{}} searching filterValue={null} onFilterChange={()=>{}} sort="recent" onSortChange={()=>{}} actions={<NewRecord/>}/>
+    </div>
+
+    <div className="cap">Selection mode — the bulk bar takes the row</div>
+    <div className="state">
+      <PageControls {...shared} search={q} onSearch={setQ} selectionCount={4}
+        bulkActions={[{label:"Approve",icon:"ph-check"},{label:"Assign",icon:"ph-user-switch"},{label:"Delete",icon:"ph-trash",danger:true}]}
+        onClearSelection={()=>{}} pagination={{page:1,pageCount:13,totalLabel:"1–25 of 312"}}/>
+    </div>
+
+    <div className="cap">Disabled — inert while the view is locked</div>
+    <div className="state">
+      <PageControls {...shared} disabled search="" onSearch={()=>{}} filterValue={null} onFilterChange={()=>{}} sort="recent" onSortChange={()=>{}} leading={<Count n={0}/>} actions={<Button category="primary" icon={<i className="ph ph-plus"/>} disabled>New request</Button>}/>
+    </div>
+
+    <div className="cap">Loading — shape="pageControls"</div>
+    <div className="state"><PageControls loading/></div>
+    <div className="cap">Usage</div>
+    <pre style={{fontFamily:"var(--font-data)",fontSize:"var(--text-xs)",background:"var(--surface-page)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:14,overflow:"auto"}}>{`<PageControls search={q} onSearch={setQ}
+  filterSections={sections} filterValue={filters} onFilterChange={setFilters}
+  sortOptions={sorts} sort={sort} onSortChange={setSort}
+  exportAction={{formats:[{key:"csv",label:"CSV"}]}}
+  primaryAction={{label:"New request",icon:"ph-plus",onClick:openForm}}
+  pagination={{page,pageCount,onChange:setPage}}/>`}</pre>
+    <div className="cap">Responsive</div>
+    <p className="note" style={{maxWidth:"78ch"}}>The toolbar is a Cluster row that wraps rather than collapsing controls: search, filters, sort, columns, export and the primary action drop to a second line under narrow widths, in that priority order. On phone-width toolbars, favor fewer <code>filterSections</code>/hiding the column picker over letting the row wrap three-deep — wrapping is legal but a tall toolbar pushes records below the fold.</p>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script>
+</body></html>

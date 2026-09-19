@@ -1,0 +1,75 @@
+<!-- @dsCard group="Chrome" viewport="900x1620" name="PanelKit — side-panel parts" subtitle="PanelIconMenu (idle/active + popover) · MenuRow radio & checkbox · PanelEmpty" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8"><title>PanelKit</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:20px;background:var(--surface-page)}.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:20px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.cap:first-child{margin-top:0}.lbl{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);margin:0 0 8px}.note{font:var(--fw-regular) var(--text-xs)/1.5 var(--font-sans);color:var(--text-tertiary);margin:6px 0 0;max-width:64ch}.row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}.pane{background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:14px}.pt{border-collapse:collapse;width:100%;margin:0 0 14px;max-width:1000px}.pt th{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);text-align:left;padding:0 12px 8px 0;border-bottom:1px solid var(--border-subtle)}.pt td{font:var(--text-xs)/1.55 var(--font-sans);color:var(--text-secondary);padding:9px 12px 9px 0;border-bottom:1px solid var(--border-subtle);vertical-align:top}.pt td:last-child,.pt th:last-child{padding-right:0}.pt code{font-family:var(--font-data);font-size:var(--text-2xs);background:var(--surface-sunken);padding:1px 5px;border-radius:var(--radius-xs);color:var(--text-primary)}.pt td strong{color:var(--text-primary)}</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { PanelKit, Button } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+const { PanelIconMenu, MenuRow, PanelEmpty, panelMenuLabelStyle } = PanelKit;
+function Demo(){
+  const [sort,setSort]=React.useState("latest");
+  const [apps,setApps]=React.useState(["payroll"]);
+  const toggle=(k)=>setApps(a=>a.includes(k)?a.filter(x=>x!==k):[...a,k]);
+  return (<div>
+    <div className="cap">PanelIconMenu — 38px trigger + anchored popover</div>
+    <div className="row" style={{alignItems:"center"}}>
+      <div><div className="lbl">Idle</div><div className="pane"><PanelIconMenu icon="ph-funnel" title="Filter"><div style={panelMenuLabelStyle}>Application</div><MenuRow type="checkbox" label="Payroll" checked={apps.includes("payroll")} onClick={()=>toggle("payroll")}/><MenuRow type="checkbox" label="Facilities" checked={apps.includes("facilities")} onClick={()=>toggle("facilities")}/><MenuRow type="checkbox" label="Travel" checked={apps.includes("travel")} onClick={()=>toggle("travel")}/></PanelIconMenu></div></div>
+      <div><div className="lbl">Active — dot + brand ring</div><div className="pane"><PanelIconMenu icon="ph-funnel" title="Filter" active><div style={panelMenuLabelStyle}>Application</div><MenuRow type="checkbox" label="Payroll" checked onClick={()=>{}}/><MenuRow type="checkbox" label="Facilities" checked={false} onClick={()=>{}}/></PanelIconMenu></div></div>
+      <div><div className="lbl">Radio rows — sort</div><div className="pane"><PanelIconMenu icon="ph-sort-ascending" title="Sort" width={200}><div style={panelMenuLabelStyle}>Order</div><MenuRow type="radio" label="Latest first" checked={sort==="latest"} onClick={()=>setSort("latest")}/><MenuRow type="radio" label="Oldest first" checked={sort==="oldest"} onClick={()=>setSort("oldest")}/><MenuRow type="radio" label="Due soonest" checked={sort==="due"} onClick={()=>setSort("due")}/></PanelIconMenu></div></div>
+    </div>
+    <p className="note">Click a trigger to open. Active means "this control is narrowing what the panel shows" — set it whenever a filter or non-default sort is applied, so state is visible with the popover closed.</p>
+    <div className="cap">PanelEmpty — the panel-scale empty state</div>
+    <div className="row">
+      <div style={{width:300}}><div className="lbl">Text only</div><div className="pane"><PanelEmpty icon="ph-check-circle" text="No approvals waiting"/></div></div>
+      <div style={{width:300}}><div className="lbl">Title + body</div><div className="pane"><PanelEmpty icon="ph-tray" title="No tasks assigned" text="Tasks assigned to you will appear here"/></div></div>
+      <div style={{width:300}}><div className="lbl">With action</div><div className="pane"><PanelEmpty icon="ph-calendar-blank" title="Nothing scheduled" text="Your day is clear" action={<Button category="secondary" size="sm" icon={<i className="ph ph-plus"/>}>New event</Button>}/></div></div>
+    </div>
+    <p className="note">PanelEmpty delegates to <code>EmptyState size="sm"</code> unbordered — never write a bespoke empty block inside a panel.</p>
+    <div className="cap">Props</div>
+    <div className="lbl">PanelIconMenu</div>
+    <table className="pt"><tbody>
+      <tr><th style={{width:"24%"}}>Prop</th><th style={{width:"26%"}}>Type</th><th>Notes</th></tr>
+      <tr><td><strong>icon</strong></td><td><code>string</code></td><td>Phosphor class without the "ph " prefix.</td></tr>
+      <tr><td><strong>active</strong></td><td><code>boolean</code></td><td>Shows the active dot + brand ring on the 38px trigger.</td></tr>
+      <tr><td><strong>title</strong></td><td><code>string</code></td><td>Tooltip on the trigger.</td></tr>
+      <tr><td><strong>width</strong></td><td><code>number</code></td><td>Popover width. Default 224.</td></tr>
+      <tr><td><strong>children</strong></td><td><code>ReactNode</code></td><td>Popover content — usually MenuRow rows under a panelMenuLabelStyle label.</td></tr>
+    </tbody></table>
+    <div className="lbl">MenuRow</div>
+    <table className="pt"><tbody>
+      <tr><th style={{width:"24%"}}>Prop</th><th style={{width:"26%"}}>Type</th><th>Notes</th></tr>
+      <tr><td><strong>type</strong></td><td><code>"radio" | "checkbox"</code></td><td>Which indicator renders.</td></tr>
+      <tr><td><strong>label</strong></td><td><code>ReactNode</code></td><td>Row text.</td></tr>
+      <tr><td><strong>checked · onClick</strong></td><td><code>boolean · () =&gt; void</code></td><td>Controlled — the row owns no state.</td></tr>
+    </tbody></table>
+    <div className="lbl">PanelEmpty</div>
+    <table className="pt"><tbody>
+      <tr><th style={{width:"24%"}}>Prop</th><th style={{width:"26%"}}>Type</th><th>Notes</th></tr>
+      <tr><td><strong>icon</strong></td><td><code>string</code></td><td>Phosphor class.</td></tr>
+      <tr><td><strong>text</strong></td><td><code>ReactNode</code></td><td>Body line. Becomes the title when no title is given.</td></tr>
+      <tr><td><strong>title</strong></td><td><code>ReactNode</code></td><td>Bold lead line above the body.</td></tr>
+      <tr><td><strong>action</strong></td><td><code>ReactNode</code></td><td>One button beneath — keep it to a single affordance.</td></tr>
+    </tbody></table>
+    <p className="note">Also exported: <code>panelMenuLabelStyle</code>, the uppercase section-label style for menu content, and the <code>PanelKit</code> bundle object.</p>
+    <div className="cap">Usage</div>
+    <pre style={{fontFamily:"var(--font-data)",fontSize:"var(--text-xs)",background:"var(--surface-sunken)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:14,overflow:"auto"}}>{`const { PanelIconMenu, MenuRow, PanelEmpty } = PanelKit;
+<PanelIconMenu icon="ph-funnel" title="Filter" active={hasActiveFilter}>
+  <MenuRow type="checkbox" label="Payroll" checked={on} onClick={toggle}/>
+</PanelIconMenu>`}</pre>
+    <div className="cap">Responsive</div>
+    <table className="pt"><tbody>
+      <tr><th style={{width:"18%"}}>Breakpoint</th><th>Behavior</th></tr>
+      <tr><td><strong>Desktop ≥ 1024</strong></td><td>Trigger + anchored popover at a fixed <code>width</code> (default 224px), positioned against the trigger's edge.</td></tr>
+      <tr><td><strong>Tablet / Phone &lt; 1024</strong></td><td>No dedicated phone treatment yet — the popover keeps its fixed width and clamps to the viewport. In a narrow side panel, prefer stacking triggers vertically over shrinking the popover.</td></tr>
+    </tbody></table>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script></body></html>

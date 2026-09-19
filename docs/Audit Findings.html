@@ -1,0 +1,75 @@
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8"><title>AgniUI — Audit Findings</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<style>
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--surface-page);color:var(--text-primary);font-family:var(--font-sans);font-size:var(--text-sm);line-height:var(--leading-normal)}
+a{color:var(--text-brand);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1040px;margin:0 auto;padding:40px 28px 96px}
+.eyebrow{font-size:var(--text-2xs);font-family:var(--font-data);text-transform:uppercase;letter-spacing:var(--tracking-wide);color:var(--text-tertiary)}
+h1{font-family:var(--font-display);font-weight:800;font-size:32px;line-height:1.1;letter-spacing:-.02em;margin:8px 0 10px}
+p.lead{color:var(--text-secondary);max-width:82ch;margin:0 0 20px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:8px}
+.stat{background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:14px 16px;box-shadow:var(--shadow-xs)}
+.stat .v{font-family:var(--font-data);font-size:26px;font-weight:var(--fw-semibold);line-height:1}
+.stat .v.ok{color:var(--status-success)}.stat .v.warn{color:var(--status-warning)}
+.stat .k{font-size:var(--text-2xs);color:var(--text-tertiary);margin-top:6px}
+h2{font-family:var(--font-display);font-size:var(--text-lg);font-weight:var(--fw-bold);margin:36px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}
+table{width:100%;border-collapse:collapse;background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:10px}
+th{text-align:left;font:var(--fw-medium) var(--text-2xs)/1 var(--font-data);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);padding:9px 13px;border-bottom:1px solid var(--border-subtle)}
+td{padding:9px 13px;border-bottom:1px solid var(--border-subtle);vertical-align:top;font-size:var(--text-xs);color:var(--text-secondary)}
+tr:last-child td{border-bottom:none}
+td.k{color:var(--text-primary);font-weight:var(--fw-medium);white-space:nowrap}
+code{font-family:var(--font-data);font-size:var(--text-2xs);background:var(--surface-soft);border-radius:4px;padding:1px 5px}
+.chip{display:inline-flex;align-items:center;height:20px;padding:0 8px;border-radius:var(--radius-full);font-size:var(--text-2xs);font-weight:var(--fw-semibold)}
+.chip.open{background:var(--status-warning-soft);color:var(--status-warning)}
+.chip.closed{background:var(--status-success-soft);color:var(--status-success)}
+.closed-list{color:var(--text-secondary);font-size:var(--text-xs);line-height:1.7;margin:0 0 10px}
+</style></head><body><div class="wrap">
+<div class="eyebrow">AgniUI · Audit findings · consolidated Sep 2026 · replaces 5 point-in-time audits</div>
+<h1>What's open, what's closed</h1>
+<p class="lead">Single source for outstanding work across the system. Supersedes <code>Coverage Audit</code>, <code>Coverage Checklist</code>, <code>Foundations Audit</code>, <code>States and Props Audit</code> and <code>System Audit Sep 2026</code> — their findings are folded in here or already shipped. The living component-by-component reference stays <code>Master Sheet.html</code>; this doc is only the open/closed ledger.</p>
+<div class="stats">
+  <div class="stat"><div class="v ok">13</div><div class="k">Foundations token fixes — shipped</div></div>
+  <div class="stat"><div class="v ok">1</div><div class="k">Pill-track unification — shipped Sep 2026</div></div>
+  <div class="stat"><div class="v warn">6</div><div class="k">Open items below</div></div>
+  <div class="stat"><div class="v warn">7</div><div class="k">Recorded decisions, not open work</div></div>
+</div>
+
+<h2>Open</h2>
+<table>
+<thead><tr><th style="width:28%">Item</th><th>Detail</th></tr></thead>
+<tbody>
+<tr><td class="k">Loading/error/empty triple incomplete</td><td><code>AttachmentRow</code> <code>DocumentPreview</code> <code>EditableTable</code> <code>EventRow</code> <code>PersonCard</code> <code>StatCard</code> accept some of the three state props, not all.</td></tr>
+<tr><td class="k"><code>States:</code> line missing from contracts</td><td>Only the seven grouped components (PageTitleBar, PageControls, RecordTable, StatsOverview, ApprovalPanel, RecordForm, RecordDetailModal) declare an explicit States: line in their doc comment. Elsewhere the state surface must be inferred from props.</td></tr>
+<tr><td class="k">Guidance lives in the wrong file</td><td><code>Avatar</code> <code>AvatarStack</code> <code>Card</code> <code>DropdownMenu</code> <code>OptionRow</code> <code>Rating</code> and most of <code>forms/</code> carry a one-line summary in the <code>.d.ts</code> while the real prose sits in the <code>.tsx</code>.</td></tr>
+<tr><td class="k">Variant coverage gaps</td><td><code>DataTable</code> (column picker, <code>fillHeight</code>, <code>sortAccessor</code>), <code>Calendar</code> (week/year views), <code>Rating</code> (settable mode), <code>OptionRow</code> (<code>selected</code>, <code>iconTone</code>) — declared in the type but not shown on a card.</td></tr>
+<tr><td class="k">Code snippets missing on cards</td><td>Most cards show a live demo but no copy-paste usage snippet.</td></tr>
+<tr><td class="k">No per-component responsive guidance</td><td>Responsive behavior is documented only at the shell/layout level (rail widths, breakpoints). No individual component or chrome card states its own desktop/tablet/mobile behavior.</td></tr>
+</tbody>
+</table>
+
+<h2>Closed this pass</h2>
+<p class="closed-list">
+<span class="chip closed">Done</span> Foundations Audit's 13 token-level fixes (focus ring, badge contrast, <code>--status-*-text</code>, neutral-500, <code>--border-control</code>, Heatmap palette, z-scale, reduced-motion guard, doc corrections, thumbnail, avatar/badge text size, screenshot cleanup, phone touch floor) — all verified shipped in <code>tokens/</code>.<br>
+<span class="chip closed">Done</span> Three segmented pill tracks (<code>TabsStrip</code>, <code>SegmentedControl</code>, <code>PageTitleBar</code>) unified onto one bed/active-state style.<br>
+<span class="chip closed">Done</span> Duplicate-name sweep — Badge/StatusChip → Tag, IconButton/SplitButton → Button, five selects → Select, Sheet/Drawer → Panel, Toast/Banner → Notice, Skeleton → Loading, five confirm modals → ConfirmModal, Kanban/Approval/TaskCard → RecordCard, RequestDetailModal/RequestForm renamed — all confirmed merged, old files are internal-only shims with no public contract.
+</p>
+
+<h2>Recorded decisions — not open work</h2>
+<p class="closed-list">Left as-is on purpose; revisiting needs a new reason, not a re-audit.</p>
+<table>
+<thead><tr><th style="width:28%">Item</th><th>Why it stays closed</th></tr></thead>
+<tbody>
+<tr><td class="k">Breakpoint tokens informational only</td><td><code>--bp-*</code> can't drive media queries (CSS limitation); literal values in <code>spacing.css</code> are kept in sync by hand, documented as the rule.</td></tr>
+<tr><td class="k"><code>AttendanceGrid</code> left scaffold-local</td><td>One consumer is not a pattern. Promote when a second module needs it.</td></tr>
+<tr><td class="k">AI composer left scaffold-local</td><td>Shape still moving, appears once. Revisit when a second surface needs a prompt field.</td></tr>
+<tr><td class="k">Approval-row panel interaction stays local</td><td><code>RecordCard preset="approval"</code> covers the card; the panel's search+list+tick interaction is a single-surface pattern.</td></tr>
+<tr><td class="k">FilterPanel's own multi-section state left thin</td><td>The toolbar card already demonstrates idle / active-with-count / phone-dialog states.</td></tr>
+<tr><td class="k">Cross-family carding (OptionRow, Rating, EditableTable, Card)</td><td>Each placement is defensible per <code>guidelines/rules/naming.card.html</code>; a navigation nit, not a documentation gap.</td></tr>
+<tr><td class="k">Do-not lists thin across most cards</td><td>System-wide editorial pass; low return until the open contract/props items above are settled.</td></tr>
+</tbody>
+</table>
+
+</div></body></html>

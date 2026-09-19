@@ -1,0 +1,77 @@
+<!-- @dsCard group="Data" viewport="1000x900" name="StageList — ordered pipeline" subtitle="Five stage states · row actions · loading · empty · error" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8"><title>StageList</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:20px;background:var(--surface-page)}.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:22px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.cap:first-child{margin-top:0}.lbl{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);margin:0 0 8px}.note{font:var(--fw-regular) var(--text-xs)/1.5 var(--font-sans);color:var(--text-tertiary);margin:8px 0 0;max-width:72ch}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.dk{background:var(--surface-page);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:14px}</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { StageList } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+
+const VIEW = { key:"view", label:"Preview", icon:"ph-eye", category:"ghost" };
+const OPEN = { key:"open", label:"Open", icon:"ph-arrow-right", category:"secondary", when:["active","blocked"] };
+
+/* One stage per state, in pipeline order — the card's whole job is to show
+   all five so the next person doesn't invent a sixth. */
+const ALL = [
+  { key:"intake",  label:"Intake review",     state:"done",    icon:"ph-tray",         meta:"Closed 12 Jun 2025 · A. Menon", actions:[VIEW] },
+  { key:"scope",   label:"Scope confirmation", state:"done",   icon:"ph-ruler",        meta:"Closed 14 Jun 2025 · R. Iyer",  actions:[VIEW] },
+  { key:"quotes",  label:"Comparative quotes", state:"active", icon:"ph-scales",       meta:"3 of 5 responses received",     actions:[VIEW, OPEN] },
+  { key:"finance", label:"Finance clearance",  state:"blocked",icon:"ph-lock",         meta:"Waiting on cost centre code",   actions:[VIEW, OPEN] },
+  { key:"order",   label:"Order placement",    state:"todo",   icon:"ph-package",      meta:"Opens once finance clears",     actions:[VIEW] },
+  { key:"site",    label:"Site inspection",    state:"skipped",icon:"ph-buildings",    meta:"Not applicable for this record" },
+];
+
+function Demo(){
+  const [last, setLast] = React.useState(null);
+  /* The compiled bundle trails a source change by one build; without this the
+     card white-screens on the first load after StageList lands. */
+  if (!StageList) return <div style={{padding:24,color:"var(--text-tertiary)",font:"var(--text-sm) var(--font-sans)"}}>Compiling design-system bundle… reload in a moment.</div>;
+  return (<div>
+    <div className="cap">All five states, in one pipeline</div>
+    <StageList stages={ALL} onAction={(s,a)=>setLast(a.label + " → " + s.label)} />
+    <p className="note">
+      Sequence numbers are positional; a completed stage swaps its number for a check. <b>skipped</b> is the only
+      state that mutes and strikes the label — it stays in the list because removing it would renumber everything
+      after it. Row actions filter themselves by <code>when</code>, which is why <b>Open</b> shows on the active and
+      blocked rows only. {last && <span style={{color:"var(--text-brand)"}}>Last action: {last}</span>}
+    </p>
+
+    <div className="cap">Tones come from the shared map</div>
+    <div className="lbl">One row per state — the tone is resolved by Tag, never by the caller</div>
+    <StageList stages={[
+      { key:"a", label:"todo",    state:"todo",    meta:"Nothing has happened yet" },
+      { key:"b", label:"active",  state:"active",  meta:"Someone is working on it now" },
+      { key:"c", label:"done",    state:"done",    meta:"Finished and recorded" },
+      { key:"d", label:"blocked", state:"blocked", meta:"Stopped by something outside this stage" },
+      { key:"e", label:"skipped", state:"skipped", meta:"Deliberately passed over" },
+    ]} />
+
+    <div className="cap">Data states — error → loading → empty → content</div>
+    <div className="grid">
+      <div><div className="lbl">loading</div><StageList loading /></div>
+      <div><div className="lbl">empty (default copy)</div><StageList stages={[]} /></div>
+      <div><div className="lbl">empty (page copy)</div><StageList stages={[]} empty="No stages configured for this record type" /></div>
+      <div><div className="lbl">error + onRetry</div><StageList error="Couldn't load the pipeline" onRetry={()=>{}} /></div>
+    </div>
+    <p className="note">
+      Resolved through <code>DataState</code>, like every other data component — a failed fetch never reads as an
+      empty pipeline.
+    </p>
+
+    <div className="cap">Dark</div>
+    <div className="dk" data-theme="dark"><StageList stages={ALL.slice(2,5)} onAction={()=>{}} /></div>
+    <div className="cap">Usage</div>
+    <pre style={{fontFamily:"var(--font-data)",fontSize:"var(--text-xs)",background:"var(--surface-page)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:14,overflow:"auto"}}>{`<StageList stages={stages} onAction={(stage,action)=>handleStageAction(stage.key,action.key)}
+  loading={loading} error={error} onRetry={retry}/>`}</pre>
+    <div className="cap">Responsive</div>
+    <p className="note">Each row is a single-line label + meta + trailing actions that wraps its meta text rather than truncating — the list needs no breakpoint of its own. On phone, row actions beyond the first collapse into the row's own overflow rather than adding a media query; keep <code>actions</code> to at most two per stage so that holds true at any width.</p>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script></body></html>

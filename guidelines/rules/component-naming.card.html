@@ -1,0 +1,86 @@
+<!-- @dsCard group="Guidelines" viewport="920x1180" name="Component naming rule" subtitle="What a component may be called, why the library never names a business object, and the merge test applied in Aug 2026" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<style>
+body{margin:0;padding:20px;background:var(--surface-page);color:var(--text-primary);font-family:var(--font-sans);font-size:var(--text-sm)}
+.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:24px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}
+.cap:first-child{margin-top:0}
+p.lead{color:var(--text-secondary);margin:0 0 14px;max-width:76ch}
+code{font-family:var(--font-data);font-size:var(--text-xs);background:var(--surface-soft);border-radius:4px;padding:1px 5px}
+.rule{display:flex;gap:12px;align-items:flex-start;background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:14px 16px;margin-bottom:10px}
+.rule .n{width:26px;height:26px;flex-shrink:0;border-radius:8px;display:grid;place-items:center;background:var(--surface-brand-soft);color:var(--text-brand);font:var(--fw-bold) var(--text-xs)/1 var(--font-data)}
+.rule b{display:block;color:var(--text-primary);font-size:var(--text-base);font-weight:var(--fw-semibold);margin-bottom:3px}
+.rule span{color:var(--text-secondary)}
+table{width:100%;border-collapse:collapse;background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);overflow:hidden}
+th{text-align:left;font:var(--fw-medium) var(--text-2xs)/1 var(--font-data);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);padding:10px 14px;border-bottom:1px solid var(--border-subtle);white-space:nowrap}
+td{padding:9px 14px;border-bottom:1px solid var(--border-subtle);vertical-align:top;font-size:var(--text-sm);color:var(--text-secondary)}
+tr:last-child td{border-bottom:none}
+td.k{color:var(--text-primary);font-weight:var(--fw-medium);white-space:nowrap}
+td.no{color:var(--text-tertiary);text-decoration:line-through}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.box{background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:14px 16px}
+.box h4{margin:0 0 6px;font-size:var(--text-base);font-weight:var(--fw-semibold);color:var(--text-primary)}
+.box p{margin:0;color:var(--text-secondary)}
+.box.no h4{color:var(--text-tertiary)}
+</style>
+</head><body>
+
+<div class="cap">The rule</div>
+<p class="lead">A component name describes <b>what the thing is</b>, in words that survive the module it was built for. Four tests, applied in order — a name that fails any one of them is not the name.</p>
+<div class="rule"><div class="n">1</div><div><b>Name the shape, not the business object</b><span>The library ships <code>RecordCard</code>, <code>RecordForm</code>, <code>RecordDetailModal</code> — never <code>PurchaseRequestCard</code> or <code>LeaveRequestForm</code>. A component that names one object cannot be reused by the next module without a lie in its name. The only family allowed to know the domain is <code>workflow/</code>, and even there the object is the generic one: a record, an approval, an audit entry.</span></div></div>
+<div class="rule"><div class="n">2</div><div><b>Nouns, never verbs</b><span>A component is a thing on screen, not the action a screen performs with it. <code>ConfirmModal</code>, not <code>SubmitConfirmModal</code> / <code>DiscardConfirmModal</code> / <code>ReviewSubmitModal</code>. If a name needs a verb to be understood, the verb belongs in a prop (<code>variant="discard"</code>) or in the consuming screen's own wrapper.</span></div></div>
+<div class="rule"><div class="n">3</div><div><b>No invented role words</b><span>Nothing is a <code>Viewer</code>, <code>Manager</code>, <code>Handler</code>, <code>Wrapper</code>, <code>Helper</code> or <code>Kit</code>-of-convenience. Use the plain word for the UI object: <code>Card</code>, <code>Modal</code>, <code>Panel</code>, <code>Form</code>, <code>List</code>, <code>Table</code>, <code>Tag</code>, <code>Stepper</code>, <code>Trail</code>. Two words maximum: <code>&lt;Object&gt;&lt;UiNoun&gt;</code>.</span></div></div>
+<div class="rule"><div class="n">4</div><div><b>One name per job — capability goes in props</b><span>Before adding a component, look for the one that already does this job with a flag added. A second component is justified only when the two carry <b>different contracts</b>, not when they carry different settings. Density, search, multi-select, placement and tone are settings.</span></div></div>
+
+<div class="cap">The merge test</div>
+<p class="lead">Applied to every pair that looked like a duplicate. If all three answers are yes, they are one component with a variant.</p>
+<table>
+  <thead><tr><th>Test</th><th>What it means</th></tr></thead>
+  <tbody>
+    <tr><td class="k">Same contract?</td><td>The same required inputs and the same event vocabulary. <code>Badge</code> and <code>StatusChip</code> both took a label and rendered a tone pill — same contract. <code>FormSection</code> and <code>DetailSection</code> do not: one owns validation and focus order, the other owns copyable values.</td></tr>
+    <tr><td class="k">Same place in a page?</td><td>Interchangeable at the call site. <code>Toast</code> and <code>Banner</code> both announce something about the current view — placement is the difference, so placement became the variant.</td></tr>
+    <tr><td class="k">Would a reader ask which one?</td><td>If a designer has to be told the rule to pick between two names, the rule should be a prop instead. <code>SearchSelect</code> vs <code>CreatableSelect</code> vs <code>MultiSelect</code> failed this badly — they are capabilities of one picker.</td></tr>
+  </tbody>
+</table>
+
+<div class="cap">Merged — Aug 2026</div>
+<p class="lead">Sixteen components became five, and two dropped their domain word. The retired names stay in the bundle as <b>internal renderers</b> (no <code>.d.ts</code>, no specimen card, marked <code>@internal</code> in source) so nothing inside the library breaks; they are no longer part of the documented API.</p>
+<table>
+  <thead><tr><th>Now</th><th>Absorbed</th><th>How you choose</th></tr></thead>
+  <tbody>
+    <tr><td class="k">Tag</td><td class="no">Badge · StatusChip</td><td><code>status="In Review"</code> maps through the shared tone table · <code>tone</code> to set it directly · <code>variant="chip"</code> for the removable token</td></tr>
+    <tr><td class="k">Button</td><td class="no">IconButton · SplitButton</td><td><code>items</code> adds the caret menu · <code>iconOnly</code> / <code>round</code> / <code>active</code> give the icon control</td></tr>
+    <tr><td class="k">Select</td><td class="no">MultiSelect · SearchSelect · CreatableSelect · UserSelect · MultiUserSelect</td><td><code>multiple</code> · <code>searchable</code> · <code>creatable</code> · <code>users</code> — combine freely</td></tr>
+    <tr><td class="k">Panel</td><td class="no">Sheet · Drawer</td><td><code>variant="inline" | "sheet" | "drawer"</code> — one titled container, three placements</td></tr>
+    <tr><td class="k">Notice</td><td class="no">Toast · Banner</td><td><code>variant="inline"</code> in the page · <code>variant="toast"</code> floating</td></tr>
+    <tr><td class="k">Tabs</td><td class="no">SegmentedControl</td><td><code>tabs</code> for the page strip · <code>items</code> for the pill track</td></tr>
+    <tr><td class="k">FileUpload</td><td class="no">FileDropzone</td><td><code>variant="dropzone"</code> (default, guided) · <code>variant="basic"</code></td></tr>
+    <tr><td class="k">Loading</td><td class="no">Skeleton</td><td><code>shape</code> — including the primitives <code>block</code> and <code>circle</code></td></tr>
+    <tr><td class="k">ConfirmModal</td><td class="no">ReviewSubmitModal · SubmitConfirmModal · DiscardConfirmModal · BulkActionConfirm · ImportRecordsModal</td><td><code>variant="review" | "submitted" | "discard" | "bulk" | "import"</code></td></tr>
+    <tr><td class="k">RecordCard</td><td class="no">KanbanCard · ApprovalCard · TaskCard</td><td><code>preset="kanban" | "approval" | "task"</code>, one record contract</td></tr>
+    <tr><td class="k">RecordDetailModal</td><td class="no">RequestDetailModal</td><td>Renamed — the shape is a record; a request is one kind of record</td></tr>
+    <tr><td class="k">RecordForm</td><td class="no">RequestForm</td><td>Renamed for the same reason</td></tr>
+  </tbody>
+</table>
+
+<div class="cap">Still separate — and why</div>
+<div class="grid2">
+  <div class="box"><h4>Tag · Avatar</h4><p>Different contracts. A tag carries a label and a tone; an avatar carries a person.</p></div>
+  <div class="box"><h4>RecordCard · PersonCard</h4><p>A person is not a record. No status, no lane, no approval footer.</p></div>
+  <div class="box"><h4>FormSection · DetailSection</h4><p>Labels, validation and focus order versus copyable values and an edit hand-off.</p></div>
+  <div class="box"><h4>EmptyState · ErrorState</h4><p>Expected nothing versus something failed. Different copy, different recovery.</p></div>
+  <div class="box"><h4>DataTable · EditableTable</h4><p>Read and select versus inline add / edit / delete inside a form.</p></div>
+  <div class="box"><h4>FilterPanel · FilterBuilder</h4><p>Facets versus rules. Both mount inside <code>PageControls</code>; neither replaces the other.</p></div>
+</div>
+
+<div class="cap">When you add a component</div>
+<p class="lead">The checklist, in order. Steps 1 and 2 remove most proposed components before they are written.</p>
+<div class="rule"><div class="n">1</div><div><b>Search the merge table above</b><span>If the job is already covered by a variant, add the call, not the component.</span></div></div>
+<div class="rule"><div class="n">2</div><div><b>Run the merge test against the nearest neighbour</b><span>Three yeses mean you are adding a prop to that neighbour instead.</span></div></div>
+<div class="rule"><div class="n">3</div><div><b>Name it with rules 1–4, then write the <code>.d.ts</code></b><span>The declaration is the API. Prop names come from the shared vocabulary — <code>tone</code>, <code>variant</code>, <code>size</code>, <code>selected</code>, <code>loading</code>, <code>error</code>, <code>empty</code>, <code>disabled</code>, <code>busy</code>.</span></div></div>
+<div class="rule"><div class="n">4</div><div><b>Ship the specimen card in the same change</b><span>Variants and states, or it isn't done — an undocumented component gets re-invented in the next module.</span></div></div>
+<div class="rule"><div class="n">5</div><div><b>Retire, never delete</b><span>A superseded component loses its <code>.d.ts</code> and its card and gains an <code>@internal</code> header pointing at its replacement. Imports keep resolving; the documented surface shrinks.</span></div></div>
+
+</body></html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>control height probe</title>
+<link rel="stylesheet" href="../styles.css">
+<style>body{margin:0;padding:16px;font:12px var(--font-data)}table{border-collapse:collapse}td,th{border:1px solid var(--border-subtle);padding:4px 8px;text-align:left}</style>
+</head><body>
+<div id="rig"></div>
+<table id="out"></table>
+<script>
+/* Bare elements carrying the same literal class strings the migrated control
+   family emits. Proves the h-control-* contract holds at every scale/density
+   without needing the compiled bundle. */
+const CASES = [
+  ["Button sm",        "h-control-sm"],
+  ["Button md",        "h-control"],
+  ["Button lg",        "h-control-lg"],
+  ["Input md",         "h-control"],
+  ["Select md",        "h-control"],
+  ["SearchSelect md",  "h-control"],
+  ["DatePicker md",    "h-control"],
+  ["Stepper md",       "h-control"],
+  ["MultiSelect md",   "min-h-control"],
+  ["UserSelect md",    "h-control-people"],
+];
+const SCOPES = [
+  ["default", {}],
+  ["scale=sm", {"data-scale":"sm"}],
+  ["scale=lg", {"data-scale":"lg"}],
+  ["scale=xl", {"data-scale":"xl"}],
+  ["density=compact", {"data-density":"compact"}],
+  ["density=spacious", {"data-density":"spacious"}],
+];
+const rig = document.getElementById("rig");
+const rows = [];
+for (const [scopeName, attrs] of SCOPES) {
+  const host = document.createElement("div");
+  for (const k in attrs) host.setAttribute(k, attrs[k]);
+  rig.appendChild(host);
+  const measured = {};
+  for (const [label, cls] of CASES) {
+    const el = document.createElement("div");
+    el.className = cls;
+    el.textContent = "x";
+    host.appendChild(el);
+    measured[label] = Math.round(el.getBoundingClientRect().height * 100) / 100;
+  }
+  rows.push([scopeName, measured]);
+}
+rig.style.display = "none";
+const t = document.getElementById("out");
+t.innerHTML = "<tr><th>scope</th>" + CASES.map(c => "<th>" + c[0] + "</th>").join("") + "</tr>"
+  + rows.map(([s, m]) => "<tr><td>" + s + "</td>" + CASES.map(c => "<td>" + m[c[0]] + "</td>").join("") + "</tr>").join("");
+window.__PROBE = Object.fromEntries(rows);
+</script>
+</body></html>

@@ -1,0 +1,17 @@
+<!-- @dsCard group="Brand" viewport="700x150" name="Motion" subtitle="Minimal utility transitions only — no decorative motion" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<style>body{margin:0;padding:18px;background:var(--surface-page);font-family:var(--font-sans)}
+.row{display:flex;gap:14px;flex-wrap:wrap}
+.tk{background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:10px 14px}
+.n{font-size:var(--text-2xs);font-family:var(--font-data);color:var(--text-tertiary)}
+.v{font-size:var(--text-sm);font-weight:600;color:var(--text-primary)}
+.bar{margin-top:8px;height:6px;width:120px;background:var(--surface-sunken);border-radius:var(--radius-full);overflow:hidden}
+.fill{height:100%;width:40%;background:var(--action-brand);border-radius:var(--radius-full);animation:run 2.4s var(--ease-standard) infinite}
+@keyframes run{0%{width:8%}50%{width:90%}100%{width:8%}}
+@media (prefers-reduced-motion: reduce){.fill{animation:none;width:60%}}</style></head><body>
+<div class="row">
+  <div class="tk"><div class="v">fast · 120ms</div><div class="n">hover / press</div></div>
+  <div class="tk"><div class="v">normal · 220ms</div><div class="n">drawers / menus</div></div>
+  <div class="tk"><div class="v">ease-standard</div><div class="n">cubic-bezier(.2,0,0,1)</div><div class="bar"><div class="fill"></div></div></div>
+</div>
+</body></html>

@@ -1,0 +1,260 @@
+<!-- @dsCard group="Workflow" viewport="1080x900" name="RecordDetailModal — the record detail pane" subtitle="Record defaults (pending · approved · assigned · rejected) and the declarative contract: sections with search + filters + scroll · stage pipeline · panes closed on open · a flow · declarative footer actions · loading · error · read-only" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>
+  body{margin:0;padding:20px;background:var(--surface-page);font-family:var(--font-sans)}
+  .bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+  .seg{display:inline-flex;gap:2px;padding:3px;background:var(--surface-sunken);border-radius:var(--radius-md)}
+  .seg button{border:none;cursor:pointer;padding:7px 14px;border-radius:var(--radius-sm);font:var(--fw-medium) var(--text-sm)/1 var(--font-sans);background:transparent;color:var(--text-tertiary)}
+  .seg button.on{background:var(--action-brand);color:var(--text-on-brand);box-shadow:var(--shadow-xs)}
+  .hint{font-size:var(--text-xs);color:var(--text-tertiary);align-self:center}
+  .stage{position:relative;height:720px;border:1px solid var(--border-subtle);border-radius:var(--radius-lg);overflow:hidden;background:var(--surface-sunken)}
+  /* Contain the (normally fixed, full-viewport) modal overlay inside the card
+     so the state toggle above stays usable. */
+  .stage > div{position:absolute !important;inset:0;background:transparent !important;backdrop-filter:none !important;padding:16px !important}
+  /* Expanded sheet renders square corners (border-top-left-radius: 0px) — drop the stage padding so it fills edge-to-edge. */
+  .stage > div:has([role="dialog"][style*="border-top-left-radius: 0px"]){padding:0 !important}
+</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { RecordDetailModal, Button } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+
+const WORKFLOW = (atStage, rejectedAt) => {
+  const base = [
+    { label:"Submitted",      actor:"Meera Krishnan", ts:"12 Jun 2025 · 09:12", detail:"Request raised against project AGV-3." },
+    { label:"Finance review", actor:"R. Sharma",      ts:"13 Jun 2025 · 14:30", detail:"Budget code 4100 verified." },
+    { label:"Head approval",  actor:"A. Prabhu",      ts:"—",                   detail:"Department head sign-off." },
+    { label:"PO issued",      actor:"Procurement",    ts:"—",                   detail:"Purchase order raised to vendor." },
+  ];
+  return base.map((s,i) => ({
+    ...s,
+    status: rejectedAt!=null
+      ? (i<rejectedAt ? "done" : i===rejectedAt ? "rejected" : "pending")
+      : (i<atStage ? "done" : i===atStage ? "current" : "pending"),
+  }));
+};
+
+const AUDIT = (state) => {
+  const base = [
+    { actor:"Meera Krishnan", action:"created the request", ts:"12 Jun 2025 · 09:12", icon:"ph-plus", tone:"info" },
+    { actor:"R. Sharma", action:"approved finance review", ts:"13 Jun 2025 · 14:30", icon:"ph-check", tone:"success" },
+    { actor:"System", action:"flagged missing cost-centre", ts:"13 Jun 2025 · 14:31", icon:"ph-warning", tone:"warning" },
+  ];
+  if (state==="Approved") base.push({ actor:"A. Prabhu", action:"approved the request", ts:"14 Jun 2025 · 10:05", icon:"ph-seal-check", tone:"success" });
+  if (state==="Assigned") { base.push({ actor:"A. Prabhu", action:"approved the request", ts:"14 Jun 2025 · 10:05", icon:"ph-seal-check", tone:"success" }); base.push({ actor:"A. Prabhu", action:"assigned to Priya Nair", ts:"14 Jun 2025 · 10:06", icon:"ph-user-switch", tone:"default" }); }
+  if (state==="Rejected") base.push({ actor:"A. Prabhu", action:"rejected the request", ts:"14 Jun 2025 · 11:20", icon:"ph-x-circle", tone:"error" });
+  return base;
+};
+
+const BASE = {
+  id:"REC-2402", requestType:"Purchase request", raisedBy:"Meera Krishnan",
+  raisedOn:"12 Jun 2025", project:"AGV-3 · Avionics",
+  basics:[
+    { label:"Category", value:"Type B — Electronics" },
+    { label:"Priority", value:"High" },
+    { label:"Quantity", value:"12 Nos" },
+    { label:"Estimated cost", value:"₹ 4,80,000" },
+    { label:"Needed by", value:"30 Jun 2025" },
+  ],
+  assignment:[
+    { label:"Assignee", value:"Priya Nair · Quality" },
+    { label:"Reviewer", value:"R. Sharma · Finance" },
+    { label:"Approver", value:"A. Prabhu · Dept. Head" },
+    { label:"Cost centre", value:"CC-4100" },
+  ],
+  execution:[
+    { label:"Current stage", value:"Head approval" },
+    { label:"SLA", value:"2 days remaining" },
+    { label:"Linked PO", value:"Not issued" },
+    { label:"Vendor", value:"Bharat Aerospace Pvt Ltd" },
+  ],
+  documents:[
+    { name:"PR-2402-spec.pdf", type:"pdf", meta:"248 KB · 12 Jun" },
+    { name:"bracket-drawing.step", type:"cad", meta:"1.1 MB · 12 Jun" },
+    { name:"cost-estimate.xlsx", type:"xls", meta:"64 KB · 13 Jun" },
+  ],
+};
+
+const RECORDS = {
+  Pending:  { ...BASE, status:"Pending",  workflow:WORKFLOW(2,null), audit:AUDIT("Pending") },
+  Approved: { ...BASE, status:"Approved", workflow:WORKFLOW(4,null), audit:AUDIT("Approved"),
+              resolution:{ state:"Approved", by:"A. Prabhu", on:"14 Jun 2025", remark:"Approved against Q3 capex. Expedite procurement." } },
+  Assigned: { ...BASE, status:"Yet to start", workflow:WORKFLOW(4,null), audit:AUDIT("Assigned"),
+              resolution:{ state:"Approved", by:"Priya Nair", on:"14 Jun 2025" },
+              effort:{ canLog:true, assignees:["Priya Nair","Kiran Rao"], entries:[
+                { by:"Priya Nair", startLabel:"14 Jun 2025, 10:00", endLabel:"14 Jun 2025, 12:30", hours:2.5, loggedOn:"14 Jun 2025, 12:31" },
+              ] } },
+  Rejected: { ...BASE, status:"Rejected", workflow:WORKFLOW(null,2), audit:AUDIT("Rejected"),
+              resolution:{ state:"Rejected", by:"A. Prabhu", on:"14 Jun 2025", remark:"Cost centre missing — re-submit with the budget code." } },
+};
+
+const LINES = [
+  { label:"Aluminium bracket 6061", value:"12 Nos · ₹ 1,80,000", cat:"mech" },
+  { label:"Avionics harness set",   value:"4 Nos · ₹ 96,000",    cat:"elec" },
+  { label:"Pressure transducer",    value:"6 Nos · ₹ 1,44,000",  cat:"elec" },
+  { label:"Titanium fastener kit",  value:"1 Lot · ₹ 38,000",    cat:"mech" },
+  { label:"Signal conditioner",     value:"2 Nos · ₹ 22,000",    cat:"elec" },
+  { label:"Vibration isolator",     value:"8 Nos · ₹ 64,000",    cat:"mech" },
+];
+
+const STAGES = [
+  { key:"intake",  label:"Intake review",      state:"done",    icon:"ph-tray",   meta:"Closed 12 Jun 2025 · A. Menon", actions:[{key:"view",label:"Preview",icon:"ph-eye",category:"ghost"}] },
+  { key:"quotes",  label:"Comparative quotes", state:"active",  icon:"ph-scales", meta:"3 of 5 responses received", flow:"quotes",
+                   actions:[{key:"view",label:"Preview",icon:"ph-eye",category:"ghost"},{key:"open",label:"Open",icon:"ph-arrow-right",category:"secondary",when:["active"]}] },
+  { key:"finance", label:"Finance clearance",  state:"blocked", icon:"ph-lock",   meta:"Waiting on cost centre code" },
+  { key:"order",   label:"Order placement",    state:"todo",    icon:"ph-package",meta:"Opens once finance clears" },
+];
+
+const PEOPLE = [
+  { name:"Priya Nair",   role:"Procurement" },
+  { name:"Kiran Rao",    role:"Procurement" },
+  { name:"R. Sharma",    role:"Finance" },
+];
+
+function Declarative({ mode }){
+  const [owner, setOwner] = React.useState(PEOPLE[0]);
+  const [log, setLog] = React.useState(null);
+  const readOnly = mode === "readonly";
+  return (
+    <RecordDetailModal open record={RECORDS.Pending} onClose={()=>{}}
+      loading={mode === "loading"}
+      error={mode === "error" ? "The record service did not respond." : null}
+      onRetry={()=>{}}
+      readOnly={readOnly}
+      busy={mode === "busy"}
+      role="approver"
+      icon="ph-shopping-cart"
+      title="Purchase request" subtitle="REC-2402 · AGV-3 Avionics"
+      parent={{ label:"Order group OG-118", hint:"opened from", onNavigate:()=>setLog("navigated to the parent record") }}
+      essentials={[
+        { label:"Record ID", value:"REC-2402", mono:true },
+        { label:"Raised by", value:"Meera Krishnan" },
+        { label:"Raised on", value:"12 Jun 2025", mono:true },
+        { label:"Estimated value", value:"₹ 5,44,000", mono:true },
+        { label:"Needed by", value:"30 Jun 2025", mono:true },
+        { label:"Justification", value:"Flight-model spares for the AGV-3 integration campaign.", span:2 },
+      ]}
+      workflowHint={<><i className="ph ph-cursor-click" /> Hover a stage for details</>}
+      assignment={{ label:"Purchase owner", value:owner, options:PEOPLE, editable:true, onChange:(p)=>{ setOwner(p); setLog("owner → " + p.name); } }}
+      defaultPane={null}
+      panes={[
+        { key:"audit", label:"Activity log", icon:"ph-clock-counter-clockwise" },
+        { key:"notes", label:"Notes", icon:"ph-note", content:
+          <div style={{fontSize:"var(--text-sm)",color:"var(--text-secondary)",lineHeight:"var(--leading-normal)"}}>
+            A page-supplied pane. The dialog owns the rail, the header and the toggle; the content is yours.
+          </div> },
+      ]}
+      sections={[
+        { key:"lines", label:"Line items", icon:"ph-list-checks", badge:LINES.length,
+          search:{ placeholder:"Search line items…", keys:["label","value"] },
+          filters:[{ key:"cat", control:"segmented", options:[
+            { value:"all", label:"All" }, { value:"elec", label:"Electronics" }, { value:"mech", label:"Mechanical" }] }],
+          scroll:220, rows:LINES, empty:"No line items match this search" },
+        { key:"terms", label:"Terms", icon:"ph-scroll", rows:[
+            { label:"Payment", value:"30 days from delivery" },
+            { label:"Incoterm", value:"DAP Chennai" },
+            { label:"Warranty", value:"12 months" } ] },
+        { key:"risk", label:"Risk register", icon:"ph-warning",
+          error:"Couldn't load the risk register", onRetry:()=>{} },
+        { key:"finance", label:"Finance", icon:"ph-coins", roles:["finance"], rows:[
+            { label:"Budget code", value:"4100" } ] },
+      ]}
+      stages={STAGES}
+      onStageAction={(s,a)=>setLog(a.label + " → " + s.label)}
+      flows={[
+        { key:"quotes", title:"Compare quotes", crumb:"3 of 5 responses",
+          content:(ctx)=>(
+            <div style={{display:"flex",flexDirection:"column",gap:"var(--space-3)"}}>
+              <p style={{margin:0,fontSize:"var(--text-sm)",color:"var(--text-secondary)",lineHeight:"var(--leading-normal)"}}>
+                A flow takes over the body: the dialog draws the breadcrumb, expands to full page and locks the pane
+                toggles; everything below this line is the page's own content.
+              </p>
+              <div style={{border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-lg)",padding:"var(--space-4)",background:"var(--surface-soft)",fontSize:"var(--text-sm)",color:"var(--text-secondary)"}}>
+                Quote comparison table would render here.
+              </div>
+              <Button category="tertiary" onClick={ctx.exit} icon={<i className="ph ph-arrow-left" />}>Exit via ctx.exit()</Button>
+            </div>),
+          footer:(ctx)=>(
+            <div style={{display:"flex",alignItems:"center",gap:"var(--space-2)"}}>
+              <span style={{flex:1,minWidth:0,fontSize:"var(--text-xs)",color:"var(--text-tertiary)"}}>The flow supplies its own footer.</span>
+              <Button category="secondary" onClick={ctx.exit}>Cancel</Button>
+              <Button category="primary" icon={<i className="ph ph-check" />} onClick={ctx.exit}>Award quote</Button>
+            </div>) },
+      ]}
+      actions={[
+        { key:"compare", label:"Compare quotes", icon:"ph-scales", flow:"quotes" },
+        { key:"reject", label:"Reject", icon:"ph-x-circle", category:"danger",
+          confirm:{ title:"Reject this record", danger:true, remark:"required",
+                    remarkLabel:"Reason for rejection", confirmLabel:"Reject record",
+                    body:<>This returns <strong>REC-2402</strong> to the requester and is recorded in the activity log.</> } },
+        { key:"approve", label:"Approve", icon:"ph-check-circle", category:"primary",
+          confirm:{ title:"Approve this record", remark:"optional", confirmLabel:"Approve record",
+                    body:<>This advances <strong>REC-2402</strong> to finance clearance.</> } },
+      ]}
+      onAction={(k,r)=>setLog("action " + k + (r ? " · remark: " + r : ""))}
+      style={{ maxWidth:"none", width:"100%", height:"100%" }} />
+  );
+}
+
+function Demo(){
+  const [shape,setShape] = React.useState("record");
+  const [state,setState] = React.useState("Pending");
+  const [cols,setCols]   = React.useState(3);
+  if (!RecordDetailModal) return <div style={{padding:24,color:"var(--text-tertiary)",font:"var(--text-sm) var(--font-sans)"}}>Compiling design-system bundle… reload in a moment.</div>;
+  const declarative = shape !== "record";
+  return (
+    <div>
+      <div className="bar">
+        <div className="seg">
+          {[["record","Record defaults"],["declarative","Declarative"],["busy","Busy"],["readonly","Read-only"],["loading","Loading"],["error","Error"]].map(([k,l]) =>
+            <button key={k} className={shape===k?"on":""} onClick={()=>setShape(k)}>{l}</button>)}
+        </div>
+        {!declarative && (
+          <div className="seg">
+            {["Pending","Approved","Assigned","Rejected"].map(s =>
+              <button key={s} className={state===s?"on":""} onClick={()=>setState(s)}>{s==="Pending"?"Pending for approval":s==="Assigned"?"Approved & assigned":s}</button>)}
+          </div>
+        )}
+        {!declarative && (
+          <div className="seg">
+            {[3,2].map(c =>
+              <button key={c} className={cols===c?"on":""} onClick={()=>setCols(c)}>{c}-column</button>)}
+          </div>
+        )}
+        <span className="hint">
+          {declarative
+            ? mode === "busy"
+              ? "busy — a decision is committing: the primary action spins and every footer action locks. The rest of the dialog stays readable."
+              : "Sections carry their own search · filters · scroll · error. Panes start closed. Stages open a flow. The footer is declarative — Reject requires a remark. The Finance section is role-gated and hidden at role=\"approver\"."
+            : "Passing only a record renders the original dialog — six essential fields, three sections, audit pane open, approve / reject in the footer."}
+        </span>
+      </div>
+      <div className="stage">
+        {declarative
+          ? <Declarative key={shape} mode={shape} />
+          : <RecordDetailModal key={state} open record={RECORDS[state]} columns={cols} onClose={()=>{}}
+              onAction={(a,r)=>{ console.log("action:",a,"remark:",r); }}
+              style={{ maxWidth:"none", width:"100%", height:"100%" }} />}
+      </div>
+    </div>
+    <div style={{marginTop:16,maxWidth:1000}}>
+      <div style={{font:"var(--fw-bold) var(--text-2xs)/1 var(--font-sans)",letterSpacing:"var(--tracking-wider)",textTransform:"uppercase",color:"var(--text-brand)",marginBottom:10}}>Usage</div>
+      <pre style={{font:"var(--text-2xs)/1.6 var(--font-data)",background:"var(--surface-sunken)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:"12px 14px",overflow:"auto",color:"var(--text-secondary)",margin:0}}>{`<RecordDetailModal open record={record} onClose={close}
+  role={me.role} essentials={essentials} sections={sections} stages={stages}
+  actions={[{ key:"approve", label:"Approve", category:"primary",
+    confirm:{ title:"Approve this record", confirmLabel:"Approve record" } }]}
+  onAction={handleAction}/>`}</pre>
+      <div style={{font:"var(--fw-bold) var(--text-2xs)/1 var(--font-sans)",letterSpacing:"var(--tracking-wider)",textTransform:"uppercase",color:"var(--text-brand)",margin:"14px 0 10px"}}>Responsive</div>
+      <p style={{font:"var(--fw-regular) var(--text-xs)/1.5 var(--font-sans)",color:"var(--text-tertiary)",maxWidth:"78ch",margin:0}}>The dialog measures its own container width and switches at 760px: wide, the pane rail (audit/notes/effort) sits beside the detail column; narrow, it overlays the detail column instead of squeezing it (see the <code>narrow</code> state and its <code>ResizeObserver</code> in <code>RequestDetailModal.tsx</code>). This is a real container-width switch, not a viewport breakpoint. A flow (<code>stages[].flow</code>) always goes full-bleed regardless of width.</p>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script></body></html>

@@ -1,0 +1,34 @@
+/* ============================================================================
+   AgniUI — Agnikul Cosmos ERP Design System
+   Root stylesheet. Consumers link THIS one file.
+   3-layer token architecture: brand → colors(semantic) → components.
+   Import order: fonts → brand → semantic/scale → typography → spacing →
+   elevation → states → component tokens → system-matched mode → base reset.
+   Default appearance follows the OPERATING SYSTEM; data-theme="light|dark" on
+   any element overrides it for that subtree.
+   ========================================================================== */
+@import "tokens/layers.css";
+@import "tokens/fonts.css";
+@import "tokens/brand.css";
+@import "tokens/colors.css";
+@import "tokens/typography.css";
+@import "tokens/spacing.css";
+@import "tokens/layout.css";
+@import "tokens/elevation.css";
+@import "tokens/states.css";
+@import "tokens/components.css";
+@import "tokens/charts.css";
+@import "tokens/forms.css";
+/* System-matched mode resolution. Must come after every file that declares a
+   [data-theme="dark"] block — it re-applies those values under
+   @media (prefers-color-scheme: dark) and adds the explicit [data-theme="light"]
+   scope. GENERATED: regenerate, don't hand-edit. */
+@import "tokens/system-theme.css";
+@import "tokens/base.css";
+/* Compiled Tailwind utilities for migrated components (core/Button onward).
+   Imported HERE, not linked per-page: styles.css is the single entry point
+   consumers link, and a component whose utilities are absent renders as a bare
+   OS control with no error. Anything that loads _ds_bundle.js therefore gets
+   the matching rules automatically — cards, templates and apps alike.
+   Last in the closure so the utilities layer is declared after base. */
+@import "tailwind/agniui.css";

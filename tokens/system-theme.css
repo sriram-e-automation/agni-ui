@@ -1,0 +1,322 @@
+/* ============================================================================
+   AgniUI · System-matched theme resolution
+   GENERATED — do not hand-edit. Regenerate from the [data-theme="dark"] blocks
+   in tokens/brand · colors · elevation · states · components · charts.
+
+   The default mode is the OPERATING SYSTEM's preference (decided Aug 2026).
+   Authoring stays where it was: every mode-varying token is declared once for
+   light in its :root block and once for dark in its [data-theme="dark"] block.
+   This file only re-applies those same values through two extra scopes:
+
+     @media (prefers-color-scheme: dark) :root
+        -> OS dark becomes the document default.
+     [data-theme="light"]
+        -> an EXPLICIT light scope, so a subtree (or a specimen card) can pin
+           light even while the OS is dark. Light previously lived only in
+           :root, which an OS-dark document would have overridden.
+
+   ORDER IS THE OVERRIDE, not specificity: :root and [data-theme="light"] have
+   the same specificity, so the light block MUST stay after the media block in
+   this file. (An earlier draft used :root:not([data-theme="light"]) to win on
+   specificity instead; the DS token compiler reads that as a component-style
+   selector and refuses to register the 133 tokens inside it.)
+
+   Explicit data-theme on any element still wins for its subtree, in either
+   direction, because a matching declaration always beats an inherited value.
+   Imported after every token file so these scopes are declared last.
+   ========================================================================== */
+@media (prefers-color-scheme: dark) {
+  :root {
+  /* ── brand.css ── */
+  --brand-primary-wash: rgba(126, 212, 164, 0.12);
+
+  /* ── colors.css ── */
+  --agni-green-50: rgba(126, 212, 164, 0.10);
+  --agni-green-150: rgba(126, 212, 164, 0.16);
+  --agni-green-600: #7ED4A4;
+  --agni-neutral-100: rgba(255, 255, 255, 0.06);
+  --surface-page: var(--agni-navy-900);
+  --surface-card: #0C1340;
+  --surface-soft: #111A4D;
+  --surface-sunken: #080E33;
+  --surface-brand: #2F6B3D;
+  --surface-brand-soft: rgba(126, 212, 164, 0.12);
+  --surface-inverse: #FFFFFF;
+  --text-primary: #EAEEF6;
+  --text-secondary: #B6C0D9;
+  --text-tertiary: #7E8AAD;
+  --text-disabled: #545F84;
+  --text-brand: #7ED4A4;
+  --text-on-brand: #FFFFFF;
+  --text-inverse: var(--agni-neutral-900);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-default: rgba(255, 255, 255, 0.16);
+  --border-strong: rgba(255, 255, 255, 0.28);
+  --border-control: rgba(255, 255, 255, 0.36);
+  --border-brand: #7ED4A4;
+  --action-brand: #38804A;
+  --action-brand-hover: #3F8C50;
+  --action-brand-press: #2F6B3D;
+  --action-neutral: rgba(255, 255, 255, 0.08);
+  --action-neutral-hover: rgba(255, 255, 255, 0.14);
+  --status-success-soft: rgba(7, 148, 85, 0.16);
+  --status-warning-soft: rgba(220, 104, 3, 0.16);
+  --status-info-soft: rgba(21, 112, 239, 0.16);
+  --status-error-soft: rgba(217, 45, 32, 0.16);
+  --status-error-hover: #B42318;
+  --status-pending: #A9B6CF;
+  --status-blocked: #FB7185;
+  --status-success-text: #6FDDA0;
+  --status-warning-text: #F5A65B;
+  --status-info-text: #6BB0FF;
+  --status-error-text: #FF8A80;
+  --status-pending-text: #A9B6CF;
+  --status-blocked-text: #FB7185;
+  --tone-done-fg: #6FDDA0;
+  --tone-doing-fg: #6BB0FF;
+  --tone-error-fg: #FF8A80;
+  --tone-todo-fg: #C2CBE0;
+  --tone-warning-fg: #F5A65B;
+  --tone-brand-fg: #8FE0B2;
+  --tone-pending-fg: #A9B6CF;
+  --tone-blocked-fg: #FB7185;
+  --kanban-approvals-bg: rgba(89,37,220,0.16);
+  --kanban-todo-bg: rgba(255,255,255,0.04);
+  --kanban-progress-bg: rgba(21,112,239,0.16);
+  --kanban-overdue-bg: rgba(220,104,3,0.16);
+  --kanban-done-bg: rgba(7,148,85,0.16);
+  --kanban-rejected-bg: rgba(217,45,32,0.16);
+  --avatar-1-bg: #1E3250;
+  --avatar-2-bg: #1B2C5F;
+  --avatar-3-bg: #23245F;
+  --avatar-4-bg: #312B44;
+  --avatar-5-bg: #33264A;
+  --avatar-6-bg: #1C334F;
+  --scrim: rgba(0, 3, 24, 0.66);
+
+  /* ── elevation.css ── */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.40);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.50), 0 1px 2px rgba(0, 0, 0, 0.40);
+  --shadow-md: 0 4px 10px -2px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 12px 20px -4px rgba(0, 0, 0, 0.60);
+  --shadow-xl: 0 20px 30px -6px rgba(0, 0, 0, 0.65);
+  --shadow-2xl: 0 28px 56px -12px rgba(0, 0, 0, 0.72);
+
+  /* ── states.css ── */
+  --focus-ring: 0 0 0 2px var(--surface-card), 0 0 0 4px var(--agni-green-600);
+  --focus-ring-error: 0 0 0 2px var(--surface-card), 0 0 0 4px #FF8A80;
+  --focus-ring-offset: var(--focus-ring);
+  --state-hover-overlay: rgba(255, 255, 255, 0.06);
+  --state-press-overlay: rgba(255, 255, 255, 0.10);
+  --state-selected-bg: rgba(126, 212, 164, 0.12);
+
+  /* ── components.css ── */
+  --button-primary-bg: var(--action-brand);
+  --button-primary-bg-hover: var(--action-brand-hover);
+  --button-primary-bg-press: var(--action-brand-press);
+  --button-secondary-bg: var(--surface-card);
+  --button-secondary-fg: var(--text-secondary);
+  --button-secondary-bdr: var(--border-default);
+  --button-danger-bg: var(--status-error);
+  --button-danger-bg-hover: var(--status-error-hover);
+  --button-danger-bg-press: var(--status-error-press);
+  --input-bg: var(--surface-card);
+  --input-bg-disabled: var(--surface-soft);
+  --input-bdr: var(--border-control);
+  --input-bdr-focus: var(--border-brand);
+  --input-placeholder: var(--text-tertiary);
+  --card-bg: var(--surface-card);
+  --card-bdr: var(--border-subtle);
+  --panel-bg: var(--surface-card);
+  --drawer-bg: var(--surface-card);
+  --modal-bg: var(--surface-card);
+  --modal-scrim: var(--scrim);
+  --table-header-bg: rgba(0, 7, 62, 0.55);
+  --table-header-fg: var(--text-secondary);
+  --table-row-hover: var(--surface-soft);
+  --table-row-selected: var(--surface-brand-soft);
+  --table-cell-bdr: var(--border-subtle);
+  --gantt-header-bg: var(--table-header-bg);
+  --gantt-header-fg: var(--table-header-fg);
+  --gantt-grid-line: var(--border-subtle);
+  --gantt-row-hover: var(--table-row-hover);
+  --gantt-group-bg: var(--surface-soft);
+  --gantt-today: var(--action-brand);
+  --nav-item-active-bg: var(--action-brand);
+  --nav-item-hover-bg: var(--surface-brand-soft);
+  --nav-item-fg: var(--text-secondary);
+  --link-color: var(--text-brand);
+  --link-color-hover: var(--action-brand-hover);
+  --tooltip-bg: var(--surface-inverse);
+  --tooltip-fg: var(--text-inverse);
+  --tooltip-bdr: var(--border-subtle);
+  --tooltip-radius: var(--radius-sm);
+  --tooltip-shadow: var(--shadow-lg);
+
+  /* ── charts.css ── */
+  --chart-1: #6FDDA0;
+  --chart-2: #6BB0FF;
+  --chart-3: #F5A65B;
+  --chart-4: #A48AFB;
+  --chart-5: #5FD4C4;
+  --chart-6: #FF7A99;
+  --chart-7: #E478FA;
+  --chart-8: #F38744;
+  --chart-1-soft: rgba(111, 221, 160, 0.18);
+  --chart-2-soft: rgba(107, 176, 255, 0.18);
+  --chart-3-soft: rgba(245, 166, 91, 0.18);
+  --chart-4-soft: rgba(164, 138, 251, 0.18);
+  --chart-5-soft: rgba(95, 212, 196, 0.18);
+  --chart-6-soft: rgba(255, 122, 153, 0.18);
+  --chart-track: rgba(255, 255, 255, 0.06);
+  --chart-tooltip-bg: #131C52;
+  --chart-tooltip-bdr: var(--border-strong);
+  }
+}
+
+[data-theme="light"] {
+  /* ── brand.css ── */
+  --brand-primary-wash: #EEF4EC;
+
+  /* ── colors.css ── */
+  --agni-green-50: #EEF4EC;
+  --agni-green-150: #E4EEE1;
+  --agni-green-600: var(--brand-primary);
+  --agni-neutral-100: #ECEEEC;
+  --surface-page: #F6F7F6;
+  --surface-card: #FFFFFF;
+  --surface-soft: #F5F6F5;
+  --surface-sunken: #ECEEEC;
+  --surface-brand: var(--agni-green-600);
+  --surface-brand-soft: var(--agni-green-50);
+  --surface-inverse: var(--agni-navy-950);
+  --text-primary: var(--agni-neutral-900);
+  --text-secondary: var(--agni-neutral-700);
+  --text-tertiary: var(--agni-neutral-500);
+  --text-disabled: var(--agni-neutral-400);
+  --text-brand: var(--agni-green-600);
+  --text-on-brand: #FFFFFF;
+  --text-inverse: #FFFFFF;
+  --border-subtle: var(--agni-neutral-200);
+  --border-default: var(--agni-neutral-300);
+  --border-strong: var(--agni-neutral-400);
+  --border-control: #888E96;
+  --border-brand: var(--agni-green-600);
+  --action-brand: var(--agni-green-600);
+  --action-brand-hover: var(--agni-green-700);
+  --action-brand-press: var(--agni-green-800);
+  --action-neutral: var(--agni-neutral-100);
+  --action-neutral-hover: var(--agni-neutral-200);
+  --status-success-soft: var(--hue-success-soft);
+  --status-warning-soft: var(--hue-warning-soft);
+  --status-info-soft: var(--hue-info-soft);
+  --status-error-soft: var(--hue-error-soft);
+  --status-error-hover: #B42318;
+  --status-pending: var(--hue-pending);
+  --status-blocked: var(--hue-blocked);
+  --status-success-text: #056B3E;
+  --status-warning-text: #B25201;
+  --status-info-text: #0E52BB;
+  --status-error-text: #B42318;
+  --status-pending-text: #475467;
+  --status-blocked-text: var(--hue-blocked);
+  --tone-done-fg: var(--status-success-text);
+  --tone-doing-fg: var(--status-info-text);
+  --tone-error-fg: var(--status-error-text);
+  --tone-todo-fg: var(--agni-neutral-600);
+  --tone-warning-fg: var(--status-warning-text);
+  --tone-brand-fg: var(--agni-green-700);
+  --tone-pending-fg: var(--status-pending-text);
+  --tone-blocked-fg: var(--hue-blocked);
+  --kanban-approvals-bg: var(--hue-violet-soft);
+  --kanban-todo-bg: var(--agni-neutral-50);
+  --kanban-progress-bg: var(--hue-info-soft);
+  --kanban-overdue-bg: var(--hue-warning-soft);
+  --kanban-done-bg: var(--hue-success-soft);
+  --kanban-rejected-bg: var(--hue-error-soft);
+  --avatar-1-bg: #EEF4EC;
+  --avatar-2-bg: #EFF8FF;
+  --avatar-3-bg: #F4F3FF;
+  --avatar-4-bg: #FFFAEB;
+  --avatar-5-bg: #FEF3F2;
+  --avatar-6-bg: #ECFDF3;
+  --scrim: rgba(6, 11, 46, 0.45);
+
+  /* ── elevation.css ── */
+  --shadow-xs: 0 1px 2px rgba(16, 24, 40, 0.05);
+  --shadow-sm: 0 1px 3px rgba(16, 24, 40, 0.10), 0 1px 2px rgba(16, 24, 40, 0.06);
+  --shadow-md: 0 4px 8px -2px rgba(16, 24, 40, 0.10), 0 2px 4px -2px rgba(16, 24, 40, 0.06);
+  --shadow-lg: 0 12px 16px -4px rgba(16, 24, 40, 0.08), 0 4px 6px -2px rgba(16, 24, 40, 0.04);
+  --shadow-xl: 0 20px 24px -4px rgba(16, 24, 40, 0.10), 0 8px 8px -4px rgba(16, 24, 40, 0.04);
+  --shadow-2xl: 0 24px 48px -12px rgba(16, 24, 40, 0.18);
+
+  /* ── states.css ── */
+  --focus-ring: 0 0 0 2px var(--surface-card), 0 0 0 4px var(--agni-green-600);
+  --focus-ring-error: 0 0 0 2px var(--surface-card), 0 0 0 4px var(--status-error);
+  --focus-ring-offset: var(--focus-ring);
+  --state-hover-overlay: rgba(16, 24, 40, 0.04);
+  --state-press-overlay: rgba(16, 24, 40, 0.08);
+  --state-selected-bg: var(--agni-green-50);
+
+  /* ── components.css ── */
+  --button-primary-bg: var(--action-brand);
+  --button-primary-bg-hover: var(--action-brand-hover);
+  --button-primary-bg-press: var(--action-brand-press);
+  --button-secondary-bg: var(--surface-card);
+  --button-secondary-fg: var(--text-secondary);
+  --button-secondary-bdr: var(--border-default);
+  --button-danger-bg: var(--status-error);
+  --button-danger-bg-hover: var(--status-error-hover);
+  --button-danger-bg-press: var(--status-error-press);
+  --input-bg: var(--surface-card);
+  --input-bg-disabled: var(--surface-soft);
+  --input-bdr: var(--border-control);
+  --input-bdr-focus: var(--border-brand);
+  --input-placeholder: var(--text-tertiary);
+  --card-bg: var(--surface-card);
+  --card-bdr: var(--border-subtle);
+  --panel-bg: var(--surface-card);
+  --drawer-bg: var(--surface-card);
+  --modal-bg: var(--surface-card);
+  --modal-scrim: var(--scrim);
+  --table-header-bg: var(--surface-brand-soft);
+  --table-header-fg: var(--text-secondary);
+  --table-row-hover: var(--surface-soft);
+  --table-row-selected: var(--surface-brand-soft);
+  --table-cell-bdr: var(--border-subtle);
+  --gantt-header-bg: var(--table-header-bg);
+  --gantt-header-fg: var(--table-header-fg);
+  --gantt-grid-line: var(--border-subtle);
+  --gantt-row-hover: var(--table-row-hover);
+  --gantt-group-bg: var(--surface-soft);
+  --gantt-today: var(--action-brand);
+  --nav-item-active-bg: var(--action-brand);
+  --nav-item-hover-bg: var(--surface-brand-soft);
+  --nav-item-fg: var(--text-secondary);
+  --link-color: var(--text-brand);
+  --link-color-hover: var(--action-brand-hover);
+  --tooltip-bg: var(--surface-inverse);
+  --tooltip-fg: var(--text-inverse);
+  --tooltip-bdr: transparent;
+  --tooltip-radius: var(--radius-sm);
+  --tooltip-shadow: var(--shadow-lg);
+
+  /* ── charts.css ── */
+  --chart-1: #3F7343;
+  --chart-2: #1570EF;
+  --chart-3: #DC6803;
+  --chart-4: #6938EF;
+  --chart-5: #0E9384;
+  --chart-6: #E31B54;
+  --chart-7: #BA24D5;
+  --chart-8: #B54708;
+  --chart-1-soft: rgba(63, 115, 67, 0.16);
+  --chart-2-soft: rgba(21, 112, 239, 0.16);
+  --chart-3-soft: rgba(220, 104, 3, 0.16);
+  --chart-4-soft: rgba(105, 56, 239, 0.16);
+  --chart-5-soft: rgba(14, 147, 132, 0.16);
+  --chart-6-soft: rgba(227, 27, 84, 0.16);
+  --chart-track: var(--surface-sunken);
+  --chart-tooltip-bg: var(--surface-card);
+  --chart-tooltip-bdr: var(--border-default);
+}

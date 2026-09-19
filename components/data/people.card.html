@@ -1,0 +1,61 @@
+<!-- @dsCard group="Data" viewport="1080x760" name="People" subtitle="PersonCard — sizes sm/md/lg · rest/hover/selected/dimmed states · OrgTree — reporting line-up bracket tree: elbow connectors · collapsible branches · selected-path highlight" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:18px;background:var(--surface-page)}.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:18px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.cap:first-child{margin-top:0}.lbl{font:var(--fw-medium) var(--text-2xs)/1 var(--font-data);color:var(--text-tertiary);margin:0 0 6px}</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { PersonCard, OrgTree } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+const P = (id, name, role, crew, team, reportsTo) => ({ id, name, role, crew, team, reportsTo });
+const PEOPLE = [
+  P("EMP-2401","Aravind Prabhu","Director","Operations","Leadership",null),
+  P("EMP-2402","Meera Krishnan","Vice president","Propulsion","Leadership","EMP-2401"),
+  P("EMP-2403","Vikram Singh","Vice president","Avionics & Software","Leadership","EMP-2401"),
+  P("EMP-2404","Rohit Sharma","Senior lead","Propulsion","Engines","EMP-2402"),
+  P("EMP-2405","Kavitha Desai","Senior lead","Structures","Airframe","EMP-2402"),
+  P("EMP-2406","Priya Nair","Senior lead","Avionics","Flight computers","EMP-2403"),
+  P("EMP-2408","Karthik Reddy","Senior associate","Propulsion","Engines","EMP-2404"),
+  P("EMP-2409","Anjali Menon","Senior associate","Propulsion","Turbopumps","EMP-2404"),
+  P("EMP-2410","Rajesh Nambiar","Senior associate","Structures","Airframe","EMP-2405"),
+  P("EMP-2412","Deepa Pillai","Senior associate","Avionics","Flight computers","EMP-2406"),
+  P("EMP-2416","Dhruv Malhotra","Associate","Propulsion","Engines","EMP-2408"),
+  P("EMP-2417","Nithya Menon","Associate","Propulsion","Turbopumps","EMP-2409"),
+  P("EMP-2420","Bala Krishnan","Associate","Avionics","Flight computers","EMP-2412"),
+];
+const one = PEOPLE[3];
+function Demo(){
+  const [sel, setSel] = React.useState("EMP-2416");
+  return (<div>
+    <div className="cap">PersonCard — sizes sm · md · lg (lg adds the ID line)</div>
+    <div style={{display:"flex", alignItems:"flex-start", gap:14, flexWrap:"wrap"}}>
+      <div><p className="lbl">sm</p><PersonCard person={one} size="sm" /></div>
+      <div><p className="lbl">md</p><PersonCard person={one} size="md" /></div>
+      <div><p className="lbl">lg</p><PersonCard person={one} size="lg" /></div>
+    </div>
+    <div className="cap">States — interactive (hover to lift) · selected · dimmed · no role/team</div>
+    <div style={{display:"flex", alignItems:"flex-start", gap:14, flexWrap:"wrap"}}>
+      <div><p className="lbl">interactive</p><PersonCard person={one} onClick={()=>{}} /></div>
+      <div><p className="lbl">selected</p><PersonCard person={one} selected onClick={()=>{}} /></div>
+      <div><p className="lbl">dimmed</p><PersonCard person={one} dimmed /></div>
+      <div><p className="lbl">minimal</p><PersonCard person={{ id:"EMP-2499", name:"Sunita Rao" }} /></div>
+    </div>
+    <div className="cap">OrgTree — click a person (path to root highlights) · collapse a branch with its count pill · hierarchy legend</div>
+    <div style={{height:430, background:"var(--surface-card)", border:"1px solid var(--border-subtle)", borderRadius:"var(--radius-lg)", boxShadow:"var(--shadow-xs)", padding:14, boxSizing:"border-box"}}>
+      <OrgTree people={PEOPLE} selectedId={sel} onPersonClick={(p)=>setSel(p.id)}
+        legend={["Director","Vice president","Senior lead","Senior associate","Associate"]} />
+    </div>
+    <div className="cap">Usage</div>
+    <pre style={{fontFamily:"var(--font-data)",fontSize:"var(--text-xs)",background:"var(--surface-card)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:14,overflow:"auto"}}>{`<PersonCard person={person} size="md" selected={person.id===selectedId} onClick={select}/>
+<OrgTree people={people} selectedId={selectedId} onPersonClick={(p)=>select(p.id)}/>`}</pre>
+    <div className="cap">Responsive</div>
+    <p className="note" style={{maxWidth:"72ch"}}>PersonCard drops to <code>size="sm"</code> (200px) inside narrow panes or tree nodes — pick the size at the call site, it doesn't self-adjust. OrgTree's bracket layout needs horizontal room to breathe; on tablet/phone wrap it in <code>overflow-x:auto</code> rather than compressing the tree, or switch the surface to a flat PersonCard list.</p>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script></body></html>

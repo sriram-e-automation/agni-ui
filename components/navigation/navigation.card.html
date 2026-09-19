@@ -1,0 +1,109 @@
+<!-- @dsCard group="Navigation" viewport="820x1000" name="Navigation — tabs, pill track, breadcrumbs, palette" subtitle="Tabs: page strip · pill track · Breadcrumbs (trail, truncation) · CommandPalette (empty, typing, results, no results)" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:20px;background:var(--surface-page)}.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:18px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.cap:first-child{margin-top:0}.lbl{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);margin:0 0 8px}</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { Tabs, Breadcrumbs, CommandPalette, Button } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+function Demo(){
+  const [a,setA]=React.useState("all");
+  const [b,setB]=React.useState("list");
+  const [c,setC]=React.useState("all");
+  const [v,setV]=React.useState("list");
+  const [s,setS]=React.useState("mine");
+  const [two,setTwo]=React.useState("table");
+  const [six,setSix]=React.useState("list");
+  const [pal,setPal]=React.useState(false);
+  const COMMANDS=[
+    {id:"new",label:"New record",icon:"ph-file-plus",group:"Create",hint:"C"},
+    {id:"import",label:"Import records",icon:"ph-upload-simple",group:"Create"},
+    {id:"appr",label:"Go to approvals",icon:"ph-seal-check",group:"Navigate"},
+    {id:"tasks",label:"Go to my tasks",icon:"ph-checks",group:"Navigate"},
+    {id:"crew",label:"Open crew directory",icon:"ph-users-three",group:"Navigate"},
+    {id:"dark",label:"Toggle dark mode",icon:"ph-moon",group:"Settings"},
+    {id:"density",label:"Change density",icon:"ph-rows",group:"Settings"},
+  ];
+  return (<div>
+    <div className="cap">Variants</div>
+    <div className="lbl">Underline — page tabs (badges + active state)</div>
+    <div style={{marginBottom:18}}>
+      <Tabs variant="underline" value={a} onChange={setA} tabs={[{key:"all",label:"All",badge:28},{key:"mine",label:"Mine",badge:8},{key:"team",label:"Team"},{key:"org",label:"Organisation"}]}/>
+    </div>
+    <div className="lbl">Segmented — filter counts</div>
+    <div style={{marginBottom:18}}>
+      <Tabs variant="segmented" value={a} onChange={setA} tabs={[{key:"all",label:"All",badge:28},{key:"mine",label:"Mine",badge:8},{key:"team",label:"Team",badge:14},{key:"org",label:"Organisation",badge:6}]}/>
+    </div>
+    <div className="lbl">Segmented — view toggle</div>
+    <Tabs variant="segmented" value={b} onChange={setB} tabs={[{key:"list",label:"List",icon:"ph-list"},{key:"kanban",label:"Kanban",icon:"ph-kanban"},{key:"card",label:"Cards",icon:"ph-squares-four"}]}/>
+    <div className="lbl">Disabled tab — a scope this role can't open</div>
+    <div style={{marginBottom:8}}>
+      <Tabs variant="underline" value={a} onChange={setA} tabs={[
+        {key:"all",label:"All records",badge:28},
+        {key:"mine",label:"Assigned to me",badge:6},
+        {key:"audit",label:"Audit",icon:"ph-lock-simple",disabled:true}]}/>
+    </div>
+    <p style={{font:"var(--fw-regular) var(--text-xs)/1.5 var(--font-sans)",color:"var(--text-tertiary)",maxWidth:"64ch",margin:"0 0 18px"}}>
+      A disabled tab is the one place the system shows a withheld capability rather than removing it: dropping it
+      would change the strip's shape as the viewer's role changes. Everywhere else — bulk actions, action columns,
+      nav pages — a withheld action is <b>absent</b>. Hovering gives "Not available for your role".
+    </p>
+    <div className="cap">Sizes — sm · md</div>
+    <div className="lbl">Underline</div>
+    <div style={{display:"flex",flexDirection:"column",gap:14}}>
+      <Tabs variant="underline" size="sm" value={c} onChange={setC} tabs={[{key:"all",label:"Small"},{key:"mine",label:"Tabs"}]}/>
+      <Tabs variant="underline" size="md" value={c} onChange={setC} tabs={[{key:"all",label:"Medium"},{key:"mine",label:"Tabs"}]}/>
+    </div>
+    <div className="cap">Tabs — the pill track</div>
+    <div className="lbl">Icon-only — the canonical view switcher (title = tooltip)</div>
+    <div style={{marginBottom:18}}>
+      <Tabs value={v} onChange={setV} items={[{key:"list",icon:"ph-list",title:"List view"},{key:"kanban",icon:"ph-kanban",title:"Kanban view"},{key:"card",icon:"ph-squares-four",title:"Card view"},{key:"timeline",icon:"ph-chart-bar-horizontal",title:"Timeline"},{key:"calendar",icon:"ph-calendar-dots",title:"Calendar"}]}/>
+    </div>
+    <div className="lbl">Labelled with counts — scope switch</div>
+    <div style={{marginBottom:18}}>
+      <Tabs value={s} onChange={setS} items={[{key:"mine",label:"Assigned to me",count:8},{key:"team",label:"My team",count:14},{key:"all",label:"All",count:28}]}/>
+    </div>
+    <div className="lbl">Two segments — a binary toggle</div>
+    <div style={{marginBottom:18}}>
+      <Tabs value={two} onChange={setTwo} items={[{key:"table",label:"Table",icon:"ph-table"},{key:"tree",label:"Reporting line-up",icon:"ph-tree-structure"}]}/>
+    </div>
+    <div className="lbl">Six segments — the practical ceiling; past this use Tabs or a Select</div>
+    <Tabs value={six} onChange={setSix} items={[{key:"list",icon:"ph-list",title:"List"},{key:"kanban",icon:"ph-kanban",title:"Kanban"},{key:"card",icon:"ph-squares-four",title:"Cards"},{key:"timeline",icon:"ph-chart-bar-horizontal",title:"Timeline"},{key:"calendar",icon:"ph-calendar-dots",title:"Calendar"},{key:"map",icon:"ph-map-trifold",title:"Map"}]}/>
+    <p style={{font:"var(--fw-regular) var(--text-xs)/1.5 var(--font-sans)",color:"var(--text-tertiary)",maxWidth:"64ch",margin:"10px 0 0"}}>Tabs vs Tabs: <b>Tabs</b> switch what a region <i>contains</i> (scopes, record sections). <b>Tabs</b> switches how one set is <i>rendered</i>, or toggles a mode — it is what <code>PageTitleBar</code> uses for the view switcher.</p>
+    <div className="cap">Breadcrumbs</div>
+    <div className="lbl">Two levels — the shortest useful trail</div>
+    <div style={{marginBottom:16}}><Breadcrumbs items={[{label:"Administration",icon:"ph-buildings",onClick:()=>{}},{label:"Records"}]}/></div>
+    <div className="lbl">Four levels — the last item is the current page and is never a link</div>
+    <div style={{marginBottom:16}}><Breadcrumbs items={[{label:"Administration",icon:"ph-buildings",onClick:()=>{}},{label:"Records",onClick:()=>{}},{label:"Purchase requests",onClick:()=>{}},{label:"REQ-0184"}]}/></div>
+    <div className="lbl">Long labels in a narrow region — each crumb truncates, the trail does not wrap</div>
+    <div style={{width:360,border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",background:"var(--surface-card)",padding:"10px 12px",overflow:"hidden"}}>
+      <Breadcrumbs items={[{label:"Administration & Support Operations",icon:"ph-buildings",onClick:()=>{}},{label:"Procurement records",onClick:()=>{}},{label:"REQ-0184 · Ti-6Al-4V bracket set"}]}/>
+    </div>
+    <p style={{font:"var(--fw-regular) var(--text-xs)/1.5 var(--font-sans)",color:"var(--text-tertiary)",maxWidth:"64ch",margin:"10px 0 0"}}>The shell header carries one breadcrumb per module. Keep it to three levels where possible — deeper trails mean the page hierarchy is doing work the nav rail should do.</p>
+    <div className="cap">CommandPalette — ⌘K</div>
+    <Button category="secondary" icon={<i className="ph ph-magnifying-glass"/>} onClick={()=>setPal(true)}>Open the palette</Button>
+    <p style={{font:"var(--fw-regular) var(--text-xs)/1.5 var(--font-sans)",color:"var(--text-tertiary)",maxWidth:"64ch",margin:"10px 0 0"}}>Opens empty with every command grouped (Create · Navigate · Settings). Typing filters as you go; ↑↓ moves, Enter runs, Esc closes. A query with no match shows a single “No commands match” line rather than an empty box — type <code>zzz</code> to see it. Reach for the palette over a long DropdownMenu once actions pass roughly eight.</p>
+    <div className="lbl" style={{marginTop:14}}>loading — commands still resolving</div>
+    <Button category="secondary" icon={<i className="ph ph-spinner"/>} onClick={()=>setPal("loading")}>Open while loading</Button>
+    <p style={{font:"var(--fw-regular) var(--text-xs)/1.5 var(--font-sans)",color:"var(--text-tertiary)",maxWidth:"64ch",margin:"10px 0 0"}}>The palette opens instantly and fills in — the search field is live while the list resolves, so typing is never blocked by the fetch.</p>
+    <CommandPalette open={pal===true} onClose={()=>setPal(false)} commands={COMMANDS} placeholder="Search commands…"/>
+    <CommandPalette open={pal==="loading"} onClose={()=>setPal(false)} commands={[]} loading placeholder="Search commands…"/>
+    <div className="cap">Usage</div>
+    <pre style={{fontFamily:"var(--font-data)",fontSize:"var(--text-xs)",background:"var(--surface-card)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:14,overflow:"auto"}}>{`<Tabs variant="underline" value={scope} onChange={setScope}
+  tabs={[{key:"all",label:"All",badge:28},{key:"mine",label:"Mine",badge:8}]}/>
+<Breadcrumbs items={[{label:"Records",onClick:goToList},{label:"REQ-0184"}]}/>
+<CommandPalette open={paletteOpen} onClose={closePalette} commands={COMMANDS}/>`}</pre>
+    <div className="cap">Responsive</div>
+    <table style={{borderCollapse:"collapse",width:"100%",marginBottom:14}}><tbody>
+      <tr><th style={{textAlign:"left",fontSize:"var(--text-2xs)",color:"var(--text-tertiary)",paddingBottom:8,borderBottom:"1px solid var(--border-subtle)",width:"18%"}}>Breakpoint</th><th style={{textAlign:"left",fontSize:"var(--text-2xs)",color:"var(--text-tertiary)",paddingBottom:8,borderBottom:"1px solid var(--border-subtle)"}}>Behavior</th></tr>
+      <tr><td style={{padding:"9px 12px 9px 0",borderBottom:"1px solid var(--border-subtle)",fontSize:"var(--text-xs)"}}><strong>Desktop ≥ 1024</strong></td><td style={{padding:"9px 0",borderBottom:"1px solid var(--border-subtle)",fontSize:"var(--text-xs)",color:"var(--text-secondary)"}}>Tabs/pill tracks lay out inline; Breadcrumbs shows the full trail; CommandPalette centers at a fixed max-width.</td></tr>
+      <tr><td style={{padding:"9px 12px 9px 0",borderBottom:"1px solid var(--border-subtle)",fontSize:"var(--text-xs)"}}><strong>Tablet / Phone &lt; 1024</strong></td><td style={{padding:"9px 0",borderBottom:"1px solid var(--border-subtle)",fontSize:"var(--text-xs)",color:"var(--text-secondary)"}}>Tabs/Tabs scroll horizontally rather than wrap once they exceed the container — give the wrapper <code>overflow-x:auto</code>. Breadcrumbs already truncates each crumb via CSS ellipsis instead of wrapping (see the narrow-region example above). CommandPalette clamps to <code>92vw</code> so it never touches the screen edge on phone.</td></tr>
+    </tbody></table>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script></body></html>

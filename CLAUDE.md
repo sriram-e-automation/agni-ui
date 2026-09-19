@@ -1,0 +1,1 @@
+- Update `readme.md` on every turn where a notable change lands (new/merged/renamed components, state-contract changes, doc consolidation, token changes, etc). Keep edits targeted to the affected section(s) — don't rewrite the whole file.

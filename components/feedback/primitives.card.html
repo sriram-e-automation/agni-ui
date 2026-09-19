@@ -1,0 +1,92 @@
+<!-- @dsCard group="Feedback" viewport="1000x900" name="Feedback primitives — notice, progress, loading, modal" subtitle="Notice 5 tones × dismissible/action · Progress determinate & indeterminate · Loading shapes · Modal sizes & scrolling" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8"><title>Feedback primitives</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:20px;background:var(--surface-page)}.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:20px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.cap:first-child{margin-top:0}.lbl{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);margin:0 0 8px}.note{font:var(--fw-regular) var(--text-xs)/1.5 var(--font-sans);color:var(--text-tertiary);margin:8px 0 0;max-width:64ch}.row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}.pane{background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:16px}</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { Notice, Progress, Loading, Modal, Button } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+function Demo(){
+  const [open,setOpen]=React.useState(null);
+  const [dismissed,setDismissed]=React.useState(false);
+  return (<div>
+    <div className="cap">Notice — tones</div>
+    <div style={{display:"flex",flexDirection:"column",gap:10}}>
+      <Notice tone="info" title="Scheduled maintenance">The desk will be read-only on Sunday 02:00–04:00 IST.</Notice>
+      <Notice tone="success" title="Request approved">REC-2401 moved to Approved and the requester was notified.</Notice>
+      <Notice tone="warning" title="Two approvals overdue">Records waiting more than 5 days escalate to the department lead.</Notice>
+      <Notice tone="error" title="Import failed">4 of 28 rows could not be read. Fix the highlighted rows and re-upload.</Notice>
+      <Notice tone="brand" title="New: timeline view">Records can now be viewed as a Gantt timeline from the view switcher.</Notice>
+    </div>
+    <div className="cap">Notice — with action · dismissible · icon override</div>
+    <div style={{display:"flex",flexDirection:"column",gap:10}}>
+      <Notice tone="warning" title="Draft not submitted" action={<Button category="secondary" size="sm">Resume draft</Button>}>You have an unsubmitted purchase request from 12 Aug.</Notice>
+      {dismissed?null:<Notice tone="info" onDismiss={()=>setDismissed(true)}>Your display size preference now follows this browser.</Notice>}
+      <Notice tone="error" icon="ph-shield-warning" title="Role changed">Your access to Organisation scope was removed.</Notice>
+    </div>
+    <p className="note">Notice is for page- or region-level conditions that persist. Transient confirmation of an action the user just took is a <code>Notice</code>; a region that failed to load is <code>ErrorState</code>. Body copy is one line of fact.</p>
+    <div className="cap">Progress — determinate</div>
+    <div className="pane" style={{display:"flex",flexDirection:"column",gap:16}}>
+      <Progress value={18} label="Uploading crew-roster.csv" showValue/>
+      <Progress value={64} tone="info" label="Validating rows" showValue/>
+      <Progress value={100} tone="success" label="Import complete" showValue/>
+      <Progress value={42} tone="warning" label="Storage used" showValue/>
+      <Progress value={88} tone="error" label="Quota" showValue/>
+    </div>
+    <div className="cap">Progress — indeterminate & sizes</div>
+    <div className="pane" style={{display:"flex",flexDirection:"column",gap:16}}>
+      <Progress indeterminate label="Contacting the approval service"/>
+      <div className="row" style={{gap:24}}>
+        <div style={{width:200}}><div className="lbl">sm</div><Progress size="sm" value={55}/></div>
+        <div style={{width:200}}><div className="lbl">md</div><Progress size="md" value={55}/></div>
+        <div style={{width:200}}><div className="lbl">lg</div><Progress size="lg" value={55}/></div>
+      </div>
+    </div>
+    <p className="note">Use determinate whenever a total is known — an unbounded bar reads as "stuck". Indeterminate is for waits with no measurable progress.</p>
+    <div className="cap">Loading — the raw shapes</div>
+    <div className="pane">
+      <div className="row" style={{gap:28,alignItems:"flex-start"}}>
+        <div style={{width:220}}><div className="lbl">line × 3</div><Loading shape="text" lines={3}/></div>
+        <div style={{width:220}}><div className="lbl">block</div><Loading shape="block" height={90}/></div>
+        <div><div className="lbl">circle</div><Loading shape="circle" width={44} height={44}/></div>
+        <div style={{width:220}}><div className="lbl">composed — a card head</div><div style={{display:"flex",gap:10,alignItems:"center"}}><Loading shape="circle" width={32} height={32}/><div style={{flex:1}}><Loading shape="text" lines={2}/></div></div></div>
+      </div>
+    </div>
+    <p className="note"><code>Loading</code> is the primitive. Do not assemble page placeholders from it by hand — <code>Loading shape="…"</code> already provides a shape-matched skeleton for every component family, and a component's own <code>loading</code> prop is better still.</p>
+    <div className="cap">Modal — sizes, scrolling body, danger</div>
+    <div className="row">
+      <Button category="secondary" onClick={()=>setOpen("sm")}>sm — confirm</Button>
+      <Button category="secondary" onClick={()=>setOpen("md")}>md — default</Button>
+      <Button category="secondary" onClick={()=>setOpen("lg")}>lg — detail</Button>
+      <Button category="secondary" onClick={()=>setOpen("scroll")}>Scrolling body</Button>
+      <Button category="secondary" onClick={()=>setOpen("danger")}>danger</Button>
+    </div>
+    <p className="note">Footer actions read right-to-left by weight: the primary sits last. Esc and scrim-click close unless <code>closeOnScrim={false}</code> — set that only when closing would lose typed work, and pair it with a discard confirmation.</p>
+    <Modal open={open==="sm"} onClose={()=>setOpen(null)} title="Submit request?" size="sm" footer={<><Button category="ghost" onClick={()=>setOpen(null)}>Cancel</Button><Button category="primary" onClick={()=>setOpen(null)}>Submit</Button></>}>REC-2401 will enter the approval chain and notify Aravind Prabhu.</Modal>
+    <Modal open={open==="md"} onClose={()=>setOpen(null)} title="Reassign record" size="md" footer={<><Button category="ghost" onClick={()=>setOpen(null)}>Cancel</Button><Button category="primary" onClick={()=>setOpen(null)}>Reassign</Button></>}>The default size. Wide enough for a short form, narrow enough to read as a decision.</Modal>
+    <Modal open={open==="lg"} onClose={()=>setOpen(null)} title="Record detail" size="lg" footer={<Button category="secondary" onClick={()=>setOpen(null)}>Close</Button>}>Large is for two-pane content. Anything richer than that is a page or a <code>Panel</code>, not a modal.</Modal>
+    <Modal open={open==="scroll"} onClose={()=>setOpen(null)} title="Terms of the purchase agreement" size="md" footer={<><Button category="ghost" onClick={()=>setOpen(null)}>Decline</Button><Button category="primary" onClick={()=>setOpen(null)}>Accept</Button></>}>
+      <div style={{display:"flex",flexDirection:"column",gap:12}}>{Array.from({length:14}).map((_,i)=><p key={i} style={{margin:0,color:"var(--text-secondary)"}}>Clause {i+1} — the body scrolls while the header and footer stay pinned, so the primary action is always reachable.</p>)}</div>
+    </Modal>
+    <Modal open={open==="danger"} onClose={()=>setOpen(null)} title="Delete 4 records?" size="sm" danger footer={<><Button category="ghost" onClick={()=>setOpen(null)}>Cancel</Button><Button category="danger" onClick={()=>setOpen(null)}>Delete</Button></>}>This cannot be undone. The records leave every board and report immediately.</Modal>
+    <div className="cap">Usage</div>
+    <pre style={{fontFamily:"var(--font-data)",fontSize:"var(--text-xs)",background:"var(--surface-page)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:14,overflow:"auto"}}>{`<Notice tone="warning" title="Draft not submitted" action={<Button size="sm">Resume</Button>}>You have an unsubmitted request from 12 Aug.</Notice>
+<Progress value={64} tone="info" label="Validating rows" showValue/>
+<Modal open={open} onClose={close} title="Reassign record" size="md"
+  footer={<><Button category="ghost" onClick={close}>Cancel</Button><Button category="primary">Reassign</Button></>}>…</Modal>`}</pre>
+    <div className="cap">Responsive</div>
+    <table style={{borderCollapse:"collapse",width:"100%",marginBottom:14}}><tbody>
+      <tr><th style={{textAlign:"left",fontSize:"var(--text-2xs)",color:"var(--text-tertiary)",paddingBottom:8,borderBottom:"1px solid var(--border-subtle)",width:"18%"}}>Breakpoint</th><th style={{textAlign:"left",fontSize:"var(--text-2xs)",color:"var(--text-tertiary)",paddingBottom:8,borderBottom:"1px solid var(--border-subtle)"}}>Behavior</th></tr>
+      <tr><td style={{padding:"9px 12px 9px 0",borderBottom:"1px solid var(--border-subtle)",fontSize:"var(--text-xs)"}}><strong>Desktop ≥ 1024</strong></td><td style={{padding:"9px 0",borderBottom:"1px solid var(--border-subtle)",fontSize:"var(--text-xs)",color:"var(--text-secondary)"}}>Modal opens at its fixed <code>size</code> (sm/md/lg), centered with a scrim. Notice and Progress fill their container width.</td></tr>
+      <tr><td style={{padding:"9px 12px 9px 0",borderBottom:"1px solid var(--border-subtle)",fontSize:"var(--text-xs)"}}><strong>Tablet / Phone &lt; 1024</strong></td><td style={{padding:"9px 0",borderBottom:"1px solid var(--border-subtle)",fontSize:"var(--text-xs)",color:"var(--text-secondary)"}}>Modal has no built-in phone sheet — it stays a centered dialog and should be given <code>style={{width:"min(92vw,480px)"}}</code> at the call site so it doesn't touch the screen edges. Notice/Progress need no adjustment; they're already fluid.</td></tr>
+    </tbody></table>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script></body></html>

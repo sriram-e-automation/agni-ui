@@ -1,0 +1,95 @@
+<!-- @dsCard group="Chrome" viewport="920x1120" name="ApprovalPanel — the in-page approval block" subtitle="Stepper + role-gated decisions + required note + audit — States: idle · comment-required · submitting · read-only · loading · error" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:18px;background:var(--surface-page)}.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:24px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.cap:first-child{margin-top:0}.state{margin-bottom:18px}.note{font:var(--text-xs)/1.5 var(--font-sans);color:var(--text-tertiary);margin:6px 0 0}.note code{font-family:var(--font-data);font-size:var(--text-2xs);background:var(--surface-sunken);padding:1px 4px;border-radius:var(--radius-xs)}pre{font:var(--text-2xs)/1.6 var(--font-data);background:var(--surface-sunken);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:12px 14px;overflow:auto;color:var(--text-secondary);margin:8px 0 0}.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { ApprovalPanel } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+
+const STEPS = [
+  { label:"Raised",          status:"done",    actor:"K. Raghavan", ts:"24 Aug · 09:14", detail:"Submitted with 3 attachments" },
+  { label:"Team lead",       status:"done",    actor:"S. Menon",    ts:"24 Aug · 11:02", detail:"Recommended for approval" },
+  { label:"Finance review",  status:"current", actor:"D. Iyer",     ts:"pending",        detail:"Budget line FY26-PROP-014" },
+  { label:"Head of ops",     status:"pending" },
+];
+const ENTRIES = [
+  { actor:"S. Menon",    action:"recommended the request", ts:"24 Aug · 11:02", tone:"success", icon:"ph-thumbs-up" },
+  { actor:"K. Raghavan", action:"attached quote-2411.pdf", ts:"24 Aug · 09:16", icon:"ph-paperclip" },
+  { actor:"K. Raghavan", action:"raised the request",      ts:"24 Aug · 09:14", tone:"info", icon:"ph-plus-circle" },
+];
+const DECISIONS = [
+  { key:"approve", label:"Approve", icon:"ph-check",  kind:"primary", roles:["approver","admin"] },
+  { key:"reject",  label:"Reject",  icon:"ph-x",      kind:"danger",  roles:["approver","admin"] },
+  { key:"hold",    label:"Put on hold", icon:"ph-pause", kind:"ghost", roles:["approver","admin"] },
+];
+
+function Demo(){
+  const [note,setNote]=React.useState("");
+  return (<div>
+    <div className="cap">Live instance — approver, note required before deciding</div>
+    <div className="state">
+      <ApprovalPanel stage="Finance review" status="In Review" steps={STEPS} entries={ENTRIES}
+        decisions={DECISIONS} role="approver" requireComment comment={note} onCommentChange={setNote} />
+      <p className="note">Type in the note to enable Approve and Reject. <code>requireComment</code> leaves ghost decisions (Put on hold) available — a hold is not a decision that needs a reason.</p>
+    </div>
+
+    <div className="cap">Read-only viewer — no decision matches the role, so the whole decision block goes</div>
+    <div className="state">
+      <ApprovalPanel stage="Finance review" status="In Review" steps={STEPS} entries={ENTRIES} decisions={DECISIONS} role="viewer" />
+    </div>
+
+    <div className="two">
+      <div>
+        <div className="cap">Vertical — for a narrow side pane</div>
+        <div className="state"><ApprovalPanel stage="Finance review" status="In Review" orientation="vertical" steps={STEPS} decisions={[]} showAudit={false} /></div>
+      </div>
+      <div>
+        <div className="cap">Submitting — spinner on the primary, rest inert</div>
+        <div className="state"><ApprovalPanel stage="Finance review" status="In Review" steps={STEPS} decisions={DECISIONS} role="approver" submitting comment="Budget confirmed against FY26-PROP-014." showAudit={false} /></div>
+      </div>
+    </div>
+
+    <div className="cap">Decided — readOnly, dimmed, controls inert</div>
+    <div className="state">
+      <ApprovalPanel stage="Approved" status="Approved" steps={STEPS.map((s,i)=>({...s,status:i<3?"done":"current"}))} entries={ENTRIES} decisions={DECISIONS} role="approver" readOnly />
+    </div>
+
+    <div className="two">
+      <div>
+        <div className="cap">Loading</div>
+        <div className="state"><ApprovalPanel loading /></div>
+      </div>
+      <div>
+        <div className="cap">Error — precedence over loading and empty</div>
+        <div className="state"><ApprovalPanel error="Couldn't load the approval chain" onRetry={()=>{}} /></div>
+      </div>
+    </div>
+
+    <div className="cap">Usage</div>
+    <pre>{`const { ApprovalPanel } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+
+<ApprovalPanel
+  stage="Finance review" status="In Review"
+  steps={steps} entries={auditEntries}
+  role={me.role} requireComment
+  decisions={[
+    { key:"approve", label:"Approve", icon:"ph-check", kind:"primary",
+      roles:["approver","admin"], onClick:() => decide("approve", note) },
+    { key:"reject",  label:"Reject",  icon:"ph-x", kind:"danger",
+      roles:["approver","admin"], onClick:() => decide("reject", note) },
+  ]}
+  comment={note} onCommentChange={setNote}
+  submitting={isSaving} readOnly={record.decided} />`}</pre>
+    <p className="note">RecordDetailModal is the dialog form of the same three parts. Use ApprovalPanel when the approval lives on the record page; use RecordDetailModal when it opens over a list.</p>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script>
+</body></html>

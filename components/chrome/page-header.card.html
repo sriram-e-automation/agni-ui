@@ -1,0 +1,119 @@
+<!-- @dsCard group="Chrome" viewport="1180x2900" name="PageHeader — title bar + controls as one group" subtitle="The records-page header in one component: PageTitleBar over PageControls in one card, optional QuickStats strip, sticky · loading · disabled · role-gated" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:20px;background:var(--surface-page);font-family:var(--font-sans)}.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:24px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.cap:first-child{margin-top:0}.lbl{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);margin:0 0 8px}.rec{font-family:var(--font-data);font-size:var(--text-2xs);color:var(--text-tertiary);background:var(--surface-soft);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:10px 12px;white-space:pre-wrap;line-height:1.6;margin:0 0 14px}.stack{display:flex;flex-direction:column;gap:22px}table{border-collapse:collapse;width:100%;margin:0 0 14px}th{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);text-align:left;padding:0 12px 8px 0;border-bottom:1px solid var(--border-subtle)}td{font:var(--text-xs)/1.55 var(--font-sans);color:var(--text-secondary);padding:9px 12px 9px 0;border-bottom:1px solid var(--border-subtle);vertical-align:top}td:last-child,th:last-child{padding-right:0}code{font-family:var(--font-data);font-size:var(--text-2xs);background:var(--surface-sunken);padding:1px 5px;border-radius:var(--radius-xs);color:var(--text-primary)}td strong{color:var(--text-primary)}</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { PageHeader } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+const TABS=[{key:"all",label:"All",count:28},{key:"your",label:"Mine",count:8},{key:"team",label:"Team",count:14},{key:"org",label:"Organisation",count:6}];
+const VIEWS=[{key:"list",icon:"ph-list",title:"Table"},{key:"kanban",icon:"ph-kanban",title:"Board"},{key:"card",icon:"ph-squares-four",title:"Cards"}];
+const FILTERS=[{key:"status",label:"Status",options:[{value:"open",label:"Open"},{value:"review",label:"In review"},{value:"done",label:"Completed"}]},{key:"priority",label:"Priority",options:[{value:"high",label:"High"},{value:"med",label:"Med"},{value:"low",label:"Low"}]}];
+const STATS=[{key:null,icon:"ph-stack",label:"All records",value:"28"},{key:"status:open",icon:"ph-hourglass",label:"Open",value:"12",accent:"var(--status-pending)"},{key:"status:review",icon:"ph-seal-check",label:"In review",value:"6",accent:"var(--status-info)"},{key:"status:done",icon:"ph-check-circle",label:"Completed",value:"10",accent:"var(--status-success)"}];
+const EXPORT={formats:["CSV","XLSX"],onExport:(f)=>console.log("export",f)};
+
+function Demo(){
+  const [tab,setTab]=React.useState("all");
+  const [view,setView]=React.useState("list");
+  const [q,setQ]=React.useState("");
+  const [filters,setFilters]=React.useState({});
+  const [stat,setStat]=React.useState(null);
+  if (!PageHeader) return <div style={{padding:24,color:"var(--text-tertiary)"}}>Compiling design-system bundle… reload in a moment.</div>;
+  const titleBar={
+    title:"Request tracker", icon:"ph-list-checks", subtitle:"28 records · updated 2 min ago",
+    tabs:TABS, tab, onTabChange:setTab,
+    viewModes:VIEWS, viewMode:view, onViewModeChange:setView,
+  };
+  const controls={
+    search:q, onSearch:setQ, searchPlaceholder:"Search requests…",
+    filterSections:FILTERS, filterValue:filters, onFilterChange:setFilters,
+    sortOptions:[{value:"recent",label:"Most recent"},{value:"priority",label:"Priority"}], sort:"recent", onSortChange:()=>{},
+    exportAction:EXPORT,
+    primaryAction:{label:"New request", icon:"ph-plus", onClick:()=>console.log("new")},
+  };
+  return (<div>
+    <p className="rec">PageHeader {"{"} titleBar, controls, stats {"}"} — one component replaces the card shell, the divider, the sticky wrapper and the switcher de-duplication that every records page was hand-writing.</p>
+
+    <div className="cap">Full — title bar · controls · quick stats</div>
+    <PageHeader titleBar={titleBar} controls={controls}
+      stats={{items:STATS, value:stat, showShare:true, onChange:(k)=>setStat(k)}} />
+
+    <div className="cap">Without the stats strip</div>
+    <PageHeader titleBar={titleBar} controls={controls} />
+
+    <div className="cap">Title bar only — pages with nothing to filter</div>
+    <p className="rec">controls={"{"}null{"}"} — the divider goes with it. A dashboard or a settings page uses this shape.</p>
+    <PageHeader titleBar={{title:"Dashboard", icon:"ph-chart-pie-slice", subtitle:"Rolling 30 days", primaryAction:{label:"Share", icon:"ph-share-network", kind:"secondary", onClick:()=>{}}}} controls={null} />
+
+    <div className="cap">Role-gated — one prop reaches both rows</div>
+    <p className="rec">role="viewer" — actions carrying a roles list are withheld; exportAction with enabled:false stays visible-disabled.</p>
+    <PageHeader role="viewer" titleBar={titleBar}
+      controls={{...controls, exportAction:{...EXPORT, enabled:false, disabledReason:"Export needs the Lead role"},
+        primaryAction:{label:"New request", icon:"ph-plus", roles:["lead","admin"], onClick:()=>{}}}} />
+
+    <div className="cap">Loading — both rows shimmer together</div>
+    <PageHeader loading titleBar={titleBar} controls={controls} stats={{items:STATS}} />
+
+    <div className="cap">Disabled — record saving, header inert</div>
+    <PageHeader disabled titleBar={titleBar} controls={controls} />
+
+    <div className="cap">Frosted — over a wallpapered shell</div>
+    <div style={{background:"linear-gradient(120deg,var(--surface-brand-soft),var(--agni-neutral-200))",padding:16,borderRadius:"var(--radius-lg)"}}>
+      <PageHeader blur background="color-mix(in oklab, var(--surface-card) 72%, transparent)" titleBar={titleBar} controls={controls} />
+    </div>
+
+    <div className="cap">Quick stats — the toggle is built in</div>
+    <p className="rec">stats={"{"}…{"}"} puts a “Quick stats” toggle in the toolbar’s leading slot and owns the strip’s open state. Pass statsOpen / onStatsToggle to control it; pass statsToggle={"{"}false{"}"} to keep the strip always on.</p>
+    <PageHeader titleBar={{...titleBar, tabs:[], viewModes:[]}}
+      controls={{search:q, onSearch:setQ, searchPlaceholder:"Search…", filterSections:FILTERS, filterValue:filters, onFilterChange:setFilters}}
+      stats={{items:STATS, value:stat, showShare:true, onChange:(k)=>setStat(k)}} />
+
+    <div className="cap">Props</div>
+    <table><tbody>
+      <tr><th style={{width:"22%"}}>Prop</th><th style={{width:"22%"}}>Type</th><th>Notes</th></tr>
+      <tr><td><strong>titleBar</strong></td><td><code>PageTitleBarProps</code></td><td>Required. The heading row — a header without a title is a toolbar.</td></tr>
+      <tr><td><strong>controls</strong></td><td><code>PageControlsProps | null</code></td><td>The toolbar row. null on pages with nothing to filter; the divider goes with it.</td></tr>
+      <tr><td><strong>stats</strong></td><td><code>QuickStatsProps | null</code></td><td>Click-to-filter strip below the card.</td></tr>
+      <tr><td><strong>statsToggle</strong></td><td><code>boolean</code></td><td>Defaults true whenever <code>stats</code> and a toolbar are both present.</td></tr>
+      <tr><td><strong>statsOpen</strong> · <strong>onStatsToggle</strong></td><td><code>boolean</code> · <code>(open) =&gt; void</code></td><td>Controlled open state. Omit and the header owns it.</td></tr>
+      <tr><td><strong>sticky</strong> · <strong>stickyTop</strong></td><td><code>boolean</code> · <code>number</code></td><td>Pins the header to the top of the scroll region.</td></tr>
+      <tr><td><strong>bordered</strong> · <strong>background</strong> · <strong>blur</strong></td><td><code>boolean</code> · <code>string</code> · <code>boolean</code></td><td>Card chrome. Frost it over a wallpapered shell.</td></tr>
+      <tr><td><strong>role</strong></td><td><code>string</code></td><td>Hoisted to both rows — gates every action carrying a <code>roles</code> list.</td></tr>
+      <tr><td><strong>disabled</strong> · <strong>loading</strong></td><td><code>boolean</code></td><td>Hoisted. Loading shimmers both rows together so the header never half-resolves.</td></tr>
+    </tbody></table>
+
+    <div className="cap">Rules it shares with every page block</div>
+    <table><tbody>
+      <tr><th style={{width:"38%"}}>When</th><th>Then</th></tr>
+      <tr><td>Mounting a title bar and a toolbar together</td><td>Use PageHeader. It owns the card shell, the divider and the sticky wrapper that pages were hand-writing.</td></tr>
+      <tr><td>Both rows carry a view switcher</td><td>The <strong>title bar</strong> owns it — PageHeader drops any <code>viewModes</code> passed to <code>controls</code>.</td></tr>
+      <tr><td>An action must be withheld from a viewer</td><td>Actions are data: <code>ActionSpec</code> objects with a <code>roles</code> list, gated by the hoisted <code>role</code>. Never branch on role in JSX at the call site.</td></tr>
+      <tr><td>Export is not available to this viewer</td><td><code>exportAction.enabled: false</code> — visible but disabled, with <code>disabledReason</code> as the tooltip. A page that changes shape per viewer looks broken.</td></tr>
+      <tr><td>The specs cannot express something</td><td>The <code>actions</code> ReactNode slot survives on both rows and renders after the declarative set.</td></tr>
+    </tbody></table>
+
+    <p className="rec">One switcher per page. When titleBar.viewModes is set, any viewModes passed to controls is dropped — the title bar owns it. Pass viewModes to controls only on pages with no title bar.</p>
+    <div className="cap">Usage</div>
+    <pre style={{fontFamily:"var(--font-data)",fontSize:"var(--text-xs)",background:"var(--surface-sunken)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:14,overflow:"auto"}}>{`<PageHeader
+  titleBar={{ title:"Request tracker", icon:"ph-list-checks", tabs, tab, onTabChange }}
+  controls={{ search:q, onSearch:setQ, filterSections, filterValue, onFilterChange,
+    primaryAction:{ label:"New request", icon:"ph-plus", onClick:openForm } }}
+  stats={{ items:STATS, value:stat, onChange:setStat }}
+  sticky role={me.role}/>`}</pre>
+    <div className="cap">Responsive</div>
+    <table><tbody>
+      <tr><th style={{width:"18%"}}>Breakpoint</th><th>Behavior</th></tr>
+      <tr><td><strong>Desktop ≥ 1024</strong></td><td>Title bar and toolbar each lay out in one row; the quick-stats strip is an auto-fit grid.</td></tr>
+      <tr><td><strong>Tablet / Phone &lt; 1024</strong></td><td>Both hoisted rows wrap via their own Cluster <code>wrap</code> behavior (see PageTitleBar, PageControls) — PageHeader adds no breakpoint logic of its own beyond hoisting <code>role</code>/<code>disabled</code>/<code>loading</code> to both. The stats grid's columns shrink with <code>auto-fit</code> down to one column.</td></tr>
+    </tbody></table>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script>
+</body></html>

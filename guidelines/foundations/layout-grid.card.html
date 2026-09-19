@@ -1,0 +1,236 @@
+<!-- @dsCard group="Layout" viewport="1120x1560" name="Layout — grid, rails, panes, bars & breakpoints" subtitle="12 / 8 / 4-col grid · containers · margins · safe areas · adoption do / don't" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;padding:28px 28px 32px;background:var(--surface-page);font-family:var(--font-sans);color:var(--text-primary)}
+  .eyebrow{font-size:var(--text-2xs);font-weight:var(--fw-semibold);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);margin:0 0 6px}
+  h1{font-family:var(--font-display);font-weight:var(--fw-semibold);letter-spacing:var(--tracking-tight);font-size:var(--text-2xl);margin:0}
+  h2{font-family:var(--font-display);font-weight:var(--fw-semibold);font-size:var(--text-md);margin:0 0 12px;display:flex;align-items:center;gap:8px}
+  .lead{font-size:var(--text-sm);color:var(--text-secondary);max-width:740px;margin:8px 0 0;line-height:var(--leading-normal)}
+  .section{margin-top:30px}
+
+  /* device row */
+  .devices{display:grid;grid-template-columns:1.55fr 1.15fr 0.55fr;gap:20px;align-items:end}
+  .device{background:var(--surface-card);border:1px solid var(--border-default);border-radius:var(--radius-lg);box-shadow:var(--shadow-xs);overflow:hidden}
+  .dcap{display:flex;align-items:baseline;justify-content:space-between;margin:0 0 8px}
+  .dcap .nm{font-weight:var(--fw-semibold);font-size:var(--text-sm)}
+  .dcap .bp{font-family:var(--font-data);font-size:var(--text-2xs);color:var(--text-tertiary)}
+
+  /* shared frame parts */
+  .bar{height:22px;display:flex;align-items:center;gap:6px;padding:0 9px;background:var(--surface-soft);border-bottom:1px solid var(--border-subtle);flex-shrink:0}
+  .bar.foot{border-bottom:0;border-top:1px solid var(--border-subtle);height:16px}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--action-brand);flex-shrink:0}
+  .barlbl{font-size:8px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-tertiary);font-weight:600}
+  .barpush{margin-left:auto;display:flex;gap:4px}
+  .pill{width:18px;height:7px;border-radius:var(--radius-full);background:var(--border-default)}
+  .pill.av{width:9px;height:9px;border-radius:50%;background:var(--agni-green-150)}
+
+  .body{display:flex;min-height:212px}
+  .rail{flex-shrink:0;background:var(--agni-green-50);border-right:1px solid var(--border-subtle);padding:8px 0;display:flex;flex-direction:column;gap:5px;align-items:stretch}
+  .rail.icononly{width:34px;align-items:center}
+  .rail.drawer{width:84px}
+  .ritem{height:9px;border-radius:var(--radius-xs);background:var(--border-default);margin:0 8px}
+  .rail.icononly .ritem{width:16px;height:16px;border-radius:var(--radius-sm);margin:0}
+  .ritem.on{background:var(--action-brand)}
+
+  .content{flex:1;min-width:0;padding:10px;position:relative;background:var(--surface-card)}
+  /* column overlay */
+  .cols{position:absolute;inset:10px;display:grid;gap:5px;pointer-events:none;opacity:.5}
+  .cols span{background:repeating-linear-gradient(var(--surface-brand-soft),var(--surface-brand-soft));border-radius:2px}
+  .panes{position:relative;display:flex;flex-direction:column;gap:8px;height:100%}
+  .pane{background:var(--surface-soft);border:1px solid var(--border-subtle);border-radius:var(--radius-sm)}
+  .pane.h-stat{height:30px}
+  .pane.grow{flex:1}
+  .prow{display:flex;gap:8px}
+  .prow > .pane{flex:1}
+
+  .wsrail{width:24px;flex-shrink:0;border-left:1px solid var(--border-subtle);background:linear-gradient(180deg,var(--surface-card),var(--agni-green-150));display:flex;flex-direction:column;align-items:center;gap:6px;padding-top:9px}
+  .wsdot{width:10px;height:10px;border-radius:var(--radius-sm);background:var(--border-default)}
+
+  .colnote{margin-top:8px;font-family:var(--font-data);font-size:var(--text-2xs);color:var(--text-tertiary);text-align:center}
+
+  /* anatomy legend */
+  .legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .leg{display:flex;align-items:flex-start;gap:9px;flex:1 1 200px;min-width:200px;background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:11px 13px}
+  .leg i{font-size:17px;color:var(--text-brand);margin-top:1px}
+  .leg .lt{font-weight:var(--fw-semibold);font-size:var(--text-sm)}
+  .leg .ld{font-size:var(--text-xs);color:var(--text-tertiary);line-height:var(--leading-snug);margin-top:2px}
+
+  /* breakpoint table */
+  table{width:100%;border-collapse:collapse;background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);overflow:hidden;font-size:var(--text-sm)}
+  thead th{text-align:left;padding:10px 14px;background:var(--agni-green-50);color:var(--text-secondary);font-weight:var(--fw-semibold);font-size:var(--text-2xs);letter-spacing:var(--tracking-wide);text-transform:uppercase;border-bottom:1px solid var(--border-subtle)}
+  tbody td{padding:11px 14px;border-bottom:1px solid var(--border-subtle);color:var(--text-secondary)}
+  tbody tr:last-child td{border-bottom:0}
+  td.k{font-weight:var(--fw-semibold);color:var(--text-primary)}
+  td .mono,.mono{font-family:var(--font-data);font-size:var(--text-xs);color:var(--text-primary)}
+  td .tag{display:inline-flex;align-items:center;gap:6px}
+  td .tag i{font-size:14px;color:var(--text-brand)}
+
+  /* do / dont */
+  .guide{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .gcol{background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:16px 18px}
+  .ghead{display:flex;align-items:center;gap:8px;font-family:var(--font-display);font-weight:var(--fw-semibold);font-size:var(--text-md);margin-bottom:10px}
+  .ghead.do{color:var(--status-success)}
+  .ghead.dont{color:var(--status-error)}
+  .gli{display:flex;gap:9px;padding:7px 0;border-top:1px solid var(--border-subtle);font-size:var(--text-sm);color:var(--text-secondary);line-height:var(--leading-snug)}
+  .gli:first-of-type{border-top:0}
+  .gli i{font-size:16px;margin-top:1px;flex-shrink:0}
+  .gli.y i{color:var(--status-success)}
+  .gli.n i{color:var(--status-error)}
+  .gli b{color:var(--text-primary);font-weight:var(--fw-semibold)}
+</style></head><body>
+
+<p class="eyebrow">Foundations · Layout</p>
+<h1>Grid, rails, panes &amp; bars</h1>
+<p class="lead">AgniUI is a desktop-first, data-dense ERP. One responsive structure governs every desk: horizontal <b>bars</b> frame the top and bottom, a vertical <b>rail</b> holds navigation, the <b>content</b> region runs on a column grid, and an optional right <b>workspace rail</b> carries cross-app shortcuts. The grid and chrome step down at three breakpoints.</p>
+
+<!-- ░░ DEVICE WIREFRAMES ░░ -->
+<div class="section">
+  <h2><i class="ph-bold ph-devices"></i>Anatomy across breakpoints</h2>
+  <div class="devices">
+
+    <!-- DESKTOP -->
+    <div>
+      <div class="dcap"><span class="nm">Desktop</span><span class="bp">≥ 1024px · 12-col</span></div>
+      <div class="device">
+        <div class="bar"><span class="dot"></span><span class="barlbl">Top bar</span><span class="barpush"><span class="pill"></span><span class="pill av"></span></span></div>
+        <div class="body">
+          <div class="rail drawer"><div class="ritem on"></div><div class="ritem"></div><div class="ritem"></div><div class="ritem"></div></div>
+          <div class="content">
+            <div class="cols" style="grid-template-columns:repeat(12,1fr)"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="panes">
+              <div class="prow"><div class="pane h-stat"></div><div class="pane h-stat"></div><div class="pane h-stat"></div></div>
+              <div class="pane grow"></div>
+            </div>
+          </div>
+          <div class="wsrail"><span class="wsdot"></span><span class="wsdot"></span><span class="wsdot"></span></div>
+        </div>
+        <div class="bar foot"><span class="barlbl">Footer</span></div>
+      </div>
+      <div class="colnote">expanded rail 248 · content · workspace rail 56</div>
+    </div>
+
+    <!-- TABLET -->
+    <div>
+      <div class="dcap"><span class="nm">Tablet</span><span class="bp">640–1023 · 8-col</span></div>
+      <div class="device">
+        <div class="bar"><span class="dot"></span><span class="barlbl">Bar</span><span class="barpush"><span class="pill av"></span></span></div>
+        <div class="body">
+          <div class="rail icononly"><div class="ritem on"></div><div class="ritem"></div><div class="ritem"></div><div class="ritem"></div></div>
+          <div class="content">
+            <div class="cols" style="grid-template-columns:repeat(8,1fr)"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="panes">
+              <div class="prow"><div class="pane h-stat"></div><div class="pane h-stat"></div></div>
+              <div class="pane grow"></div>
+            </div>
+          </div>
+        </div>
+        <div class="bar foot"><span class="barlbl">Footer</span></div>
+      </div>
+      <div class="colnote">icon rail 72 · no workspace rail</div>
+    </div>
+
+    <!-- PHONE -->
+    <div>
+      <div class="dcap"><span class="nm">Phone</span><span class="bp">&lt; 640 · 4-col</span></div>
+      <div class="device" style="max-width:180px">
+        <div class="bar"><i class="ph ph-list" style="font-size:11px;color:var(--text-secondary)"></i><span class="barpush"><span class="pill av"></span></span></div>
+        <div class="body" style="min-height:236px">
+          <div class="content" style="padding:8px">
+            <div class="cols" style="inset:8px;grid-template-columns:repeat(4,1fr)"><span></span><span></span><span></span><span></span></div>
+            <div class="panes">
+              <div class="pane h-stat"></div>
+              <div class="pane grow"></div>
+            </div>
+          </div>
+        </div>
+        <div class="bar foot"><span class="barlbl">Tab bar</span></div>
+      </div>
+      <div class="colnote">nav → overlay drawer</div>
+    </div>
+
+  </div>
+
+  <!-- anatomy legend -->
+  <div class="legend">
+    <div class="leg"><i class="ph ph-arrows-horizontal"></i><div><div class="lt">Bars</div><div class="ld">Fixed top header (--bar-h) and slim footer. Global chrome only — brand, search, identity, signature.</div></div></div>
+    <div class="leg"><i class="ph ph-sidebar"></i><div><div class="lt">Rail</div><div class="ld">Left navigation. Collapses 248 → 72 → overlay. Right workspace rail (56) for cross-app shortcuts on desktop.</div></div></div>
+    <div class="leg"><i class="ph ph-square-half"></i><div><div class="lt">Panes</div><div class="ld">Content surfaces (cards/tables). Each owns its padding (--pane-pad); the shell owns the frame.</div></div></div>
+    <div class="leg"><i class="ph ph-columns"></i><div><div class="lt">Grid</div><div class="ld">12 / 8 / 4 columns with 24 / 20 / 16 gutters. Align panes to columns, never to pixels.</div></div></div>
+  </div>
+</div>
+
+<!-- ░░ BREAKPOINT TABLE ░░ -->
+<div class="section">
+  <h2><i class="ph-bold ph-ruler"></i>Breakpoint reference</h2>
+  <table>
+    <thead><tr><th style="width:120px">Breakpoint</th><th>Range</th><th>Columns · gutter · margin</th><th>Left rail</th><th>Workspace rail</th><th>Content</th></tr></thead>
+    <tbody>
+      <tr><td class="k"><span class="tag"><i class="ph ph-desktop"></i>Desktop</span></td><td class="mono">≥ 1024px</td><td><span class="mono">12 · 24 · 24</span></td><td>Panel 248 / rail 72</td><td>Shown · 56px</td><td>Capped 1440, centred ≥1440</td></tr>
+      <tr><td class="k"><span class="tag"><i class="ph ph-device-tablet"></i>Tablet</span></td><td class="mono">640–1023</td><td><span class="mono">8 · 20 · 20</span></td><td>Icon rail 72</td><td>Hidden</td><td>Fluid, 14px pane pad</td></tr>
+      <tr><td class="k"><span class="tag"><i class="ph ph-device-mobile"></i>Phone</span></td><td class="mono">&lt; 640px</td><td><span class="mono">4 · 16 · 16 + safe</span></td><td>Overlay drawer</td><td>Hidden</td><td>Single column, full-bleed</td></tr>
+    </tbody>
+  </table>
+  <p class="lead">Tokens live in <span class="mono">spacing.css</span> (<span class="mono">--bp-tablet</span>, <span class="mono">--bp-desktop</span>, <span class="mono">--bp-wide</span>, <span class="mono">--grid-cols</span>…) and <span class="mono">layout.css</span> (containers, safe areas, <span class="mono">.agni-grid</span> + <span class="mono">.span-*</span>). The matching <span class="mono">@media</span> rules re-point rail, pane &amp; grid tokens so any component reading them adapts with no per-component code. Gutters and margins come off the <b>8-point spacing scale</b> (24 / 20 / 16 — majors + half-steps), so grid rhythm and component rhythm never disagree.</p>
+</div>
+
+<!-- ░░ CONTAINERS, MARGINS & SAFE AREAS ░░ -->
+<div class="section">
+  <h2><i class="ph-bold ph-frame-corners"></i>Containers, margins &amp; safe areas</h2>
+  <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:20px;align-items:start">
+    <div>
+      <div style="background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:16px 18px">
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <div><div style="height:22px;border-radius:var(--radius-xs);background:var(--surface-brand-soft);border:1px solid var(--agni-green-300);width:44.4%;display:flex;align-items:center;padding:0 10px"><span class="mono">--container-sm · 640</span></div></div>
+          <div><div style="height:22px;border-radius:var(--radius-xs);background:var(--surface-brand-soft);border:1px solid var(--agni-green-300);width:66.7%;display:flex;align-items:center;padding:0 10px"><span class="mono">--container-md · 960</span></div></div>
+          <div><div style="height:22px;border-radius:var(--radius-xs);background:var(--surface-brand-soft);border:1px solid var(--agni-green-300);width:83.3%;display:flex;align-items:center;padding:0 10px"><span class="mono">--container-lg · 1200</span></div></div>
+          <div><div style="height:22px;border-radius:var(--radius-xs);background:var(--action-brand);color:#fff;width:100%;display:flex;align-items:center;padding:0 10px"><span class="mono" style="color:#fff">--container-xl · 1440 = --content-max</span></div></div>
+        </div>
+        <p class="lead" style="margin:12px 0 0;font-size:var(--text-xs)"><span class="mono">sm</span> narrow forms · <span class="mono">md</span> single-record detail · <span class="mono">lg</span> dashboards without workspace rail · <span class="mono">xl</span> full desk cap. <span class="mono">.agni-container</span> centres content at the cap with <span class="mono">--grid-margin</span> side margins (24 / 20 / 16 per breakpoint).</p>
+      </div>
+    </div>
+    <div>
+      <div style="background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:14px 16px">
+        <div style="width:150px;margin:0 auto;border:1.5px solid var(--border-default);border-radius:14px;overflow:hidden;background:var(--surface-soft)">
+          <div style="height:16px;background:var(--agni-green-150);display:flex;align-items:center;justify-content:center"><span style="width:44px;height:7px;border-radius:4px;background:var(--agni-green-900);opacity:.55"></span></div>
+          <div style="display:flex;height:88px">
+            <div style="width:12px;background:repeating-linear-gradient(45deg,var(--surface-brand-soft) 0 4px,transparent 4px 8px)"></div>
+            <div style="flex:1;padding:7px 0"><div style="height:16px;background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:3px;margin-bottom:6px"></div><div style="height:52px;background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:3px"></div></div>
+            <div style="width:12px;background:repeating-linear-gradient(45deg,var(--surface-brand-soft) 0 4px,transparent 4px 8px)"></div>
+          </div>
+          <div style="height:14px;background:repeating-linear-gradient(45deg,var(--surface-brand-soft) 0 4px,transparent 4px 8px);display:flex;align-items:center;justify-content:center"><span style="width:36px;height:3px;border-radius:2px;background:var(--text-tertiary)"></span></div>
+        </div>
+        <p class="lead" style="margin:11px 0 0;font-size:var(--text-xs)"><b>Safe areas (phone).</b> Margins never sit inside a notch, curved edge or home bar: <span class="mono">--page-margin-* = max(--grid-margin, env(safe-area-inset-*))</span>; sticky footers pad by <span class="mono">--safe-bottom</span>. Zero on desktop — safe to use everywhere.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ░░ ADOPTION GUIDE ░░ -->
+<div class="section">
+  <h2><i class="ph-bold ph-seal-check"></i>Adoption guide</h2>
+  <div class="guide">
+    <div class="gcol">
+      <div class="ghead do"><i class="ph-fill ph-check-circle"></i>Do</div>
+      <div class="gli y"><i class="ph ph-check"></i><span>Build every desk from <b>AppShell</b> — header bar, rail sidebar, content, footer — so structure stays identical across modules.</span></div>
+      <div class="gli y"><i class="ph ph-check"></i><span>Lay panes on the <b>column grid</b> and size with spacing tokens (<span class="mono">--space-*</span>, <span class="mono">--pane-gap</span>), not arbitrary pixels.</span></div>
+      <div class="gli y"><i class="ph ph-check"></i><span>Let <b>tokens drive the breakpoints</b> — read <span class="mono">--rail-w</span>, <span class="mono">--pane-pad</span>, <span class="mono">--grid-cols</span> rather than hard-coding widths.</span></div>
+      <div class="gli y"><i class="ph ph-check"></i><span>Collapse the rail to icons on tablet and to an <b>overlay drawer</b> on phone; keep one primary action reachable.</span></div>
+      <div class="gli y"><i class="ph ph-check"></i><span>Reserve <b>bars</b> for global chrome and let <b>panes own their padding</b> — the shell owns the frame.</span></div>
+    </div>
+    <div class="gcol">
+      <div class="ghead dont"><i class="ph-fill ph-x-circle"></i>Don't</div>
+      <div class="gli n"><i class="ph ph-x"></i><span>Don't invent a <b>bespoke shell</b> per module or nest a second app frame inside the content region.</span></div>
+      <div class="gli n"><i class="ph ph-x"></i><span>Don't <b>hard-code rail or pane widths</b> in px — it breaks the responsive token swap and drifts between desks.</span></div>
+      <div class="gli n"><i class="ph ph-x"></i><span>Don't place <b>page-level actions or filters inside the top bar</b>; those belong in the page title / controls row.</span></div>
+      <div class="gli n"><i class="ph ph-x"></i><span>Don't keep the <b>workspace rail or multi-column layouts</b> on tablet/phone — collapse to a single column.</span></div>
+      <div class="gli n"><i class="ph ph-x"></i><span>Don't let content <b>page-scroll the whole shell</b> — bars and rail stay fixed; panes scroll within.</span></div>
+    </div>
+  </div>
+</div>
+
+</body></html>

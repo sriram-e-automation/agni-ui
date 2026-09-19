@@ -1,0 +1,62 @@
+<!-- @dsCard group="Workflow" viewport="1000x620" name="RecordForm — create, edit, view" subtitle="Modes create / edit / view · 2-col & 3-col grids · submitting · submitError · ConfirmModal review + submitted" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8"><title>RecordForm</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:20px;background:var(--surface-page);font-family:var(--font-sans)}.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:20px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.cap:first-child{margin-top:0}.lbl{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);margin:0 0 8px}.note{font:var(--fw-regular) var(--text-xs)/1.5 var(--font-sans);color:var(--text-tertiary);margin:8px 0 0;max-width:66ch}.row{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-start}.pane{background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:16px}</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { RecordForm, ConfirmModal, Button, REQUEST_FORM_DEFAULTS } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+const PREFILL = { reqType:"purchase", priority:"high", category:"Propulsion", site:"chennai", title:"Ti-6Al-4V bracket set, stage 2", qty:4, urgent:true, desc:"<p>Replacement needed before the next static fire.</p>", assignee:"u1", members:["u2"], rows:[{item:"Bracket, Ti-6Al-4V",qty:4,unit:"Nos"}] };
+const SUBMITTED = { id:"REQ-0184", ...PREFILL };
+function Demo(){
+  const [open,setOpen]=React.useState(null);
+  const [done,setDone]=React.useState(null);
+  const [imp,setImp]=React.useState(false);
+  return (<div>
+    <div className="cap">Modes</div>
+    <div className="row">
+      <Button category="primary" icon={<i className="ph ph-plus"/>} onClick={()=>setOpen("create")}>create — blank, 2 columns</Button>
+      <Button category="secondary" icon={<i className="ph ph-pencil-simple"/>} onClick={()=>setOpen("edit")}>edit — prefilled, "Save changes"</Button>
+      <Button category="secondary" icon={<i className="ph ph-eye"/>} onClick={()=>setOpen("view")}>view — read-only, Close only</Button>
+      <Button category="secondary" icon={<i className="ph ph-columns"/>} onClick={()=>setOpen("cols3")}>create — 3 columns</Button>
+    </div>
+    <p className="note">One component covers all three. <code>mode="view"</code> makes every field inert and reduces the footer to Close — never build a separate read-only form. The discard guard fires on close whenever the form is dirty.</p>
+    <div className="cap">Commit states</div>
+    <div className="row">
+      <Button category="secondary" icon={<i className="ph ph-spinner"/>} onClick={()=>setOpen("submitting")}>submitting — primary spins, fields lock</Button>
+      <Button category="secondary" icon={<i className="ph ph-warning-circle"/>} onClick={()=>setOpen("error")}>submitError — banner at the top of the form</Button>
+    </div>
+    <div className="row"><Button category="secondary" icon={<i className="ph ph-hourglass-medium"/>} onClick={()=>setOpen("busy")}>busy — the documented alias for submitting</Button></div>
+    <p className="note"><code>busy</code> and <code>error</code> are the system-wide names for "committing" and "it failed"; <code>submitting</code> and <code>submitError</code> are this component's originals and remain valid. Both render identically — a commit differs from a fetch in meaning, not in appearance.</p>
+    <p className="note">Client-side validation is inline on the field (FormField <code>error</code>). <code>submitError</code> is for what the server rejected after a valid submit — it belongs at the top of the form, where it survives scrolling.</p>
+    <div className="cap">After submit — ConfirmModal</div>
+    <div className="row"><Button category="secondary" icon={<i className="ph ph-check-circle"/>} onClick={()=>setDone(SUBMITTED)}>Show the confirmation</Button></div>
+    <p className="note">Success mark, the new record id in mono, a summary grid, and two ways forward: Done or View request. This is the only place a record id is announced, so it must be copyable.</p>
+    <div className="cap">Bulk entry — ConfirmModal</div>
+    <div className="row"><Button category="secondary" icon={<i className="ph ph-upload-simple"/>} onClick={()=>setImp(true)}>Import records</Button></div>
+    <p className="note">Format callout, the expected-columns table, a template download, then the dropzone. Drop a CSV to see the success state. Column definitions come from <code>columns</code>, so each module documents its own format in one place.</p>
+    <RecordForm open={open==="create"} onClose={()=>setOpen(null)} onSubmitted={(r)=>{setOpen(null);setDone(r);}}/>
+    <RecordForm open={open==="cols3"} cols={3} onClose={()=>setOpen(null)} onSubmitted={(r)=>{setOpen(null);setDone(r);}}/>
+    <RecordForm open={open==="edit"} mode="edit" value={PREFILL} title="Edit request" subtitle="REQ-0184 · Purchase request" onClose={()=>setOpen(null)}/>
+    <RecordForm open={open==="view"} mode="view" value={PREFILL} title="View request" subtitle="REQ-0184 · submitted 12 Jul 2026" onClose={()=>setOpen(null)}/>
+    <RecordForm open={open==="submitting"} mode="edit" value={PREFILL} submitting onClose={()=>setOpen(null)}/>
+    <RecordForm open={open==="busy"} mode="edit" value={PREFILL} busy onClose={()=>setOpen(null)}/>
+    <RecordForm open={open==="error"} mode="edit" value={PREFILL} submitError="Cost centre CC-204 is closed for the current quarter. Pick another or contact Finance Ops." onClose={()=>setOpen(null)}/>
+    <ConfirmModal variant="submitted" data={done} onClose={()=>setDone(null)} onView={()=>setDone(null)} options={REQUEST_FORM_DEFAULTS}/>
+    <ConfirmModal variant="import" open={imp} onClose={()=>setImp(false)}/>
+    <div className="cap">Usage</div>
+    <pre style={{fontFamily:"var(--font-data)",fontSize:"var(--text-xs)",background:"var(--surface-card)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:14,overflow:"auto"}}>{`<RecordForm open={open} mode="create" cols={2}
+  onClose={close} onSubmitted={(record) => { close(); showConfirm(record); }}
+  submitting={isSaving} submitError={serverError}/>`}</pre>
+    <div className="cap">Responsive</div>
+    <p style={{font:"var(--fw-regular) var(--text-xs)/1.5 var(--font-sans)",color:"var(--text-tertiary)",maxWidth:"72ch",margin:0}}>RecordForm opens inside a Panel sheet, which slides up full-width on any viewport and scrolls its body between a sticky header and footer (see <code>form-grid</code> for the anatomy). The field grid inside collapses from <code>cols={2}</code>/<code>cols={3}</code> to one column automatically under <code>--field-min</code> — there is no separate phone layout to author.</p>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script></body></html>

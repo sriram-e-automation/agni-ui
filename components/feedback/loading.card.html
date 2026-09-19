@@ -1,0 +1,70 @@
+<!-- @dsCard group="Feedback" viewport="1180x820" name="Loading — skeletons for every component" subtitle="Loading (shape-matched) · Spinner · LoadingOverlay" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:20px;background:var(--surface-page)}.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:22px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.cap:first-child{margin-top:0}.lbl{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);margin:0 0 8px}.g{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { Loading, Spinner, LoadingOverlay, Button, Card } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+const Cell = ({name, children}) => (<div><div className="lbl">{name}</div>{children}</div>);
+function Demo(){
+  const [busy, setBusy] = React.useState(true);
+  return (<div>
+    <div className="cap">Data — shape-matched skeletons</div>
+    <div className="g2">
+      <Cell name='shape="table"'><Loading shape="table" rows={4} columns={4}/></Cell>
+      <Cell name='shape="quickStats"'><Loading shape="quickStats" columns={2}/></Cell>
+      <Cell name='shape="list"'><Loading shape="list" rows={4}/></Cell>
+      <Cell name='shape="chart"'><Loading shape="chart" columns={7}/></Cell>
+    </div>
+
+    <div className="cap">ERP &amp; chrome</div>
+    <div className="g2">
+      <Cell name='shape="kanban"'><Loading shape="kanban" columns={3} rows={1}/></Cell>
+      <Cell name='shape="requestForm"'><Loading shape="requestForm"/></Cell>
+      <Cell name='shape="approvalStepper"'><Loading shape="approvalStepper" rows={4}/></Cell>
+      <Cell name='shape="auditTrail"'><Loading shape="auditTrail" rows={3}/></Cell>
+    </div>
+
+    <div className="cap">Core &amp; forms</div>
+    <div className="g">
+      <Cell name='shape="card"'><Loading shape="card"/></Cell>
+      <Cell name='shape="form"'><Loading shape="form" rows={4} columns={1}/></Cell>
+      <Cell name='shape="avatar" · "tag" · "button"'>
+        <div style={{display:"flex",flexDirection:"column",gap:16}}>
+          <Loading shape="avatar"/><Loading shape="tag"/><Loading shape="button"/>
+        </div>
+      </Cell>
+    </div>
+
+    <div className="cap">States — first paint vs. refresh-in-place</div>
+    <div className="g2">
+      <Cell name="Spinner — sizes">
+        <div style={{display:"flex",alignItems:"center",gap:18,padding:"10px 0"}}>
+          <Spinner size={16}/><Spinner size={22}/><Spinner size={30}/>
+          <Button category="primary" loading>Saving</Button>
+        </div>
+      </Cell>
+      <Cell name="LoadingOverlay — toggle">
+        <div style={{display:"flex",flexDirection:"column",gap:10}}>
+          <Button category="secondary" size="sm" onClick={()=>setBusy(b=>!b)}>{busy ? "Finish loading" : "Start loading"}</Button>
+          <Loading loading={busy} overlay>
+            <Card><div style={{padding:4,font:"var(--fw-semibold) var(--text-sm)/1.5 var(--font-sans)",color:"var(--text-primary)"}}>Live content stays visible<div style={{font:"var(--text-xs)/1.6 var(--font-sans)",color:"var(--text-tertiary)",fontWeight:400,marginTop:6}}>Use overlay for refreshes; use a skeleton shape for first paint.</div></div></Card>
+          </Loading>
+        </div>
+      </Cell>
+    </div>
+    <div className="cap">Usage</div>
+    <pre style={{fontFamily:"var(--font-data)",fontSize:"var(--text-xs)",background:"var(--surface-page)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:14,overflow:"auto"}}>{`<Loading shape="table" rows={6} columns={5}/>
+<Loading loading={refreshing} overlay><RecordsGrid/></Loading>`}</pre>
+    <div className="cap">Responsive</div>
+    <p style={{font:"var(--fw-regular) var(--text-xs)/1.5 var(--font-sans)",color:"var(--text-tertiary)",maxWidth:"70ch",margin:0}}>Every shape fills its parent's width (<code>width:"100%"</code> unless overridden) and has no breakpoint of its own — it mirrors whatever layout the real component would take, so it reflows exactly like that component does. <code>columns</code> for grid-shaped skeletons (table, quickStats, chart, kanban) should be recomputed by the caller for the current breakpoint, same as the real columns count.</p>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script></body></html>

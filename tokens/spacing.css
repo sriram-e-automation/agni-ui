@@ -1,0 +1,187 @@
+/* ============================================================================
+   AgniUI · Spacing, layout, radii & density
+   ========================================================================== */
+:root {
+  /* ── Atomic unit + scale multiplier — the foundation of fractional scaling ──
+     Everything sizeable derives from --u × step × --scale, so ONE rung moves
+     the whole system coherently (OS-style 100/112/125% desk zoom) while token
+     names stay identical (non-breaking). --scale is set by the [data-scale]
+     rungs below (never a free slider → pixels stay whole, tables stay crisp). */
+  --u:     4px;   /* atomic unit — every size is a multiple of this */
+  --scale: 1;     /* @kind other */ /* zoom rung · 0.875 · 1 · 1.125 · 1.25 (see [data-scale]) */
+
+  /* ── Spacing scale — 8-point system with 4px half-steps ──
+     Majors are 8-multiples (8·16·24·32·40·48·64·80) and set structural rhythm
+     (pane gaps, section padding, grid gutters). Half-steps (4·12·20) exist for
+     dense ERP micro-spacing (icon↔label, chip padding, table cells).
+     Rederived off --u × step × --scale — values @scale 1 shown in comments. */
+  --space-0:  0;
+  --space-1:  calc(var(--u) *  1 * var(--scale));  /* 4px  */
+  --space-2:  calc(var(--u) *  2 * var(--scale));  /* 8px  */
+  --space-3:  calc(var(--u) *  3 * var(--scale));  /* 12px */
+  --space-4:  calc(var(--u) *  4 * var(--scale));  /* 16px */
+  --space-5:  calc(var(--u) *  5 * var(--scale));  /* 20px */
+  --space-6:  calc(var(--u) *  6 * var(--scale));  /* 24px */
+  --space-8:  calc(var(--u) *  8 * var(--scale));  /* 32px */
+  --space-10: calc(var(--u) * 10 * var(--scale));  /* 40px */
+  --space-12: calc(var(--u) * 12 * var(--scale));  /* 48px */
+  --space-16: calc(var(--u) * 16 * var(--scale));  /* 64px */
+  --space-20: calc(var(--u) * 20 * var(--scale));  /* 80px */
+
+  /* ── Radii ── */
+  --radius-xs:   4px;
+  --radius-sm:   6px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-2xl:  24px;
+  --radius-full: 999px;
+  /* Alias — skeleton shapes and pills were written against this name. */
+  --radius-pill: 999px;
+
+  /* ── Layout: bars, rails, panes ── */
+  --bar-h:        60px;   /* top app bar height */
+  --bar-pad-x:    20px;   /* horizontal padding inside bars */
+  --footer-h:     40px;
+
+  --rail-w:           72px;   /* collapsed nav rail */
+  --rail-drawer-w-sm: 200px;
+  --rail-drawer-w-md: 248px;  /* expanded nav drawer (default) */
+  --rail-drawer-w-lg: 296px;
+  --workspace-rail-w: 56px;   /* right-hand workspace rail */
+
+  --pane-pad:     16px;   /* padding around content panes */
+  --pane-gap:     12px;   /* gap between stacked panes */
+  --content-max:  1440px; /* max content width for centered layouts (= --container-xl) */
+  /* Container widths, safe-area insets, sizing/constraint/auto-layout
+     utilities: tokens/layout.css. */
+
+  /* ── Responsive grid ── columns / gutter / margin shift per breakpoint.
+     Desktop = 12-col, Tablet = 8-col, Phone = 4-col. Defaults are desktop. */
+  --grid-cols:    12; /* @kind other */
+  --grid-gutter:  24px;
+  --grid-margin:  24px;
+
+  /* ── Breakpoints (min-width thresholds) ──
+     Desktop-first ERP. Tokens document the system & feed JS / container queries;
+     use the matching @media min-width rules below for actual layout shifts.
+       phone    0–639     single column · nav as overlay drawer · bars compress
+       tablet   640–1023  icon rail (72px) · workspace rail hidden · 8-col
+       desktop  1024–1439 full rail drawer (248px) + content + workspace rail · 12-col
+       wide     ≥1440     content capped at --content-max, centred · 12-col      */
+  --bp-phone:    0;       /* @kind other */
+  --bp-tablet:   640px;   /* @kind other */
+  --bp-desktop:  1024px;  /* @kind other */
+  --bp-wide:     1440px;  /* @kind other */
+
+  /* ── Cluster gaps (Cluster component) ── */
+  --cluster-tight:    8px;
+  --cluster-default:  12px;
+  --cluster-loose:    20px;
+
+  /* ── Z-index scale — the stacking contract. Local stacking inside a
+     component stays numeric (0–5); anything that floats over the page uses
+     these. Order: sticky < bar < dropdown < overlay < modal < popover <
+     toast < tooltip. Popover (DatePicker) sits ABOVE modal so pickers open
+     inside modal forms. ── */
+  --z-sticky:   10; /* @kind other */
+  --z-bar:      100; /* @kind other */
+  --z-dropdown: 600; /* @kind other */
+  --z-overlay:  700; /* @kind other */  /* Drawer · Sheet scrims */
+  --z-modal:    800; /* @kind other */
+  --z-popover:  850; /* @kind other */  /* DatePicker calendar */
+  --z-toast:    900; /* @kind other */
+  --z-tooltip:  950; /* @kind other */
+
+  /* ── Density: default = comfortable. Set data-density on a container. ── */
+  --density-cell-pad: calc(12px * var(--scale));   /* vertical padding in table cells / rows */
+  --density-row-h:    calc(48px * var(--scale));
+  --density-control-h:calc(38px * var(--scale));   /* default control (button/input) height */
+}
+
+/* ── Scale rungs — desk-level fractional zoom. Set data-scale on <html> or any
+   subtree; viewport can nudge the default (see media queries). Rungs are
+   discrete so the grid keeps landing on whole pixels. ── */
+[data-scale="sm"]  { --scale: 0.875; /* @kind other */ }
+[data-scale="md"]  { --scale: 1; /* @kind other */ }
+[data-scale="lg"]  { --scale: 1.125; /* @kind other */ }
+[data-scale="xl"]  { --scale: 1.25; /* @kind other */ }
+
+/* Re-derive the scale-driven tokens on ANY element carrying data-scale (not
+   only :root). A custom property's var() resolves against the element that
+   DECLARES it, so the derivations must be re-declared wherever --scale is
+   overridden — otherwise a subtree inherits :root's already-resolved values.
+   Placed before the [data-density] scopes so density still wins for its tokens. */
+[data-scale] {
+  --space-1:  calc(var(--u) *  1 * var(--scale));
+  --space-2:  calc(var(--u) *  2 * var(--scale));
+  --space-3:  calc(var(--u) *  3 * var(--scale));
+  --space-4:  calc(var(--u) *  4 * var(--scale));
+  --space-5:  calc(var(--u) *  5 * var(--scale));
+  --space-6:  calc(var(--u) *  6 * var(--scale));
+  --space-8:  calc(var(--u) *  8 * var(--scale));
+  --space-10: calc(var(--u) * 10 * var(--scale));
+  --space-12: calc(var(--u) * 12 * var(--scale));
+  --space-16: calc(var(--u) * 16 * var(--scale));
+  --space-20: calc(var(--u) * 20 * var(--scale));
+  --density-cell-pad: calc(12px * var(--scale));
+  --density-row-h:    calc(48px * var(--scale));
+  --density-control-h:calc(38px * var(--scale));
+}
+
+/* Compact — high-information desks (the reference admin app uses this) */
+[data-density="compact"] {
+  --density-cell-pad: calc(8px * var(--scale));
+  --density-row-h:    calc(36px * var(--scale));
+  --density-control-h:calc(34px * var(--scale));
+  --pane-pad:         14px;
+}
+
+/* Spacious — review / approval surfaces */
+[data-density="spacious"] {
+  --density-cell-pad: calc(16px * var(--scale));
+  --density-row-h:    calc(56px * var(--scale));
+  --density-control-h:calc(44px * var(--scale));
+  --pane-pad:         20px;
+}
+
+/* ============================================================================
+   RESPONSIVE — grid, rails, panes & bars shift at the breakpoints above.
+   Desktop-first: the :root values ARE the desktop spec; these queries step the
+   layout DOWN for tablet and phone. Token-only — components reading --rail-w,
+   --pane-pad, --grid-cols etc. adapt automatically.
+   ========================================================================== */
+
+/* ── Tablet · 640–1023 ── icon rail, no right workspace rail, 8-col grid ── */
+@media (max-width: 1023.98px) {
+  :root {
+    --grid-cols:        8; /* @kind other */
+    --grid-gutter:      20px;
+    --grid-margin:      20px;
+    --rail-drawer-w-md: 216px;  /* expanded drawer is narrower on tablet */
+    --workspace-rail-w: 0px;     /* right workspace rail folds away */
+    --bar-h:            56px;
+    --pane-pad:         14px;
+    --pane-gap:         10px;
+  }
+}
+
+/* ── Phone · 0–639 ── single column, nav becomes an overlay drawer, 4-col ── */
+@media (max-width: 639.98px) {
+  :root {
+    --grid-cols:        4; /* @kind other */
+    --grid-gutter:      16px;
+    --grid-margin:      16px;
+    --rail-w:           0px;     /* collapsed rail hidden; nav opens as overlay */
+    --bar-h:            52px;
+    --bar-pad-x:        14px;
+    --pane-pad:         12px;
+    --content-max:      100%;    /* never cap on phone */
+  }
+  /* Touch floor: at phone width every density mode raises controls to the
+     44px WCAG touch-target minimum (overrides the data-density scopes too). */
+  :root, [data-density="compact"], [data-density="comfortable"], [data-density="spacious"] {
+    --density-control-h: 44px;
+    --density-row-h:     48px;
+  }
+}

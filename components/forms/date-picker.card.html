@@ -1,0 +1,62 @@
+<!-- @dsCard group="Forms" viewport="960x680" name="DatePicker & FileUpload" subtitle="DatePicker: closed · open panel · min/max · sizes · error · disabled — FileUpload: empty · hint · accept · multiple" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8"><title>DatePicker & FileUpload</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:20px;background:var(--surface-page)}.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:20px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.cap:first-child{margin-top:0}.lbl{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);margin:0 0 8px}.note{font:var(--fw-regular) var(--text-xs)/1.5 var(--font-sans);color:var(--text-tertiary);margin:8px 0 0;max-width:64ch}.row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}.pane{background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:16px}</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { DatePicker, FileUpload, Modal, Button, FormField } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+function Demo(){
+  const [d1,setD1]=React.useState(null);
+  const [d2,setD2]=React.useState(new Date(2026,7,17));
+  const [d3,setD3]=React.useState(null);
+  const [files,setFiles]=React.useState([]);
+  const [modal,setModal]=React.useState(false);
+  const [dm,setDm]=React.useState(null);
+  return (<div>
+    <div className="cap">DatePicker — states</div>
+    <div className="row">
+      <div style={{width:210}}><div className="lbl">Empty</div><DatePicker value={d1} onChange={setD1} placeholder="Pick a date"/></div>
+      <div style={{width:210}}><div className="lbl">Selected</div><DatePicker value={d2} onChange={setD2}/></div>
+      <div style={{width:210}}><div className="lbl">Error</div><DatePicker value={null} onChange={()=>{}} error placeholder="Required"/></div>
+      <div style={{width:210}}><div className="lbl">Disabled</div><DatePicker value={new Date(2026,6,2)} onChange={()=>{}} disabled/></div>
+    </div>
+    <p className="note">Click a trigger to open the calendar panel: month navigation, today marker, selected day in brand fill. Days outside <code>min</code>/<code>max</code> are inert.</p>
+    <div className="cap">Bounded range — min / max</div>
+    <div className="row">
+      <div style={{width:230}}><div className="lbl">Future only (min = today)</div><DatePicker value={d3} onChange={setD3} min={new Date(2026,7,17)} placeholder="Needed by"/></div>
+      <div style={{width:230}}><div className="lbl">Past only (max = today)</div><DatePicker value={null} onChange={()=>{}} max={new Date(2026,7,17)} placeholder="Completed on"/></div>
+    </div>
+    <div className="cap">Sizes — sm · md · lg</div>
+    <div className="row">
+      <div style={{width:200}}><DatePicker size="sm" value={new Date(2026,7,3)} onChange={()=>{}}/></div>
+      <div style={{width:200}}><DatePicker size="md" value={new Date(2026,7,3)} onChange={()=>{}}/></div>
+      <div style={{width:200}}><DatePicker size="lg" value={new Date(2026,7,3)} onChange={()=>{}}/></div>
+    </div>
+    <div className="cap">Inside a modal — the z-order case</div>
+    <Button category="secondary" icon={<i className="ph ph-calendar-plus"/>} onClick={()=>setModal(true)}>Open a dialog with a date field</Button>
+    <p className="note">The picker's popover sits at <code>--z-popover</code>, above <code>--z-modal</code>, so a date field works inside a dialog without clipping. Verify this whenever a new overlay is introduced.</p>
+    <Modal open={modal} onClose={()=>setModal(false)} title="Schedule review" size="sm" footer={<><Button category="ghost" onClick={()=>setModal(false)}>Cancel</Button><Button category="primary" onClick={()=>setModal(false)}>Schedule</Button></>}>
+      <FormField label="Review date" required><DatePicker value={dm} onChange={setDm} placeholder="Pick a date"/></FormField>
+    </Modal>
+    <div className="cap">FileUpload</div>
+    <div className="row">
+      <div style={{width:340}}><div className="lbl">Empty</div><FileUpload onFiles={setFiles} hint="PDF, PNG or JPG · up to 10 MB"/></div>
+      <div style={{width:340}}><div className="lbl">Constrained — accept + multiple</div><FileUpload onFiles={()=>{}} accept=".csv,.xlsx" multiple hint="CSV or XLSX · up to 5 files"/></div>
+    </div>
+    {files.length?<p className="note">Picked: {files.map(f=>f.name).join(", ")}</p>:<p className="note">Drop a file or click to browse. <code>FileUpload</code> is the plain dropzone — it reports files through <code>onFiles</code> and holds no upload state itself. For per-file progress, rejection and retry rows, pair it with <code>AttachmentRow</code>; for the in-form variant with a bordered well, use <code>FileUpload</code>.</p>}
+    <div className="cap">Usage</div>
+    <pre style={{fontFamily:"var(--font-data)",fontSize:"var(--text-xs)",background:"var(--surface-page)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:14,overflow:"auto"}}>{`<DatePicker value={dueDate} onChange={setDueDate} min={today} placeholder="Needed by"/>
+<FileUpload onFiles={setFiles} accept=".pdf,.png,.jpg" multiple hint="Up to 10 MB"/>`}</pre>
+    <div className="cap">Responsive</div>
+    <p style={{font:"var(--fw-regular) var(--text-xs)/1.5 var(--font-sans)",color:"var(--text-tertiary)",maxWidth:"70ch",margin:0}}>DatePicker's trigger fills its container; its calendar popover is a fixed 272px wide and clamps to the viewport edges (see <code>DatePicker.tsx</code>'s own <code>window.innerWidth</code> clamp) rather than shrinking — on a very narrow phone it can still touch the opposite edge, so give it room or open it in a full-width Modal there. FileUpload's dropzone is fluid and needs no adjustment.</p>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script></body></html>

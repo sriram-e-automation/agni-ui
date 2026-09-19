@@ -1,0 +1,146 @@
+<!-- @dsCard group="Layout" viewport="1120x1430" name="Auto layout — the component contract" subtitle="Every component declares direction · gap · padding · alignment · distribution · wrapping · overflow · clip" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;padding:28px 28px 32px;background:var(--surface-page);font-family:var(--font-sans);color:var(--text-primary)}
+  .eyebrow{font-size:var(--text-2xs);font-weight:var(--fw-semibold);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);margin:0 0 6px}
+  h1{font-family:var(--font-display);font-weight:var(--fw-semibold);letter-spacing:var(--tracking-tight);font-size:var(--text-2xl);margin:0}
+  h2{font-family:var(--font-display);font-weight:var(--fw-semibold);font-size:var(--text-md);margin:0 0 12px;display:flex;align-items:center;gap:8px}
+  .lead{font-size:var(--text-sm);color:var(--text-secondary);max-width:780px;margin:8px 0 0;line-height:var(--leading-normal)}
+  .section{margin-top:28px}
+  .mono{font-family:var(--font-data);font-size:var(--text-xs);color:var(--text-primary)}
+  .props{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .prop{background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:12px 14px}
+  .pname{font-weight:var(--fw-semibold);font-size:var(--text-sm);display:flex;align-items:center;gap:7px}
+  .pname i{color:var(--text-brand);font-size:16px}
+  .diagram{height:62px;margin-top:9px;border:1px dashed var(--border-default);border-radius:var(--radius-md);background:var(--surface-soft);display:flex;align-items:center;justify-content:center;gap:6px;padding:8px;overflow:hidden;position:relative}
+  .bx{width:18px;height:18px;background:var(--action-brand);border-radius:3px;flex-shrink:0}
+  .bx.soft{background:var(--agni-green-300)}
+  .gapbar{width:6px;height:18px;background:var(--status-warning);border-radius:2px;flex-shrink:0}
+  .pcss{margin-top:9px;font-family:var(--font-data);font-size:10.5px;color:var(--text-secondary);background:var(--surface-soft);border:1px solid var(--border-subtle);border-radius:var(--radius-sm);padding:5px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .prule{font-size:var(--text-xs);color:var(--text-tertiary);line-height:var(--leading-snug);margin-top:7px}
+  table{width:100%;border-collapse:collapse;background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);overflow:hidden}
+  thead th{text-align:left;padding:8px 10px;background:var(--agni-green-50);color:var(--text-secondary);font-weight:var(--fw-semibold);font-size:var(--text-2xs);letter-spacing:var(--tracking-wide);text-transform:uppercase;border-bottom:1px solid var(--border-subtle);white-space:nowrap}
+  tbody td{padding:8px 10px;border-bottom:1px solid var(--border-subtle);color:var(--text-secondary);font-family:var(--font-data);font-size:var(--text-2xs);line-height:var(--leading-snug)}
+  tbody tr:last-child td{border-bottom:0}
+  td.k{font-family:var(--font-sans);font-weight:var(--fw-semibold);color:var(--text-primary);font-size:var(--text-xs)}
+  td.warn{color:var(--status-warning-text)}
+  .code{background:var(--agni-navy-900);color:#D9E2F2;border-radius:var(--radius-md);padding:12px 16px;font-family:var(--font-data);font-size:var(--text-xs);line-height:1.7;overflow-x:auto}
+  .code .c{color:#7C8DB0}.code .t{color:#7ED4A4}.code .a{color:#F2C063}
+  .guide{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .gcol{background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:14px 18px}
+  .ghead{display:flex;align-items:center;gap:8px;font-family:var(--font-display);font-weight:var(--fw-semibold);font-size:var(--text-md);margin-bottom:8px}
+  .ghead.do{color:var(--status-success)}
+  .ghead.dont{color:var(--status-error)}
+  .gli{display:flex;gap:9px;padding:6px 0;border-top:1px solid var(--border-subtle);font-size:var(--text-sm);color:var(--text-secondary);line-height:var(--leading-snug)}
+  .gli:first-of-type{border-top:0}
+  .gli i{font-size:16px;margin-top:1px;flex-shrink:0}
+  .gli.y i{color:var(--status-success)}
+  .gli.n i{color:var(--status-error)}
+  .gli b{color:var(--text-primary);font-weight:var(--fw-semibold)}
+</style></head><body>
+
+<p class="eyebrow">Foundations · Layout</p>
+<h1>Auto layout — the component contract</h1>
+<p class="lead">Every AgniUI component and pane is a flex auto-layout that declares <b>eight properties</b>. Siblings are spaced by <b>gap tokens on the container</b> — margins between siblings are banned. In code this is <span class="mono">&lt;Cluster&gt;</span> / <span class="mono">&lt;Stack&gt;</span> (or <span class="mono">.al-h</span> / <span class="mono">.al-v</span>); in Figma it's Auto layout with the same eight fields.</p>
+
+<!-- ░░ THE 8 PROPERTIES ░░ -->
+<div class="section">
+  <div class="props">
+    <div class="prop">
+      <div class="pname"><i class="ph ph-arrow-right"></i>1 · Direction</div>
+      <div class="diagram"><div style="display:flex;gap:5px;align-items:center"><span class="bx"></span><span class="bx"></span><span class="bx"></span><i class="ph ph-arrow-right" style="color:var(--text-tertiary)"></i></div><div style="display:flex;flex-direction:column;gap:5px;align-items:center;margin-left:10px"><span class="bx soft"></span><span class="bx soft"></span><i class="ph ph-arrow-down" style="color:var(--text-tertiary);font-size:13px"></i></div></div>
+      <div class="pcss">flex-direction: row | column</div>
+      <div class="prule">Row = <b>Cluster</b> (toolbars, bars, meta rows). Column = <b>Stack</b> (forms, cards, panes).</div>
+    </div>
+    <div class="prop">
+      <div class="pname"><i class="ph ph-arrows-out-line-horizontal"></i>2 · Gap</div>
+      <div class="diagram"><span class="bx"></span><span class="gapbar"></span><span class="bx"></span><span class="gapbar"></span><span class="bx"></span></div>
+      <div class="pcss">gap: var(--cluster-tight|default|loose)</div>
+      <div class="prule">Token only — 8 / 12 / 20, or <span class="mono">--space-*</span>, <span class="mono">--pane-gap</span>. Never sibling margins.</div>
+    </div>
+    <div class="prop">
+      <div class="pname"><i class="ph ph-frame-corners"></i>3 · Padding</div>
+      <div class="diagram" style="padding:0"><div style="position:absolute;inset:0;background:var(--surface-brand-soft)"></div><div style="position:absolute;inset:10px;background:var(--surface-card);border:1px dashed var(--border-default);border-radius:4px"></div></div>
+      <div class="pcss">padding: var(--pane-pad | --space-*)</div>
+      <div class="prule">The container owns its inset. Controls read density (<span class="mono">--density-control-h</span>).</div>
+    </div>
+    <div class="prop">
+      <div class="pname"><i class="ph ph-align-center-vertical"></i>4 · Alignment</div>
+      <div class="diagram"><span class="bx" style="height:12px"></span><span class="bx" style="height:26px"></span><span class="bx" style="height:18px"></span><div style="position:absolute;left:12px;right:12px;top:50%;height:1px;background:var(--status-warning)"></div></div>
+      <div class="pcss">align-items: center | stretch | baseline …</div>
+      <div class="prule">Cross axis. Rows default <b>center</b> (baseline for mixed type sizes); stacks default <b>stretch</b>.</div>
+    </div>
+    <div class="prop">
+      <div class="pname"><i class="ph ph-arrows-left-right"></i>5 · Distribution</div>
+      <div class="diagram" style="justify-content:space-between;padding:8px 12px"><span class="bx"></span><span class="bx soft"></span><span class="bx"></span></div>
+      <div class="pcss">justify-content: start | between | end …</div>
+      <div class="prule">Main axis. <b>between</b> for bars &amp; card headers (title ↔ actions); otherwise <b>start</b>.</div>
+    </div>
+    <div class="prop">
+      <div class="pname"><i class="ph ph-arrow-u-down-left"></i>6 · Wrapping</div>
+      <div class="diagram" style="flex-wrap:wrap;align-content:center;padding:8px 20px"><span class="bx" style="width:30px"></span><span class="bx" style="width:22px"></span><span class="bx" style="width:34px"></span><span class="bx soft" style="width:26px"></span><span class="bx soft" style="width:30px"></span></div>
+      <div class="pcss">flex-wrap: wrap | nowrap</div>
+      <div class="prule">Chips, filters &amp; field grids <b>wrap</b>. Toolbars <b>don't</b> — overflow into a ⋯ menu instead.</div>
+    </div>
+    <div class="prop">
+      <div class="pname"><i class="ph ph-arrows-vertical"></i>7 · Overflow</div>
+      <div class="diagram" style="justify-content:flex-start;padding:8px 8px 14px"><span class="bx" style="width:52px"></span><span class="bx" style="width:52px"></span><span class="bx soft" style="width:52px;margin-right:-30px"></span><div style="position:absolute;left:8px;right:8px;bottom:5px;height:4px;border-radius:2px;background:var(--border-subtle)"><div style="width:45%;height:100%;border-radius:2px;background:var(--border-strong)"></div></div></div>
+      <div class="pcss">overflow: auto (on the pane, not the page)</div>
+      <div class="prule">Panes &amp; table bodies scroll <b>within</b>; bars and rail stay fixed. Tables scroll x when needed.</div>
+    </div>
+    <div class="prop">
+      <div class="pname"><i class="ph ph-crop"></i>8 · Clip content</div>
+      <div class="diagram" style="padding:0"><div style="position:absolute;inset:8px 44px 8px 8px;border:1px solid var(--border-default);border-radius:8px;overflow:hidden"><div style="position:absolute;inset:0;background:repeating-linear-gradient(45deg,var(--surface-brand-soft) 0 6px,var(--surface-card) 6px 12px)"></div></div><div style="position:absolute;right:8px;top:8px;bottom:8px;width:30px;background:repeating-linear-gradient(45deg,var(--agni-green-150) 0 6px,var(--surface-soft) 6px 12px);opacity:.45;border-radius:2px"></div></div>
+      <div class="pcss">overflow: hidden + border-radius</div>
+      <div class="prule">Clip flush media inside cards/thumbnails. <b>Never clip</b> a container that spawns menus or popovers.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ░░ CONTRACT TABLE ░░ -->
+<div class="section">
+  <h2><i class="ph-bold ph-table"></i>Contract by component class</h2>
+  <table>
+    <thead><tr><th>Component</th><th>Direction</th><th>Gap</th><th>Padding</th><th>Alignment</th><th>Distribution</th><th>Wrap</th><th>Overflow</th><th>Clip</th></tr></thead>
+    <tbody>
+      <tr><td class="k">Button / control</td><td>row</td><td>8</td><td>0 × space-4</td><td>center</td><td>center</td><td>no</td><td>visible</td><td>no — focus ring</td></tr>
+      <tr><td class="k">Toolbar · Cluster</td><td>row</td><td>cluster-default 12</td><td>0</td><td>center</td><td>start / between</td><td class="warn">no → ⋯ menu</td><td>visible</td><td>no</td></tr>
+      <tr><td class="k">Chip / filter row</td><td>row</td><td>cluster-tight 8</td><td>0</td><td>center</td><td>start</td><td>wrap</td><td>visible</td><td>no</td></tr>
+      <tr><td class="k">Form section · Stack</td><td>column</td><td>space-4 16</td><td>pane-pad 16</td><td>stretch</td><td>start</td><td>no</td><td>visible</td><td>no</td></tr>
+      <tr><td class="k">Card</td><td>column</td><td>space-3 12</td><td>pane-pad 16</td><td>stretch</td><td>start</td><td>no</td><td>visible</td><td>flush media only</td></tr>
+      <tr><td class="k">Modal</td><td>column</td><td>0 — regions own</td><td>0 — regions own</td><td>stretch</td><td>start</td><td>no</td><td>body scroll-y</td><td>yes · radius-lg</td></tr>
+      <tr><td class="k">DataTable pane</td><td>column</td><td>0</td><td>0</td><td>stretch</td><td>start</td><td>no</td><td>scroll x · y within pane</td><td>yes · radius-lg</td></tr>
+      <tr><td class="k">AppShell content</td><td>column</td><td>pane-gap 12</td><td>pane-pad 16</td><td>stretch</td><td>start</td><td>no</td><td>panes scroll within</td><td>no</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ░░ IN CODE ░░ -->
+<div class="section">
+  <h2><i class="ph-bold ph-code"></i>In code</h2>
+  <div class="code"><span class="c">// The contract is the props of Cluster (row) and Stack (column):</span><br>&lt;<span class="t">Cluster</span> <span class="a">gap</span>="tight" <span class="a">justify</span>="between" <span class="a">padding</span>="0 var(--space-4)"&gt;…&lt;/<span class="t">Cluster</span>&gt;<br>&lt;<span class="t">Stack</span> <span class="a">gap</span>={16} <span class="a">padding</span>="var(--pane-pad)" <span class="a">overflow</span>="scroll-y"&gt;…&lt;/<span class="t">Stack</span>&gt;<br><span class="c">// Static HTML uses the utilities from tokens/layout.css:</span><br>&lt;<span class="t">div</span> <span class="a">class</span>="al-h jc-between al-wrap" <span class="a">style</span>="--gap: var(--space-2)"&gt;…&lt;/<span class="t">div</span>&gt;</div>
+</div>
+
+<!-- ░░ GUIDE ░░ -->
+<div class="section">
+  <div class="guide">
+    <div class="gcol">
+      <div class="ghead do"><i class="ph-fill ph-check-circle"></i>Do</div>
+      <div class="gli y"><i class="ph ph-check"></i><span>Space siblings with <b>gap on the container</b>; use <b>padding for the inset</b> — the two never substitute for each other.</span></div>
+      <div class="gli y"><i class="ph ph-check"></i><span>Use <b>baseline alignment</b> when a row mixes type sizes (page title + record count).</span></div>
+      <div class="gli y"><i class="ph ph-check"></i><span>Declare all eight fields when specing a new component — "unspecified" is how desks drift apart.</span></div>
+    </div>
+    <div class="gcol">
+      <div class="ghead dont"><i class="ph-fill ph-x-circle"></i>Don't</div>
+      <div class="gli n"><i class="ph ph-x"></i><span>Don't add <b>margins between siblings</b> or space with <span class="mono">&lt;br&gt;</span>/empty divs — gap owns rhythm.</span></div>
+      <div class="gli n"><i class="ph ph-x"></i><span>Don't <b>hard-code px gaps</b> — a gap that isn't a token won't follow density modes.</span></div>
+      <div class="gli n"><i class="ph ph-x"></i><span>Don't <b>clip a menu's parent</b> or nest scrollbars — popovers escape via the z-scale; one scroll region per pane.</span></div>
+    </div>
+  </div>
+</div>
+
+</body></html>

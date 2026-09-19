@@ -1,0 +1,144 @@
+<!-- @dsCard group="Chrome" viewport="1120x3200" name="Chrome — workspace, settings, notifications, launcher" subtitle="WorkspacePane collapsed/expanded/active · SettingsMenu with accent, background &amp; display size · NotificationsMenu unread/read/empty · AppSwitcher" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:20px;background:var(--surface-page)}.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:22px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.cap:first-child{margin-top:0}.lbl{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);margin:0 0 8px}.row{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap}.note{font:var(--fw-regular) var(--text-xs)/1.5 var(--font-sans);color:var(--text-tertiary);margin:10px 0 0;max-width:66ch}.pt{border-collapse:collapse;width:100%;margin:0 0 14px;max-width:1000px}.pt th{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);text-align:left;padding:0 12px 8px 0;border-bottom:1px solid var(--border-subtle)}.pt td{font:var(--text-xs)/1.55 var(--font-sans);color:var(--text-secondary);padding:9px 12px 9px 0;border-bottom:1px solid var(--border-subtle);vertical-align:top}.pt td:last-child,.pt th:last-child{padding-right:0}.pt code{font-family:var(--font-data);font-size:var(--text-2xs);background:var(--surface-sunken);padding:1px 5px;border-radius:var(--radius-xs);color:var(--text-primary)}.pt td strong{color:var(--text-primary)}</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { WorkspacePane, SettingsMenu, AppSwitcher, NotificationsMenu, Theme, Button } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+const WS_ITEMS=[{key:"apps",icon:"ph-dots-nine",label:"App switcher"},"divider",{key:"tasks",icon:"ph-check-square",label:"Tasks",badge:3,launch:true},{key:"approvals",icon:"ph-seal-check",label:"Approvals",badge:7,launch:true},{key:"calendar",icon:"ph-calendar-blank",label:"Calendar",launch:true},"spacer","divider",{key:"ai",icon:"ph-robot",label:"AI Chat",launch:true}];
+const CATS=[{key:"biz",label:"Business Operations",icon:"ph-trend-up",apps:[{label:"Procurement\nManagement",icon:"ph-shopping-cart"},{label:"Inventory\nManagement",icon:"ph-warehouse"},{label:"Finance\nManagement",icon:"ph-bank"},{label:"Expense\nManagement",icon:"ph-receipt"}]},{key:"prod",label:"Product",icon:"ph-stack",apps:[{label:"CAD\nManagement",icon:"ph-cube"},{label:"Manufacturing\nManagement",icon:"ph-factory"}]}];
+const NOTIF_ITEMS=[
+  {id:"n1",icon:"ph-seal-check",message:"Your purchase request REC-2401 was approved by Aravind Prabhu.",time:"10:05",date:"Today",read:false},
+  {id:"n2",icon:"ph-user-switch",message:"Fabrication order REC-2403 was assigned to Vikram Singh for review.",time:"09:18",date:"Today",read:false},
+  {id:"n3",icon:"ph-x-circle",message:"Access request REC-2416 was rejected — missing manager sign-off. Resubmit with the updated form attached.",time:"Yesterday",date:"Yesterday",read:true},
+  {id:"n4",icon:"ph-clock",message:"Service request REC-2413 is overdue by 2 days.",time:"08:40",date:"Yesterday",read:false},
+];
+function Demo(){
+  const [open,setOpen]=React.useState(true);
+  const [sw,setSw]=React.useState(false);
+  const [dark,setDark]=React.useState(false);
+  const [accent,setAccent]=React.useState("forest");
+  const [notifItems,setNotifItems]=React.useState(NOTIF_ITEMS);
+  const [wall,setWall]=React.useState("sage");
+  const [scale,setScale]=React.useState("md");
+  const [act,setAct]=React.useState("approvals");
+  const WALLS=[{key:"none",label:"None"},{key:"sage",label:"Sage",color:"var(--surface-brand-soft)"},{key:"sky",label:"Sky",color:"var(--hue-info-soft)"},{key:"sand",label:"Sand",color:"var(--hue-warning-soft)"}];
+  const PINNED=[{key:"apps",icon:"ph-dots-nine",label:"App switcher"},"divider",{key:"procure",icon:"ph-shopping-cart",label:"Procurement",launch:true},{key:"inventory",icon:"ph-warehouse",label:"Inventory",launch:true},"divider",{key:"tasks",icon:"ph-check-square",label:"Tasks",badge:3,launch:true},{key:"approvals",icon:"ph-seal-check",label:"Approvals",badge:7,launch:true},"spacer","divider",{key:"ai",icon:"ph-robot",label:"AI Chat",launch:true}];
+  return (<div style={{...Theme.deriveAccentVars(accent,dark)}}>
+    <div className="cap">WorkspacePane — expanded · collapsed · active item · pinned apps</div>
+    <div className="row">
+      <div>
+        <div className="lbl">WorkspacePane (expanded)</div>
+        <div style={{height:240,width:232,border:"1px solid var(--border-default)",borderRadius:"var(--radius-lg)",overflow:"hidden",background:"linear-gradient(180deg,var(--surface-card),var(--agni-green-150))"}}>
+          <WorkspacePane items={WS_ITEMS} open={open} onToggleOpen={setOpen} onSelect={(k)=>k==="apps"&&setSw(true)}/>
+        </div>
+      </div>
+      <div>
+        <div className="lbl">Collapsed — the resting state; badges stay visible</div>
+        <div style={{height:240,width:64,border:"1px solid var(--border-default)",borderRadius:"var(--radius-lg)",overflow:"hidden",background:"linear-gradient(180deg,var(--surface-card),var(--agni-green-150))"}}>
+          <WorkspacePane items={WS_ITEMS} open={false} onToggleOpen={()=>{}} onSelect={()=>{}} style={{width:56}}/>
+        </div>
+      </div>
+      <div>
+        <div className="lbl">activeKey — a panel is open beside the rail</div>
+        <div style={{height:240,width:232,border:"1px solid var(--border-default)",borderRadius:"var(--radius-lg)",overflow:"hidden",background:"linear-gradient(180deg,var(--surface-card),var(--agni-green-150))"}}>
+          <WorkspacePane items={WS_ITEMS} open activeKey={act} onToggleOpen={()=>{}} onSelect={setAct}/>
+        </div>
+      </div>
+      <div>
+        <div className="lbl">Pinned apps — injected between the dividers</div>
+        <div style={{height:300,width:232,border:"1px solid var(--border-default)",borderRadius:"var(--radius-lg)",overflow:"hidden",background:"linear-gradient(180deg,var(--surface-card),var(--agni-green-150))"}}>
+          <WorkspacePane items={PINNED} open onToggleOpen={()=>{}} onSelect={()=>{}}/>
+        </div>
+      </div>
+    </div>
+    <p className="note">The rail stays put; selecting an item slides a content panel in beside it — that panel is built from <code>PanelKit</code>. Apps a user pins from the launcher appear as extra items, so the pane's length is data-driven.</p>
+    <div className="cap">SettingsMenu · NotificationsMenu · AppSwitcher</div>
+    <div className="row">
+      <div style={{position:"relative",minWidth:260}}>
+        <div className="lbl">SettingsMenu — dark, accent, background, display size</div>
+        <div style={{position:"relative",height:470}}>
+          <SettingsMenu dark={dark} onDarkChange={setDark} accent={accent} onAccentChange={setAccent}
+            wallpaper={wall} onWallpaperChange={setWall} wallpapers={WALLS}
+            scale={scale} onScaleChange={setScale}
+            onClose={()=>{}} style={{position:"static",width:240,boxShadow:"var(--shadow-md)"}}/>
+        </div>
+      </div>
+      <div style={{position:"relative",minWidth:380}}>
+        <div className="lbl">NotificationsMenu — Unread/Read + mark-as-read</div>
+        <div style={{position:"relative",height:420}}>
+          <NotificationsMenu items={notifItems}
+            onMarkRead={(id)=>setNotifItems(p=>p.map(n=>n.id===id?{...n,read:true}:n))}
+            onMarkUnread={(id)=>setNotifItems(p=>p.map(n=>n.id===id?{...n,read:false}:n))}
+            onMarkAllRead={()=>setNotifItems(p=>p.map(n=>({...n,read:true})))}
+            onClose={()=>{}} style={{position:"static",width:340,boxShadow:"var(--shadow-md)"}}/>
+        </div>
+      </div>
+      <div>
+        <div className="lbl">AppSwitcher (overlay)</div>
+        <Button category="primary" icon={<i className="ph ph-dots-nine"/>} onClick={()=>setSw(true)}>Open launcher</Button>
+      </div>
+      <div style={{position:"relative",minWidth:360}}>
+        <div className="lbl">NotificationsMenu — all read · empty feed</div>
+        <div style={{display:"flex",flexDirection:"column",gap:16}}>
+          <NotificationsMenu items={NOTIF_ITEMS.map(n=>({...n,read:true}))} onClose={()=>{}} style={{position:"static",width:340,boxShadow:"var(--shadow-md)"}}/>
+          <NotificationsMenu items={[]} onClose={()=>{}} style={{position:"static",width:340,boxShadow:"var(--shadow-md)"}}/>
+        </div>
+      </div>
+    </div>
+    <p className="note">The bell carries an unread count only while unread items exist; all-read drops the badge but keeps the Read tab, and an empty feed shows its own empty state rather than a blank popover. Appearance sections hide themselves when their callback is omitted — pass <code>onScaleChange</code> only where display size is actually supported.</p>
+    <AppSwitcher open={sw} onClose={()=>setSw(false)} quickActions={[{label:"Add new task",icon:"ph-plus-circle"},{label:"Book Food",icon:"ph-fork-knife"}]} categories={CATS}/>
+    <div className="cap">Props</div>
+    <div className="lbl">WorkspacePane</div>
+    <table className="pt"><tbody>
+      <tr><th style={{width:"24%"}}>Prop</th><th style={{width:"26%"}}>Type</th><th>Notes</th></tr>
+      <tr><td><strong>items</strong></td><td><code>(WorkspaceItem | "divider" | "spacer")[]</code></td><td>Each item is {"{"} key, icon, label, badge?, launch? {"}"}. The two literal strings insert a rule and a flexible gap.</td></tr>
+      <tr><td><strong>open · onToggleOpen</strong></td><td><code>boolean · (open) =&gt; void</code></td><td>Collapsed icon rail vs expanded pane. Collapsed width is <code>--workspace-rail-w</code>, which is <code>0px</code> at the tablet breakpoint — the rail folds away rather than crowding a narrow screen. This specimen pins 56px so it stays visible here.</td></tr>
+      <tr><td><strong>activeKey · onSelect</strong></td><td><code>string | null · (key) =&gt; void</code></td><td>The active item renders with a brand background.</td></tr>
+      <tr><td><strong>title</strong></td><td><code>string</code></td><td>Header text while expanded. Default "Workspace".</td></tr>
+    </tbody></table>
+    <div className="lbl">SettingsMenu</div>
+    <table className="pt"><tbody>
+      <tr><th style={{width:"24%"}}>Prop</th><th style={{width:"26%"}}>Type</th><th>Notes</th></tr>
+      <tr><td><strong>dark · onDarkChange</strong></td><td><code>boolean · (dark) =&gt; void</code></td><td>Dark-mode toggle.</td></tr>
+      <tr><td><strong>accent · onAccentChange</strong></td><td><code>string · (accent) =&gt; void</code></td><td>Accent key from Theme.accents. Default "forest".</td></tr>
+      <tr><td><strong>wallpaper · onWallpaperChange · wallpapers</strong></td><td><code>string · (key) =&gt; void · {"{"} key, label, src?, color? {"}"}[]</code></td><td>Background picker. src for an image swatch, color for a solid tint, neither for "none". Section hidden when the list is empty.</td></tr>
+      <tr><td><strong>scale · onScaleChange · scaleOptions</strong></td><td><code>string · (scale) =&gt; void · {"{"} key, label {"}"}[]</code></td><td>Display-size rungs (fractional --scale). Section hidden unless onScaleChange is given.</td></tr>
+      <tr><td><strong>onClose</strong></td><td><code>() =&gt; void</code></td><td>Fired on click-outside and Escape.</td></tr>
+    </tbody></table>
+    <div className="lbl">NotificationsMenu</div>
+    <table className="pt"><tbody>
+      <tr><th style={{width:"24%"}}>Prop</th><th style={{width:"26%"}}>Type</th><th>Notes</th></tr>
+      <tr><td><strong>items</strong></td><td><code>NotificationItem[]</code></td><td>{"{"} id, message, read, icon?, title?, time?, date? {"}"} — date is the group header the item buckets under.</td></tr>
+      <tr><td><strong>loading</strong></td><td><code>boolean</code></td><td>Skeleton rows instead of the list while items arrive.</td></tr>
+      <tr><td><strong>onMarkRead · onMarkUnread · onMarkAllRead</strong></td><td><code>(id) =&gt; void · (id) =&gt; void · () =&gt; void</code></td><td>Read-state callbacks. The bell badge counts unread items only.</td></tr>
+      <tr><td><strong>onItemClick · onOpenSettings · onClose</strong></td><td><code>(item) =&gt; void · () =&gt; void · () =&gt; void</code></td><td>Row click, footer settings link, dismissal.</td></tr>
+    </tbody></table>
+    <div className="lbl">AppSwitcher</div>
+    <table className="pt"><tbody>
+      <tr><th style={{width:"24%"}}>Prop</th><th style={{width:"26%"}}>Type</th><th>Notes</th></tr>
+      <tr><td><strong>open · onClose</strong></td><td><code>boolean · () =&gt; void</code></td><td>Full-screen launcher overlay.</td></tr>
+      <tr><td><strong>quickActions</strong></td><td><code>LauncherApp[]</code></td><td>Pinned actions above the grid.</td></tr>
+      <tr><td><strong>categories</strong></td><td><code>AppCategory[]</code></td><td>{"{"} key, label, icon, apps {"}"} — each app is {"{"} label, icon {"}"}.</td></tr>
+    </tbody></table>
+    <div className="cap">Usage</div>
+    <pre style={{fontFamily:"var(--font-data)",fontSize:"var(--text-xs)",background:"var(--surface-sunken)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:14,overflow:"auto"}}>{`<WorkspacePane items={items} open={open} onToggleOpen={setOpen} onSelect={setActive} activeKey={active}/>
+<NotificationsMenu items={notifications} onMarkRead={markRead} onMarkAllRead={markAllRead} onClose={close}/>`}</pre>
+    <div className="cap">Responsive</div>
+    <table className="pt"><tbody>
+      <tr><th style={{width:"18%"}}>Breakpoint</th><th>Behavior</th></tr>
+      <tr><td><strong>Desktop ≥ 1024</strong></td><td>WorkspacePane sits open beside the rail at its full width; SettingsMenu/NotificationsMenu/AppSwitcher render as anchored popovers.</td></tr>
+      <tr><td><strong>Tablet 640–1023</strong></td><td>WorkspacePane's collapsed width rides <code>--workspace-rail-w</code>, which is <code>0px</code> at this breakpoint — the pane folds away rather than crowding the content column; open it on demand.</td></tr>
+      <tr><td><strong>Phone &lt; 640</strong></td><td>AppSwitcher and the popovers clamp to the viewport and effectively go full-bleed; NotificationsMenu/SettingsMenu widths (340/240 in this demo) should be given as <code>"min(92vw,340px)"</code> rather than a fixed px in a real phone layout.</td></tr>
+    </tbody></table>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script></body></html>

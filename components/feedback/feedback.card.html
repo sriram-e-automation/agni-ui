@@ -1,0 +1,38 @@
+<!-- @dsCard group="Feedback" viewport="700x220" name="Feedback — tooltip & notice" subtitle="Tooltip - Notice (info / success / warning / error)" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:20px;background:var(--surface-page)}.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:18px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.cap:first-child{margin-top:0}.lbl{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);margin:0 0 8px}</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { Tooltip, Notice, Button } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+function Demo(){
+  return (<div>
+    <div className="cap">Variants</div>
+    <div className="lbl">Tooltip — sides (hover the controls)</div>
+    <div style={{display:"flex",gap:14,marginBottom:8,paddingTop:6}}>
+      <Tooltip label="Top" side="top"><Button iconOnly icon={<i className="ph ph-bell"/>} variant="outline" round/></Tooltip>
+      <Tooltip label="Bottom" side="bottom"><Button iconOnly icon={<i className="ph ph-funnel"/>} variant="outline"/></Tooltip>
+      <Tooltip label="Right" side="right"><Button category="secondary" size="sm" icon={<i className="ph ph-export"/>}>Export</Button></Tooltip>
+    </div>
+    <div className="cap">States — toast tones</div>
+    <div style={{display:"flex",gap:12,flexWrap:"wrap"}}>
+      <Notice variant="toast" tone="info" title="Sync running" message="Importing 28 records…" onClose={()=>{}}/>
+      <Notice variant="toast" tone="success" title="Record approved" message="REC-2402 moved to Completed." onClose={()=>{}}/>
+      <Notice variant="toast" tone="warning" title="Review overdue" message="2 approvals past due date." onClose={()=>{}}/>
+      <Notice variant="toast" tone="error" title="Submission failed" message="Check required fields and retry." onClose={()=>{}}/>
+    </div>
+    <div className="cap">Usage</div>
+    <pre style={{fontFamily:"var(--font-data)",fontSize:"var(--text-xs)",background:"var(--surface-soft)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:14,overflow:"auto"}}>{`<Tooltip label="Export" side="top"><Button iconOnly icon={<i className="ph ph-export"/>}/></Tooltip>
+<Notice variant="toast" tone="success" title="Record approved" message="REC-2402 moved to Completed." onClose={dismiss}/>`}</pre>
+    <div className="cap">Responsive</div>
+    <p style={{font:"var(--fw-regular) var(--text-xs)/1.5 var(--font-sans)",color:"var(--text-tertiary)",maxWidth:"66ch",margin:0}}>Tooltip has no phone equivalent — there is no hover, so a touch UI should not rely on it for anything essential (put the same text in a <code>title</code>/label instead). Toasts stack at a fixed width in the corner on desktop; on phone, position them full-width at the bottom (<code>width:"calc(100vw - 32px)"</code>) so they don't clip.</p>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script></body></html>

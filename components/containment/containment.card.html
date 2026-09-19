@@ -1,0 +1,155 @@
+<!-- @dsCard group="Containment" viewport="900x760" name="Containment — panel: inline, drawer, sheet" subtitle="Panel inline: collapsed/expanded · padded/flush · Accordion: single/multi · Panel drawer: right/left · widths · Panel sheet: the form shell" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8"><title>Containment</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:20px;background:var(--surface-page)}.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:20px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.cap:first-child{margin-top:0}.cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}.lbl{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);margin:0 0 8px}.note{font:var(--fw-regular) var(--text-xs)/1.5 var(--font-sans);color:var(--text-tertiary);margin:10px 0 0;max-width:66ch}.row{display:flex;gap:12px;flex-wrap:wrap}</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { Panel, Accordion, Button, Input, FormField, FormSection, Select, Textarea } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+function Demo(){
+  const [drawer,setDrawer]=React.useState(null);
+  const [sheet,setSheet]=React.useState(false);
+  return (<div>
+    <div className="cap">Panel inline — collapsed · expanded · flush</div>
+    <div className="cols">
+      <div>
+        <div className="lbl">Expanded, with an action</div>
+        <Panel title="Cost centre" icon="ph-bank" collapsible defaultOpen actions={<Button size="sm" category="tertiary">Edit</Button>}>
+          <div style={{fontSize:"var(--text-sm)",color:"var(--text-secondary)",lineHeight:1.6}}>Propulsion · CC-204<br/>Owner: Finance Ops</div>
+        </Panel>
+        <div style={{height:12}}></div>
+        <div className="lbl">Collapsed — same panel, closed</div>
+        <Panel title="Attachments" icon="ph-paperclip" collapsible defaultOpen={false}>
+          <div style={{fontSize:"var(--text-sm)",color:"var(--text-secondary)"}}>3 files</div>
+        </Panel>
+      </div>
+      <div>
+        <div className="lbl">Static — no collapse control</div>
+        <Panel title="Approval chain" icon="ph-seal-check">
+          <div style={{fontSize:"var(--text-sm)",color:"var(--text-secondary)",lineHeight:1.6}}>Lead → Department → Finance</div>
+        </Panel>
+        <div style={{height:12}}></div>
+        <div className="lbl">pad={"{false}"} — flush body for tables and lists</div>
+        <Panel title="Recent activity" icon="ph-clock-counter-clockwise" pad={false}>
+          <div style={{fontSize:"var(--text-sm)"}}>
+            {["Approved by Finance Ops","Reviewed by Meera Krishnan","Submitted by Aravind Prabhu"].map((r,i)=>(
+              <div key={i} style={{padding:"9px 14px",borderTop:i?"1px solid var(--border-subtle)":"none",color:"var(--text-secondary)"}}>{r}</div>
+            ))}
+          </div>
+        </Panel>
+      </div>
+    </div>
+    <p className="note">Use <code>pad={"{false}"}</code> whenever the body has its own row rhythm — a padded panel around a table double-insets it.</p>
+
+    <div className="cap">Panel states — loading · error · empty</div>
+    <div className="cols">
+      <div>
+        <div className="lbl">loading — the frame stays, the body is a skeleton</div>
+        <Panel title="Cost breakdown" loading />
+      </div>
+      <div>
+        <div className="lbl">error + onRetry</div>
+        <Panel title="Cost breakdown" error="Rates didn't load." onRetry={()=>{}} />
+      </div>
+      <div>
+        <div className="lbl">empty — a panel with nothing in it yet</div>
+        <Panel title="Attachments" empty="No files attached" />
+      </div>
+      <div>
+        <div className="lbl">the same three props on an overlay</div>
+        <div className="row" style={{gap:8}}>
+          <Button category="secondary" size="sm" icon={<i className="ph ph-warning-circle"/>} onClick={()=>setDrawer("failed")}>Failed drawer</Button>
+          <Button category="secondary" size="sm" icon={<i className="ph ph-spinner"/>} onClick={()=>setDrawer("loading")}>Loading drawer</Button>
+          <Button category="secondary" size="sm" icon={<i className="ph ph-tray"/>} onClick={()=>setSheet("empty")}>Empty sheet</Button>
+        </div>
+      </div>
+    </div>
+    <p className="note">Resolved through <code>DataState</code> in the fixed order <b>error → loading → empty → content</b>, so a panel that failed to load never reads as an empty one. The header and footer stay in every state — a panel that loses its chrome mid-fetch shifts the page under the pointer.</p>
+    <p className="note"><b>All three variants, since Aug 2026.</b> The dispatcher resolves the body once and hands it to the inline section, the sheet or the drawer — so a record drawer whose fetch failed shows the failure instead of an empty shell. Two rules come with it: the header stays in every state, because an overlay must always be closable; and <code>error</code> / <code>loading</code> <b>withhold the footer</b>, since a sticky Save above an <code>ErrorState</code> offers an action that cannot be performed. <code>empty</code> keeps its footer — the action beside an empty body is usually the way out of it.</p>
+
+    <div className="cap">Accordion — single · multi</div>
+    <div className="cols">
+      <div>
+        <div className="lbl">Single — opening one closes the last</div>
+        <Accordion defaultOpen={["a"]} items={[
+          {key:"a",title:"General",icon:"ph-gear",content:"Module name, code, owner and description."},
+          {key:"b",title:"Approvals",icon:"ph-seal-check",content:"Routing rules and approver matrix."},
+          {key:"c",title:"Notifications",icon:"ph-bell",content:"Email and in-app alert preferences."},
+        ]}/>
+      </div>
+      <div>
+        <div className="lbl">multi — several open at once</div>
+        <Accordion multi defaultOpen={["a","c"]} items={[
+          {key:"a",title:"General",icon:"ph-gear",content:"Module name, code, owner and description."},
+          {key:"b",title:"Approvals",icon:"ph-seal-check",content:"Routing rules and approver matrix."},
+          {key:"c",title:"Notifications",icon:"ph-bell",content:"Email and in-app alert preferences."},
+        ]}/>
+      </div>
+    </div>
+    <p className="note">Single is right for settings a user reads one at a time; <code>multi</code> for content they compare. All panels closed is a legal starting state — pass an empty <code>defaultOpen</code>.</p>
+
+    <div className="cap">Panel drawer — side & width</div>
+    <div className="row">
+      <Button category="secondary" icon={<i className="ph ph-sidebar-simple"/>} onClick={()=>setDrawer("right")}>Right (default)</Button>
+      <Button category="secondary" icon={<i className="ph ph-sidebar"/>} onClick={()=>setDrawer("left")}>Left</Button>
+      <Button category="secondary" icon={<i className="ph ph-arrows-out-line-horizontal"/>} onClick={()=>setDrawer("wide")}>Wide — 560</Button>
+    </div>
+    <p className="note">Right is the default and the one to use for record detail; left is for navigation and filters, so it doesn't fight the workspace rail. Esc or scrim-click closes.</p>
+
+    <div className="cap">Panel sheet — the form shell</div>
+    <Button category="primary" icon={<i className="ph ph-plus"/>} onClick={()=>setSheet(true)}>New record</Button>
+    <p className="note">Panel slides up from the bottom: sticky header, scrolling body on the <code>--field-*</code> grid, sticky footer. Use it for creating and editing records — a Modal for decisions, a Panel for reading detail beside the list, a Panel for filling a form.</p>
+
+    <Panel variant="drawer" open={drawer==="right"} onClose={()=>setDrawer(null)} title="REC-2401 · Detail"
+      footer={<><Button category="secondary" onClick={()=>setDrawer(null)}>Close</Button><Button category="primary">Save</Button></>}>
+      <div style={{display:"flex",flexDirection:"column",gap:12}}>
+        <Input value="Meera Krishnan" onChange={()=>{}}/>
+        <Input value="₹ 4,82,000" onChange={()=>{}}/>
+        <p style={{fontSize:"var(--text-sm)",color:"var(--text-tertiary)",margin:0}}>Slides in from the right over a scrim.</p>
+      </div>
+    </Panel>
+    <Panel variant="sheet" open={sheet==="empty"} onClose={()=>setSheet(false)} icon="ph-paperclip" title="Attachments"
+      subtitle="REC-2401 · Purchase request" empty="No files attached yet"
+      footer={<><Button category="ghost" onClick={()=>setSheet(false)}>Close</Button><Button category="primary" icon={<i className="ph ph-upload-simple"/>}>Upload files</Button></>} />
+    <Panel variant="drawer" open={drawer==="failed"} onClose={()=>setDrawer(null)} title="REC-2401 · Detail"
+      error="The record service did not respond." onRetry={()=>setDrawer(null)}
+      footer={<><Button category="secondary">Close</Button><Button category="primary">Save</Button></>} />
+    <Panel variant="drawer" open={drawer==="loading"} onClose={()=>setDrawer(null)} title="REC-2401 · Detail" loading
+      footer={<><Button category="secondary">Close</Button><Button category="primary">Save</Button></>} />
+    <Panel variant="drawer" open={drawer==="left"} onClose={()=>setDrawer(null)} side="left" title="Filters"
+      footer={<><Button category="ghost" onClick={()=>setDrawer(null)}>Clear all</Button><Button category="primary" onClick={()=>setDrawer(null)}>Apply</Button></>}>
+      <p style={{fontSize:"var(--text-sm)",color:"var(--text-secondary)",margin:0}}>side="left" — for navigation and filter surfaces.</p>
+    </Panel>
+    <Panel variant="drawer" open={drawer==="wide"} onClose={()=>setDrawer(null)} width={560} title="Audit trail"
+      footer={<Button category="secondary" onClick={()=>setDrawer(null)}>Close</Button>}>
+      <p style={{fontSize:"var(--text-sm)",color:"var(--text-secondary)",margin:0}}>width={"{560}"} — widen only when the content is genuinely two-column.</p>
+    </Panel>
+
+    <Panel variant="sheet" open={sheet===true} onClose={()=>setSheet(false)} icon="ph-plus" title="New record" subtitle="Purchase request · Chennai HQ"
+      footer={<><Button category="ghost" onClick={()=>setSheet(false)}>Discard</Button><Button category="primary" onClick={()=>setSheet(false)}>Review &amp; submit</Button></>}>
+      <FormSection title="Request details" desc="What is being asked for, and under which budget." cols={2}>
+        <FormField label="Request type" required><Select value="purchase" onChange={()=>{}} options={[{value:"purchase",label:"Purchase request"},{value:"service",label:"Service request"}]}/></FormField>
+        <FormField label="Priority"><Select value="med" onChange={()=>{}} options={[{value:"high",label:"High"},{value:"med",label:"Medium"},{value:"low",label:"Low"}]}/></FormField>
+        <FormField label="Justification" span hint="Visible to every approver on the chain"><Textarea value="" onChange={()=>{}} rows={3} placeholder="Why is this needed?"/></FormField>
+      </FormSection>
+    </Panel>
+    <div className="cap">Usage</div>
+    <pre style={{fontFamily:"var(--font-data)",fontSize:"var(--text-xs)",background:"var(--surface-page)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:14,overflow:"auto"}}>{`<Panel title="Cost centre" icon="ph-bank" collapsible defaultOpen>…</Panel>
+<Panel variant="drawer" side="right" width={480} open={open} onClose={close}
+  title="REC-2401 · Detail" loading={loading} error={error} onRetry={retry}
+  footer={<><Button category="secondary" onClick={close}>Close</Button><Button category="primary">Save</Button></>}>…</Panel>`}</pre>
+    <div className="cap">Responsive</div>
+    <table style={{borderCollapse:"collapse",width:"100%",marginBottom:14}}><tbody>
+      <tr><th style={{textAlign:"left",fontSize:"var(--text-2xs)",color:"var(--text-tertiary)",paddingBottom:8,borderBottom:"1px solid var(--border-subtle)",width:"18%"}}>Breakpoint</th><th style={{textAlign:"left",fontSize:"var(--text-2xs)",color:"var(--text-tertiary)",paddingBottom:8,borderBottom:"1px solid var(--border-subtle)"}}>Behavior</th></tr>
+      <tr><td style={{padding:"9px 12px 9px 0",borderBottom:"1px solid var(--border-subtle)",fontSize:"var(--text-xs)"}}><strong>Desktop ≥ 1024</strong></td><td style={{padding:"9px 0",borderBottom:"1px solid var(--border-subtle)",fontSize:"var(--text-xs)",color:"var(--text-secondary)"}}>Inline panel sits in the content column at its parent's width; drawer/sheet open at their declared <code>width</code> (default 420, widen with the <code>width</code> prop).</td></tr>
+      <tr><td style={{padding:"9px 12px 9px 0",borderBottom:"1px solid var(--border-subtle)",fontSize:"var(--text-xs)"}}><strong>Tablet / Phone &lt; 1024</strong></td><td style={{padding:"9px 0",borderBottom:"1px solid var(--border-subtle)",fontSize:"var(--text-xs)",color:"var(--text-secondary)"}}>Drawer/sheet have no built-in narrow-viewport clamp — pass an explicit <code>width="min(92vw,420px)"</code>-style value at the call site on phone so the panel never overruns the screen edge.</td></tr>
+    </tbody></table>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script></body></html>

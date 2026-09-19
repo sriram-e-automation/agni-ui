@@ -1,0 +1,95 @@
+<!-- @dsCard group="Data" viewport="1100x760" name="KanbanBoard — the lane layout" subtitle="Lane tones · count pills · visibleLanes + horizontal scroll · renderCard · dark — states live on the Feedback states card" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8"><title>KanbanBoard</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:20px;background:var(--surface-page);font-family:var(--font-sans)}.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:22px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.cap:first-child{margin-top:0}.lbl{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);margin:0 0 8px}.note{font:var(--fw-regular) var(--text-xs)/1.5 var(--font-sans);color:var(--text-tertiary);margin:10px 0 0;max-width:78ch}.frame{height:360px;display:flex;background:var(--surface-page);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);overflow:hidden}.dk{background:var(--surface-page);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:14px}.seg{display:inline-flex;gap:2px;padding:3px;background:var(--surface-sunken);border-radius:var(--radius-md);margin-bottom:10px}.seg button{border:none;cursor:pointer;padding:6px 12px;border-radius:var(--radius-sm);font:var(--fw-medium) var(--text-sm)/1 var(--font-sans);background:transparent;color:var(--text-tertiary)}.seg button.on{background:var(--action-brand);color:var(--text-on-brand)}</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { KanbanBoard, Tag } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+
+const COLS = ["Approvals","Yet to start","In progress","Overdue","Completed","Rejected"];
+const card = (id, type, by, extra) => ({ id, requestType:type, requestedBy:by, date:"12 Jun 2025", priority:"Med", ...extra });
+const BOARD = {
+  "Approvals":   [card("REC-2402","Purchase request","Meera Krishnan"), card("REC-2405","Travel request","Kiran Rao")],
+  "Yet to start":[card("REC-2398","Service request","Priya Nair",{assignee:"Priya Nair",assignedOn:"14 Jun 2025"})],
+  "In progress": [card("REC-2390","Purchase request","R. Sharma",{assignee:"Kiran Rao"}), card("REC-2391","Tooling request","A. Menon",{assignee:"Priya Nair"})],
+  "Overdue":     [card("REC-2377","Purchase request","Meera Krishnan",{assignee:"Kiran Rao",priority:"High"})],
+  "Completed":   [card("REC-2350","Service request","Priya Nair",{assignee:"Priya Nair"})],
+  "Rejected":    [card("REC-2361","Travel request","A. Menon")],
+};
+const PEOPLE = [{ id:"p1", name:"Priya Nair", team:"Quality" },{ id:"p2", name:"Kiran Rao", team:"Procurement" }];
+
+function Demo(){
+  const [lanes,setLanes]=React.useState(4);
+  const [last,setLast]=React.useState(null);
+  if (!KanbanBoard) return <div style={{padding:24,color:"var(--text-tertiary)",font:"var(--text-sm) var(--font-sans)"}}>Compiling design-system bundle… reload in a moment.</div>;
+  return (<div>
+    <div className="cap">The board — six lanes on the work-status vocabulary</div>
+    <div className="frame">
+      <KanbanBoard columns={COLS} board={BOARD} assignees={PEOPLE} visibleLanes={lanes} onView={(c)=>setLast(c.id)}/>
+    </div>
+    <p className="note">
+      Lane headers are sticky and tone-tinted from the status map, each with a count pill; every lane body scrolls
+      independently so a long queue never pushes the others down. The board itself scrolls horizontally
+      past <code>visibleLanes</code>. {last && <span style={{color:"var(--text-brand)"}}>Opened {last}</span>}
+    </p>
+
+    <div className="cap">visibleLanes — how many lanes fit before scrolling</div>
+    <div className="seg">
+      {[2,3,4,6].map(n => <button key={n} className={lanes===n?"on":""} onClick={()=>setLanes(n)}>{n} lanes</button>)}
+    </div>
+    <p className="note">
+      Lane width is derived, not fixed: the board divides its container by <code>visibleLanes</code>. Four is the
+      desk default; drop to two inside a workspace pane. This is why the board can sit in a 320 px panel and a
+      1440 px page without a media query.
+    </p>
+
+    <div className="cap">The lane vocabulary</div>
+    <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:4}}>
+      <Tag status="Approvals" size="sm">Approvals</Tag>
+      <Tag status="Yet to start" size="sm">Yet to start</Tag>
+      <Tag status="In progress" size="sm">In progress</Tag>
+      <Tag status="Overdue" size="sm">Overdue</Tag>
+      <Tag status="Completed" size="sm">Completed</Tag>
+      <Tag status="Rejected" size="sm">Rejected</Tag>
+    </div>
+    <p className="note">
+      These are the <b>work status</b> strings — the board's own vocabulary. The first lane, <b>Approvals</b>, is the
+      seam: the records in it are still on the <b>record status</b> vocabulary (Pending · In Review), because they
+      have not become work yet. Both resolve their tone through <code>Tag</code>. Override a single lane's tone
+      with <code>toneMap</code>; never hand a lane a raw colour.
+    </p>
+
+    <div className="cap">renderCard — when a lane needs a different card</div>
+    <div className="frame" style={{height:280}}>
+      <KanbanBoard columns={["In progress","Completed"]} board={{ "In progress":BOARD["In progress"], "Completed":BOARD["Completed"] }}
+        visibleLanes={2} assignees={PEOPLE}
+        renderCard={(c,lane)=>(
+          <div style={{background:"var(--surface-card)",border:"1px solid var(--border-subtle)",borderLeft:"3px solid var(--action-brand)",borderRadius:"var(--radius-md)",padding:"10px 12px",marginBottom:8}}>
+            <div style={{font:"var(--fw-semibold) var(--text-sm) var(--font-sans)",color:"var(--text-primary)"}}>{c.requestType}</div>
+            <div style={{font:"var(--text-2xs) var(--font-data)",color:"var(--text-tertiary)",marginTop:3}}>{c.id} · {lane}</div>
+          </div>
+        )}/>
+    </div>
+    <p className="note">Default is <code>RecordCard preset="kanban"</code> — reach for <code>renderCard</code> only when a board genuinely shows something that is not a record. Loading, per-lane empty and lane-level error states are on the <b>States</b> card in the Feedback group.</p>
+
+    <div className="cap">Dark</div>
+    <div className="dk" data-theme="dark">
+      <div className="frame" style={{height:300}}>
+        <KanbanBoard columns={COLS.slice(0,4)} board={BOARD} assignees={PEOPLE} visibleLanes={3} onView={()=>{}}/>
+      </div>
+    </div>
+    <div className="cap">Usage</div>
+    <pre style={{fontFamily:"var(--font-data)",fontSize:"var(--text-xs)",background:"var(--surface-page)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:14,overflow:"auto"}}>{`<KanbanBoard columns={LANES} board={board} assignees={people} visibleLanes={4} onView={openRecord}/>`}</pre>
+    <div className="cap">Responsive</div>
+    <p className="note">Lane width is derived from the container divided by <code>visibleLanes</code>, not a fixed px value — drop <code>visibleLanes</code> to 2 on tablet and 1 on phone (or inside a narrow workspace pane) rather than shrinking cards; extra lanes scroll horizontally past that count on every breakpoint.</p>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script></body></html>

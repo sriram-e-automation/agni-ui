@@ -1,0 +1,94 @@
+<!-- @dsCard group="Chrome" viewport="1060x1850" name="PageTitleBar — heading row" subtitle="Back · title + badge + subtitle · scope tabs with counts · view switcher · declarative actions — States: idle · countsLoading · disabled · loading" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8"><title>PageTitleBar</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:20px;background:var(--surface-page)}.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:20px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.cap:first-child{margin-top:0}.lbl{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);margin:0 0 8px}.note{font:var(--fw-regular) var(--text-xs)/1.5 var(--font-sans);color:var(--text-tertiary);margin:6px 0 0;max-width:64ch}.row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}.pane{background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:14px}.pt{border-collapse:collapse;width:100%;margin:0 0 14px;max-width:1000px}.pt th{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);text-align:left;padding:0 12px 8px 0;border-bottom:1px solid var(--border-subtle)}.pt td{font:var(--text-xs)/1.55 var(--font-sans);color:var(--text-secondary);padding:9px 12px 9px 0;border-bottom:1px solid var(--border-subtle);vertical-align:top}.pt td:last-child,.pt th:last-child{padding-right:0}.pt code{font-family:var(--font-data);font-size:var(--text-2xs);background:var(--surface-sunken);padding:1px 5px;border-radius:var(--radius-xs);color:var(--text-primary)}.pt td strong{color:var(--text-primary)}</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { PageTitleBar, Button, DropdownMenu } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+const TABS=[{key:"all",label:"All applications",count:28},{key:"mine",label:"Assigned to me",count:8},{key:"team",label:"My team",count:14},{key:"org",label:"Organisation",count:6,disabled:true}];
+const VIEWS=[{key:"list",icon:"ph-list",title:"List view"},{key:"kanban",icon:"ph-kanban",title:"Kanban view"},{key:"card",icon:"ph-squares-four",title:"Card view"},{key:"timeline",icon:"ph-chart-bar-horizontal",title:"Timeline"},{key:"calendar",icon:"ph-calendar-dots",title:"Calendar"}];
+function Bar({label,children,note}){return (<div style={{marginBottom:18}}><div className="lbl">{label}</div><div className="pane" style={{padding:0,overflow:"hidden"}}>{children}</div>{note?<p className="note">{note}</p>:null}</div>);}
+function Demo(){
+  const [t,setT]=React.useState("all");
+  const [v,setV]=React.useState("list");
+  const [t2,setT2]=React.useState("mine");
+  return (<div>
+    <div className="cap">Anatomy</div>
+    <Bar label="Full — icon tile, title, scope tabs with counts, view switcher, ⋮ actions" note="The disabled scope (Organisation) is a role the signed-in user can't open: muted and inert, never hidden — so permissions read as a boundary rather than a missing feature.">
+      <PageTitleBar title="Records" icon="ph-files" tabs={TABS} tab={t} onTabChange={setT} viewModes={VIEWS} viewMode={v} onViewModeChange={setV}/>
+    </Bar>
+    <Bar label="Title only — pages with no scopes or views (Dashboard, Quick access)">
+      <PageTitleBar title="Dashboard" icon="ph-chart-pie-slice" actions={null}/>
+    </Bar>
+    <Bar label="Custom actions slot — a page-level primary action instead of the default ⋮" note="Pass actions={null} to hide the trailing menu entirely; pass a node to replace it.">
+      <PageTitleBar title="Crew" icon="ph-users-three" viewModes={[{key:"list",icon:"ph-list",title:"Table view"},{key:"tree",icon:"ph-tree-structure",title:"Reporting line-up"}]} viewMode="list" onViewModeChange={()=>{}}
+        actions={<span style={{display:"flex",gap:8,alignItems:"center"}}><Button category="secondary" size="sm" icon={<i className="ph ph-download-simple"/>}>Export</Button><DropdownMenu trigger={<Button iconOnly icon="ph-dots-three-vertical" title="More"/>} items={[{label:"Print roster",icon:"ph-printer"},{label:"Manage roles",icon:"ph-user-gear"}]}/></span>}/>
+    </Bar>
+    <Bar label="Record page — back, status badge, subtitle, declarative actions" note="badge passes straight to Tag, so a record status resolves its tone through the one shared map. back is the affordance for a record opened from inside a list scope.">
+      <PageTitleBar back={{label:"All requests"}} title="REQ-2411" icon="ph-clipboard-text"
+        badge={{label:"In Review",status:"In Review"}}
+        subtitle="Raised by K. Raghavan · 24 Aug 2026 · Propulsion"
+        role="approver"
+        exportAction={{formats:[{key:"pdf",label:"PDF"},{key:"csv",label:"CSV"}]}}
+        secondaryActions={[{key:"print",label:"Print",icon:"ph-printer",iconOnly:true,kind:"ghost"}]}
+        primaryAction={{label:"Approve",icon:"ph-check"}}/>
+    </Bar>
+    <Bar label="Declarative actions — kinds, icon-only, split, disabled with a reason" note="Each action carries its own kind, size, iconOnly, disabled + disabledReason, loading, items and roles. Passing any declarative action suppresses the default ⋮ — pass actions={<Button iconOnly … />} to keep one.">
+      <PageTitleBar title="Requests" icon="ph-files" role="approver"
+        secondaryActions={[
+          {key:"refresh",label:"Refresh",icon:"ph-arrows-clockwise",iconOnly:true,kind:"ghost"},
+          {key:"archive",label:"Archive",icon:"ph-archive",kind:"tertiary",disabled:true,disabledReason:"Archive opens after the quarter closes"},
+          {key:"purge",label:"Purge",icon:"ph-trash",kind:"danger",roles:["admin"]},
+        ]}
+        primaryAction={{label:"New request",icon:"ph-plus",items:[{label:"Import records",icon:"ph-upload-simple"}]}}/>
+    </Bar>
+    <Bar label="disabled — the whole row dimmed and inert while the record saves">
+      <PageTitleBar title="Records" icon="ph-files" tabs={TABS} tab="all" onTabChange={()=>{}} disabled primaryAction={{label:"New request",icon:"ph-plus"}}/>
+    </Bar>
+    <div className="cap">Loading</div>
+    <Bar label="loading — the whole row shimmers (Loading shape=&quot;pageTitleBar&quot;)">
+      <PageTitleBar loading/>
+    </Bar>
+    <Bar label="countsLoading — tabs are live, counts still arriving; placeholder pills hold their width" note="Use this instead of rendering counts from undefined: the tabs don't reflow when the numbers land.">
+      <PageTitleBar title="Records" icon="ph-files" tabs={TABS} tab={t2} onTabChange={setT2} countsLoading/>
+    </Bar>
+    <div className="cap">Pairing rule</div>
+    <p className="note">When a PageTitleBar and <code>PageControls</code> are both on screen, the <b>title bar owns the view switcher</b> — pass <code>viewModes</code> here and omit it from the toolbar. Only pages without a title bar put the switcher in the toolbar.</p>
+    <div className="cap">Props</div>
+    <table className="pt"><tbody>
+      <tr><th style={{width:"24%"}}>Prop</th><th style={{width:"26%"}}>Type</th><th>Notes</th></tr>
+      <tr><td><strong>title · icon · subtitle</strong></td><td><code>string · string · ReactNode</code></td><td>Icon is a Phosphor class for the title tile; subtitle is the one line beneath — record count, owner, last-updated.</td></tr>
+      <tr><td><strong>badge</strong></td><td><code>{"{"} label, status?, tone? {"}"} | null</code></td><td>Status pill beside the title, forwarded to Tag.</td></tr>
+      <tr><td><strong>back</strong></td><td><code>{"{"} label?, onClick? {"}"} | null</code></td><td>Back affordance above the title, for a record page inside a list scope.</td></tr>
+      <tr><td><strong>tabs · tab · onTabChange</strong></td><td><code>PageTab[] · string · (key) =&gt; void</code></td><td>Scope tabs with count pills. A tab the role cannot open is passed disabled, not removed.</td></tr>
+      <tr><td><strong>countsLoading</strong></td><td><code>boolean</code></td><td>Counts still arriving — placeholder pills hold the tabs’ width so nothing reflows when the numbers land.</td></tr>
+      <tr><td><strong>viewModes · viewMode · onViewModeChange</strong></td><td><code>PageViewMode[] · string · (key) =&gt; void</code></td><td>Icon view switcher. When a PageControls is also on screen the title bar owns this.</td></tr>
+      <tr><td><strong>primaryAction</strong></td><td><code>ActionSpec | null</code></td><td>The page’s one primary action; kind defaults to "primary".</td></tr>
+      <tr><td><strong>secondaryActions</strong></td><td><code>ActionSpec[]</code></td><td>Left of the primary one, in order.</td></tr>
+      <tr><td><strong>exportAction</strong></td><td><code>ExportActionSpec | null</code></td><td>Rendered first. enabled:false keeps it visible-disabled with disabledReason as the tooltip.</td></tr>
+      <tr><td><strong>role</strong></td><td><code>string</code></td><td>Gates any action carrying a roles list (core/RoleGate contract).</td></tr>
+      <tr><td><strong>actions</strong></td><td><code>ReactNode</code></td><td>Escape hatch for bespoke right-edge content. Defaults to a ghost ⋮ button; pass null to hide.</td></tr>
+      <tr><td><strong>disabled · loading</strong></td><td><code>boolean</code></td><td>Dim and make inert · shimmer the whole row (Loading shape="pageTitleBar").</td></tr>
+    </tbody></table>
+    <div className="cap">Usage</div>
+    <pre style={{fontFamily:"var(--font-data)",fontSize:"var(--text-xs)",background:"var(--surface-sunken)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:14,overflow:"auto"}}>{`<PageTitleBar title="Records" icon="ph-files"
+  tabs={tabs} tab={tab} onTabChange={setTab}
+  viewModes={views} viewMode={view} onViewModeChange={setView}
+  primaryAction={{ label:"New request", icon:"ph-plus", onClick:openForm }}/>`}</pre>
+    <div className="cap">Responsive</div>
+    <table className="pt"><tbody>
+      <tr><th style={{width:"18%"}}>Breakpoint</th><th>Behavior</th></tr>
+      <tr><td><strong>Desktop ≥ 1024</strong></td><td>Title, scope tabs, view switcher and actions sit in one row (Cluster <code>justify="space-between"</code>).</td></tr>
+      <tr><td><strong>Tablet / Phone &lt; 1024</strong></td><td>The row is <code>wrap</code>ped, not collapsed by a breakpoint prop: tabs and the view switcher drop to a second line with their own row-gap once the title's min-content width forces it. There is no icon-only or stacked phone variant — a very narrow host should hide <code>viewModes</code> or move scopes into a dropdown instead.</td></tr>
+    </tbody></table>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script></body></html>

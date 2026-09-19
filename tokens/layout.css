@@ -1,0 +1,109 @@
+/* ============================================================================
+   AgniUI · Layout system — containers, safe areas, sizing behaviors,
+   constraints & auto-layout utilities.
+   Vocabulary (Figma-aligned):
+     Sizing      hug / fill / fixed per axis, + min/max clamps
+     Constraints pinned children inside position:relative parents
+     Auto layout every component declares direction · gap · padding ·
+                 alignment · distribution · wrapping · overflow · clip
+   Grid columns/gutters/margins + breakpoints live in tokens/spacing.css.
+   ========================================================================== */
+:root {
+  /* ── Container widths (readable / centered layouts) ── */
+  --container-sm: 640px;   /* narrow forms, dialogs-as-pages */
+  --container-md: 960px;   /* single-record detail */
+  --container-lg: 1200px;  /* dashboards without workspace rail */
+  --container-xl: 1440px;  /* = --content-max · full desk cap */
+
+  /* ── Safe areas (phone notch / home bar / curved edges). 0 on desktop. ── */
+  --safe-top:    env(safe-area-inset-top, 0px);
+  --safe-right:  env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left:   env(safe-area-inset-left, 0px);
+  /* Page margins never sit inside a notch: outer margin = max(grid, safe). */
+  --page-margin-left:  max(var(--grid-margin), var(--safe-left));
+  --page-margin-right: max(var(--grid-margin), var(--safe-right));
+
+  /* ── Min / Max clamps (canonical limits for fill-sized elements) ── */
+  --min-w-control: 64px;              /* buttons never collapse below */
+  --min-w-field:   160px;             /* inputs in wrapping field grids */
+  --min-w-menu:    180px;             /* dropdown / split-button menus */
+  --max-w-field:   480px;             /* a lone field stops growing here */
+  --max-w-prose:   640px;             /* help text / empty-state copy */
+  --max-h-menu:    320px;             /* dropdowns scroll past this */
+  --max-h-modal:   min(720px, 85vh);  /* @kind other */  /* modal body scrolls past this */
+
+  /* ── Icon sizes — track control height, NOT the spacing scale, so glyphs stay
+     optically centered in buttons & fields at every scale rung. SVGs render at
+     these sizes; keep stroke-width in ABSOLUTE px so strokes never thicken on
+     zoom. Map <Icon size="sm|md|lg"> to these. ── */
+  --icon-sm: calc(var(--density-control-h) * 0.42);  /* ~16px @ 38px control */
+  --icon-md: calc(var(--density-control-h) * 0.53);  /* ~20px */
+  --icon-lg: calc(var(--density-control-h) * 0.63);  /* ~24px */
+  --icon-stroke: 1.5px;               /* absolute — does NOT scale */
+}
+
+/* ── Container — centered, capped, safe-area-aware side margins ── */
+.agni-container { width: 100%; max-width: var(--content-max); margin-inline: auto; padding-inline: var(--page-margin-left) var(--page-margin-right); }
+
+/* ── Pane — the recurring surface (card, form section, list panel) AND the
+   container-query context. Children query the pane's width via @container, not
+   the viewport, so a component scales to its slot and drops in anywhere.
+   The min-width:0 + container pairing is what lets panes nest arbitrarily deep
+   and each still scale to its own width — the core future-proofing guarantee. */
+.agni-pane { container: pane / inline-size; min-width: 0; padding: var(--pane-pad); border-radius: var(--radius-lg); background: var(--surface-card, #fff); }
+.al-v.agni-pane, .al-h.agni-pane { gap: var(--pane-gap); }
+/* Bare context (no surface styling) — for wrappers that only need to be queried. */
+.cq { container: pane / inline-size; min-width: 0; }
+
+/* ── Column grid — reads --grid-cols/--grid-gutter, so 12 → 8 → 4 is automatic */
+.agni-grid { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); gap: var(--grid-gutter); }
+.span-1{grid-column:span 1}.span-2{grid-column:span 2}.span-3{grid-column:span 3}.span-4{grid-column:span 4}.span-5{grid-column:span 5}.span-6{grid-column:span 6}.span-7{grid-column:span 7}.span-8{grid-column:span 8}.span-9{grid-column:span 9}.span-10{grid-column:span 10}.span-11{grid-column:span 11}.span-12{grid-column:span 12}.span-full{grid-column:1/-1}
+/* Spans wider than the current grid collapse to full width (tablet 8-col, phone 4-col). */
+@media (max-width: 1023.98px) { .span-9, .span-10, .span-11, .span-12 { grid-column: 1/-1; } }
+@media (max-width: 639.98px) { .span-3, .span-4, .span-5, .span-6, .span-7, .span-8 { grid-column: 1/-1; } }
+
+/* ── Sizing behaviors — hug / fill / fixed per axis ──
+   Fixed reads --w / --h set inline: <div class="w-fixed" style="--w:240px"> */
+.w-hug   { width: fit-content; flex: 0 0 auto; }
+.w-fill  { flex: 1 1 0; width: auto; min-width: 0; }
+.w-fixed { width: var(--w); flex: 0 0 var(--w); }
+.h-hug   { height: fit-content; }
+.h-fill  { align-self: stretch; min-height: 0; }  /* cross-axis fill in a row */
+.h-fixed { height: var(--h); }
+.grow    { flex: 1 1 0; min-width: 0; min-height: 0; }  /* main-axis fill */
+/* Clamps — set only the vars you need: <div class="limits" style="--min-w:160px;--max-w:480px"> */
+.limits  { min-width: var(--min-w, 0); max-width: var(--max-w, none); min-height: var(--min-h, 0); max-height: var(--max-h, none); }
+
+/* ── Constraints — pinned children inside a position:relative parent.
+   Offset via --pin (default 0): <span class="pin pin-top pin-right" style="--pin:8px"> */
+.pin-parent { position: relative; }
+.pin        { position: absolute; }
+.pin-left   { left: var(--pin, 0); }
+.pin-right  { right: var(--pin, 0); }
+.pin-top    { top: var(--pin, 0); }
+.pin-bottom { bottom: var(--pin, 0); }
+.pin-x      { left: var(--pin, 0); right: var(--pin, 0); }   /* stretch: width follows parent */
+.pin-y      { top: var(--pin, 0); bottom: var(--pin, 0); }   /* stretch: height follows parent */
+.pin-center { left: 50%; top: 50%; transform: translate(-50%, -50%); }
+.pin-scale  { inset: var(--pin-inset, 10%); }                 /* %-based: scales with parent */
+
+/* ── Auto layout — flex rows/stacks with token gaps. Never sibling margins. ── */
+.al-h { display: flex; flex-direction: row; align-items: center; gap: var(--gap, var(--cluster-default)); }
+.al-v { display: flex; flex-direction: column; align-items: stretch; gap: var(--gap, var(--pane-gap)); }
+.al-wrap { flex-wrap: wrap; }
+.pad { padding: var(--pad, var(--pane-pad)); }
+/* Alignment (cross axis) */
+.ai-start{align-items:flex-start}.ai-center{align-items:center}.ai-end{align-items:flex-end}.ai-stretch{align-items:stretch}.ai-baseline{align-items:baseline}
+/* Distribution (main axis) */
+.jc-start{justify-content:flex-start}.jc-center{justify-content:center}.jc-end{justify-content:flex-end}.jc-between{justify-content:space-between}
+/* Overflow & clip */
+.ov-visible{overflow:visible}.ov-clip{overflow:hidden}.ov-auto{overflow:auto}
+.ov-x{overflow-x:auto;overflow-y:hidden;min-width:0}.ov-y{overflow-y:auto;overflow-x:hidden;min-height:0}
+
+/* ── Icon box — square, sizes to the icon token; svg inside inherits. Absolute
+   stroke keeps hairlines crisp at every scale rung. ── */
+.icon { display: inline-flex; align-items: center; justify-content: center; width: var(--icon-md); height: var(--icon-md); flex: 0 0 auto; }
+.icon svg { width: 100%; height: 100%; stroke-width: var(--icon-stroke); }
+.icon-sm { width: var(--icon-sm); height: var(--icon-sm); }
+.icon-lg { width: var(--icon-lg); height: var(--icon-lg); }

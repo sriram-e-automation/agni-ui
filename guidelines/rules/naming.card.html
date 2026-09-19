@@ -1,0 +1,123 @@
+<!-- @dsCard group="Guidelines" viewport="920x1080" name="Prop vocabulary & decisions" subtitle="One word per concept, the five state props, and the calls on record — component naming has its own card" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<style>
+body{margin:0;padding:20px;background:var(--surface-page);color:var(--text-primary);font-family:var(--font-sans);font-size:var(--text-sm)}
+.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:24px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}
+.cap:first-child{margin-top:0}
+p.lead{color:var(--text-secondary);margin:0 0 14px;max-width:74ch}
+code{font-family:var(--font-data);font-size:var(--text-xs);background:var(--surface-soft);border-radius:4px;padding:1px 5px}
+table{width:100%;border-collapse:collapse;background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);overflow:hidden}
+th{text-align:left;font:var(--fw-medium) var(--text-2xs)/1 var(--font-data);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);padding:10px 14px;border-bottom:1px solid var(--border-subtle);white-space:nowrap}
+td{padding:10px 14px;border-bottom:1px solid var(--border-subtle);vertical-align:top;font-size:var(--text-sm);color:var(--text-secondary)}
+tr:last-child td{border-bottom:none}
+td.k{color:var(--text-primary);font-weight:var(--fw-medium);white-space:nowrap}
+td.no{color:var(--text-tertiary)}
+.rule{display:flex;gap:12px;align-items:flex-start;background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:14px 16px;margin-bottom:10px}
+.rule .ic{width:28px;height:28px;flex-shrink:0;border-radius:8px;display:grid;place-items:center;background:var(--surface-brand-soft);color:var(--text-brand);font-size:15px}
+.rule b{display:block;color:var(--text-primary);font-size:var(--text-base);font-weight:var(--fw-semibold);margin-bottom:3px}
+.rule span{color:var(--text-secondary)}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pair>div{background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:14px 16px}
+.pair h4{margin:0 0 5px;font-size:var(--text-base);font-weight:var(--fw-semibold);color:var(--text-primary)}
+.pair p{margin:0;color:var(--text-secondary)}
+</style>
+</head><body>
+
+<div class="cap">Component names</div>
+<p class="lead">The naming rule, the merge test and the Aug 2026 merge table live in their own card — <b>Component naming rule</b>. In short: name the shape and not the business object, nouns never verbs, no invented role words, one name per job with capability in props.</p>
+
+<div class="cap">One word per concept</div>
+<p class="lead">Same idea, same prop name, every component. The left column is what to write in new work; the right column keeps working where it already ships.</p>
+<table>
+  <thead><tr><th>Concept</th><th>Use</th><th>Still valid</th></tr></thead>
+  <tbody>
+    <tr><td class="k">Semantic colour</td><td><code>tone</code> — done · doing · todo · pending · blocked · warning · error · brand · neutral</td><td class="no">—</td></tr>
+    <tr><td class="k">Visual variant</td><td><code>variant</code> — the form or emphasis of a control</td><td class="no"><code>category</code> on Button</td></tr>
+    <tr><td class="k">Destructive intent</td><td><code>tone="danger"</code> where a tone scale exists; <code>danger</code> boolean on Modal</td><td class="no">—</td></tr>
+    <tr><td class="k">Density</td><td><code>size</code> — sm · md · lg, per instance</td><td class="no"><code>density</code> on DataTable · <code>compact</code> on EmptyState</td></tr>
+    <tr><td class="k">Page density</td><td><code>data-density</code> on an ancestor — per page, not per component</td><td class="no">—</td></tr>
+    <tr><td class="k">Record selection</td><td><code>selected</code></td><td class="no"><code>highlight</code> on ApprovalCard</td></tr>
+    <tr><td class="k">Navigation position</td><td><code>active</code> — only for "where am I", never for record selection</td><td class="no">—</td></tr>
+    <tr><td class="k">Access</td><td><code>role</code> on a component that owns actions + <code>roles</code> on each action/item entry — resolved by <code>roleAllows()</code> from <code>core/RoleGate</code></td><td class="no">wrap in <code>&lt;RoleGate&gt;</code> for whole regions</td></tr>
+    <tr><td class="k">Theme</td><td><code>data-theme="light" | "dark"</code> on an ancestor — omit it to follow the OS</td><td class="no"><code>dark</code> as an explicit override</td></tr>
+  </tbody>
+</table>
+
+<div class="cap">State props — the same five everywhere</div>
+<p class="lead">Every component that shows data takes these. Precedence is fixed: <b>error → loading → empty → content</b>, so a failed fetch never reads as an empty region.</p>
+<table>
+  <thead><tr><th>Prop</th><th>Means</th><th>Renders</th></tr></thead>
+  <tbody>
+    <tr><td class="k"><code>loading</code></td><td>Content in flight</td><td>the matching <code>Loading</code> shape, in place, keeping the surrounding chrome</td></tr>
+    <tr><td class="k"><code>empty</code></td><td>Nothing to show, and that's expected</td><td>string → a muted line · node → your <code>EmptyState</code> with its action</td></tr>
+    <tr><td class="k"><code>error</code></td><td>The fetch or action failed</td><td>string/true → <code>ErrorState</code> with <code>onRetry</code> · node → as given</td></tr>
+    <tr><td class="k"><code>disabled</code></td><td>Present but not actionable — role, lock, or parent state</td><td>muted, inert, still readable</td></tr>
+    <tr><td class="k"><code>busy</code></td><td>This record's own action is committing</td><td>spinner on the primary action; the rest locks</td></tr>
+  </tbody>
+</table>
+
+<div class="cap">Where a component lives</div>
+<p class="lead">Families are named after the <b>shape</b> of what they hold, not the domain they serve — <code>data/</code> is anything that displays records, <code>core/</code> anything shape-only. The one exception is <code>workflow/</code>, the approval layer that genuinely knows what a request, approval and audit entry are. If a component would work unchanged in a product that has no approvals, it does not belong there.</p>
+<div class="rule"><div class="ic"><i class="ph-bold ph-folders"></i></div><div><b>Shape-based families, one domain family</b><span>Aug 2026: <code>erp/</code> was retired. Its 9 domain-bound pieces moved to <code>workflow/</code>; the 9 shape-generic ones (RecordCard, KanbanBoard/Card, TaskCard, ApprovalCard, PersonCard, OrgTree, BulkActionToolbar, DocumentPreview) to <code>data/</code>; <code>RoleGate</code> to <code>core/</code>. Folder moves don't change the runtime namespace — every component is still reached flat off the bundle.</span></div></div>
+<div class="rule"><div class="ic"><i class="ph-bold ph-cards"></i></div><div><b>A component is not done until its card shows its states</b><span>Shipping in the bundle is half of it. Without a specimen showing variants and states, the next person re-invents the component in their page — which is exactly how the scaffold accumulated eleven local parts.</span></div></div>
+
+<div class="cap">Decisions on record</div>
+<p class="lead">Where two components could do one job, the call is written down here so it isn't re-litigated per module.</p>
+<table>
+  <thead><tr><th>Question</th><th>Decision</th></tr></thead>
+  <tbody>
+    <tr><td class="k">Read-only fields — <code>FormSection</code> variant or its own component?</td><td>Its own: <code>DetailSection</code> + <code>DetailList</code>. A form section owns labels, validation and focus order; a detail section owns copyable values and an edit hand-off. One component doing both would carry two contracts.</td></tr>
+    <tr><td class="k">Dated label/value cards — <code>AuditTrail</code> variant?</td><td>No. AuditTrail is chronological and actor-driven; education/employment history is a set of label/value pairs. Those use <code>DetailList layout="row"</code>.</td></tr>
+    <tr><td class="k">Tracker cards, support options, settings choices</td><td>One <code>OptionRow</code> with <code>variant="card" | "row"</code>. <code>ActionTile</code> stays separate: it is a landing-page entry point, not a row in a list.</td></tr>
+    <tr><td class="k">One figure — <code>StatCard</code> or <code>QuickStats</code>?</td><td>QuickStats when clicking filters a records region below it. StatCard everywhere else. The strip is a filter that happens to summarise; the card is a figure.</td></tr>
+    <tr><td class="k">Event colours in agenda views</td><td><code>EventRow</code> takes the shared <code>tone</code> vocabulary. No module maps event types to raw colours.</td></tr>
+    <tr><td class="k">Nav overlay drawer</td><td><code>NavRail overlay</code> owns its scrim and slide-in panel. Hosts never wrap the rail in their own drawer.</td></tr>
+    <tr><td class="k">Stub screens</td><td><code>EmptyState</code>. There is no placeholder-page component.</td></tr>
+    <tr><td class="k">Attendance grid (year × month day cells)</td><td><b>Decided Aug 2026 — stays scaffold-local.</b> It is neither a <code>Heatmap</code> (which is a chart with a value scale) nor a <code>Calendar</code> (which is keyed to records). Promote it as <code>AttendanceGrid</code> when a second module needs it; one consumer is not yet a pattern.</td></tr>
+    <tr><td class="k">AI assistant composer (suggestion chips + prompt field)</td><td><b>Decided Aug 2026 — stays scaffold-local.</b> Its shape is still moving and it appears once. Revisit when a second surface needs a prompt field.</td></tr>
+    <tr><td class="k">Three pill tracks with three sets of values</td><td><b>Resolved Sep 2026.</b> All three (<code>TabsStrip variant="segmented"</code>, <code>SegmentedControl</code>, <code>PageTitleBar</code>'s own) now share one bed (<code>--agni-neutral-100</code>), one active state (<code>bg-action-brand</code>, literal <code>#fff</code> label) and one count/badge treatment. PageTitleBar's view-mode switcher keeps its own 32px square button size — a deliberate sizing difference for icon-only targets, not a leftover divergence.</td></tr>
+    <tr><td class="k"><code>Panel</code>'s state props on the sheet and drawer variants</td><td><b>Decided Aug 2026: all three variants.</b> The dispatcher resolves the body once through <code>resolvePanelBody()</code> and hands it down, so <code>PanelBase</code>, <code>Sheet</code> and <code>Drawer</code> cannot drift. Two rules came out of it: the <b>header stays in every state</b>, because an overlay must always be closable; and <b><code>error</code> / <code>loading</code> withhold the footer</b>, since a sticky Save above an <code>ErrorState</code> offers an action that cannot be performed. <code>empty</code> keeps its footer — the action beside an empty body is usually the way out of it. Previously the four props were documented inline-only and were silently dropped by the overlays.</td></tr>
+    <tr><td class="k">Default appearance — light, or the operating system's?</td><td><b>Decided Aug 2026: the OS.</b> An unattributed document follows <code>prefers-color-scheme</code>; <code>data-theme="light" | "dark"</code> on any element overrides it for that subtree. Specimen cards pin <code>light</code> on <code>&lt;html&gt;</code> so their light halves stay light on a dark-mode machine.</td></tr>
+  </tbody>
+</table>
+
+<div class="cap">Status vocabularies — two, on purpose</div>
+<p class="lead">A record's <b>approval state</b> and a task's <b>progress</b> are different questions, so they keep different words. Decided Aug 2026: keep both, and pick by what the surface is about. Never mix strings from the two columns in one control.</p>
+<table>
+  <thead><tr><th>Vocabulary</th><th>Strings</th><th>Use it when</th></tr></thead>
+  <tbody>
+    <tr><td class="k">Record status</td><td><code>Pending</code> · <code>In Review</code> · <code>Approved</code> · <code>Rejected</code> · <code>On Hold</code></td><td>The question is <b>has this been decided?</b> — list views, record detail, approval queues, <code>RecordCard preset="approval"</code>, <code>ApprovalStepper</code>.</td></tr>
+    <tr><td class="k">Work status</td><td><code>Yet to start</code> · <code>In progress</code> · <code>Overdue</code> · <code>Completed</code> · <code>Rejected</code></td><td>The question is <b>how far along is it?</b> — the kanban board, assigned tasks, <code>RecordCard preset="task"</code>, Gantt bars.</td></tr>
+  </tbody>
+</table>
+<div class="rule"><div class="ic"><i class="ph-bold ph-arrows-left-right"></i></div><div><b>The board's first column is the seam</b><span>The kanban board's <code>Approvals</code> lane holds records still in the <b>record</b> vocabulary — they have not become work yet. Everything to its right is work status. That single lane is where the two vocabularies meet, and it is the only place both appear on one screen.</span></div></div>
+<div class="rule"><div class="ic"><i class="ph-bold ph-palette"></i></div><div><b>Both resolve through one tone map</b><span><code>Tag status="…"</code> accepts either vocabulary and resolves the tone itself. No module maps a status string to a colour — that is why the two sets can coexist without drifting apart visually.</span></div></div>
+
+<div class="cap">Role gating — who owns the check</div>
+<p class="lead">One rule: <b>a component takes <code>role</code> when it owns actions the viewer may not be allowed to perform.</b> Everything else is gated at the call site with <code>RoleGate</code>. Omitting <code>roles</code> on an entry means every role; omitting <code>role</code> on the component means show everything.</p>
+<div class="rule"><div class="ic"><i class="ph-bold ph-user-gear"></i></div><div><b>Withheld means absent, not disabled</b><span>A bulk action, an action column or a nav page the role cannot use is not rendered. A disabled control still tells the viewer the capability exists and invites a support ticket. The exception is <code>Tabs</code>, where a disabled tab with "Not available for your role" keeps the strip's shape.</span></div></div>
+<div class="rule"><div class="ic"><i class="ph-bold ph-lock-open"></i></div><div><b>An absent role means ungated</b><span><code>roleAllows("")</code> returns <b>true</b>. A component whose <code>role</code> was never threaded through shows everything, so adding <code>roles</code> metadata to an array can never quietly remove actions from a page that does not gate — the failure would be silent, and silent is the one thing a gate must not be. This gates <i>visibility</i>; the server authorises.</span></div></div>
+<div class="rule"><div class="ic"><i class="ph-bold ph-git-fork"></i></div><div><b>One predicate, seven components</b><span><code>DropdownMenu</code> · <code>BulkActionToolbar</code> · <code>PageControls</code> · <code>DataTable</code> · <code>StageList</code> · <code>NavRail</code> · <code>RecordDetailModal</code> all call <code>roleAllows(role, allow, deny)</code>, which <code>RoleGate</code> itself uses — so the check exists once. Components that render a single unit (<code>ActionTile</code>, <code>OptionRow</code>, <code>AttachmentRow</code>, <code>EventRow</code>) stay call-site gated.</span></div></div>
+<div class="rule"><div class="ic"><i class="ph-bold ph-warning-diamond"></i></div><div><b><code>role</code> is overloaded — mind which one</b><span>On the seven above it means <i>access</i>. On <code>PersonCard</code> and <code>ApprovalStep</code> it means <i>job title</i>. Those two predate the access contract and are not renamed, because a person's role genuinely is their role.</span></div></div>
+
+<div class="cap">Pairs — which one to reach for</div>
+<div class="pair">
+  <div><h4>FilterPanel</h4><p>Facets. A funnel popover of multi-select option pills. Quick narrowing, no syntax to learn. Mounts inside <code>PageControls</code>.</p></div>
+  <div><h4>FilterBuilder</h4><p>Rules. AND-chained <code>field · operator · value</code> rows for precise or saved queries. Also mounts inside <code>PageControls</code>.</p></div>
+  <div><h4>EmptyState</h4><p>Nothing here, and that's fine. Says what creates the first item. Never a bare illustration.</p></div>
+  <div><h4>ErrorState</h4><p>Something failed. Says what, offers the way back — message, technical detail, retry.</p></div>
+  <div><h4>DataTable</h4><p>Read, sort, select. The default records view.</p></div>
+  <div><h4>EditableTable</h4><p>Inline add / edit / delete under fixed columns — line items inside a form.</p></div>
+  <div><h4>RecordCard</h4><p>Any record as a card: <code>preset</code> kanban · approval · task. One contract for all three.</p></div>
+  <div><h4>PersonCard</h4><p>A crew member. Deliberately separate — a person is not a record.</p></div>
+  <div><h4>PageTitleBar</h4><p>Page identity: title, scope tabs with counts. Owns the view switcher when both are on screen.</p></div>
+  <div><h4>PageControls</h4><p>Acting on the records: search, filters, sort, columns, bulk selection, pagination.</p></div>
+</div>
+
+<div class="cap">Record contract</div>
+<p class="lead">One record shape flows through the whole stack — <code>DataTable</code> rows, <code>RecordCard</code> presets and <code>RecordDetailModal</code>. <code>normalizeRecord()</code> accepts the legacy field names (<code>owner</code> → <code>requestedBy</code>, <code>group</code> → <code>requestedFor</code>, <code>lane</code> → <code>status</code>, <code>type</code> → <code>requestType</code>, <code>raisedOn</code> → <code>date</code>), so older data doesn't need reshaping at the call site.</p>
+
+</body></html>

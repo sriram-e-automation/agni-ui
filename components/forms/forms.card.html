@@ -1,0 +1,103 @@
+<!-- @dsCard group="Forms" viewport="760x720" name="Forms — inputs & controls" subtitle="Input · Select (plain · multiple) · Textarea · Checkbox · Switch · Radio — by Variants · Sizes · States" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:20px;background:var(--surface-page)}.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:18px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.cap:first-child{margin-top:0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 24px;max-width:640px}.lbl{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);margin-bottom:8px}.col{display:flex;flex-direction:column;gap:10px}</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { Input, Select, Textarea, Checkbox, Switch, Radio, RadioGroup } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+function Demo(){
+  const [q,setQ]=React.useState("REC-2403");
+  const [cat,setCat]=React.useState("type-b");
+  const [chk,setChk]=React.useState(true);
+  const [sw,setSw]=React.useState(true);
+  const [rad,setRad]=React.useState("mine");
+  const [ta,setTa]=React.useState("Replacement needed before the next static fire.");
+  const [ms,setMs]=React.useState(["avionics","flight"]);
+  const TAGS=[{value:"avionics",label:"Avionics"},{value:"flight",label:"Flight critical"},{value:"ground",label:"Ground systems"},{value:"consumable",label:"Consumable"}];
+  return (<div>
+    {/* ── VARIANTS ── */}
+    <div className="cap">Variants — control types</div>
+    <div className="grid">
+      <div><div className="lbl">Input</div><div className="col">
+        <Input value={q} onChange={setQ} prefixIcon={<i className="ph ph-magnifying-glass"/>} placeholder="Search records"/>
+      </div></div>
+      <div><div className="lbl">Select</div><div className="col">
+        <Select value={cat} onChange={setCat} options={[{value:"type-a",label:"Type A"},{value:"type-b",label:"Type B"},{value:"type-c",label:"Type C"}]}/>
+      </div></div>
+      <div><div className="lbl">Checkbox &nbsp;·&nbsp; Switch</div><div className="col">
+        <Checkbox checked={chk} onChange={setChk} label="Notify on approval"/>
+        <Switch checked={sw} onChange={setSw} label="Auto-assign reviewer"/>
+      </div></div>
+      <div><div className="lbl">Radio group</div>
+        <RadioGroup value={rad} onChange={setRad} options={[{value:"all",label:"All records"},{value:"mine",label:"Assigned to me"},{value:"team",label:"My team"}]}/>
+      </div>
+      <div><div className="lbl">Textarea</div><div className="col">
+        <Textarea value={ta} onChange={setTa} rows={3} placeholder="Justification"/>
+      </div></div>
+      <div><div className="lbl">Select — removable chips</div><div className="col">
+        <Select multiple value={ms} onChange={setMs} options={TAGS} placeholder="Add tags"/>
+      </div></div>
+    </div>
+
+    {/* ── SIZES ── */}
+    <div className="cap">Sizes — sm · md · lg</div>
+    <div className="grid">
+      <div><div className="lbl">Input</div><div className="col">
+        <Input size="sm" value="Small" onChange={()=>{}}/>
+        <Input size="md" value="Medium" onChange={()=>{}}/>
+        <Input size="lg" value="Large" onChange={()=>{}}/>
+      </div></div>
+      <div><div className="lbl">Select</div><div className="col">
+        <Select size="sm" value="type-a" onChange={()=>{}} options={[{value:"type-a",label:"Small"}]}/>
+        <Select size="md" value="type-a" onChange={()=>{}} options={[{value:"type-a",label:"Medium"}]}/>
+        <Select size="lg" value="type-a" onChange={()=>{}} options={[{value:"type-a",label:"Large"}]}/>
+      </div></div>
+    </div>
+
+    {/* ── STATES ── */}
+    <div className="cap">States — default · filled · error · disabled · indeterminate</div>
+    <div className="grid">
+      <div><div className="lbl">Input</div><div className="col">
+        <Input value="" onChange={()=>{}} placeholder="Default (empty)"/>
+        <Input value="invalid@" onChange={()=>{}} error suffixIcon={<i className="ph ph-warning-circle"/>}/>
+        <Input value="" onChange={()=>{}} placeholder="Disabled" disabled/>
+      </div></div>
+      <div><div className="lbl">Select · Checkbox</div><div className="col">
+        <Select value="" onChange={()=>{}} placeholder="Empty / placeholder" options={["Group One","Group Two"]}/>
+        <Checkbox indeterminate onChange={()=>{}} label="Indeterminate"/>
+        <Checkbox checked={false} onChange={()=>{}} label="Error" error/>
+        <Checkbox checked={false} onChange={()=>{}} label="Disabled" disabled/>
+        <Radio checked={false} onChange={()=>{}} label="Error" error/>
+      </div></div>
+      <div><div className="lbl">Textarea</div><div className="col">
+        <Textarea value="" onChange={()=>{}} rows={2} placeholder="Default (empty)"/>
+        <Textarea value="Too short" onChange={()=>{}} rows={2} error/>
+        <Textarea value="Locked by your role" onChange={()=>{}} rows={2} disabled/>
+      </div></div>
+      <div><div className="lbl">Select</div><div className="col">
+        <Select multiple value={[]} onChange={()=>{}} options={TAGS} placeholder="Empty — click to open"/>
+        <Select multiple value={["avionics"]} onChange={()=>{}} options={TAGS} error/>
+        <Select multiple value={["ground","consumable"]} onChange={()=>{}} options={TAGS} disabled/>
+      </div></div>
+      <div><div className="lbl">Select — sizes & overflow</div><div className="col">
+        <Select multiple size="sm" value={["avionics"]} onChange={()=>{}} options={TAGS}/>
+        <Select multiple size="lg" value={["avionics","flight","ground","consumable"]} onChange={()=>{}} options={TAGS}/>
+      </div></div>
+    </div>
+    <p style={{font:"var(--fw-regular) var(--text-xs)/1.5 var(--font-sans)",color:"var(--text-tertiary)",maxWidth:"64ch",margin:"14px 0 0"}}>Every control takes the same three: <code>error</code> (red edge + error focus ring), <code>disabled</code> (muted, inert, still readable) and <code>size</code> (sm 32 / md 38 / lg 44). Chips wrap rather than scroll, so a Select grows downward — give it a full row when many values are likely.</p>
+    <div className="cap">Usage</div>
+    <pre style={{fontFamily:"var(--font-data)",fontSize:"var(--text-xs)",background:"var(--surface-soft)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:14,overflow:"auto"}}>{`<Input value={title} onChange={setTitle} placeholder="Short description" error={!title &amp;&amp; touched}/>
+<Select value={category} onChange={setCategory} options={CATEGORIES} placeholder="Select category"/>
+<Checkbox checked={notify} onChange={setNotify} label="Notify on approval"/>`}</pre>
+    <div className="cap">Responsive</div>
+    <p style={{font:"var(--fw-regular) var(--text-xs)/1.5 var(--font-sans)",color:"var(--text-tertiary)",maxWidth:"70ch",margin:0}}>Every control fills its container width and rides the density/scale tokens (control heights hit the 44px touch floor under 640px automatically) — none has a breakpoint of its own. What collapses with viewport is the <b>grid around them</b>: see <code>forms-advanced</code>/<code>form-field</code> field grids, which drop from 2-up to 1-up under <code>--field-min</code>.</p>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script></body></html>

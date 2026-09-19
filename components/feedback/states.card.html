@@ -1,0 +1,87 @@
+<!-- @dsCard group="Feedback" viewport="1000x1180" name="States — loading · empty · error" subtitle="The same three props on every core component: DataTable · Card · KanbanBoard · RecordCard · PageTitleBar · EmptyState · ErrorState" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:18px;background:var(--surface-page)}.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:22px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.cap:first-child{margin-top:0}.lbl{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);margin:0 0 8px}.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.g2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.note{font:var(--text-xs)/1.5 var(--font-sans);color:var(--text-tertiary);margin:8px 0 0}.note code{font-family:var(--font-data);background:var(--surface-soft);border-radius:4px;padding:1px 5px}</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const NS = window.AgniUIAgnikulERPDesignSystem_153d9e;
+const { DataTable, Card, KanbanBoard, RecordCard, PageTitleBar, EmptyState, ErrorState, Tag, Button } = NS;
+/* KanbanCard is an internal preset renderer — the public component is RecordCard. */
+const KanbanCard = (p) => <RecordCard preset="kanban" record={p} status={p.status} showStatus={p.showStatus} />;
+const COLS=[{key:"id",label:"Request",width:120},{key:"owner",label:"Raised by"},{key:"status",label:"Status",render:v=><Tag status={v}/>},{key:"date",label:"Created",align:"right"}];
+const ROWS=[
+  {id:"REQ-0184",owner:"Meera Krishnan",status:"In Review",date:"18 Jul 2026"},
+  {id:"REQ-0185",owner:"Rohit Sharma",status:"Approved",date:"17 Jul 2026"},
+  {id:"REQ-0186",owner:"Priya Nair",status:"Pending",date:"16 Jul 2026"},
+];
+const CARD={id:"REQ-0190",requestType:"Purchase request",date:"12 Jul 2026",requestedBy:"Meera Krishnan",requestedFor:"Agnibaan S-02",priority:"High",assignee:"Rohit Sharma",assignedOn:"13 Jul 2026"};
+const TABS=[{key:"all",label:"All requests",count:312},{key:"mine",label:"Raised by me",count:14},{key:"audit",label:"Audit",disabled:true}];
+
+function Demo(){
+  return (<div>
+    <div className="cap">DataTable — error takes precedence over loading, loading over empty</div>
+    <div className="g3">
+      <div><div className="lbl">loading</div><DataTable columns={COLS} rows={[]} loading loadingRows={4}/></div>
+      <div><div className="lbl">empty — node with an action</div><DataTable columns={COLS} rows={[]} empty={<EmptyState size="sm" bordered={false} icon="ph-tray" title="No requests yet" message="Raise the first one and it lands here." action={<Button category="primary" size="sm" icon={<i className="ph ph-plus"/>}>New request</Button>}/>}/></div>
+      <div><div className="lbl">error + onRetry</div><DataTable columns={COLS} rows={[]} error="The request service didn't respond in time." onRetry={()=>{}}/></div>
+    </div>
+    <p className="note">The header stays in every state, so column widths never jump. <code>emptyText</code> still works — <code>empty</code> supersedes it and accepts a node.</p>
+
+    <div className="cap">Card — body states, header intact</div>
+    <div className="g3">
+      <div><div className="lbl">loading</div><Card title="Approvals" subtitle="This week" loading loadingShape="stat"/></div>
+      <div><div className="lbl">empty</div><Card title="Approvals" subtitle="This week" empty="Nothing awaiting you"/></div>
+      <div><div className="lbl">error</div><Card title="Approvals" subtitle="This week" error="Couldn't reach the approvals service." onRetry={()=>{}}/></div>
+    </div>
+
+    <div className="cap">KanbanBoard — board loading · per-lane empty · lane error</div>
+    <div className="g2">
+      <div><div className="lbl">loading — skeleton cards, count pills held</div>
+        <div style={{height:330,display:"flex"}}><KanbanBoard columns={["Approvals","Yet to start"]} board={{}} visibleLanes={2} loading loadingCards={2}/></div></div>
+      <div><div className="lbl">empty per lane + one lane failed</div>
+        <div style={{height:330,display:"flex"}}><KanbanBoard columns={["Approvals","Yet to start"]} board={{Approvals:[]}} visibleLanes={2}
+          empty={{"Approvals":"Nothing to approve"}} laneErrors={{"Yet to start":"Assignments didn't load."}} onRetry={()=>{}}/></div></div>
+    </div>
+
+    <div className="cap">KanbanCard — busy · disabled · selected</div>
+    <div className="g3">
+      <div><div className="lbl">busy — action in flight</div><KanbanCard status="Approvals" {...CARD} assignee={null} assignedOn={null} busy/></div>
+      <div><div className="lbl">disabled — viewer role</div><KanbanCard status="Approvals" {...CARD} assignee={null} assignedOn={null} disabled/></div>
+      <div><div className="lbl">selected</div><KanbanCard status="Yet to start" {...CARD} selected/></div>
+    </div>
+
+    <div className="cap">PageTitleBar — counts arriving · disabled scope</div>
+    <div style={{background:"var(--surface-card)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-lg)",padding:"14px 16px",marginBottom:14}}>
+      <PageTitleBar title="Requests" icon="ph-file-text" tabs={TABS} tab="all" onTabChange={()=>{}} countsLoading actions={null}/>
+    </div>
+    <div style={{background:"var(--surface-card)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-lg)",padding:"14px 16px"}}>
+      <PageTitleBar title="Requests" icon="ph-file-text" tabs={TABS} tab="all" onTabChange={()=>{}} actions={null}/>
+    </div>
+    <p className="note">Placeholder pills hold the tabs' width while counts load; <code>Audit</code> shows a scope this role can't open.</p>
+
+    <div className="cap">EmptyState &amp; ErrorState — one pair, three sizes</div>
+    <div className="g2">
+      <div><div className="lbl">EmptyState — sm (panels) · bordered=false</div><div style={{background:"var(--surface-card)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-lg)"}}><EmptyState size="sm" bordered={false} icon="ph-bell" title="No notifications" message="You're all caught up."/></div></div>
+      <div><div className="lbl">ErrorState — sm · detail · retry</div><div style={{background:"var(--surface-card)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-lg)"}}><ErrorState size="sm" bordered={false} message="The records service returned an error." detail="500 · req_9f2c14" onRetry={()=>{}}/></div></div>
+      <div><div className="lbl">EmptyState — md (default)</div><EmptyState icon="ph-tray" title="No requests yet" message="Raised requests appear here." action={<Button category="primary" size="sm" icon={<i className="ph ph-plus"/>}>New request</Button>}/></div>
+      <div><div className="lbl">ErrorState — md (default)</div><ErrorState message="We couldn't load your requests." detail="TIMEOUT · req_41ab08" onRetry={()=>{}} action={<Button category="tertiary" size="md">Contact support</Button>}/></div>
+    </div>
+    <div className="cap">Usage</div>
+    <pre style={{fontFamily:"var(--font-data)",fontSize:"var(--text-xs)",background:"var(--surface-card)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:14,overflow:"auto"}}>{`<DataTable columns={columns} rows={rows}
+  loading={loading} loadingRows={6}
+  error={error} onRetry={refetch}
+  empty={!rows.length &amp;&amp; <EmptyState icon="ph-tray" title="No requests yet" action={<Button onClick={openForm}>New request</Button>}/>}/>`}</pre>
+    <div className="cap">Responsive</div>
+    <p style={{font:"var(--fw-regular) var(--text-xs)/1.5 var(--font-sans)",color:"var(--text-tertiary)",maxWidth:"74ch",margin:0}}>The precedence (error → loading → empty → content) and the three props are identical at every breakpoint — nothing here is size-gated. What changes with viewport is the shape underneath: DataTable's own loading skeleton recomputes its column count for the visible columns, and EmptyState/ErrorState drop to <code>size="sm"</code> inside any panel narrower than ~320px so the icon and message stay proportional.</p>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script>
+</body></html>

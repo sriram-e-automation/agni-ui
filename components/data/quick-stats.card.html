@@ -1,0 +1,40 @@
+<!-- @dsCard group="Data" viewport="1080x620" name="QuickStats — click-to-filter strip" subtitle="Rest · selected · accent tones · share pills · one-card and six-card strips" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8"><title>QuickStats</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:20px;background:var(--surface-page)}.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:20px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.cap:first-child{margin-top:0}.lbl{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);margin:0 0 8px}.note{font:var(--fw-regular) var(--text-xs)/1.5 var(--font-sans);color:var(--text-tertiary);margin:6px 0 0;max-width:60ch}.row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}.dk{background:var(--surface-page);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:14px}</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { QuickStats } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+const ITEMS=[{key:null,icon:"ph-stack",label:"All records",value:"28",accent:"var(--text-brand)"},{key:"status:Pending",icon:"ph-clock",label:"Pending",value:"08",accent:"var(--status-warning)"},{key:"status:In Review",icon:"ph-eye",label:"In review",value:"06",accent:"var(--status-info)"},{key:"status:Approved",icon:"ph-check-circle",label:"Approved",value:"11",accent:"var(--status-success)"},{key:"status:Rejected",icon:"ph-x-circle",label:"Rejected",value:"03",accent:"var(--status-error)"}];
+function Demo(){
+  const [a,setA]=React.useState(null);
+  const [b,setB]=React.useState("status:Pending");
+  const [c,setC]=React.useState(null);
+  return (<div>
+    <div className="cap">States</div>
+    <div className="lbl">Rest — nothing selected (the "all" card is the neutral position)</div>
+    <div style={{marginBottom:18}}><QuickStats items={ITEMS} value={a} onChange={setA}/></div>
+    <div className="lbl">Selected — one card active, filtering the list below it</div>
+    <div style={{marginBottom:18}}><QuickStats items={ITEMS} value={b} onChange={setB}/></div>
+    <p className="note">Clicking the active card again clears the filter (emits <code>null</code>). The strip is the only filter control that is also a summary — keep it to 4–6 cards so it stays scannable.</p>
+    <div className="cap">Share pills — showShare</div>
+    <QuickStats items={ITEMS} value={c} onChange={setC} showShare/>
+    <p className="note">Each card shows its share of the <code>key:null</code> card's total. Use when proportion matters more than raw count.</p>
+    <div className="cap">Accent tones</div>
+    <div className="lbl">Tones come from status tokens, not ad-hoc colour — so they theme with the rest of the system</div>
+    <QuickStats items={[{key:null,icon:"ph-briefcase",label:"Open",value:"42",accent:"var(--text-brand)"},{key:"a",icon:"ph-hourglass",label:"Blocked",value:"04",accent:"var(--status-blocked)"},{key:"b",icon:"ph-pause-circle",label:"On hold",value:"02",accent:"var(--status-pending)"}]} value={null} onChange={()=>{}}/>
+    <div className="cap">Usage</div>
+    <pre style={{fontFamily:"var(--font-data)",fontSize:"var(--text-xs)",background:"var(--surface-page)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:14,overflow:"auto"}}>{`<QuickStats items={STATS} value={statFilter} onChange={setStatFilter} showShare/>`}</pre>
+    <div className="cap">Responsive</div>
+    <p className="note">The strip is a flex row that wraps its cards rather than scrolling — under narrow widths cards drop to a second line instead of shrinking below their minimum content width. Keep the strip to 4–6 cards precisely because a wrapped strip past that count reads as cluttered on tablet.</p>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script></body></html>

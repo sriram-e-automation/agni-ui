@@ -1,0 +1,239 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<title>AgniUI — Inventory Audit</title>
+<style>doc-page:not(:defined){visibility:hidden}
+body{font-family:Georgia,"Times New Roman",serif;color:#1a1a1a}
+h1{font-family:Arial,sans-serif;font-size:26px;margin:0 0 4px}
+.subtitle{font-family:Arial,sans-serif;color:#666;font-size:13px;margin:0 0 28px}
+h2{font-family:Arial,sans-serif;font-size:17px;margin:32px 0 6px;padding-bottom:4px;border-bottom:2px solid #222;break-after:avoid}
+h3{font-family:Arial,sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:#444;margin:18px 0 8px;break-after:avoid}
+p{font-size:13px;line-height:1.55;margin:0 0 10px}
+table{width:100%;border-collapse:collapse;margin:8px 0 16px;font-size:11.5px;break-inside:avoid}
+th{background:#f0f0f0;text-align:left;padding:5px 8px;border:1px solid #ccc;font-family:Arial,sans-serif;font-weight:700}
+td{padding:5px 8px;border:1px solid #ddd;vertical-align:top}
+code{font-family:"Courier New",monospace;font-size:11px;background:#f2f2f2;padding:1px 4px;border-radius:2px}
+pre{font-family:"Courier New",monospace;font-size:10.5px;background:#f5f5f5;border:1px solid #ddd;border-radius:4px;padding:10px;overflow:auto;line-height:1.4;break-inside:avoid}
+.tag-exists{color:#0a6b2e;font-weight:700}
+.tag-partial{color:#a56200;font-weight:700}
+.tag-absent{color:#a3221e;font-weight:700}
+.tag-unknown{color:#555;font-weight:700}
+.note{font-size:12px;color:#555;font-style:italic;margin:0 0 16px}
+ol{font-size:12px;line-height:1.6}
+li{margin-bottom:4px}
+</style>
+</head><body>
+<doc-page margin="0.85in">
+
+<h1>AgniUI — Inventory Audit</h1>
+<p class="subtitle">Design-system fundamentals reference: token architecture, component states, quality conventions, export &amp; code. Reported directly from project sources — nothing assumed or extended.</p>
+
+<p class="note">No numbered requirements document exists in <code>uploads/</code> to check specific section references against. Any such cross-reference is tagged <span class="tag-unknown">UNKNOWN</span> below.</p>
+
+<h2>Part A — Foundations</h2>
+
+<h3>A1–A3 · Token layer, tiers, naming</h3>
+<p><span class="tag-exists">EXISTS</span> — every component reads CSS custom properties (Tailwind utilities resolving to <code>var(--token)</code>, or raw <code>var()</code> in a few exempted files); no hardcoded hex found in component logic.</p>
+<p>3 tiers, all <span class="tag-exists">EXISTS</span>: primitive (<code>brand.css</code>, 10 tokens) → semantic (<code>colors.css</code>, ~235 tokens, light+dark paired) → component (<code>components.css</code>, 90 tokens). Non-tiered token files: typography (21), spacing/density/z-index/breakpoints (78), layout/sizing (21), elevation+motion (13), charts (38), states/a11y (15). System total: <strong>727 tokens</strong>.</p>
+<p>Naming convention: <code>--&lt;domain&gt;-&lt;role&gt;[-&lt;modifier&gt;]</code>, kebab-case. Verbatim examples: <code>--agni-green-600</code>, <code>--surface-brand-soft</code>, <code>--button-primary-bg-hover</code>, <code>--text-tertiary</code>, <code>--z-dropdown</code>, <code>--density-control-h</code>, <code>--focus-ring-error</code>, <code>--chart-1-soft</code>, <code>--tone-done-fg</code>, <code>--border-control</code>.</p>
+
+<h3>A4 · Token table (representative — full flat table is ~470 rows)</h3>
+<table><tr><th>Tier</th><th>Token</th><th>Light</th><th>Dark</th><th>Used for</th><th>Tag</th></tr>
+<tr><td>primitive</td><td><code>--brand-primary</code></td><td>#3F7343</td><td>(same)</td><td>brand green source hex</td><td class="tag-exists">EXISTS</td></tr>
+<tr><td>semantic</td><td><code>--surface-page</code></td><td>#F6F7F6</td><td>#060B2E</td><td>page background</td><td class="tag-exists">EXISTS</td></tr>
+<tr><td>semantic</td><td><code>--surface-card</code></td><td>#FFFFFF</td><td>#0C1340</td><td>card background</td><td class="tag-exists">EXISTS</td></tr>
+<tr><td>semantic</td><td><code>--text-primary</code></td><td>#16191D</td><td>#EAEEF6</td><td>primary text</td><td class="tag-exists">EXISTS</td></tr>
+<tr><td>semantic</td><td><code>--status-success-text</code></td><td>#056B3E</td><td>#6FDDA0</td><td>status text ≥4.5:1</td><td class="tag-exists">EXISTS</td></tr>
+<tr><td>semantic</td><td><code>--border-control</code></td><td>#888E96</td><td>rgba(255,255,255,.36)</td><td>input/checkbox/radio edge</td><td class="tag-exists">EXISTS</td></tr>
+<tr><td>component</td><td><code>--button-primary-bg</code></td><td>chain → action.brand</td><td>re-resolves</td><td>Button primary fill</td><td class="tag-exists">EXISTS</td></tr>
+<tr><td>spacing</td><td><code>--space-4</code></td><td>16px × scale</td><td>N/A</td><td>structural gap/padding</td><td class="tag-exists">EXISTS</td></tr>
+<tr><td>radius</td><td><code>--radius-lg</code></td><td>12px</td><td>N/A</td><td>card corner radius</td><td class="tag-exists">EXISTS</td></tr>
+<tr><td>elevation</td><td><code>--shadow-xs</code></td><td>0 1px 2px rgba(16,24,40,.05)</td><td>0 1px 2px rgba(0,0,0,.40)</td><td>resting card shadow</td><td class="tag-exists">EXISTS</td></tr>
+<tr><td>focus</td><td><code>--focus-ring</code></td><td>2px surface + 4px #3F7343</td><td>recomputed vs dark brand</td><td>keyboard focus ring</td><td class="tag-exists">EXISTS</td></tr>
+<tr><td>typography</td><td><code>--text-base</code></td><td>14px</td><td>N/A</td><td>body floor size</td><td class="tag-exists">EXISTS</td></tr>
+</table>
+<p>All semantic tokens sampled had a paired dark value — no missing-dark-value gap found.</p>
+
+<h3>A5 · Where tokens live</h3>
+<p>CSS custom properties in <code>tokens/*.css</code>, <code>@import</code>ed by <code>styles.css</code> in a fixed order. Tailwind v4 layers on top via <code>tailwind/agniui.theme.css</code>'s <code>@theme inline</code>, re-exporting the same variables — Tailwind config holds no independent values. No Figma Variables exist.</p>
+
+<h3>A6 · Typography</h3>
+<table><tr><th>Role</th><th>Family</th><th>Size px</th><th>Weight</th><th>Line height</th><th>Letter spacing</th></tr>
+<tr><td>Display</td><td>Plus Jakarta Sans</td><td>48/36/28/22</td><td>700–800</td><td>1.2</td><td>−0.02em</td></tr>
+<tr><td>UI/body</td><td>Poppins</td><td>14 (base)</td><td>400–600</td><td>1.5</td><td>0</td></tr>
+<tr><td>Micro/eyebrow</td><td>Poppins</td><td>11</td><td>500</td><td>1</td><td>0.04–0.08em</td></tr>
+<tr><td>Data/numeric</td><td>IBM Plex Mono</td><td>12–14</td><td>400–600</td><td>1.5</td><td>0</td></tr>
+</table>
+
+<h3>A7–A8 · Spacing, density</h3>
+<p>Base unit <code>--u = 4px</code>. Full scale: 0, 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80px. Row height <code>--density-row-h</code>: 48/36/56px (comfortable/compact/spacious, ×scale). Field height <code>--density-control-h</code>: 38/34/44px, floored to 44px under 640px viewport regardless of density. Cell padding <code>--density-cell-pad</code>: 12/8/16px. Density: <span class="tag-exists">EXISTS</span>, 3 modes via <code>data-density</code>, default comfortable.</p>
+
+<h3>A9 · Iconography</h3>
+<p>Phosphor Icons, confirmed. Weights in use: <code>ph</code> (regular), <code>ph-bold</code>, <code>ph-fill</code>. <code>ph-duotone</code> is claimed in readme prose but not found in use — <span class="tag-partial">PARTIAL</span>. Weight-to-meaning rule <span class="tag-exists">EXISTS</span> (documented in readme).</p>
+
+<h2>Part B — Components</h2>
+
+<h3>B1 · Component inventory (sample of 129)</h3>
+<table><tr><th>Component</th><th>Variants</th><th>Sizes</th><th>Light</th><th>Dark</th><th>Tag</th></tr>
+<tr><td>Button</td><td>category: primary/secondary/brand-soft/tertiary/ghost/danger; variant: solid/outline/ghost</td><td>sm/md/lg</td><td class="tag-exists">EXISTS</td><td class="tag-exists">EXISTS</td><td class="tag-exists">EXISTS</td></tr>
+<tr><td>Tag</td><td>variant: status/chip</td><td>sm/md</td><td class="tag-exists">EXISTS</td><td class="tag-exists">EXISTS</td><td class="tag-exists">EXISTS</td></tr>
+<tr><td>Panel</td><td>variant: inline/sheet/drawer</td><td>N/A</td><td class="tag-exists">EXISTS</td><td class="tag-exists">EXISTS</td><td class="tag-exists">EXISTS</td></tr>
+<tr><td>RecordCard</td><td>preset: kanban/approval/task</td><td>N/A</td><td class="tag-exists">EXISTS</td><td class="tag-exists">EXISTS</td><td class="tag-exists">EXISTS</td></tr>
+<tr><td>Input</td><td>N/A (no variant prop)</td><td>sm/md/lg</td><td class="tag-exists">EXISTS</td><td class="tag-exists">EXISTS</td><td class="tag-exists">EXISTS</td></tr>
+</table>
+
+<h3>B2 · State coverage (per component's own doc comment)</h3>
+<table><tr><th>Component</th><th>default</th><th>hover</th><th>focus-visible</th><th>active</th><th>disabled</th><th>loading</th><th>error</th><th>empty</th><th>selected</th><th>read-only</th></tr>
+<tr><td>Button</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>—</td><td>N/A</td><td>N/A</td><td>—</td></tr>
+<tr><td>Input</td><td>✓</td><td>—</td><td>✓ (undocumented as own state)</td><td>N/A</td><td>✓</td><td>—</td><td>✓</td><td>N/A</td><td>N/A</td><td>—</td></tr>
+<tr><td>Checkbox</td><td>✓</td><td>—</td><td>—</td><td>—</td><td>✓</td><td>—</td><td>✓</td><td>N/A</td><td>✓ (checked)</td><td>—</td></tr>
+<tr><td>DataTable</td><td>✓</td><td>—</td><td>—</td><td>—</td><td>—</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>—</td></tr>
+<tr><td>RecordCard</td><td>✓</td><td>✓</td><td>—</td><td>✓ (busy)</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>—</td></tr>
+<tr><td>Modal</td><td>✓ (open)</td><td>N/A</td><td>—</td><td>N/A</td><td>—</td><td>—</td><td>—</td><td>N/A</td><td>N/A</td><td>—</td></tr>
+<tr><td>NavRail</td><td>✓</td><td>—</td><td>—</td><td>✓ (nav position)</td><td>—</td><td>—</td><td>—</td><td>N/A</td><td>N/A</td><td>—</td></tr>
+<tr><td>Select</td><td>✓</td><td>—</td><td>—</td><td>—</td><td>✓</td><td>—</td><td>✓</td><td>✓</td><td>N/A</td><td>—</td></tr>
+<tr><td>RecordDetailModal</td><td>✓ (open)</td><td>N/A</td><td>—</td><td>N/A</td><td>—</td><td>✓</td><td>✓</td><td>—</td><td>N/A</td><td>✓</td></tr>
+<tr><td>Panel</td><td>✓ (open)</td><td>N/A</td><td>—</td><td>N/A</td><td>—</td><td>✓</td><td>✓</td><td>✓</td><td>N/A</td><td>—</td></tr>
+</table>
+<p>"—" means genuinely absent from that component's declared state list, not an assumption.</p>
+
+<h3>B3 · Prop interfaces</h3>
+<p><span class="tag-exists">EXISTS</span> for all 129 — every component has a <code>&lt;Name&gt;Props</code> TypeScript interface. None found visual-only.</p>
+<table><tr><th>Component</th><th>Prop names as defined</th><th>Visual-only?</th></tr>
+<tr><td>Button</td><td><code>category, variant, size, iconOnly, round, active, loading, disabled, items, icon, onClick, style</code></td><td>No</td></tr>
+<tr><td>Input</td><td><code>value, onChange, placeholder, type, size, prefixIcon, suffixIcon, error, disabled, style, inputStyle, className</code></td><td>No</td></tr>
+<tr><td>RecordCard</td><td><code>record, preset, status, selected, busy, disabled, loading, error, empty, onApprove, onReject, people</code></td><td>No</td></tr>
+</table>
+
+<h3>B4 · Appearance-axis vocabulary</h3>
+<p>System word: <code>variant</code> — used by Tag, Panel, Notice, Tabs, ConfirmModal, OptionRow, FileUpload, and most others. Confirmed inconsistencies: <strong>Button</strong> uses <code>category</code> for primary/secondary/danger plus a separate <code>variant</code> for solid/outline/ghost; <strong>RecordCard</strong> uses <code>preset</code> instead of <code>variant</code>. Both are acknowledged internally as legacy in <code>guidelines/rules/naming.card.html</code>, not corrected.</p>
+
+<h3>B5 · Pattern presence</h3>
+<table><tr><th>Pattern</th><th>Tag</th></tr>
+<tr><td>Data table</td><td class="tag-exists">EXISTS</td></tr>
+<tr><td>Form layout</td><td class="tag-exists">EXISTS</td></tr>
+<tr><td>Dialog/modal</td><td class="tag-exists">EXISTS</td></tr>
+<tr><td>Toast</td><td class="tag-exists">EXISTS</td></tr>
+<tr><td>Tabs</td><td class="tag-exists">EXISTS</td></tr>
+<tr><td>Status badge</td><td class="tag-exists">EXISTS</td></tr>
+<tr><td>Empty state</td><td class="tag-exists">EXISTS</td></tr>
+<tr><td>Filter bar</td><td class="tag-exists">EXISTS</td> (split: FilterPanel facets + FilterBuilder rules)</tr>
+<tr><td>Stepper</td><td class="tag-exists">EXISTS</td></tr>
+<tr><td>Side navigation</td><td class="tag-exists">EXISTS</td></tr>
+<tr><td>Page header</td><td class="tag-exists">EXISTS</td></tr>
+<tr><td>Audit/activity view</td><td class="tag-exists">EXISTS</td></tr>
+</table>
+
+<h3>B6 · Data table capabilities</h3>
+<table><tr><th>Capability</th><th>Tag</th></tr>
+<tr><td>Sort</td><td class="tag-exists">EXISTS</td></tr>
+<tr><td>Filter</td><td class="tag-exists">EXISTS</td> (composed, not native)</tr>
+<tr><td>Pagination</td><td class="tag-exists">EXISTS</td> (separate component, composed)</tr>
+<tr><td>Column resize</td><td class="tag-absent">ABSENT</td></tr>
+<tr><td>Column pin</td><td class="tag-absent">ABSENT</td></tr>
+<tr><td>Row selection</td><td class="tag-exists">EXISTS</td></tr>
+<tr><td>Select-all-across-pages</td><td class="tag-unknown">UNKNOWN</td> (consumer-wired)</tr>
+<tr><td>Inline edit</td><td class="tag-absent">ABSENT</td> on DataTable (exists on separate EditableTable)</tr>
+<tr><td>Virtualization</td><td class="tag-absent">ABSENT</td></tr>
+<tr><td>Saved views</td><td class="tag-absent">ABSENT</td></tr>
+<tr><td>Export</td><td class="tag-exists">EXISTS</td> (composed via PageControls/RecordTable)</tr>
+</table>
+
+<h3>B7 · Templates</h3>
+<p>1 full-page template: <code>templates/admin-ops</code> ("Desk App Scaffold"). Composes ShellHeader, ShellFooter, NavRail, WorkspacePane+PanelKit, AppSwitcher, PageHeader/PageTitleBar/PageControls, RecordTable, KanbanBoard, Calendar, GanttTimeline, StatsOverview, RecordDetailModal, RecordForm, plus two scaffold-local (non-DS) pieces kept deliberately local.</p>
+
+<h2>Part C — Quality and conventions</h2>
+
+<h3>C1–C2 · Contrast</h3>
+<p><span class="tag-exists">EXISTS</span> historically — a prior audit (now consolidated into <code>docs/Audit Findings.html</code>) recorded 41 pairs checked, passing, plus 6 fixed failures. Raw numeric ratios: <span class="tag-unknown">UNKNOWN</span> — only the pass/fail count survived consolidation. Light/dark checked separately per source comments; whether re-validated after every later token edit: <span class="tag-unknown">UNKNOWN</span>.</p>
+
+<h3>C3 · Focus</h3>
+<p><span class="tag-exists">EXISTS</span>. One shared token: <code>--focus-ring: 0 0 0 2px var(--surface-card), 0 0 0 4px var(--agni-green-600)</code> (error variant swaps to <code>--status-error</code>), on <code>:focus-visible</code>.</p>
+
+<h3>C4 · Keyboard/ARIA</h3>
+<p><span class="tag-partial">PARTIAL</span>. <code>Spinner</code> has <code>role="status" aria-label</code>; <code>Loading</code>/<code>LoadingOverlay</code> have <code>role="status" aria-busy aria-live</code>. No documented system-wide ARIA-role/keyboard-model table for menus, comboboxes, or dialogs.</p>
+
+<h3>C5–C6 · Documentation and versioning</h3>
+<p>Both <span class="tag-exists">EXISTS</span>. Guidelines cards document naming rules, merge decisions, patterns, and pairing rules (do/don't lists are thin per the prior audit). Versioning: <code>CHANGELOG.md</code>, per-component <code>@version</code> tags, <code>CONTRIBUTING.md</code>, <code>docs/Audit Findings.html</code>.</p>
+
+<h3>C7 · User-facing strings (verbatim, sample)</h3>
+<table><tr><th>Type</th><th>Strings</th></tr>
+<tr><td>Button</td><td>"New record", "Export", "Approve", "Cancel", "Delete", "Reject"</td></tr>
+<tr><td>Error</td><td>"The request service didn't respond in time.", "Couldn't reach the approvals service."</td></tr>
+<tr><td>Empty state</td><td>"No requests yet" / "Raised requests appear here."</td></tr>
+<tr><td>Status label</td><td>"Pending", "In Review", "Approved", "Rejected", "On Hold", "Yet to start", "In progress", "Overdue", "Completed"</td></tr>
+<tr><td>Confirmation</td><td>"Approve 3 requests", "Delete 3 requests"</td></tr>
+</table>
+
+<h3>C8 · Status labels</h3>
+<p><strong>Record status</strong> — Pending, In Review, Approved, Rejected, On Hold. <strong>Work status</strong> — Yet to start, In progress, Overdue, Completed, Rejected. "Rejected" is intentionally shared by both vocabularies (documented, not accidental). No other same-meaning duplicate found.</p>
+
+<h3>C9 · Naming consistency</h3>
+<p><span class="tag-partial">PARTIAL</span>. Consistent except: <code>Button.category</code> vs. the system-wide <code>variant</code>; <code>RecordCard.preset</code> vs. <code>variant</code>. The system's own merge table documents 12 historical naming fixes (e.g. Badge/StatusChip → Tag).</p>
+
+<h2>Part D — Export and code</h2>
+
+<h3>D1–D2 · What exports today</h3>
+<p>The compiled runtime bundle <code>_ds_bundle.js</code> (plain JS, no build step) + <code>_ds_manifest.json</code>, loaded via <code>&lt;script src&gt;</code>. <code>templates/repo-scaffold</code> is an <strong>unrun</strong> npm-package scaffold — no evidence it has been built or published. No PNG/PDF/Figma export exists. Output = React components + a CSS token file; no static HTML/CSS-only or design-file export.</p>
+
+<h3>D3–D4 · Styling approach, evidence</h3>
+<p>Tailwind v4 utilities over the CSS-custom-property layer; a named set of exemptions (charts, Loading's skeleton geometry, Cluster/Stack) stay inline-style by rule. No CSS Modules, no CSS-in-JS.</p>
+<pre>// components/core/Button.tsx (verbatim)
+export function Button({ items = null, iconOnly = false, round = false, active = false, ...p }: any) {
+  if (items && items.length) return &lt;SplitButton items={items} {...p} /&gt;;
+  if (iconOnly || round || active) {
+    const cat = p.variant || p.category || "ghost";
+    const v = cat === "solid" || cat === "outline" || cat === "ghost" ? cat
+      : cat === "primary" ? "solid" : cat === "secondary" ? "outline" : "ghost";
+    return (
+      &lt;IconButton icon={p.icon} variant={v} size={p.size} round={round} active={active}
+        disabled={p.disabled} title={p.title} tooltipSide={p.tooltipSide}
+        onClick={p.onClick} style={p.style} /&gt;
+    );
+  }
+  return &lt;ButtonBase {...p} /&gt;;
+}
+
+// components/forms/Input.tsx (verbatim, shell classes)
+const SHELL = "flex items-center gap-2 border rounded-md transition-[border-color,box-shadow] duration-fast ease-standard";
+const IDLE = "bg-surface-card border-[var(--input-bdr)] focus-within:border-line-brand focus-within:ring-focus";
+const ERROR = "bg-surface-card border-status-error focus-within:ring-focus-error";</pre>
+
+<h3>D5 · Token output (actual format)</h3>
+<pre>/* @ds-bundle: {"format":4,"namespace":"AgniUIAgnikulERPDesignSystem_153d9e",
+"components":[{"name":"BarChart","sourcePath":"components/charts/BarChart.tsx"},
+{"name":"ChartCard","sourcePath":"components/charts/ChartCard.tsx"}, … ]} */</pre>
+<p>No separate token export file (JSON/YAML/Style Dictionary) exists — tokens ship only as CSS. <span class="tag-partial">PARTIAL</span> relative to a standalone token artifact.</p>
+
+<h3>D6–D8 · Dependencies, language, structure</h3>
+<p>Confirmed dependencies: React 18.3.1, ReactDOM 18.3.1, Babel Standalone 7.29.0 (in-browser JSX transpile), Tailwind v4, <code>@phosphor-icons/web@2.1.1</code>. No Radix, Base UI, or Headless UI. Language: TypeScript (<code>.tsx</code> + <code>.d.ts</code> pairs); prop types present on all 129 components. Structure: <code>components/&lt;family&gt;/&lt;Component&gt;.tsx + .d.ts + &lt;group&gt;.card.html</code>; <code>tokens/*.css</code>; <code>templates/admin-ops/</code>; <code>templates/repo-scaffold/{src, .changeset, .github, package.json, vite.config.ts}</code> (unrun). No <code>dist/</code> build output exists.</p>
+
+<h2>Gap List</h2>
+<ol>
+<li>A4 — full flat token table (~470 rows) not rendered inline; representative rows only.</li>
+<li>A9 — <code>ph-duotone</code> claimed in readme, not found in use.</li>
+<li>B2 — Button has no documented error or read-only state.</li>
+<li>B2 — Input has no documented hover or loading state; focus not named as its own state.</li>
+<li>B2 — Checkbox/Radio/Switch have no documented hover/focus-visible/loading state.</li>
+<li>B2 — DataTable has no documented hover/focus-visible/active state despite CSS-level hover existing.</li>
+<li>B2 — RecordCard has no documented focus-visible or read-only state.</li>
+<li>B2 — Modal has no documented hover/focus/active/disabled/loading/error/empty/selected state.</li>
+<li>B2 — NavRail has no documented disabled/loading/error/empty/selected/read-only state.</li>
+<li>B2 — Select has no documented hover/focus-visible/active/selected/read-only state.</li>
+<li>B2 — RecordDetailModal has no documented hover/focus/active/selected state.</li>
+<li>B2 — Panel has no documented hover/focus/active/selected/read-only state.</li>
+<li>B6 — Column resize, column pin, virtualization, saved views all absent from DataTable.</li>
+<li>B6 — Select-all-across-pages unknown, depends on consumer wiring.</li>
+<li>B6 — Inline edit absent on DataTable specifically (lives on EditableTable).</li>
+<li>B4/C9 — Button.category and RecordCard.preset diverge from the system-wide variant convention.</li>
+<li>C1 — Raw numeric contrast ratios unknown (source audit doc consolidated).</li>
+<li>C2 — Whether dark-mode contrast was re-verified after every later token change is unknown.</li>
+<li>C4 — No system-wide documented ARIA-role/keyboard-model contract.</li>
+<li>C5 — Do/don't and when-not-to-use guidance is thin across most cards.</li>
+<li>D1 — templates/repo-scaffold is unrun/unbuilt; no evidence a package has been produced.</li>
+<li>D1 — No PNG/PDF/Figma export path exists.</li>
+<li>D5 — No standalone token export file; tokens exist only as CSS.</li>
+<li>General — every cross-reference to a numbered requirements document is unknown; no such document exists in uploads/.</li>
+</ol>
+
+</doc-page>
+<script src="./doc-page.js"></script>
+</body></html>

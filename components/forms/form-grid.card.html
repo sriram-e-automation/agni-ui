@@ -1,0 +1,98 @@
+<!-- @dsCard group="Spacing" viewport="900x640" name="Form layout — the field grid" subtitle="Panel anatomy · field rhythm · 2-up→1-up grid · mandatory markers — the --field-* / --sheet-* system" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<style>
+  body{margin:0;padding:22px;background:var(--surface-page);font-family:var(--font-sans);color:var(--text-primary)}
+  .wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+  h2{margin:0;font:var(--fw-bold) var(--text-xl)/1.2 var(--font-display);letter-spacing:var(--tracking-tight)}
+  .lead{margin:4px 0 0;font-size:var(--text-sm);color:var(--text-secondary);line-height:var(--leading-normal)}
+  .sec-h{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);margin:0 0 10px}
+  .card{background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:18px}
+  /* sheet anatomy */
+  .sheet{border:1px solid var(--border-default);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-md)}
+  .sheet .hd,.sheet .ft{padding:12px 16px;background:var(--surface-soft);font-size:var(--text-sm);font-weight:var(--fw-semibold);display:flex;align-items:center;gap:8px}
+  .sheet .hd{border-bottom:1px solid var(--border-subtle)}
+  .sheet .ft{border-top:1px solid var(--border-subtle);justify-content:flex-end;color:var(--text-tertiary);font-weight:var(--fw-regular)}
+  .sheet .bd{padding:14px 16px;font-size:var(--text-xs);color:var(--text-tertiary);background:repeating-linear-gradient(135deg,transparent,transparent 9px,var(--surface-soft) 9px,var(--surface-soft) 10px)}
+  .tag{margin-left:auto;font-family:var(--font-data);font-size:var(--text-2xs);color:var(--text-tertiary);font-weight:var(--fw-regular)}
+  /* field grid demo */
+  .fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(var(--field-min),1fr));gap:var(--field-gap) var(--field-col-gap)}
+  .f{display:flex;flex-direction:column;gap:var(--field-label-gap)}
+  .f .l{font-size:var(--text-sm);font-weight:var(--fw-medium);color:var(--text-secondary)}
+  .f .l .r{color:var(--required-mark);font-weight:var(--fw-bold);margin-left:2px}
+  .f .ctrl{height:38px;border:1px solid var(--input-bdr);border-radius:var(--radius-md);background:var(--input-bg)}
+  .span2{grid-column:1 / -1}
+  table{width:100%;border-collapse:collapse;font-size:var(--text-sm)}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--border-subtle)}
+  th{font-size:var(--text-2xs);text-transform:uppercase;letter-spacing:var(--tracking-wide);color:var(--text-tertiary)}
+  td code{font-family:var(--font-data);font-size:var(--text-xs);color:var(--text-brand);background:var(--surface-brand-soft);padding:1px 6px;border-radius:4px}
+  td .v{font-family:var(--font-data);font-size:var(--text-xs);color:var(--text-secondary)}
+  .rules{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .rule{display:flex;gap:9px;align-items:flex-start;font-size:var(--text-sm);color:var(--text-secondary);line-height:1.4}
+  .rule i{font-size:16px;flex-shrink:0;margin-top:1px}
+  .do i{color:var(--status-success)} .dont i{color:var(--status-error)}
+  @media(max-width:560px){.rules{grid-template-columns:1fr}}
+</style>
+</head><body>
+<div class="wrap">
+  <div>
+    <h2>Form layout — the field grid</h2>
+    <p class="lead">Every create/edit form is a single-column stack of titled sections inside a centred <strong>Panel</strong> that rises from the bottom. Dense sections use a 2-up field grid that collapses to one column on narrow viewports. The cadence is driven entirely by <code style="font-family:var(--font-data)">--field-*</code> and <code style="font-family:var(--font-data)">--sheet-*</code> tokens, so every form shares one rhythm.</p>
+  </div>
+
+  <!-- Panel anatomy -->
+  <div class="card">
+    <div class="sec-h">1 · Panel anatomy</div>
+    <div class="sheet">
+      <div class="hd"><i class="ph ph-plus"></i> Sticky header — title + close <span class="tag">--sheet-header-h 60px</span></div>
+      <div class="bd">Scrollable body — section stack, padded --sheet-pad-y / --sheet-pad-x (20 / 24)</div>
+      <div class="ft">Sticky footer — Save as draft · Submit <span class="tag" style="margin-left:8px">--sheet-footer-h 68px</span></div>
+    </div>
+    <p class="lead" style="margin-top:12px">Header and footer never scroll; only the body does. Max width is capped at <span class="v" style="font-family:var(--font-data);color:var(--text-secondary)">--sheet-max-w 880px</span> and centred, so the form stays readable on wide screens.</p>
+  </div>
+
+  <!-- Field grid -->
+  <div class="card">
+    <div class="sec-h">2 · Field grid — 2-up that collapses to 1-up</div>
+    <div class="fg">
+      <div class="f"><span class="l">Priority<span class="r">*</span></span><div class="ctrl"></div></div>
+      <div class="f"><span class="l">Category<span class="r">*</span></span><div class="ctrl"></div></div>
+      <div class="f span2"><span class="l">Site / location<span class="r">*</span></span><div class="ctrl"></div></div>
+      <div class="f"><span class="l">Quantity</span><div class="ctrl" style="width:140px"></div></div>
+    </div>
+    <p class="lead" style="margin-top:14px">Columns are <code style="font-family:var(--font-data)">repeat(auto-fit, minmax(var(--field-min), 1fr))</code> — they pack 2-up while there's room for a <span class="v" style="font-family:var(--font-data);color:var(--text-secondary)">--field-min 260px</span> column, then wrap to 1-up. Wide controls (textareas, tables, file zones, the user picker) span the full row with <code style="font-family:var(--font-data)">grid-column: 1 / -1</code>.</p>
+  </div>
+
+  <!-- Token reference -->
+  <div class="card">
+    <div class="sec-h">3 · Rhythm tokens</div>
+    <table>
+      <thead><tr><th>Token</th><th>Role</th><th>Default</th></tr></thead>
+      <tbody>
+        <tr><td><code>--field-label-gap</code></td><td>Label → control</td><td><span class="v">7px</span></td></tr>
+        <tr><td><code>--field-gap</code></td><td>Between stacked fields</td><td><span class="v">20px</span></td></tr>
+        <tr><td><code>--field-col-gap</code></td><td>Between columns (2-up)</td><td><span class="v">20px</span></td></tr>
+        <tr><td><code>--field-section-gap</code></td><td>Between titled sections</td><td><span class="v">28px</span></td></tr>
+        <tr><td><code>--field-min</code></td><td>Wrap point (2-up → 1-up)</td><td><span class="v">260px</span></td></tr>
+        <tr><td><code>--required-mark</code></td><td>Mandatory asterisk</td><td><span class="v">status-error</span></td></tr>
+      </tbody>
+    </table>
+    <p class="lead" style="margin-top:12px">All values tighten under <code style="font-family:var(--font-data)">[data-density="compact"]</code> and loosen under <code style="font-family:var(--font-data)">spacious</code>, matching the table density tokens.</p>
+  </div>
+
+  <!-- Rules -->
+  <div class="card">
+    <div class="sec-h">4 · Layout fundamentals</div>
+    <div class="rules">
+      <div class="rule do"><i class="ph-fill ph-check-circle"></i><span>Group fields into <strong>titled sections</strong>; separate them by <code style="font-family:var(--font-data)">--field-section-gap</code>, never ad-hoc margins.</span></div>
+      <div class="rule do"><i class="ph-fill ph-check-circle"></i><span>Mark every mandatory field with the <strong style="color:var(--required-mark)">*</strong> and repeat the legend in the footer.</span></div>
+      <div class="rule do"><i class="ph-fill ph-check-circle"></i><span>Let wide controls <strong>span the full row</strong>; keep short, related inputs side-by-side.</span></div>
+      <div class="rule do"><i class="ph-fill ph-check-circle"></i><span>Keep actions in the <strong>sticky footer</strong> — primary right, draft beside it, legend left.</span></div>
+      <div class="rule dont"><i class="ph-fill ph-x-circle"></i><span>Don't fix the grid to 2 columns — it must collapse below <code style="font-family:var(--font-data)">--field-min</code>.</span></div>
+      <div class="rule dont"><i class="ph-fill ph-x-circle"></i><span>Don't scroll the header or footer; only the body region scrolls.</span></div>
+    </div>
+  </div>
+</div>
+</body></html>

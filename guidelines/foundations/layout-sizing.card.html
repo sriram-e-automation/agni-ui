@@ -1,0 +1,174 @@
+<!-- @dsCard group="Layout" viewport="1120x1290" name="Layout — sizing & constraints" subtitle="Hug · Fill · Fixed per axis, min/max clamps, and pin constraints for overlay children" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;padding:28px 28px 32px;background:var(--surface-page);font-family:var(--font-sans);color:var(--text-primary)}
+  .eyebrow{font-size:var(--text-2xs);font-weight:var(--fw-semibold);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);margin:0 0 6px}
+  h1{font-family:var(--font-display);font-weight:var(--fw-semibold);letter-spacing:var(--tracking-tight);font-size:var(--text-2xl);margin:0}
+  h2{font-family:var(--font-display);font-weight:var(--fw-semibold);font-size:var(--text-md);margin:0 0 12px;display:flex;align-items:center;gap:8px}
+  .lead{font-size:var(--text-sm);color:var(--text-secondary);max-width:760px;margin:8px 0 0;line-height:var(--leading-normal)}
+  .section{margin-top:30px}
+  .mono{font-family:var(--font-data);font-size:var(--text-xs);color:var(--text-primary)}
+  .tri{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+  .tile{background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:14px 16px}
+  .tname{font-weight:var(--fw-semibold);font-size:var(--text-sm);display:flex;align-items:center;gap:7px}
+  .tname i{color:var(--text-brand);font-size:16px}
+  .tdesc{font-size:var(--text-xs);color:var(--text-tertiary);line-height:var(--leading-snug);margin-top:3px;min-height:30px}
+  .frame{margin-top:10px;border:1.5px dashed var(--border-default);border-radius:var(--radius-md);padding:10px;background:var(--surface-soft)}
+  .chipd{background:var(--surface-brand-soft);border:1px solid var(--action-brand);color:var(--text-brand);font-size:var(--text-xs);font-weight:var(--fw-semibold);border-radius:var(--radius-md);padding:6px 12px;text-align:center;white-space:nowrap}
+  .css{margin-top:10px;font-family:var(--font-data);font-size:var(--text-2xs);color:var(--text-secondary);background:var(--surface-soft);border:1px solid var(--border-subtle);border-radius:var(--radius-sm);padding:6px 9px}
+  .ruler{display:flex;align-items:center;gap:0;margin-top:6px;color:var(--text-tertiary)}
+  .ruler .tick{width:1px;height:9px;background:var(--border-strong)}
+  .ruler .line{height:1px;background:var(--border-strong);flex:0 0 auto}
+  .ruler .rl{font-family:var(--font-data);font-size:10px;padding:0 6px}
+  table{width:100%;border-collapse:collapse;background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);overflow:hidden;font-size:var(--text-sm)}
+  thead th{text-align:left;padding:9px 14px;background:var(--agni-green-50);color:var(--text-secondary);font-weight:var(--fw-semibold);font-size:var(--text-2xs);letter-spacing:var(--tracking-wide);text-transform:uppercase;border-bottom:1px solid var(--border-subtle)}
+  tbody td{padding:9px 14px;border-bottom:1px solid var(--border-subtle);color:var(--text-secondary);vertical-align:top}
+  tbody tr:last-child td{border-bottom:0}
+  td.k{font-weight:var(--fw-semibold);color:var(--text-primary);white-space:nowrap}
+  .clampdemo{display:flex;flex-direction:column;gap:8px}
+  .field{height:30px;border:1px solid var(--border-control);border-radius:var(--radius-md);background:var(--surface-card);display:flex;align-items:center;padding:0 10px;font-size:var(--text-xs);color:var(--text-tertiary)}
+  .cap{font-family:var(--font-data);font-size:10px;color:var(--text-tertiary);margin-top:3px}
+  .pins{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+  .cframe{position:relative;height:104px;border:1.5px dashed var(--border-default);border-radius:var(--radius-md);background:var(--surface-card)}
+  .pchip{width:36px;height:24px;background:var(--action-brand);border-radius:var(--radius-xs);position:absolute}
+  .pbar{background:var(--action-brand);border-radius:var(--radius-xs);position:absolute}
+  .edge{position:absolute;background:var(--status-warning)}
+  .pcap{text-align:center;margin-top:7px}
+  .pcap .pn{font-weight:var(--fw-semibold);font-size:var(--text-xs)}
+  .pcap .pc{font-family:var(--font-data);font-size:10px;color:var(--text-tertiary);margin-top:2px}
+  .guide{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .gcol{background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:14px 18px}
+  .ghead{display:flex;align-items:center;gap:8px;font-family:var(--font-display);font-weight:var(--fw-semibold);font-size:var(--text-md);margin-bottom:8px}
+  .ghead.do{color:var(--status-success)}
+  .ghead.dont{color:var(--status-error)}
+  .gli{display:flex;gap:9px;padding:6px 0;border-top:1px solid var(--border-subtle);font-size:var(--text-sm);color:var(--text-secondary);line-height:var(--leading-snug)}
+  .gli:first-of-type{border-top:0}
+  .gli i{font-size:16px;margin-top:1px;flex-shrink:0}
+  .gli.y i{color:var(--status-success)}
+  .gli.n i{color:var(--status-error)}
+  .gli b{color:var(--text-primary);font-weight:var(--fw-semibold)}
+</style></head><body>
+
+<p class="eyebrow">Foundations · Layout</p>
+<h1>Sizing &amp; constraints</h1>
+<p class="lead">Every element declares how it sizes on <b>each axis</b> — <b>hug</b> its content, <b>fill</b> its container, or stay <b>fixed</b> — plus optional <b>min / max clamps</b>. Elements that float over a surface (badges, close buttons, today-lines) use <b>constraints</b>: pinned edges inside a <span class="mono">position:relative</span> parent. Everything else flows in auto layout.</p>
+
+<!-- ░░ BEHAVIORS ░░ -->
+<div class="section">
+  <h2><i class="ph-bold ph-arrows-out-line-horizontal"></i>Width &amp; height behaviors</h2>
+  <div class="tri">
+    <div class="tile">
+      <div class="tname"><i class="ph ph-arrows-in-line-horizontal"></i>Hug contents</div>
+      <div class="tdesc">Sized by what's inside. Default for buttons, badges, chips, menu items.</div>
+      <div class="frame al-h"><span class="chipd w-hug">Approve request</span></div>
+      <div class="css">.w-hug · width: fit-content; flex: 0 0 auto</div>
+    </div>
+    <div class="tile">
+      <div class="tname"><i class="ph ph-arrows-out-line-horizontal"></i>Fill container</div>
+      <div class="tdesc">Takes the space left over. Panes, inputs in field grids, table wrappers.</div>
+      <div class="frame al-h" style="--gap:8px"><span class="chipd w-hug">Label</span><span class="chipd w-fill" style="text-align:center">fills →</span></div>
+      <div class="css">.w-fill / .grow · flex: 1 1 0; min-width: 0</div>
+    </div>
+    <div class="tile">
+      <div class="tname"><i class="ph ph-ruler"></i>Fixed</div>
+      <div class="tdesc">A token dimension. Chrome only — rails, bars, avatars, icon boxes.</div>
+      <div class="frame"><span class="chipd w-fixed" style="--w:160px;display:block">rail</span>
+        <div class="ruler" style="width:160px"><span class="tick"></span><span class="line" style="flex:1"></span><span class="rl">--w: 160px</span><span class="line" style="flex:1"></span><span class="tick"></span></div>
+      </div>
+      <div class="css">.w-fixed · width: var(--w); flex: 0 0 var(--w)</div>
+    </div>
+  </div>
+  <div style="margin-top:14px">
+  <table>
+    <thead><tr><th style="width:110px">Behavior</th><th>Width axis</th><th>Height axis</th><th>AgniUI default for</th></tr></thead>
+    <tbody>
+      <tr><td class="k">Hug</td><td><span class="mono">width: fit-content</span></td><td><span class="mono">height: fit-content</span></td><td>Buttons, badges, tags, chips, dropdown menus, tooltips</td></tr>
+      <tr><td class="k">Fill</td><td><span class="mono">flex: 1 1 0; min-width: 0</span></td><td>main axis <span class="mono">.grow</span> · cross axis <span class="mono">align-self: stretch</span></td><td>Content panes, inputs in field grids, table wrappers, shell content region</td></tr>
+      <tr><td class="k">Fixed</td><td><span class="mono">width: var(--rail-w) …</span></td><td><span class="mono">height: var(--bar-h) …</span></td><td>Rails (248/72/56), bars (60/40), avatars, icon boxes — always a token, never a magic number</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<!-- ░░ MIN / MAX ░░ -->
+<div class="section">
+  <h2><i class="ph-bold ph-arrows-horizontal"></i>Min &amp; max clamps</h2>
+  <div class="tri" style="grid-template-columns:0.9fr 1.1fr">
+    <div class="tile">
+      <div class="tname"><i class="ph ph-brackets-angle"></i>Clamped fill</div>
+      <div class="tdesc">Fill is never unbounded — clamp it so fields stay usable at both extremes.</div>
+      <div class="frame clampdemo">
+        <div><div class="field" style="width:160px">Search…</div><div class="cap">at --min-w-field · never thinner than 160</div></div>
+        <div><div class="field" style="width:70%">Search…</div><div class="cap">filling the container</div></div>
+        <div><div class="field" style="width:100%;max-width:480px">Search…</div><div class="cap">at --max-w-field · stops growing at 480</div></div>
+      </div>
+      <div class="css">.limits · style="--min-w:160px; --max-w:480px"</div>
+    </div>
+    <div class="tile">
+      <div class="tname"><i class="ph ph-list-numbers"></i>Canonical clamp tokens</div>
+      <div class="tdesc">One shared limit per element class — not per-screen numbers.</div>
+      <div style="margin-top:10px">
+      <table>
+        <thead><tr><th>Token</th><th style="width:90px">Value</th><th>Clamps</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">--min-w-control</td><td class="mono">64px</td><td>Buttons never collapse below</td></tr>
+          <tr><td class="mono">--min-w-field</td><td class="mono">160px</td><td>Inputs in wrapping field grids</td></tr>
+          <tr><td class="mono">--max-w-field</td><td class="mono">480px</td><td>A lone field stops growing</td></tr>
+          <tr><td class="mono">--max-w-prose</td><td class="mono">640px</td><td>Help / empty-state copy line length</td></tr>
+          <tr><td class="mono">--max-h-menu</td><td class="mono">320px</td><td>Dropdowns scroll past this</td></tr>
+          <tr><td class="mono">--max-h-modal</td><td class="mono">min(720px, 85vh)</td><td>Modal body scrolls past this</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ░░ CONSTRAINTS ░░ -->
+<div class="section">
+  <h2><i class="ph-bold ph-push-pin"></i>Constraints — pinned overlay children</h2>
+  <p class="lead" style="margin:0 0 14px">Only for elements <b>absolutely positioned inside a</b> <span class="mono">position:relative</span> <b>parent</b>: status dot on an avatar, close button in a modal, today-line in the Gantt, toast stack in the viewport. The pinned edge stays put as the parent resizes. Never use constraints for flow layout.</p>
+  <div class="pins">
+    <div><div class="cframe"><span class="edge" style="left:0;top:0;bottom:0;width:2px"></span><span class="pchip pin pin-left pin-top" style="--pin:8px"></span></div><div class="pcap"><div class="pn">Left</div><div class="pc">.pin-left · left: 8px</div></div></div>
+    <div><div class="cframe"><span class="edge" style="right:0;top:0;bottom:0;width:2px"></span><span class="pchip pin pin-right pin-top" style="--pin:8px"></span></div><div class="pcap"><div class="pn">Right</div><div class="pc">.pin-right · right: 8px</div></div></div>
+    <div><div class="cframe"><span class="edge" style="left:0;right:0;top:0;height:2px"></span><span class="pchip pin pin-top pin-center" style="--pin:8px;top:8px;transform:translateX(-50%)"></span></div><div class="pcap"><div class="pn">Top</div><div class="pc">.pin-top · top: 8px</div></div></div>
+    <div><div class="cframe"><span class="edge" style="left:0;right:0;bottom:0;height:2px"></span><span class="pchip pin pin-bottom pin-center" style="--pin:8px;top:auto;bottom:8px;transform:translateX(-50%)"></span></div><div class="pcap"><div class="pn">Bottom</div><div class="pc">.pin-bottom · bottom: 8px</div></div></div>
+    <div><div class="cframe"><span class="edge" style="left:0;top:0;bottom:0;width:2px"></span><span class="edge" style="right:0;top:0;bottom:0;width:2px"></span><span class="pbar pin pin-x pin-top" style="--pin:8px;height:24px;left:8px;right:8px"></span></div><div class="pcap"><div class="pn">Left + Right</div><div class="pc">.pin-x · stretches with parent</div></div></div>
+    <div><div class="cframe"><span class="pbar pin pin-scale" style="--pin-inset:15%"></span></div><div class="pcap"><div class="pn">Scale</div><div class="pc">.pin-scale · inset: 15%</div></div></div>
+  </div>
+</div>
+
+<!-- ░░ GUIDE ░░ -->
+<div class="section">
+  <div class="guide">
+    <div class="gcol">
+      <div class="ghead do"><i class="ph-fill ph-check-circle"></i>Do</div>
+      <div class="gli y"><i class="ph ph-check"></i><span><b>Hug</b> controls, <b>fill</b> content, <b>fix</b> chrome — and always fix with a token (<span class="mono">--rail-w</span>, <span class="mono">--bar-h</span>), never a magic number.</span></div>
+      <div class="gli y"><i class="ph ph-check"></i><span><b>Clamp every fill</b>: pair <span class="mono">flex: 1</span> with <span class="mono">min-width: 0</span> so tables and long IDs can't blow the pane open.</span></div>
+      <div class="gli y"><i class="ph ph-check"></i><span>Reserve <b>constraints for overlay children</b> — badge on avatar, close button, scrim (<span class="mono">.pin-x.pin-y</span>).</span></div>
+    </div>
+    <div class="gcol">
+      <div class="ghead dont"><i class="ph-fill ph-x-circle"></i>Don't</div>
+      <div class="gli n"><i class="ph ph-x"></i><span>Don't <b>fix widths on text-bearing elements</b> — labels are translated and IDs grow; hug or clamp instead.</span></div>
+      <div class="gli n"><i class="ph ph-x"></i><span>Don't use <b>absolute positioning for flow layout</b> — if it isn't floating over something, it belongs in auto layout.</span></div>
+      <div class="gli n"><i class="ph ph-x"></i><span>Don't let a <b>fill grow past its clamp</b> — a 1600px-wide input on a wide monitor is a bug, not a feature.</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="eyebrow">Rule · audited Aug 2026</div>
+  <h2><i class="ph-bold ph-ruler"></i>Spacing &amp; shrink floor</h2>
+  <p class="lead">Two rules enforced across all 118 component source files this pass.</p>
+  <div class="tri" style="margin-top:14px">
+    <div class="tile"><div class="tname"><i className="ph-bold ph-scan"></i>No hand-typed spacing</div><div class="tdesc">Every <span class="mono">gap</span>/<span class="mono">padding</span>/<span class="mono">margin</span> (and directional variants) reads a <span class="mono">--space-*</span> token, snapped to the nearest step on the scale — never a bare pixel number. Values under 4px (hairline/optical nudges, not layout spacing) are the one exception.</div></div>
+    <div class="tile"><div class="tname"><i className="ph-bold ph-arrows-in-line-horizontal"></i>Shrinkable children get <span class="mono">min-width:0</span></div><div class="tdesc">Any flex child with <span class="mono">flex:"1 …"</span> gets an explicit <span class="mono">min-width:0</span> floor, so it can shrink inside a crowded toolbar row instead of forcing an overflow — the same fix <span class="mono">.w-fill</span>/<span class="mono">.grow</span> already apply as utility classes.</div></div>
+    <div class="tile"><div class="tname"><i className="ph-bold ph-arrows-out-line-horizontal"></i>Max-width caps stay put</div><div class="tdesc">Existing caps (search boxes, popovers, summary cards) were left as-is — this pass didn't invent new ones. A component picks a container-query clamp or a viewport breakpoint based on where it actually sits, per the existing tokens above.</div></div>
+  </div>
+</div>
+
+</body></html>

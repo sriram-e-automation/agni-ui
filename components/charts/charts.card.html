@@ -1,0 +1,187 @@
+<!-- @dsCard group="Charts" viewport="960x1180" name="Charts — MUI X-compatible family" subtitle="Bar · Line/Area · Pie/Donut · Scatter · Sparkline · Gauge · Radar · Heatmap — themed SVG, animated entrance + hover, light+dark, plus loading/empty/error" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>
+  body{margin:0;padding:18px;background:var(--surface-page)}
+  .bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .ttl{font:var(--fw-semibold) var(--text-md)/1 var(--font-display);color:var(--text-primary)}
+  .lbl{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);margin:0 0 10px}
+  .card{background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:14px 16px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .span2{grid-column:1 / -1}
+  .toggle{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border-default);background:var(--surface-card);color:var(--text-secondary);border-radius:var(--radius-md);padding:7px 13px;font:var(--fw-medium) var(--text-sm)/1 var(--font-sans);cursor:pointer}
+  @media(max-width:620px){.grid{grid-template-columns:1fr}}
+</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const NS = window.AgniUIAgnikulERPDesignSystem_153d9e;
+const { BarChart, LineChart, PieChart, DonutChart, ScatterChart, SparkLineChart, Gauge, RadarChart, Heatmap, ChartCard, Button, Theme } = NS;
+const LINE_SERIES=[{ data:[18,24,21,30,27,34], label:"Requests", area:true, color:"var(--chart-2)" }];
+
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun"];
+const SCATTER = Array.from({length:22}, () => ({ x: Math.round(Math.random()*100), y: Math.round(Math.random()*100) }));
+// Heatmap: 7 days × 5 time-bands of activity
+const HEAT_X = ["M","T","W","T","F","S","S"], HEAT_Y = ["6am","10am","12pm","5pm","8pm"];
+const HEAT = [];
+for (let y=0;y<HEAT_Y.length;y++) for (let x=0;x<HEAT_X.length;x++) HEAT.push([x,y, Math.round(Math.random()*Math.random()*100)]);
+
+function Demo(){
+  const [dark,setDark] = React.useState(false);
+  React.useEffect(() => { document.body.style.background = "var(--surface-page)"; }, [dark]);
+  return (
+    <div data-theme={dark?"dark":undefined} style={{padding:4}}>
+      <div className="bar">
+        <span className="ttl">Chart family — MUI X-compatible API</span>
+        <button className="toggle" onClick={()=>setDark(d=>!d)}><i className={"ph "+(dark?"ph-sun":"ph-moon-stars")} /> {dark?"Light":"Dark"} mode</button>
+      </div>
+
+      <div style={{display:"flex",flexDirection:"column",gap:14}}>
+        {/* ChartCard first: it is the frame the other examples deliberately omit,
+            so the difference between framed and bare is visible on one screen. */}
+        <div>
+          <div className="lbl">ChartCard — the standard frame: title · subtitle · legend · actions</div>
+          <ChartCard title="Requests by month" subtitle="Apr – Sep 2025 · all modules"
+            legend={[{ label:"Raised", color:"var(--chart-2)" }, { label:"Approved", color:"var(--chart-1)" }]}
+            actions={<Button size="sm" category="tertiary" icon={<i className="ph ph-download-simple" />}>Export</Button>}>
+            <LineChart
+              xAxis={[{ data: MONTHS, scaleType:"point" }]}
+              series={[
+                { data:[18,24,21,30,27,34], label:"Raised", area:true, color:"var(--chart-2)" },
+                { data:[10,14,12,18,16,22], label:"Approved", color:"var(--chart-1)" },
+              ]} />
+          </ChartCard>
+          <p style={{font:"var(--fw-regular) var(--text-xs)/1.5 var(--font-sans)",color:"var(--text-tertiary)",maxWidth:"74ch",margin:"10px 0 0"}}>
+            Every chart on a dashboard goes in a ChartCard — it owns the title rhythm, the legend row and the action
+            slot so framing is identical across modules, and it keeps the legend outside the SVG where it can wrap.
+            The bare charts below are specimens, not a pattern to copy. Use <code>Card</code> for non-chart content.
+          </p>
+        </div>
+
+        <div className="card">
+          <div className="lbl">LineChart — multi-series + area (hover · toggle legend), unframed</div>
+          <LineChart
+            xAxis={[{ data: MONTHS, scaleType:"point" }]}
+            series={[
+              { data:[18,24,21,30,27,34], label:"Requests", area:true, color:"var(--chart-2)" },
+              { data:[10,14,12,18,16,22], label:"Approved", color:"var(--chart-1)" },
+            ]} />
+        </div>
+
+        <div className="grid">
+          <div className="card">
+            <div className="lbl">BarChart — grouped</div>
+            <BarChart
+              xAxis={[{ data:["Q1","Q2","Q3","Q4"], scaleType:"band" }]}
+              series={[{ data:[19,12,23,15], label:"Plan" }, { data:[14,17,20,11], label:"Actual" }]} />
+          </div>
+          <div className="card">
+            <div className="lbl">BarChart — stacked</div>
+            <BarChart
+              xAxis={[{ data:["Q1","Q2","Q3","Q4"], scaleType:"band" }]}
+              series={[
+                { data:[8,6,11,7], label:"Avionics", stack:"a" },
+                { data:[6,9,5,8], label:"Propulsion", stack:"a" },
+                { data:[4,3,7,5], label:"Structures", stack:"a" },
+              ]} />
+          </div>
+        </div>
+
+        <div className="grid">
+          <div className="card">
+            <div className="lbl">BarChart — horizontal</div>
+            <BarChart layout="horizontal"
+              xAxis={[{ data:["Avionics","Propulsion","Structures","Ground"], scaleType:"band" }]}
+              series={[{ data:[23,17,14,9], label:"Open" }]} />
+          </div>
+          <div className="card">
+            <div className="lbl">ScatterChart</div>
+            <ScatterChart series={[{ data: SCATTER, label:"Samples" }]} />
+          </div>
+        </div>
+
+        <div className="grid">
+          <div className="card">
+            <div className="lbl">PieChart — donut + legend</div>
+            <PieChart
+              series={[{ innerRadius:0.62, data:[
+                { label:"Approved", value:10, color:"var(--chart-1)" },
+                { label:"Pending", value:8, color:"var(--chart-3)" },
+                { label:"In review", value:7, color:"var(--chart-2)" },
+                { label:"Rejected", value:3, color:"var(--chart-6)" },
+              ]}]}
+              centerLabel="total" />
+          </div>
+          <div className="card">
+            <div className="lbl">PieChart — pie</div>
+            <PieChart series={[{ data:[
+              { label:"Type A", value:34 },{ label:"Type B", value:22 },
+              { label:"Type C", value:28 },{ label:"Type D", value:16 },
+            ]}]} />
+          </div>
+        </div>
+
+        <div className="grid">
+          <div className="card">
+            <div className="lbl">Gauge</div>
+            <div style={{display:"flex",gap:20,alignItems:"center",justifyContent:"space-around"}}>
+              <Gauge value={68} color="var(--chart-1)" />
+              <Gauge value={42} color="var(--chart-3)" />
+              <Gauge value={88} color="var(--chart-2)" />
+            </div>
+          </div>
+          <div className="card">
+            <div className="lbl">SparkLineChart — line + bar</div>
+            <div style={{display:"flex",flexDirection:"column",gap:14,justifyContent:"center",height:"100%"}}>
+              <div style={{display:"flex",alignItems:"center",gap:12}}>
+                <span style={{fontSize:"var(--text-xl)",fontWeight:"var(--fw-bold)",fontFamily:"var(--font-data)",color:"var(--text-primary)"}}>2,418</span>
+                <div style={{flex:1}}><SparkLineChart data={[12,18,14,22,19,26,30]} area color="var(--chart-1)" showTooltip /></div>
+              </div>
+              <div style={{display:"flex",alignItems:"center",gap:12}}>
+                <span style={{fontSize:"var(--text-xl)",fontWeight:"var(--fw-bold)",fontFamily:"var(--font-data)",color:"var(--text-primary)"}}>76%</span>
+                <div style={{flex:1}}><SparkLineChart data={[5,8,6,9,7,11,9]} plot="bar" color="var(--chart-2)" showTooltip /></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="grid">
+          <div className="card">
+            <div className="lbl">RadarChart — multi-series (hover vertex · toggle legend)</div>
+            <RadarChart
+              radar={{ metrics:["Thrust","Mass","ΔV","Reliability","Cost","Reuse"] }}
+              series={[
+                { label:"Agnibaan", data:[80,62,74,88,55,42] },
+                { label:"Baseline", data:[58,72,55,70,68,30] },
+              ]} />
+          </div>
+          <div className="card">
+            <div className="lbl">Heatmap — activity (hover cell)</div>
+            <Heatmap
+              xAxis={[{ data: HEAT_X }]}
+              yAxis={[{ data: HEAT_Y }]}
+              series={[{ data: HEAT }]} />
+          </div>
+        </div>
+      </div>
+
+      <div className="bar" style={{marginTop:6}}><span className="ttl" style={{fontSize:"var(--text-sm)"}}>States — the same three props on every chart</span></div>
+      <div className="grid">
+        <div className="card"><div className="lbl">LineChart — loading</div><LineChart xAxis={[{ data: MONTHS, scaleType:"point" }]} series={LINE_SERIES} loading /></div>
+        <div className="card"><div className="lbl">LineChart — empty</div><LineChart xAxis={[{ data: MONTHS, scaleType:"point" }]} series={[{ data:[], label:"Requests" }]} empty="No data for this period" /></div>
+      </div>
+      <div className="card" style={{marginTop:14}}><div className="lbl">BarChart — error + onRetry</div><BarChart xAxis={[{ data:["Q1","Q2","Q3","Q4"], scaleType:"band" }]} series={[{ data:[19,12,23,15], label:"Plan" }]} error="Couldn't load chart data." onRetry={()=>{}} /></div>
+
+      <div className="bar" style={{marginTop:20}}><span className="ttl" style={{fontSize:"var(--text-sm)"}}>Usage &amp; responsive</span></div>
+      <pre style={{fontFamily:"var(--font-data)",fontSize:"var(--text-xs)",background:"var(--surface-card)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:14,overflow:"auto",margin:"0 0 10px"}}>{`<ChartCard title="Requests by month" legend={[{label:"Raised",color:"var(--chart-2)"}]}>
+  <LineChart xAxis={[{data:MONTHS,scaleType:"point"}]} series={[{data:VALUES,label:"Raised",area:true}]} loading={loading} error={error} onRetry={retry} empty={!VALUES.length &amp;&amp; "No data for this period"}/>
+</ChartCard>`}</pre>
+      <p style={{fontSize:"var(--text-xs)",color:"var(--text-tertiary)",lineHeight:1.6,margin:0,maxWidth:"78ch"}}>Every chart is an SVG sized to fill its parent (<code>width="100%"</code>) — there is no internal breakpoint. On desktop, put 2 charts per row in a <code>ChartCard</code> grid (as above); collapse the grid to 1 column under ~640px so axis labels stay legible — do not shrink a multi-series chart below ~280px wide, thin it to Sparkline instead.</p>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script></body></html>

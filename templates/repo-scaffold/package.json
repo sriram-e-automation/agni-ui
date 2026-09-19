@@ -1,0 +1,53 @@
+{
+  "name": "@sriram-e-automation/agni-ui",
+  "version": "1.0.0",
+  "description": "AgniUI — the Agnikul Cosmos ERP design system",
+  "license": "UNLICENSED",
+  "private": false,
+  "type": "module",
+  "sideEffects": ["*.css"],
+  "main": "./dist/agniui.cjs",
+  "module": "./dist/agniui.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/agniui.js",
+      "require": "./dist/agniui.cjs"
+    },
+    "./styles.css": "./dist/styles.css",
+    "./agniui.css": "./dist/agniui.css",
+    "./theme.css": "./dist/agniui.theme.css",
+    "./tokens/*": "./dist/tokens/*"
+  },
+  "files": ["dist"],
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sriram-e-automation/agni-ui.git"
+  },
+  "keywords": ["design-system", "react", "tailwind", "erp", "agnikul"],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && tsc -p tsconfig.build.json --emitDeclarationOnly",
+    "check": "tsc --noEmit && eslint src",
+    "release": "changeset publish",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.9",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.3",
+    "eslint": "^9.14.0",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10"
+  }
+}

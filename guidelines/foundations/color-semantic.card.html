@@ -1,0 +1,20 @@
+<!-- @dsCard group="Colors" viewport="700x170" name="Semantic status (6)" subtitle="success · warning · error · info · pending · blocked — hue constant across modes" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<style>
+body{margin:0;padding:18px;background:var(--surface-page);font-family:var(--font-sans)}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.cell{width:104px;border-radius:var(--radius-md);overflow:hidden;border:1px solid var(--border-subtle)}
+.bar{height:44px}
+.lab{padding:6px 8px;background:var(--surface-card)}
+.n{font-size:var(--text-2xs);font-weight:var(--fw-semibold);color:var(--text-primary);display:block}
+.soft{height:18px;border-top:1px solid var(--border-subtle)}
+</style></head><body>
+<div class="row">
+  <div class="cell"><div class="bar" style="background:var(--status-success)"></div><div class="soft" style="background:var(--status-success-soft)"></div><div class="lab"><span class="n">success</span></div></div>
+  <div class="cell"><div class="bar" style="background:var(--status-warning)"></div><div class="soft" style="background:var(--status-warning-soft)"></div><div class="lab"><span class="n">warning</span></div></div>
+  <div class="cell"><div class="bar" style="background:var(--status-error)"></div><div class="soft" style="background:var(--status-error-soft)"></div><div class="lab"><span class="n">error</span></div></div>
+  <div class="cell"><div class="bar" style="background:var(--status-info)"></div><div class="soft" style="background:var(--status-info-soft)"></div><div class="lab"><span class="n">info</span></div></div>
+  <div class="cell"><div class="bar" style="background:var(--status-pending)"></div><div class="soft" style="background:var(--status-pending-soft)"></div><div class="lab"><span class="n">pending</span></div></div>
+  <div class="cell"><div class="bar" style="background:var(--status-blocked)"></div><div class="soft" style="background:var(--status-blocked-soft)"></div><div class="lab"><span class="n">blocked</span></div></div>
+</div>
+</body></html>

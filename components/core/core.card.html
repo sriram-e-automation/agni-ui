@@ -1,0 +1,146 @@
+<!-- @dsCard group="Core" viewport="780x760" name="Core — buttons, tags, avatars, role gate" subtitle="Button (variants · icon-only · split) · Tag (status · chip) · Avatar · AvatarStack · Card · RoleGate — by Variants · Sizes · States" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:20px;background:var(--surface-page)}.grp{margin-bottom:14px}.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:18px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.cap:first-child{margin-top:0}.lbl{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);margin-bottom:8px}.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { Button, Tag, Avatar, AvatarStack, Card, RoleGate, DropdownMenu } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+function Demo(){
+  const [tags,setTags]=React.useState(["Procurement","High priority"]);
+  return (<div>
+    {/* ── VARIANTS ── */}
+    <div className="cap">Variants</div>
+    <div className="grp"><div className="lbl">Button — variants</div><div className="row">
+      <Button category="primary" icon={<i className="ph ph-plus"/>}>New record</Button>
+      <Button category="secondary" icon={<i className="ph ph-export"/>}>Export</Button>
+      <Button category="brand-soft">Approve</Button>
+      <Button category="tertiary">Tertiary</Button>
+      <Button category="ghost">Cancel</Button>
+      <Button category="danger" icon={<i className="ph ph-trash"/>}>Delete</Button>
+    </div></div>
+    <div className="grp"><div className="lbl">Button — icon-only · split</div><div className="row">
+      <Button variant="primary" icon={<i className="ph ph-plus"/>} items={[{label:"Import records",icon:"ph-upload-simple"},"divider",{label:"Download template",icon:"ph-file-arrow-down"}]}>New record</Button>
+      <Button iconOnly icon={<i className="ph ph-bell"/>} variant="solid"/>
+      <Button iconOnly icon={<i className="ph ph-funnel"/>} variant="outline"/>
+      <Button iconOnly icon={<i className="ph ph-dots-three-vertical"/>} variant="ghost"/>
+      <Button iconOnly icon={<i className="ph ph-bell"/>} variant="outline" round/>
+    </div></div>
+    <div className="grp"><div className="lbl">Tag — status tones &nbsp;·&nbsp; chip</div><div className="row">
+      <Tag tone="done" dot>Approved</Tag>
+      <Tag tone="doing" dot>In review</Tag>
+      <Tag tone="pending" dot>Pending</Tag>
+      <Tag tone="error" dot>Rejected</Tag>
+      <Tag tone="warning" dot>Overdue</Tag>
+      <Tag tone="brand">Group A</Tag>
+      <span style={{width:1,height:24,background:"var(--border-subtle)"}}/>
+      {tags.map(t=><Tag key={t} dot color="var(--action-brand)" onRemove={()=>setTags(tags.filter(x=>x!==t))}>{t}</Tag>)}
+    </div></div>
+
+    {/* ── SIZES ── */}
+    <div className="cap">Sizes</div>
+    <div className="grp"><div className="lbl">Button — sm · md · lg</div><div className="row">
+      <Button size="sm">Small</Button><Button size="md">Medium</Button><Button size="lg">Large</Button>
+    </div></div>
+    <div className="grp"><div className="lbl">Button — sm · md · lg &nbsp;·&nbsp; Tag — sm · md &nbsp;·&nbsp; Avatar — xs · sm · md · lg</div><div className="row">
+      <Button iconOnly icon={<i className="ph ph-star"/>} variant="outline" size="sm"/>
+      <Button iconOnly icon={<i className="ph ph-star"/>} variant="outline" size="md"/>
+      <Button iconOnly icon={<i className="ph ph-star"/>} variant="outline" size="lg"/>
+      <span style={{width:1,height:24,background:"var(--border-subtle)"}}/>
+      <Tag tone="brand" size="sm">Small</Tag>
+      <Tag tone="brand" size="md">Medium</Tag>
+      <span style={{width:1,height:24,background:"var(--border-subtle)"}}/>
+      <Avatar name="Aravind Prabhu" size="xs"/>
+      <Avatar name="Meera Krishnan" size="sm"/>
+      <Avatar name="Rohit Sharma" size="md"/>
+      <Avatar name="Priya Nair" size="lg"/>
+    </div></div>
+    <div className="grp"><div className="lbl">AvatarStack — max 3 · +N overflow</div><div className="row">
+      <AvatarStack names={["Aravind Prabhu","Meera Krishnan","Vikram Singh","Priya Nair","Karthik Reddy"]} size="md"/>
+      <AvatarStack names={["Aravind Prabhu","Meera Krishnan"]} size="sm"/>
+    </div></div>
+
+    {/* ── STATES ── */}
+    <div className="cap">States</div>
+    <div className="grp"><div className="lbl">Button — default · loading · disabled &nbsp;(hover / active are interactive)</div><div className="row">
+      <Button category="primary">Default</Button>
+      <Button category="primary" loading>Saving</Button>
+      <Button category="primary" disabled>Disabled</Button>
+      <span style={{width:1,height:24,background:"var(--border-subtle)"}}/>
+      <Button iconOnly icon={<i className="ph ph-star"/>} variant="outline"/>
+      <Button iconOnly icon={<i className="ph ph-star"/>} active title="active / selected"/>
+      <Button iconOnly icon={<i className="ph ph-star"/>} variant="outline" disabled/>
+      <span style={{width:1,height:24,background:"var(--border-subtle)"}}/>
+      <Avatar name="Aravind Prabhu" online/>
+      <Avatar name="Meera Krishnan"/>
+      <Avatar name="Broken Photo" src="https://example.invalid/missing.jpg"/>
+    </div></div>
+    <div className="grp"><div className="lbl">DropdownMenu — disabled trigger</div><div className="row">
+      <DropdownMenu trigger={<Button category="secondary" icon={<i className="ph ph-caret-down"/>}>Actions</Button>} items={[{label:"View"}]} disabled/>
+    </div></div>
+    <div className="grp"><div className="lbl">Card</div><div className="row" style={{alignItems:"stretch"}}>
+      <Card title="Launch readiness" subtitle="Agnibaan · Mission 02" style={{width:240}} actions={<Button iconOnly icon={<i className="ph ph-arrow-up-right"/>} variant="ghost" size="sm"/>}>
+        <div style={{fontSize:"var(--text-sm)",color:"var(--text-secondary)"}}>14 of 18 checks cleared</div>
+      </Card>
+    </div></div>
+
+    {/* ── ROLE GATE ── */}
+    <div className="cap">RoleGate — what each role sees</div>
+    <div className="grp"><div className="lbl">allow — the same block, three roles</div>
+      <div className="row" style={{alignItems:"stretch",gap:14}}>
+        {["lead","engineer","viewer"].map(role=>(
+          <div key={role} style={{width:212,border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",background:"var(--surface-card)",padding:12}}>
+            <div className="lbl" style={{marginBottom:10}}>role = "{role}"</div>
+            <RoleGate role={role} allow={["lead","engineer"]}
+              fallback={<div style={{fontSize:"var(--text-xs)",color:"var(--text-tertiary)",lineHeight:1.5}}>Read-only — ask a lead to approve</div>}>
+              <Button category="primary" size="sm" icon={<i className="ph ph-check"/>}>Approve</Button>
+            </RoleGate>
+          </div>
+        ))}
+      </div>
+      <p style={{font:"var(--fw-regular) var(--text-xs)/1.5 var(--font-sans)",color:"var(--text-tertiary)",maxWidth:"66ch",margin:"10px 0 0"}}>Lead and engineer see the action; viewer gets the <code>fallback</code>. Prefer a fallback sentence over silence — a control that vanishes reads as a bug, while one line explains the boundary.</p>
+    </div>
+    <div className="grp"><div className="lbl">deny overrides allow · no fallback = renders nothing</div>
+      <div className="row" style={{alignItems:"stretch",gap:14}}>
+        <div style={{width:212,border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",background:"var(--surface-card)",padding:12}}>
+          <div className="lbl" style={{marginBottom:10}}>lead, but denied</div>
+          <RoleGate role="lead" allow={["lead"]} deny={["lead"]} fallback={<div style={{fontSize:"var(--text-xs)",color:"var(--status-error-text, var(--status-error))"}}>Suspended for this record</div>}>
+            <Button category="danger" size="sm">Delete</Button>
+          </RoleGate>
+        </div>
+        <div style={{width:212,border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",background:"var(--surface-card)",padding:12}}>
+          <div className="lbl" style={{marginBottom:10}}>viewer, no fallback</div>
+          <RoleGate role="viewer" allow={["lead"]}>
+            <Button category="danger" size="sm">Delete</Button>
+          </RoleGate>
+          <div style={{fontSize:"var(--text-xs)",color:"var(--text-tertiary)"}}>— nothing rendered —</div>
+        </div>
+        <div style={{width:212,border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",background:"var(--surface-card)",padding:12}}>
+          <div className="lbl" style={{marginBottom:10}}>allow=null — open to all</div>
+          <RoleGate role="viewer" allow={null}><Button category="secondary" size="sm" icon={<i className="ph ph-export"/>}>Export</Button></RoleGate>
+        </div>
+      </div>
+      <p style={{font:"var(--fw-regular) var(--text-xs)/1.5 var(--font-sans)",color:"var(--text-tertiary)",maxWidth:"66ch",margin:"10px 0 0"}}>RoleGate hides; it does not secure. The server must enforce the same rule. For a control that should stay visible but inert, pass <code>disabled</code> to the control instead of gating it away.</p>
+    </div>
+    <div className="cap">Usage</div>
+    <pre style={{fontFamily:"var(--font-data)",fontSize:"var(--text-xs)",background:"var(--surface-soft)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:14,overflow:"auto"}}>{`<Button category="primary" icon={<i className="ph ph-plus"/>} onClick={submit}>New record</Button>
+<Tag status="In Review"/>
+<Avatar name="Aravind Prabhu" online/>
+<RoleGate role={me.role} allow={["lead","admin"]} fallback={<span>Ask a lead to approve</span>}>
+  <Button category="primary">Approve</Button>
+</RoleGate>`}</pre>
+    <div className="cap">Responsive</div>
+    <table style={{borderCollapse:"collapse",width:"100%",marginBottom:14}}><tbody>
+      <tr><th style={{textAlign:"left",fontSize:"var(--text-2xs)",color:"var(--text-tertiary)",paddingBottom:8,borderBottom:"1px solid var(--border-subtle)",width:"18%"}}>Breakpoint</th><th style={{textAlign:"left",fontSize:"var(--text-2xs)",color:"var(--text-tertiary)",paddingBottom:8,borderBottom:"1px solid var(--border-subtle)"}}>Behavior</th></tr>
+      <tr><td style={{padding:"9px 12px 9px 0",borderBottom:"1px solid var(--border-subtle)",fontSize:"var(--text-xs)"}}><strong>All sizes</strong></td><td style={{padding:"9px 0",borderBottom:"1px solid var(--border-subtle)",fontSize:"var(--text-xs)",color:"var(--text-secondary)"}}>These are token-sized primitives with no breakpoint of their own — <code>size</code> picks a rung on the <code>--scale</code> ramp and control heights respect the 44px touch floor automatically below 640px. They fill whatever width their parent grants; layout collapse (stacking a button row, wrapping tags) is the host's job.</td></tr>
+    </tbody></table>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script></body></html>

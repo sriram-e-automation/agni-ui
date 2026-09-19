@@ -1,0 +1,91 @@
+<!-- @dsCard group="Chrome" viewport="1000x1020" name="StatsOverview — the dashboard block" subtitle="Heading + date range + actions, QuickStats strip, auto-fit ChartCard grid — States: idle · filtered · loading · error · empty" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:18px;background:var(--surface-page)}.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:24px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.cap:first-child{margin-top:0}.state{margin-bottom:18px}.note{font:var(--text-xs)/1.5 var(--font-sans);color:var(--text-tertiary);margin:6px 0 0}.note code{font-family:var(--font-data);font-size:var(--text-2xs);background:var(--surface-sunken);padding:1px 4px;border-radius:var(--radius-xs)}pre{font:var(--text-2xs)/1.6 var(--font-data);background:var(--surface-sunken);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:12px 14px;overflow:auto;color:var(--text-secondary);margin:8px 0 0}</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { StatsOverview, BarChart, LineChart, DonutChart } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+
+const STATS = [
+  { key:null,        icon:"ph-list-checks",  label:"All requests", value:312 },
+  { key:"pending",   icon:"ph-clock",        label:"Pending",      value:48,  accent:"var(--status-warning)" },
+  { key:"review",    icon:"ph-eye",          label:"In review",    value:26,  accent:"var(--status-info)" },
+  { key:"approved",  icon:"ph-check-circle", label:"Approved",     value:221, accent:"var(--status-success)" },
+  { key:"rejected",  icon:"ph-x-circle",     label:"Rejected",     value:17,  accent:"var(--status-error)" },
+];
+const MONTHS = ["Mar","Apr","May","Jun","Jul","Aug"];
+
+function Demo(){
+  const [stat,setStat]=React.useState(null);
+  const [range,setRange]=React.useState(null);
+  const charts = [
+    { key:"volume", title:"Requests raised", subtitle:"Last six months",
+      children:<BarChart height={200} xAxis={[{data:MONTHS}]} series={[{data:[38,44,51,47,58,62],label:"Raised"}]} /> },
+    { key:"cycle", title:"Median approval time", subtitle:"Days, last six months",
+      children:<LineChart height={200} xAxis={[{data:MONTHS}]} series={[{data:[4.2,3.8,3.9,3.1,2.8,2.4],label:"Days"}]} /> },
+    { key:"mix", title:"By category", subtitle:"Current period", span:2,
+      children:<DonutChart height={210} data={[{label:"Propulsion",value:96},{label:"Avionics",value:78},{label:"Structures",value:71},{label:"Ground systems",value:67}]} /> },
+  ];
+  return (<div>
+    <div className="cap">Live instance — heading, date range, export, stats strip, chart grid</div>
+    <div className="state">
+      <StatsOverview title="Request operations" subtitle="Overview"
+        stats={STATS} statValue={stat} onStatChange={setStat} showShare
+        dateRange={range} onDateRangeChange={setRange}
+        exportAction={{ formats:[{key:"csv",label:"CSV"},{key:"pdf",label:"PDF"}] }}
+        primaryAction={{ label:"New request", icon:"ph-plus" }}
+        charts={charts} columns={2} />
+      <p className="note">Click a stat card to filter — the block owns the grid and the strip, nothing else. Each chart is your own node, framed by <code>ChartCard</code>, and keeps its own <code>loading</code> / <code>error</code> / <code>empty</code>.</p>
+    </div>
+
+    <div className="cap">Stats only — no charts, no heading row</div>
+    <div className="state"><StatsOverview stats={STATS} statValue="pending" onStatChange={()=>{}} /></div>
+
+    <div className="cap">Charts only — one column, wide cards</div>
+    <div className="state">
+      <StatsOverview charts={[charts[0]]} minColumnWidth={640} />
+    </div>
+
+    <div className="cap">Loading — the strip shimmers; charts carry their own state</div>
+    <div className="state">
+      <StatsOverview title="Request operations" loading stats={STATS}
+        charts={[{ key:"a", title:"Requests raised", children:<BarChart height={180} loading /> },
+                 { key:"b", title:"Median approval time", children:<LineChart height={180} loading /> }]} />
+    </div>
+
+    <div className="cap">Error — strip failed, charts show their own empty</div>
+    <div className="state">
+      <StatsOverview stats={STATS} error="Couldn't load the summary" onRetry={()=>{}}
+        charts={[{ key:"a", title:"Requests raised", children:<BarChart height={180} series={[]} empty="No data for this period" /> }]} />
+    </div>
+
+    <div className="cap">Usage</div>
+    <pre>{`const { StatsOverview, BarChart } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+
+<StatsOverview
+  title="Request operations" subtitle="Overview"
+  stats={STATS} statValue={stat} onStatChange={setStat} showShare
+  dateRange={range} onDateRangeChange={setRange}
+  exportAction={{ formats:[{key:"csv",label:"CSV"}], onExport }}
+  primaryAction={{ label:"New request", icon:"ph-plus", onClick:openForm }}
+  columns={2} minColumnWidth={320}
+  charts={[
+    { key:"volume", title:"Requests raised", subtitle:"Last six months",
+      children:<BarChart height={200} xAxis={[{data:MONTHS}]}
+                 series={[{data:volume, label:"Raised"}]} /> },
+    { key:"mix", title:"By category", span:2, children:<DonutChart data={mix} /> },
+  ]} />`}</pre>
+    <div className="cap">Responsive</div>
+    <p className="note" style={{maxWidth:"78ch"}}>The chart grid is <code>auto-fit, minmax(minColumnWidth, 1fr)</code> — it drops from <code>columns</code> down to one column as the container narrows, no prop change needed. The stats strip (QuickStats) does the same. Lower <code>minColumnWidth</code> for compact chart types (sparkline, gauge) and keep it wide for multi-series line/bar charts so axis labels don't collide.</p>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script>
+</body></html>

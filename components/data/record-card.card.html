@@ -1,0 +1,84 @@
+<!-- @dsCard group="Data" viewport="1060x3200" name="RecordCard — one contract, three presets" subtitle="The same record as kanban · approval · task · selected · busy · disabled · loading, plus the kanban preset's six status footers and display variants and the task preset's effort states" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:20px;background:var(--surface-page);font-family:var(--font-sans)}.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:20px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.cap:first-child{margin-top:0}.lbl{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);margin:0 0 8px}.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:start}.rec{font-family:var(--font-data);font-size:var(--text-2xs);color:var(--text-tertiary);background:var(--surface-soft);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:10px 12px;white-space:pre-wrap;line-height:1.6;margin:0 0 6px}</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { RecordCard } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+/* One record — every card below is fed this same object. */
+const RECORD = {
+  id:"REQ-0184", requestType:"Purchase request", category:"Propulsion",
+  app:{ name:"Procurement", icon:"ph-shopping-cart" },
+  date:"12 Jul 2026", requestedBy:"Meera Krishnan", requestedFor:"Agnibaan S-02",
+  priority:"High", assignee:"Rohit Sharma", assignedOn:"13 Jul 2026", startedOn:"14 Jul 2026", days:3,
+  effort:{ total:"6h 20m", intervals:3, running:true, current:"1h 05m", startedAt:"09:40" },
+};
+const PEOPLE=[{id:"u1",name:"Rohit Sharma",team:"Structures"},{id:"u2",name:"Priya Nair",team:"Quality"}];
+function Demo(){
+  return (<div>
+    <p className="rec">record = {"{"} id:"REQ-0184", requestType:"Purchase request", category:"Propulsion", app:{"{"}name:"Procurement"{"}"}, date, requestedBy, requestedFor, priority, assignee, assignedOn, startedOn, days, effort {"}"}</p>
+    <div className="cap">Presets — same record, three treatments</div>
+    <div className="g3">
+      <div><div className="lbl">preset="kanban" · status Approvals</div><RecordCard record={RECORD} status="Approvals" people={PEOPLE} showStatus/></div>
+      <div><div className="lbl">preset="approval"</div><RecordCard record={RECORD} preset="approval" status="In Review"/></div>
+      <div><div className="lbl">preset="task" · lane In progress</div><RecordCard record={RECORD} preset="task" status="In progress"/></div>
+    </div>
+    <div className="cap">States — carried by the contract, not the preset</div>
+    <div className="g3">
+      <div><div className="lbl">selected</div><RecordCard record={RECORD} status="Yet to start" selected/></div>
+      <div><div className="lbl">busy — approve in flight</div><RecordCard record={RECORD} status="Approvals" people={PEOPLE} busy/></div>
+      <div><div className="lbl">disabled — viewer role</div><RecordCard record={RECORD} status="Approvals" people={PEOPLE} disabled/></div>
+    </div>
+    <div className="cap">Kanban preset — status footers</div>
+    <p className="rec">The footer is driven by <code>status</code>. Approve and Reject open the DS confirmation modal; the approve flow uses <code>people</code> for approve-and-assign.</p>
+    <div className="g3">
+      <div><div className="lbl">Approvals</div><RecordCard record={{...RECORD, id:"REC-2402", date:"12 Jun 2025", assignee:null, startedOn:null, effort:null}} status="Approvals" people={PEOPLE} onApprove={(p)=>console.log("approve",p)} onReject={(p)=>console.log("reject",p)}/></div>
+      <div><div className="lbl">Yet to start</div><RecordCard record={{...RECORD, id:"REC-2401", requestType:"Fabrication order", priority:"Low", assignee:"Meera Krishnan", assignedOn:"13 Jun", startedOn:null, days:null, effort:null}} status="Yet to start"/></div>
+      <div><div className="lbl">In progress</div><RecordCard record={{...RECORD, id:"REC-2403", requestType:"Service request", assignee:"Rohit Sharma", startedOn:"10 Jun", days:3}} status="In progress"/></div>
+      <div><div className="lbl">Overdue</div><RecordCard record={{...RECORD, id:"REC-2414", assignee:"Rajesh Nair", dueSince:"04 Jun", days:6}} status="Overdue"/></div>
+      <div><div className="lbl">Completed</div><RecordCard record={{...RECORD, id:"REC-2410", requestType:"Fabrication order", priority:"Low", assignee:"Arjun Nair", completedOn:"06 Jun", days:4}} status="Completed"/></div>
+      <div><div className="lbl">Rejected</div><RecordCard record={{...RECORD, id:"REC-2405", requestType:"Service request", priority:"Med", rejectedBy:"Priya Nair"}} status="Rejected"/></div>
+    </div>
+    <div className="cap">Kanban preset — display variants</div>
+    <p className="rec">Same record — the chrome changes with where the card is shown.</p>
+    <div className="g3">
+      <div><div className="lbl">Global view · app identity</div><RecordCard record={{...RECORD, id:"REC-2408", assignee:"Aravind Prabhu", startedOn:"08 Jun", days:6}} status="In progress"/></div>
+      <div><div className="lbl">Inside an application · no app row</div><RecordCard record={{...RECORD, id:"REC-2408", app:null, assignee:"Aravind Prabhu", startedOn:"08 Jun", days:6}} status="In progress"/></div>
+      <div><div className="lbl">Card view / mobile · status pill</div><RecordCard record={{...RECORD, id:"REC-2408", assignee:"Aravind Prabhu", startedOn:"08 Jun", days:6}} status="In progress" showStatus/></div>
+    </div>
+    <div className="cap">Task preset — effort states</div>
+    <div className="g3">
+      <div><div className="lbl">Yet to start — no effort logged</div><RecordCard record={{...RECORD, effort:null, startedOn:null}} preset="task" status="Yet to start"/></div>
+      <div><div className="lbl">In progress, timer running — the banner is the tell</div><RecordCard record={RECORD} preset="task" status="In progress"/></div>
+      <div><div className="lbl">Logged but paused — running:false</div><RecordCard record={{...RECORD, effort:{total:"6h 20m",intervals:3,running:false}}} preset="task" status="In progress"/></div>
+      <div><div className="lbl">Overdue — due date past</div><RecordCard record={{...RECORD, dueSince:"04 Aug 2026", effort:{total:"11h 05m",intervals:6,running:false}}} preset="task" status="Overdue"/></div>
+      <div><div className="lbl">Completed — actions collapse</div><RecordCard record={{...RECORD, effort:{total:"14h 30m",intervals:8,running:false}}} preset="task" status="Completed"/></div>
+      <div><div className="lbl">Rejected</div><RecordCard record={RECORD} preset="task" status="Rejected"/></div>
+    </div>
+    <p className="rec">The task preset renders through <b>TaskCard</b>, which also ships standalone for the workspace Tasks panel. New work should mount <b>RecordCard preset="task"</b> — one record shape drives every treatment, and the preset is the only thing that changes. Reach for TaskCard directly only where the panel already holds a TaskCardData object.</p>
+    <div className="cap">Loading · error · empty</div>
+    <p className="rec">The same three data-state props every data component carries. They resolve before the preset does — a board renders placeholders through RecordCard itself, no separate <code>Loading shape="card"</code> beside it.</p>
+    <div className="g3">
+      <div><div className="lbl">loading — shape-matched skeleton</div><RecordCard loading/></div>
+      <div><div className="lbl">error — string + retry</div><RecordCard error="Could not load REQ-0184." onRetry={()=>console.log("retry")}/></div>
+      <div><div className="lbl">empty — no record passed</div><RecordCard empty="No record selected"/></div>
+    </div>
+    <p className="rec">Precedence is <b>loading → error → empty → record</b>. <code>disabled</code> is not a data state — the record renders in full and only the actions are withheld (shown above), so it composes with <code>selected</code> and <code>busy</code>.</p>
+    <div className="cap">Usage</div>
+    <pre style={{fontFamily:"var(--font-data)",fontSize:"var(--text-xs)",background:"var(--surface-soft)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:14,overflow:"auto"}}>{`<RecordCard record={record} status="Approvals" people={people}
+  onApprove={approve} onReject={reject} selected={record.id===selectedId} busy={saving}/>
+<RecordCard preset="task" record={record} status="In progress"/>`}</pre>
+    <div className="cap">Responsive</div>
+    <p className="rec" style={{maxWidth:"78ch"}}>The card fills its container (a kanban lane, a card-view grid cell) and has no fixed width of its own — narrowing the lane narrows the card. <code>showStatus</code> is the phone/card-view treatment: pass it whenever the surrounding chrome (lane header, column) that would otherwise convey status is not present.</p>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script>
+</body></html>

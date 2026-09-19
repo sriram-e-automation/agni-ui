@@ -1,0 +1,44 @@
+<!-- @dsCard group="Data" viewport="960x620" name="DateRangeFilter — period picker" subtitle="Idle · active label · granularity tabs · period navigator · custom range · phone dialog" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8"><title>DateRangeFilter</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:20px;background:var(--surface-page)}.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:20px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.cap:first-child{margin-top:0}.lbl{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);margin:0 0 8px}.note{font:var(--fw-regular) var(--text-xs)/1.5 var(--font-sans);color:var(--text-tertiary);margin:6px 0 0;max-width:64ch}.row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}.pane{background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:14px}</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { DateRangeFilter } = window.AgniUIAgnikulERPDesignSystem_153d9e || {};
+const computePeriod = DateRangeFilter && DateRangeFilter.computePeriod;
+const now = new Date(2026,7,17);
+const monthNow = computePeriod ? (()=>{ const p=computePeriod("month",0,now); return {start:p.start,end:p.end,label:p.lbl,gran:"month",gOffset:0}; })() : null;
+const quarterBack = computePeriod ? (()=>{ const p=computePeriod("quarter",-1,now); return {start:p.start,end:p.end,label:p.lbl,gran:"quarter",gOffset:-1}; })() : null;
+function Demo(){
+  if (!DateRangeFilter) return <div style={{padding:24,color:"var(--text-tertiary)",font:"var(--text-sm) var(--font-sans)"}}>Compiling design-system bundle… reload in a moment.</div>;
+  const [a,setA]=React.useState(null);
+  const [b,setB]=React.useState(monthNow);
+  const [c,setC]=React.useState(quarterBack);
+  const [d,setD]=React.useState(null);
+  return (<div>
+    <div className="cap">States</div>
+    <div className="row">
+      <div><div className="lbl">Idle — no range set</div><div className="pane"><DateRangeFilter value={a} onChange={setA}/></div></div>
+      <div><div className="lbl">Active — current month</div><div className="pane"><DateRangeFilter value={b} onChange={setB}/></div></div>
+      <div><div className="lbl">Active — a past quarter</div><div className="pane"><DateRangeFilter value={c} onChange={setC}/></div></div>
+    </div>
+    <p className="note">Idle is an outline calendar button. Once a range is set the trigger shows the period label and gains an × to clear. Click any trigger to open the panel: granularity tabs (Week · Month · Quarter · Year) on top, ← period → navigator below, custom From→To at the foot — so any past or future period is two clicks away.</p>
+    <div className="cap">Phone — isPhone</div>
+    <div className="lbl">The panel centers as a scrimmed dialog instead of anchoring to the trigger</div>
+    <div className="pane" style={{width:320}}><DateRangeFilter value={d} onChange={setD} isPhone/></div>
+    <p className="note">In a page toolbar you rarely mount this directly — <code>PageControls</code> composes it and forwards <code>isPhone</code>. Mount it standalone only on a surface with no records toolbar.</p>
+    <div className="cap">Usage</div>
+    <pre style={{fontFamily:"var(--font-data)",fontSize:"var(--text-xs)",background:"var(--surface-page)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:14,overflow:"auto"}}>{`<DateRangeFilter value={range} onChange={setRange} isPhone={isPhone}/>`}</pre>
+    <div className="cap">Responsive</div>
+    <p className="note" style={{maxWidth:"72ch"}}>Desktop/tablet: anchored popover clamped to the viewport (see the <code>window.innerWidth</code> clamp in <code>DateRangeFilter.tsx</code>). Pass <code>isPhone</code> below ~640px and the same panel centers as a scrimmed dialog instead — the host decides when to flip it, the component doesn't watch its own width.</p>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script></body></html>

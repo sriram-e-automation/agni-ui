@@ -1,0 +1,84 @@
+<!-- @dsCard group="Workflow" viewport="900x560" name="Workflow confirmations" subtitle="ConfirmModal — discard · review · bulk — one dialog, one variant per moment" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>
+  body{margin:0;padding:20px;background:var(--surface-page);font-family:var(--font-sans)}
+  .bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .hint{font-size:var(--text-xs);color:var(--text-tertiary);align-self:center}
+  .stage{position:relative;height:440px;border:1px solid var(--border-subtle);border-radius:var(--radius-lg);overflow:hidden;background:var(--surface-sunken)}
+  .stage > div{position:absolute !important;inset:0;background:transparent !important;backdrop-filter:none !important}
+  .empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--text-tertiary);font-size:var(--text-sm)}
+</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { ConfirmModal, Button, Avatar, Tag } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+const PEOPLE = [{id:"u1",name:"Aravind Prabhu",team:"Lead"},{id:"u2",name:"Meera Krishnan",team:"Avionics"},{id:"u3",name:"Priya Nair",team:"Quality"}];
+const SUMMARY = [
+  {label:"Title", value:"Stage-2 avionics bracket"},
+  {label:"Type", value:"Purchase request"},
+  {label:"Priority", value:<><span style={{width:7,height:7,borderRadius:"50%",background:"var(--status-error)",display:"inline-block"}}/>High</>},
+  {label:"Assignee", value:<><Avatar name="Priya Nair" size="xs"/>Priya Nair</>},
+  {label:"Handling", value:<span style={{display:"inline-flex",gap:5}}><Tag tone="neutral" size="sm">Expedite</Tag><Tag tone="neutral" size="sm">QA sign-off</Tag></span>},
+];
+function Demo(){
+  const [open,setOpen]=React.useState(null);
+  const [note,setNote]=React.useState("");
+  if (!ConfirmModal) return <div style={{padding:24,color:"var(--text-tertiary)"}}>Compiling design-system bundle… reload in a moment.</div>;
+  return (
+    <div>
+      <div className="bar">
+        <Button category={open==="discard"?"primary":"secondary"} size="sm" onClick={()=>setOpen("discard")}>ConfirmModal</Button>
+        <Button category={open==="review"?"primary":"secondary"} size="sm" onClick={()=>setOpen("review")}>ConfirmModal</Button>
+        <Button category={open==="approve"?"primary":"secondary"} size="sm" onClick={()=>setOpen("approve")}>Bulk · approve</Button>
+        <Button category={open==="assign"?"primary":"secondary"} size="sm" onClick={()=>setOpen("assign")}>Bulk · assign</Button>
+        <Button category={open==="delete"?"primary":"secondary"} size="sm" onClick={()=>setOpen("delete")}>Bulk · delete</Button>
+        <span className="hint">Reject/assign/delete validate required fields</span>
+      </div>
+      <div className="stage">
+        <div className="empty">Pick a confirmation above</div>
+        <ConfirmModal variant="discard" open={open==="discard"} onKeepEditing={()=>setOpen(null)}
+          choices={[
+            {icon:"ph-file-dashed",tone:"brand",title:"Save as draft",desc:"Keep your progress to finish later",onClick:()=>setOpen(null)},
+            {icon:"ph-trash",tone:"danger",title:"Discard request",desc:"Delete everything you’ve entered",onClick:()=>setOpen(null)},
+          ]}/>
+        <ConfirmModal variant="review" open={open==="review"} summary={SUMMARY}
+          intro="Confirm the details below, then submit. The request is routed to the assignee for review."
+          note={note} onNoteChange={setNote} noteLabel="Note for the assignee"
+          noteHint="Added to the record’s history and visible to reviewers."
+          notePlaceholder="e.g. Needed before the Stage-2 window." confirmLabel="Submit request" backLabel="Back to form"
+          onBack={()=>setOpen(null)} onConfirm={()=>setOpen(null)}/>
+        <ConfirmModal variant="bulk" open={open==="approve"} count={3} title="Approve selected requests"
+          message={<>Approve <strong style={{color:"var(--text-primary)"}}>3 requests</strong> and advance each to the next stage.</>}
+          confirmLabel="Approve 3 requests" remark remarkLabel="Remarks" remarkPlaceholder="e.g. Batch-approved against Q3 capex."
+          onCancel={()=>setOpen(null)} onConfirm={()=>setOpen(null)}/>
+        <ConfirmModal variant="bulk" open={open==="assign"} count={3} title="Assign selected requests"
+          message={<>Reassign <strong style={{color:"var(--text-primary)"}}>3 requests</strong> to a new owner.</>}
+          confirmLabel="Assign 3 requests" confirmIcon="ph-user-switch" assignees={PEOPLE}
+          onCancel={()=>setOpen(null)} onConfirm={()=>setOpen(null)}/>
+        <ConfirmModal variant="bulk" open={open==="delete"} count={3} tone="danger" title="Delete selected requests"
+          message={<>This permanently removes <strong style={{color:"var(--text-primary)"}}>3 requests</strong>. This can’t be undone.</>}
+          confirmLabel="Delete 3 requests" confirmIcon="ph-trash"
+          onCancel={()=>setOpen(null)} onConfirm={()=>setOpen(null)}/>
+      </div>
+    </div>
+    <div style={{marginTop:16}}>
+      <div style={{font:"var(--fw-bold) var(--text-2xs)/1 var(--font-sans)",letterSpacing:"var(--tracking-wider)",textTransform:"uppercase",color:"var(--text-brand)",marginBottom:10}}>Usage</div>
+      <pre style={{font:"var(--text-2xs)/1.6 var(--font-data)",background:"var(--surface-card)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:"12px 14px",overflow:"auto",color:"var(--text-secondary)",margin:0}}>{`<ConfirmModal variant="bulk" open={open} count={selected.size} tone="danger" title="Delete selected requests"
+  message={<>This permanently removes {selected.size} requests.</>}
+  confirmLabel={\`Delete \${selected.size} requests\`} confirmIcon="ph-trash"
+  onCancel={close} onConfirm={deleteSelected}/>`}</pre>
+      <div style={{font:"var(--fw-bold) var(--text-2xs)/1 var(--font-sans)",letterSpacing:"var(--tracking-wider)",textTransform:"uppercase",color:"var(--text-brand)",margin:"14px 0 10px"}}>Responsive</div>
+      <p style={{font:"var(--fw-regular) var(--text-xs)/1.5 var(--font-sans)",color:"var(--text-tertiary)",maxWidth:"70ch",margin:0}}>Every variant opens as a centered dialog at a fixed max-width, same as Modal — no phone-specific sheet form. Cap it with a viewport-relative width at the call site (<code>"min(92vw,480px)"</code>) so it never touches the screen edge on phone. The review variant's summary row already wraps under narrow widths.</p>
+    </div>
+  </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script></body></html>

@@ -1,0 +1,105 @@
+<!-- @dsCard group="Data" viewport="1000x820" name="Toolbar · documents · agenda rows" subtitle="BulkActionToolbar (incl. role gating) · DocumentPreview (types, loading, error) · EventRow (every tone, trailing, clickable)" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8"><title>Toolbar · documents · agenda rows</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:20px;background:var(--surface-page);font-family:var(--font-sans)}.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:22px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.cap:first-child{margin-top:0}.lbl{font:var(--fw-semibold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-tertiary);margin:0 0 8px}.note{font:var(--fw-regular) var(--text-xs)/1.5 var(--font-sans);color:var(--text-tertiary);margin:10px 0 0;max-width:74ch}.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.panel{background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:8px}.dk{background:var(--surface-page);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:16px}.seg{display:inline-flex;gap:2px;padding:3px;background:var(--surface-sunken);border-radius:var(--radius-md);margin-bottom:10px}.seg button{border:none;cursor:pointer;padding:6px 12px;border-radius:var(--radius-sm);font:var(--fw-medium) var(--text-sm)/1 var(--font-sans);background:transparent;color:var(--text-tertiary)}.seg button.on{background:var(--action-brand);color:var(--text-on-brand)}</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { BulkActionToolbar, DocumentPreview, EventRow, Tag } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+
+const BULK = [
+  { label:"Approve", icon:"ph-check", onClick:()=>{} },
+  { label:"Assign",  icon:"ph-user-plus", onClick:()=>{} },
+  { label:"Export",  icon:"ph-download-simple", onClick:()=>{}, roles:["admin","finance"] },
+  { label:"Delete",  icon:"ph-trash", danger:true, onClick:()=>{}, roles:["admin"] },
+];
+
+function Demo(){
+  const [role,setRole]=React.useState("admin");
+  if (!EventRow) return <div style={{padding:24,color:"var(--text-tertiary)",font:"var(--text-sm) var(--font-sans)"}}>Compiling design-system bundle… reload in a moment.</div>;
+  return (<div>
+    <div className="cap">BulkActionToolbar — selection mode</div>
+    <div className="lbl">count drives visibility — at 0 the bar renders nothing</div>
+    <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:6}}>
+      <BulkActionToolbar count={3} actions={BULK.slice(0,2)} onClear={()=>{}}/>
+      <BulkActionToolbar count={28} actions={BULK} onClear={()=>{}}/>
+    </div>
+    <p className="note">The second bar passes <b>no <code>role</code></b> and shows all four actions, two of which carry a <code>roles</code> list. That is the contract: an absent role means ungated, so adding <code>roles</code> metadata can never quietly remove actions from a page that does not gate.</p>
+    <p className="note">Pin it above or below a <code>DataTable</code>; <code>PageControls</code> mounts it for you and replaces the whole controls row while a selection is live.</p>
+
+    <div className="lbl" style={{marginTop:18}}>role — a withheld action is absent, not disabled</div>
+    <div className="seg">
+      {["admin","finance","viewer"].map(r => <button key={r} className={role===r?"on":""} onClick={()=>setRole(r)}>{r}</button>)}
+    </div>
+    <BulkActionToolbar count={28} actions={BULK} onClear={()=>{}} role={role}/>
+    <p className="note">
+      <b>admin</b> sees all four; <b>finance</b> loses Delete; <b>viewer</b> keeps only the two ungated actions.
+      Entries without a <code>roles</code> list are visible to everyone. This is the most destructive bar in the
+      system — showing a disabled Delete would only invite a support ticket.
+    </p>
+
+    <div className="cap">DocumentPreview — one attachment, by type</div>
+    <div className="g3">
+      <DocumentPreview name="PO-2025-114.pdf" type="pdf" meta="248 KB · 12 Jun" onView={()=>{}} onDownload={()=>{}}/>
+      <DocumentPreview name="bracket-drawing.step" type="cad" meta="1.1 MB · 12 Jun" onView={()=>{}} onDownload={()=>{}}/>
+      <DocumentPreview name="cost-estimate.xlsx" type="xls" meta="64 KB · 13 Jun" onView={()=>{}} onDownload={()=>{}}/>
+      <DocumentPreview name="scope-note.docx" type="doc" meta="22 KB · 11 Jun" onView={()=>{}}/>
+      <DocumentPreview name="site-photo.jpg" type="img" meta="3.4 MB · 10 Jun" onView={()=>{}} onDownload={()=>{}}/>
+      <DocumentPreview name="handover.zip" type="zip" meta="18 MB · 09 Jun"/>
+    </div>
+    <p className="note">Type drives the icon and its tint; omitting an action drops that button rather than disabling it. For a list of files being uploaded, use <code>AttachmentRow</code> — it owns the progress and failed states.</p>
+
+    <div className="lbl" style={{marginTop:18}}>States — a single document has no "empty"</div>
+    <div className="g2">
+      <div><div className="lbl">loading</div><DocumentPreview loading/></div>
+      <div><div className="lbl">error + onRetry</div><DocumentPreview error="Preview service unavailable" onRetry={()=>{}}/></div>
+    </div>
+
+    <div className="cap">EventRow — an agenda entry</div>
+    <div className="lbl">One row per tone, on the shared vocabulary</div>
+    <div className="panel">
+      <EventRow icon="ph-seal-check" label="Head approval due" time="10:00" meta="REC-2402 · A. Prabhu" tone="brand" onClick={()=>{}}/>
+      <EventRow icon="ph-check-circle" label="Finance review cleared" time="11:30" meta="REC-2398" tone="done"/>
+      <EventRow icon="ph-play-circle" label="Fit check in progress" time="13:00" meta="AGV-3 · Priya Nair" tone="doing"/>
+      <EventRow icon="ph-clock" label="Vendor response awaited" time="15:00" meta="3 of 5 quotes in" tone="pending"/>
+      <EventRow icon="ph-warning" label="SLA breach in 2 hours" time="16:00" meta="REC-2377" tone="warning"/>
+      <EventRow icon="ph-prohibit" label="Blocked on cost centre" time="17:00" meta="REC-2401" tone="blocked"/>
+    </div>
+    <p className="note">Tones come from the shared map, so an agenda reads the same as a board or a status pill. No module maps event types to raw colours.</p>
+
+    <div className="lbl" style={{marginTop:18}}>trailing — a status, a count, an action</div>
+    <div className="panel">
+      <EventRow icon="ph-calendar-check" label="Weekly ops review" time="09:00" meta="Conference room 2" tone="brand" trailing={<Tag tone="done" size="sm">Confirmed</Tag>}/>
+      <EventRow icon="ph-users-three" label="Vendor call" time="14:00" meta="Bharat Aerospace" tone="doing" trailing={<Tag tone="pending" size="sm">Tentative</Tag>}/>
+      <EventRow icon="ph-file-text" label="Documents due" time="All day" meta="2 attachments missing" tone="warning" trailing={<span style={{font:"var(--fw-semibold) var(--text-2xs) var(--font-data)",color:"var(--text-tertiary)"}}>2</span>}/>
+    </div>
+    <p className="note">The row hands its right edge to whatever the page needs. Clickable rows (<code>onClick</code>) lift on hover; rows without it are a record of fact, not a target.</p>
+
+    <div className="cap">Dark</div>
+    <div className="dk" data-theme="dark">
+      <BulkActionToolbar count={6} actions={BULK.slice(0,3)} onClear={()=>{}} role="admin"/>
+      <div style={{height:12}}/>
+      <div className="g2">
+        <DocumentPreview name="PO-2025-114.pdf" type="pdf" meta="248 KB · 12 Jun" onView={()=>{}} onDownload={()=>{}}/>
+        <div className="panel" style={{background:"var(--surface-card)"}}>
+          <EventRow icon="ph-seal-check" label="Head approval due" time="10:00" meta="REC-2402" tone="brand" onClick={()=>{}}/>
+          <EventRow icon="ph-prohibit" label="Blocked on cost centre" time="17:00" meta="REC-2401" tone="blocked"/>
+        </div>
+      </div>
+    </div>
+    <div className="cap">Usage</div>
+    <pre style={{fontFamily:"var(--font-data)",fontSize:"var(--text-xs)",background:"var(--surface-card)",border:"1px solid var(--border-subtle)",borderRadius:"var(--radius-md)",padding:14,overflow:"auto"}}>{`<BulkActionToolbar count={selected.size} actions={BULK} role={me.role} onClear={clearSelection}/>
+<DocumentPreview name={file.name} type={file.type} meta={file.meta} onView={view} onDownload={download}/>
+<EventRow icon="ph-clock" label={event.title} time={event.time} tone={event.tone} onClick={openEvent}/>`}</pre>
+    <div className="cap">Responsive</div>
+    <p className="note">BulkActionToolbar replaces the toolbar row it's paired with, so it wraps exactly like PageControls does. DocumentPreview's grid (<code>.g3</code> above) drops to fewer columns on narrow widths — the card itself stays a fixed-height row and just gets narrower. EventRow's meta line wraps rather than truncating, so it stays readable at any panel width down to phone.</p>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script></body></html>

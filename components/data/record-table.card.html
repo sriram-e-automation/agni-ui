@@ -1,0 +1,137 @@
+<!-- @dsCard group="Chrome" viewport="1000x1180" name="RecordTable — the records region" subtitle="Toolbar + table + row actions + selection + pagination — States: idle · selection · loading · error · empty · disabled · role-gated" -->
+<!DOCTYPE html><html data-theme="light" lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:18px;background:var(--surface-page)}.cap{font:var(--fw-bold) var(--text-2xs)/1 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--text-brand);margin:24px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.cap:first-child{margin-top:0}.state{margin-bottom:18px}.note{font:var(--text-xs)/1.5 var(--font-sans);color:var(--text-tertiary);margin:6px 0 0}.note code{font-family:var(--font-data);font-size:var(--text-2xs);background:var(--surface-sunken);padding:1px 4px;border-radius:var(--radius-xs)}pre{font:var(--text-2xs)/1.6 var(--font-data);background:var(--surface-sunken);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:12px 14px;overflow:auto;color:var(--text-secondary);margin:8px 0 0}</style>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { RecordTable, Tag, EmptyState } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+
+const ROWS = [
+  { id:"REQ-2411", title:"Agnilet turbopump seal replacement", owner:"K. Raghavan", category:"Propulsion", status:"Pending",   date:"2026-08-24", priority:"High" },
+  { id:"REQ-2410", title:"Avionics harness batch release",     owner:"S. Menon",    category:"Avionics",   status:"In Review", date:"2026-08-23", priority:"Med"  },
+  { id:"REQ-2408", title:"Ground systems N2 line audit",        owner:"D. Iyer",     category:"Ground systems", status:"Approved", date:"2026-08-21", priority:"Low" },
+  { id:"REQ-2405", title:"Structures — fairing bond rework",    owner:"A. Pillai",   category:"Structures", status:"Rejected",  date:"2026-08-19", priority:"High" },
+  { id:"REQ-2402", title:"Payload adapter torque re-check",     owner:"M. Nair",     category:"Structures", status:"On Hold",   date:"2026-08-17", priority:"Med"  },
+];
+const COLUMNS = [
+  { key:"id",       label:"Request ID", width:110, render:v => <span style={{fontFamily:"var(--font-data)",fontSize:"var(--text-xs)"}}>{v}</span> },
+  { key:"title",    label:"Title" },
+  { key:"owner",    label:"Raised by", width:130 },
+  { key:"status",   label:"Status", width:110, render:v => <Tag status={v} size="sm">{v}</Tag> },
+  { key:"date",     label:"Created", width:104, align:"right", render:v => <span style={{fontFamily:"var(--font-data)",fontSize:"var(--text-xs)"}}>{v}</span> },
+];
+const SECTIONS = [
+  { key:"status",   label:"Status",   options:["Pending","In Review","Approved","Rejected","On Hold"] },
+  { key:"priority", label:"Priority", options:["High","Med","Low"] },
+];
+const SORTS = [{value:"recent",label:"Newest first"},{value:"oldest",label:"Oldest first"},{value:"priority",label:"Priority"}];
+const PICKER = [{key:"id",label:"Request ID"},{key:"title",label:"Title"},{key:"owner",label:"Raised by"},{key:"status",label:"Status"},{key:"date",label:"Created"},{key:"priority",label:"Priority"}];
+
+/* Row actions may depend on the record: an approved request can't be approved
+   again, so the spec list is a function of the row. */
+const rowActions = row => [
+  { key:"view",    label:"View",    icon:"ph-eye",     kind:"ghost" },
+  { key:"approve", label:"Approve", icon:"ph-check",   kind:"ghost", roles:["approver","admin"], disabled: row.status !== "Pending", disabledReason:"Only a pending request can be approved" },
+  { key:"assign",  label:"Reassign",icon:"ph-user-switch", roles:["approver","admin"] },
+  { key:"delete",  label:"Delete",  icon:"ph-trash",   kind:"danger", roles:["admin"] },
+];
+const BULK = [
+  { label:"Approve", icon:"ph-check", roles:["approver","admin"] },
+  { label:"Assign",  icon:"ph-user-switch" },
+  { label:"Delete",  icon:"ph-trash", danger:true, roles:["admin"] },
+];
+
+function Demo(){
+  const [q,setQ]=React.useState("");
+  const [filters,setFilters]=React.useState(null);
+  const [range,setRange]=React.useState(null);
+  const [sort,setSort]=React.useState("recent");
+  const [cols,setCols]=React.useState(["id","title","owner","status","date"]);
+  const [sel,setSel]=React.useState(new Set());
+  const [page,setPage]=React.useState(1);
+
+  const controls = {
+    search:q, onSearch:setQ,
+    filterSections:SECTIONS, filterValue:filters, onFilterChange:setFilters,
+    dateRange:range, onDateRangeChange:setRange,
+    sortOptions:SORTS, sort:sort, onSortChange:setSort,
+    columns:PICKER, visibleColumns:cols, onColumnsChange:setCols,
+    exportAction:{ formats:[{key:"csv",label:"CSV",icon:"ph-file-csv"},{key:"xlsx",label:"Excel",icon:"ph-microsoft-excel-logo"},{key:"pdf",label:"PDF",icon:"ph-file-pdf"}] },
+    primaryAction:{ label:"New request", icon:"ph-plus", items:[{label:"Import records",icon:"ph-upload-simple"}] },
+  };
+
+  return (<div>
+    <div className="cap">Live instance — admin role, everything on</div>
+    <div className="state">
+      <RecordTable columns={COLUMNS} rows={ROWS} rowKey="id" role="admin"
+        selectable selected={sel} onSelect={setSel} bulkActions={BULK}
+        rowActions={rowActions} rowActionsMax={2}
+        controls={controls}
+        pagination={{page:page,pageCount:13,onChange:setPage,totalLabel:"1–5 of 312"}} />
+      <p className="note">Select a row to swap the toolbar for the bulk bar. The first two row actions render as ghost icon buttons; the rest collapse into one ⋮ menu. <code>exportAction</code> with two or more <code>formats</code> becomes a split button.</p>
+    </div>
+
+    <div className="cap">Role-gated — viewer sees only View, and no bulk destructive action</div>
+    <div className="state">
+      <RecordTable columns={COLUMNS} rows={ROWS.slice(0,3)} role="viewer"
+        rowActions={rowActions} controls={{ search:"", onSearch:()=>{}, exportAction:{ enabled:false, disabledReason:"Export is restricted to approvers" } }} />
+      <p className="note"><code>exportAction.enabled: false</code> keeps the button VISIBLE and disabled with a reason. A records page should not change shape per viewer — hiding it makes the layout look broken to the person who asks about it.</p>
+    </div>
+
+    <div className="cap">Export — the four treatments</div>
+    <div className="state">
+      <RecordTable columns={COLUMNS.slice(0,3)} rows={ROWS.slice(0,2)} controls={{ leading:<span style={{font:"var(--text-xs)/1 var(--font-sans)",color:"var(--text-tertiary)"}}>one format · split menu · loading · disabled</span>, exportAction:{ formats:[{key:"csv",label:"CSV"}] } }} />
+      <pre>{`exportAction={{ formats:[{key:"csv",label:"CSV"}] }}                 // plain button
+exportAction={{ formats:[csv, xlsx, pdf] }}                        // split menu
+exportAction={{ loading:true }}                                    // spinner
+exportAction={{ enabled:false, disabledReason:"Approvers only" }}  // visible, inert`}</pre>
+    </div>
+
+    <div className="cap">No toolbar — controls={"{null}"}</div>
+    <div className="state"><RecordTable columns={COLUMNS} rows={ROWS.slice(0,3)} controls={null} /></div>
+
+    <div className="cap">Loading — toolbar stays live, rows shimmer</div>
+    <div className="state"><RecordTable columns={COLUMNS} rows={[]} loading loadingRows={4} controls={{ search:"", onSearch:()=>{}, sortOptions:SORTS, sort:"recent", onSortChange:()=>{} }} /></div>
+
+    <div className="cap">Error — takes precedence over loading and empty</div>
+    <div className="state"><RecordTable columns={COLUMNS} rows={[]} error="Couldn't reach the records service" onRetry={()=>{}} controls={null} /></div>
+
+    <div className="cap">Empty — a node, so the empty table carries its own action</div>
+    <div className="state"><RecordTable columns={COLUMNS} rows={[]} controls={null} empty={<EmptyState icon="ph-tray" title="No requests yet" description="Requests raised in your team will appear here." />} /></div>
+
+    <div className="cap">Disabled — inert while a record is saving</div>
+    <div className="state"><RecordTable columns={COLUMNS} rows={ROWS.slice(0,3)} disabled rowActions={rowActions} role="admin" controls={{ search:"", onSearch:()=>{}, exportAction:{} }} /></div>
+
+    <div className="cap">Usage</div>
+    <pre>{`const { RecordTable } = window.AgniUIAgnikulERPDesignSystem_153d9e;
+
+<RecordTable
+  columns={COLUMNS} rows={rows} rowKey="id" role={me.role}
+  selectable selected={sel} onSelect={setSel} bulkActions={BULK}
+  rowActions={row => [
+    { key:"view", label:"View", icon:"ph-eye", kind:"ghost" },
+    { key:"approve", label:"Approve", icon:"ph-check",
+      roles:["approver","admin"], disabled: row.status !== "Pending" },
+  ]}
+  controls={{
+    search, onSearch, filterSections, filterValue, onFilterChange,
+    sortOptions, sort, onSortChange,
+    exportAction: { formats:[{key:"csv",label:"CSV"}], onExport },
+    primaryAction: { label:"New request", icon:"ph-plus", onClick:openForm },
+  }}
+  pagination={{ page, pageCount, onChange:setPage, totalLabel }}
+  loading={isLoading} error={err} onRetry={refetch} />`}</pre>
+    <div className="cap">Responsive</div>
+    <p className="note" style={{maxWidth:"78ch"}}>The toolbar row wraps under narrow widths (see PageControls); the table body scrolls horizontally under its min-content width rather than dropping columns. On tablet/phone, pair a lower <code>columnPicker.max</code> or a leaner default <code>visibleColumns</code> with a wrapper <code>overflow-x:auto</code> so the table stays usable without a redesign.</p>
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script>
+</body></html>
