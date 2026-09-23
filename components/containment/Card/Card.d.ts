@@ -1,5 +1,5 @@
 import * as React from "react";
-export interface CardProps {
+export interface CardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
   children?: React.ReactNode;
   title?: React.ReactNode;
   subtitle?: React.ReactNode;
@@ -25,7 +25,9 @@ export interface CardProps {
   bodyStyle?: React.CSSProperties;
 }
 /** Surface container with optional header + actions.
- *  @version 1.0.0
+ *  `interactive` + `onClick` makes the whole card a keyboard button (focusable,
+ *  Enter / Space). Native attributes and events pass through; the ref is the card.
+ *  @version 1.1.0
   * States: loading · error · empty.
 */
-export declare function Card(props: CardProps): JSX.Element;
+export declare const Card: React.ForwardRefExoticComponent<CardProps & React.RefAttributes<HTMLDivElement>>;

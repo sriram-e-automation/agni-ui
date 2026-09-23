@@ -22,6 +22,6 @@ export interface DetailSectionProps {
  * Read-only counterpart to FormSection: titled card + auto-fill field grid.
  * The record-detail page container — pair with DetailList / KeyValueRow.
  * Use FormSection when the fields are editable inputs.
- * @version 1.0.0
+ * @version 1.1.0
  */
-export declare function DetailSection(props: DetailSectionProps): JSX.Element;
+export declare const DetailSection: React.ForwardRefExoticComponent<DetailSectionProps & React.RefAttributes<HTMLDivElement>>;

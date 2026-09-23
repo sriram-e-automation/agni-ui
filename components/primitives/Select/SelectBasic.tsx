@@ -2,22 +2,19 @@
  * @internal Renderer behind the public <Select> — not part of the documented API
  * (no .d.ts, no specimen card). Import the public component instead.
  */
-import React, { useState, useRef, useEffect } from "react";
+import React, { forwardRef } from "react";
+import { useControllableState } from "../../utils/interaction.tsx";
+import { useSelectCore, HiddenValue, type SelectCommonProps } from "./useSelect.tsx";
 
 /* ── Types (mirrored in Select.d.ts) ── */
-export interface SelectOption { value: string; label: string; }
-export interface SelectProps {
-  value?: string;
+export interface SelectOption { value: string; label: string; icon?: string; disabled?: boolean; }
+export interface SelectProps extends SelectCommonProps {
+  /** Controlled value. Omit (and use `defaultValue`) for an uncontrolled select. */
+  value?: string | null;
+  defaultValue?: string | null;
   onChange?: (value: string) => void;
   /** [{value,label}] or string[] */
   options?: (SelectOption | string)[];
-  placeholder?: string;
-  size?: "sm" | "md" | "lg";
-  disabled?: boolean;
-  /** Error state — red border + error focus ring (matches Input/SearchSelect). */
-  error?: boolean;
-  style?: React.CSSProperties;
-  className?: string;
 }
 /** Custom dropdown select with themed menu. */
 
@@ -63,62 +60,59 @@ const OPT =
 const OPT_ON = "bg-surface-brand-soft text-fg-brand font-medium";
 const OPT_OFF = "bg-transparent text-fg-primary hover:bg-surface-soft";
 
-export function SelectBasic({
-  value,
-  onChange,
-  options = [],
-  placeholder = "Select…",
-  size = "md",
-  disabled = false,
-  error = false,
-  style = {},
-  className = "",
-  ...rest
-}: SelectProps) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef(null);
-  const opts = options.map((o) => (typeof o === "string" ? { value: o, label: o } : o));
-  const current = opts.find((o) => o.value === value);
+export const SelectBasic = forwardRef<HTMLDivElement, SelectProps>(function SelectBasic(props, ref) {
+  const {
+    value, defaultValue = null, onChange, options = [], placeholder = "Select…", size = "md",
+    name, form, style = {}, className = "",
+  } = props;
+  const opts: SelectOption[] = options.map((o) => (typeof o === "string" ? { value: o, label: o } : o));
+  const [current, setCurrent] = useControllableState<string | null>({
+    value, defaultValue, onChange: (v) => { if (v != null) onChange?.(v); },
+  });
+  const selectedIndex = opts.findIndex((o) => o.value === current);
+  const sel = selectedIndex >= 0 ? opts[selectedIndex] : undefined;
   const s = SIZE[size] ? size : "md";
+  const c = useSelectCore({
+    props, items: opts, getLabel: (o) => o.label, isItemDisabled: (o) => !!o.disabled,
+    selectedIndex, onCommit: (o) => setCurrent(o.value),
+  });
 
-  useEffect(() => {
-    if (!open) return;
-    const h = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
-    document.addEventListener("mousedown", h);
-    return () => document.removeEventListener("mousedown", h);
-  }, [open]);
-
-  const triggerState = disabled ? TRIGGER_DISABLED
-    : error ? (open ? TRIGGER_ERROR_OPEN : TRIGGER_ERROR)
-    : (open ? TRIGGER_OPEN : TRIGGER_IDLE);
+  const triggerState = c.f.disabled ? TRIGGER_DISABLED
+    : c.f.invalid ? (c.open ? TRIGGER_ERROR_OPEN : TRIGGER_ERROR)
+    : (c.open ? TRIGGER_OPEN : TRIGGER_IDLE);
 
   return (
-    <div ref={ref} className={["relative", className].join(" ")} style={style} {...rest}>
-      <button
-        type="button" disabled={disabled} onClick={() => setOpen((o) => !o)}
-        aria-expanded={open}
-        className={[TRIGGER, SIZE[s], triggerState, current ? "text-fg-primary" : "text-fg-tertiary"].join(" ")}
+    <div {...c.getRootProps()} className={["relative", className].join(" ")} style={style}>
+      <div
+        {...c.getTriggerProps(ref)}
+        /* This trigger IS the drawn control, so it keeps the global focus halo. */
+        data-agni-input={undefined}
+        className={[TRIGGER, SIZE[s], triggerState, sel ? "text-fg-primary" : "text-fg-tertiary"].join(" ")}
       >
-        <span className="overflow-hidden text-ellipsis whitespace-nowrap">{current ? current.label : placeholder}</span>
-        <i className={[open ? "ph ph-caret-up" : "ph ph-caret-down", "shrink-0 text-[14px] text-fg-tertiary"].join(" ")} />
-      </button>
-      {open && (
-        <div className={MENU}>
-          {opts.map((o) => {
-            const sel = o.value === value;
+        <span className="overflow-hidden text-ellipsis whitespace-nowrap">{sel ? sel.label : placeholder}</span>
+        <i aria-hidden="true" className={[c.open ? "ph ph-caret-up" : "ph ph-caret-down", "shrink-0 text-[14px] text-fg-tertiary"].join(" ")} />
+        <HiddenValue name={name} form={form} value={current} />
+      </div>
+      {c.open && (
+        <div {...c.getListProps()} className={MENU}>
+          {opts.map((o, i) => {
+            const on = o.value === current;
             return (
-              <button
-                key={o.value} type="button"
-                onClick={() => { onChange && onChange(o.value); setOpen(false); }}
-                className={[OPT, OPT_TEXT[s], sel ? OPT_ON : OPT_OFF].join(" ")}
+              <div
+                key={o.value}
+                {...c.getOptionProps(i, on, o.disabled)}
+                className={[OPT, OPT_TEXT[s], on ? OPT_ON : OPT_OFF, o.disabled ? "cursor-not-allowed opacity-[var(--state-disabled-opacity)]" : ""].join(" ")}
               >
-                {o.label}
-                {sel && <i className="ph ph-check text-[14px]" />}
-              </button>
+                <span className="inline-flex items-center gap-2">
+                  {o.icon && <i aria-hidden="true" className={"ph " + o.icon + " text-[16px] text-fg-tertiary"} />}
+                  {o.label}
+                </span>
+                {on && <i aria-hidden="true" className="ph ph-check text-[14px]" />}
+              </div>
             );
           })}
         </div>
       )}
     </div>
   );
-}
+});

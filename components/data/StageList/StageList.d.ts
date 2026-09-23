@@ -59,7 +59,7 @@ export interface StageListProps {
  * States resolve their tone through `Tag`, so no module invents stage colours.
  * `RecordDetailModal` mounts this internally when handed `stages`.
  * Resolves `error → loading → empty → content` through `DataState`.
- * @version 1.0.0
+ * @version 1.1.0
   * States: loading · error · empty.
 */
-export declare function StageList(props: StageListProps): JSX.Element;
+export declare const StageList: React.ForwardRefExoticComponent<StageListProps & React.RefAttributes<HTMLOListElement>>;

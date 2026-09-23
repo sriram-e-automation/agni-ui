@@ -2,7 +2,7 @@ import * as React from "react";
 
 export type TagTone = "done" | "doing" | "todo" | "error" | "warning" | "pending" | "blocked" | "brand" | "neutral";
 
-export interface TagProps {
+export interface TagProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "color"> {
   children?: React.ReactNode;
   /**
    * "status" — the tone pill · "chip" — the removable token.
@@ -20,7 +20,9 @@ export interface TagProps {
   /** chip only — accent hex for the leading dot. */
   color?: string | null;
   /** chip only — renders the close button. */
-  onRemove?: (() => void) | null;
+  onRemove?: ((e: React.MouseEvent<HTMLButtonElement>) => void) | null;
+  /** Accessible name of the close button. @default "Remove <text>" */
+  removeLabel?: string;
   style?: React.CSSProperties;
 }
 
@@ -33,10 +35,10 @@ export interface TagProps {
  *
  * `Tag.toneFor(status)` resolves a status to its tone; `Tag.statusTones` is the
  * shared map, so no module invents its own status colours.
- * @version 1.0.0
+ * The ref is the outer <span>.
+ * @version 1.1.0
  */
-export declare function Tag(props: TagProps): JSX.Element;
-export declare namespace Tag {
-  function toneFor(status: string): TagTone;
-  const statusTones: Record<string, TagTone>;
-}
+export declare const Tag: React.ForwardRefExoticComponent<TagProps & React.RefAttributes<HTMLSpanElement>> & {
+  toneFor(status: string): TagTone;
+  statusTones: Record<string, TagTone>;
+};

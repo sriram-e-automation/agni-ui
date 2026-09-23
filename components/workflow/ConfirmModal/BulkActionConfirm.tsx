@@ -3,10 +3,10 @@
  * (no .d.ts, no specimen card). Import the public component instead.
  */
 import React, { useState, useEffect } from "react";
-import { Modal } from "../feedback/Modal.tsx";
-import { Button } from "../core/Button.tsx";
-import { Textarea } from "../forms/Textarea.tsx";
-import { UserSelect } from "../forms/UserSelect.tsx";
+import { Modal } from "../../feedback/Modal/Modal.tsx";
+import { Button } from "../../primitives/Button/Button.tsx";
+import { Textarea } from "../../primitives/Textarea/Textarea.tsx";
+import { UserSelect } from "../../primitives/Select/UserSelect.tsx";
 
 /* ── Types (mirrored in BulkActionConfirm.d.ts) ── */
 export interface BulkActionConfirmUser { id: string; name: string; team?: string; }
@@ -54,7 +54,7 @@ export interface BulkActionConfirmProps {
  */
 const ERR_BANNER = "flex items-start gap-2 py-2 px-3 mb-3 bg-status-error-soft border border-status-error rounded-md text-status-error text-sm";
 const FIELD_ERR = "text-xs text-status-error inline-flex items-center gap-1";
-export function BulkActionConfirm({
+export const BulkActionConfirm = React.forwardRef<HTMLElement, BulkActionConfirmProps>(function BulkActionConfirm({
   open,
   count = 0,
   title,
@@ -72,7 +72,7 @@ export function BulkActionConfirm({
   onConfirm,
   submitting = false,
   error = null,
-}: BulkActionConfirmProps) {
+}, ref) {
   const [remarkVal, setRemarkVal] = useState("");
   const [assignee, setAssignee]   = useState(null);
   const [tried, setTried]         = useState(false);
@@ -85,7 +85,7 @@ export function BulkActionConfirm({
   const submit = () => { setTried(true); if (missingAssignee || missingRemark || submitting) return; onConfirm && onConfirm({ remark: remarkVal.trim(), assignee }); };
 
   return (
-    <Modal open={open} onClose={submitting ? undefined : onCancel} danger={danger} size="md" title={title}
+    <Modal ref={ref as never} open={open} onClose={submitting ? undefined : onCancel} danger={danger} size="md" title={title}
       footer={<>
         <Button category="secondary" onClick={onCancel} disabled={submitting}>Cancel</Button>
         <Button category={danger ? "danger" : "primary"} icon={<i className={"ph " + confirmIcon} />} loading={submitting} onClick={submit}>{confirmLabel}</Button>
@@ -118,4 +118,4 @@ export function BulkActionConfirm({
       )}
     </Modal>
   );
-}
+});

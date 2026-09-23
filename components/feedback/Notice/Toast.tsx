@@ -2,15 +2,17 @@
  * @internal Renderer behind the public <Notice> — not part of the documented API
  * (no .d.ts, no specimen card). Import the public component instead.
  */
-import React from "react";
+import React, { forwardRef } from "react";
 
 /* ── Types (mirrored in Toast.d.ts) ── */
-export interface ToastProps {
+export interface ToastProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
   tone?: "info" | "success" | "warning" | "error";
   title?: React.ReactNode;
   message?: React.ReactNode;
   onClose?: () => void;
   action?: React.ReactNode;
+  /** Accessible name of the close button. @default "Dismiss" */
+  closeLabel?: string;
   style?: React.CSSProperties;
 }
 /** Inline notification toast. */
@@ -41,12 +43,17 @@ const CLOSE =
   "w-6 h-6 shrink-0 border-none bg-transparent text-fg-tertiary cursor-pointer text-[15px] " +
   "rounded-xs transition-colors duration-fast hover:text-fg-primary";
 
-export function Toast({ tone = "info", title, message, onClose, action = null, style = {} }: ToastProps) {
+export const Toast = forwardRef<HTMLDivElement, ToastProps>(function Toast(
+  { tone = "info", title, message, onClose, action = null, closeLabel = "Dismiss", role, style = {}, className = "", ...rest },
+  ref,
+) {
   const t = TONES[tone] || TONES.info;
+  /* Errors interrupt (assertive); everything else waits its turn (polite). */
   return (
-    <div role="status" className={[SHELL, t.bdr].join(" ")}
+    <div {...rest} ref={ref} role={role ?? (tone === "error" ? "alert" : "status")} aria-atomic="true"
+      className={[SHELL, t.bdr, className].join(" ")}
       style={{ animation: "agni-toast-in var(--dur-normal) var(--ease-spring)", ...style }}>
-      <span className={[CHIP, t.chip].join(" ")}>
+      <span aria-hidden="true" className={[CHIP, t.chip].join(" ")}>
         <i className={["ph-fill", t.icon].join(" ")} />
       </span>
       <div className="flex-1 min-w-0">
@@ -55,9 +62,9 @@ export function Toast({ tone = "info", title, message, onClose, action = null, s
         {action && <div className="mt-2">{action}</div>}
       </div>
       {onClose && (
-        <button type="button" onClick={onClose} className={CLOSE}><i className="ph ph-x" /></button>
+        <button type="button" onClick={onClose} aria-label={closeLabel} className={CLOSE}><i aria-hidden="true" className="ph ph-x" /></button>
       )}
       <style>{`@keyframes agni-toast-in { from { opacity: 0; transform: translateY(8px) scale(0.98); } }`}</style>
     </div>
   );
-}
+});

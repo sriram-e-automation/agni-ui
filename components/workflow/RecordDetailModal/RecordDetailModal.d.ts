@@ -11,8 +11,8 @@
 */
 
 import * as React from "react";
-import { ApprovalStep } from "./ApprovalStepper";
-import { RecordStage, StageAction, StageState } from "../data/StageList";
+import { ApprovalStep } from "../ApprovalStepper/ApprovalStepper";
+import { RecordStage, StageAction, StageState } from "../../data/StageList/StageList";
 
 /* Stage shapes live with the component that owns them (data/StageList) and are
    re-exported here so a page can type a `stages` array from one import. */
@@ -374,7 +374,7 @@ export interface RecordDetailModalProps {
  * Passing only `record` reproduces the original approval dialog exactly:
  * six essential fields, three sections, the audit pane, and approve / reject
  * (or "Mark as completed" for assigned tasks) in the footer.
- * @version 1.0.0
+ * @version 1.1.0
   * States: loading · error · busy · open · expanded · readOnly.
 */
-export declare function RecordDetailModal(props: RecordDetailModalProps): JSX.Element;
+export declare const RecordDetailModal: React.ForwardRefExoticComponent<RecordDetailModalProps & React.RefAttributes<HTMLElement>>;

@@ -6,6 +6,6 @@ export interface BarProps {
   style?: React.CSSProperties;
 }
 /** Horizontal header / footer chrome bar.
- *  @version 1.0.0
+ *  @version 1.1.0
  */
-export declare function Bar(props: BarProps): JSX.Element;
+export declare const Bar: React.ForwardRefExoticComponent<BarProps & React.RefAttributes<HTMLDivElement>>;

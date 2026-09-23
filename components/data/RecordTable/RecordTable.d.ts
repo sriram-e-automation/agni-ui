@@ -1,8 +1,8 @@
 import * as React from "react";
-import { DataColumn } from "./DataTable";
-import { PageControlsProps } from "./PageControls";
-import { BulkAction } from "./BulkActionToolbar";
-import { ActionSpec } from "../core/actionSpec";
+import { DataColumn } from "../DataTable/DataTable";
+import { PageControlsProps } from "../PageControls/PageControls";
+import { BulkAction } from "../BulkActionToolbar/BulkActionToolbar";
+import { ActionSpec } from "../../utils/actionSpec";
 
 export interface RecordTablePagination {
   page?: number;
@@ -84,6 +84,6 @@ export interface RecordTableProps {
  * fillHeight · three densities.
  * States: idle · filtered · searching · selection-mode · loading · error ·
  * empty · disabled.
- * @version 1.0.0
+ * @version 1.1.0
  */
-export declare function RecordTable(props: RecordTableProps): JSX.Element;
+export declare const RecordTable: React.ForwardRefExoticComponent<RecordTableProps & React.RefAttributes<HTMLDivElement>>;

@@ -3,27 +3,28 @@
  * (no .d.ts, no specimen card). Import the public component instead.
  */
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Button } from "../core/Button.tsx";
-import { IconButton } from "../core/IconButton.tsx";
-import { Avatar } from "../core/Avatar.tsx";
-import { Badge } from "../core/Badge.tsx";
-import { ErrorState } from "../feedback/ErrorState.tsx";
-import { Loading } from "../feedback/Loading.tsx";
-import { StatusChip } from "../data/StatusChip.tsx";
-import { Tabs } from "../navigation/Tabs.tsx";
-import { Input } from "../forms/Input.tsx";
-import { SelectBasic } from "../forms/SelectBasic.tsx";
-import { DropdownMenu } from "../core/DropdownMenu.tsx";
-import { StageList } from "../data/StageList.tsx";
-import { roleAllows } from "../core/RoleGate.tsx";
-import { resolveDataState } from "../feedback/DataState.tsx";
-import { Modal } from "../feedback/Modal.tsx";
-import { Textarea } from "../forms/Textarea.tsx";
-import { RichTextEditor } from "../forms/RichTextEditor.tsx";
-import { DatePicker } from "../forms/DatePicker.tsx";
-import { ApprovalStepper } from "./ApprovalStepper.tsx";
-import { AuditTrail } from "./AuditTrail.tsx";
-import { DocumentPreview } from "../data/DocumentPreview.tsx";
+import { setRef, useFocusTrap, useScrollLock } from "../../utils/interaction.tsx";
+import { Button } from "../../primitives/Button/Button.tsx";
+import { IconButton } from "../../primitives/Button/IconButton.tsx";
+import { Avatar } from "../../primitives/Avatar/Avatar.tsx";
+import { Badge } from "../../primitives/Badge/Badge.tsx";
+import { ErrorState } from "../../feedback/ErrorState/ErrorState.tsx";
+import { Loading } from "../../feedback/Loading/Loading.tsx";
+import { StatusChip } from "../../data/StatusChip/StatusChip.tsx";
+import { Tabs } from "../../navigation/Tabs/Tabs.tsx";
+import { Input } from "../../primitives/Input/Input.tsx";
+import { SelectBasic } from "../../primitives/Select/SelectBasic.tsx";
+import { DropdownMenu } from "../../navigation/DropdownMenu/DropdownMenu.tsx";
+import { StageList } from "../../data/StageList/StageList.tsx";
+import { roleAllows } from "../../utils/RoleGate.tsx";
+import { resolveDataState } from "../../utils/DataState.tsx";
+import { Modal } from "../../feedback/Modal/Modal.tsx";
+import { Textarea } from "../../primitives/Textarea/Textarea.tsx";
+import { RichTextEditor } from "../../forms/RichTextEditor/RichTextEditor.tsx";
+import { DatePicker } from "../../forms/DatePicker/DatePicker.tsx";
+import { ApprovalStepper } from "../ApprovalStepper/ApprovalStepper.tsx";
+import { AuditTrail } from "../AuditTrail/AuditTrail.tsx";
+import { DocumentPreview } from "../../data/DocumentPreview/DocumentPreview.tsx";
 
 /* ── Types (mirrored in RequestDetailModal.d.ts) ── */
 export interface RequestDetailField { label: React.ReactNode; value: React.ReactNode; }
@@ -309,7 +310,7 @@ function ActionConfirm({ action, config, record, onCancel, onConfirm }) {
   );
 }
 
-export function RequestDetailModal({
+export const RequestDetailModal = React.forwardRef<HTMLDivElement, RequestDetailModalProps>(function RequestDetailModal({
   open, record, onClose, onAction, onComplete, onLogEffort,
   loading = false, error = null, onRetry, readOnly = false, busy = false, columns = 3,
   /* Header */
@@ -332,7 +333,7 @@ export function RequestDetailModal({
   /* Access */
   role = "",
   style = {}, containerStyle = {},
-}: RequestDetailModalProps) {
+}, fwd) {
   const cols = Number(columns) === 2 ? 2 : 3;
   /* null = "first section", which reproduces the old default of "basic". */
   const [tab, setTab] = useState(null);
@@ -368,8 +369,13 @@ export function RequestDetailModal({
      rather than discarding a zero: the first RO callback can legitimately
      report contentRect.width === 0, and swallowing it froze `narrow` at its
      mount value for the life of the dialog. */
-  const [dialogEl, setDialogEl] = useState(null);
-  const dialogRef = useCallback((node) => setDialogEl(node), []);
+  const [dialogEl, setDialogEl] = useState<HTMLElement | null>(null);
+  const trapRef = useRef<HTMLElement | null>(null);
+  /* The forwarded ref lands on the dialog panel (loading shell or loaded dialog). */
+  const fwdRef = useRef(fwd); fwdRef.current = fwd;
+  const dialogRef = useCallback((node: HTMLElement | null) => {
+    trapRef.current = node; setDialogEl(node); setRef(fwdRef.current, node as HTMLDivElement | null);
+  }, []);
   useEffect(() => {
     if (typeof ResizeObserver !== "undefined") return;
     const onResize = () => setNarrow(window.innerWidth < 760);
@@ -407,12 +413,15 @@ export function RequestDetailModal({
   useEffect(() => {
     setEffortEntries((record && record.effort && record.effort.entries) || []);
   }, [record && record.id, record && record.effort]);
-  useEffect(() => {
-    if (!open) return;
-    const k = (e) => { if (e.key === "Escape" && !confirm) onClose && onClose(); };
-    document.addEventListener("keydown", k);
-    return () => document.removeEventListener("keydown", k);
-  }, [open, confirm, onClose]);
+  /* Modal dialog contract: focus in on open, trapped, returned on close. The
+     trap re-arms when the loading shell is swapped for the loaded dialog.
+     Escape is handled on the dialog (onDialogKey), not on document, so a
+     nested note editor or ConfirmModal closes first. */
+  useFocusTrap(trapRef, !!open, { rearmKey: dialogEl });
+  useScrollLock(!!open);
+  const onDialogKey = (e: React.KeyboardEvent) => {
+    if (e.key === "Escape" && !confirm) { e.stopPropagation(); onClose && onClose(); }
+  };
 
   /* ── Controlled / uncontrolled resolution ── */
   const isFull = expanded !== undefined ? !!expanded : full;
@@ -437,7 +446,7 @@ export function RequestDetailModal({
     return (
       <div onClick={onClose} className={[SCRIM, isFull ? "items-stretch" : "items-end"].join(" ")}
         style={{ animation: "agni-fade-in var(--dur-fast) var(--ease-standard)", ...containerStyle }}>
-        <div role="dialog" aria-modal="true" aria-busy={loading || undefined} aria-label="Request" ref={dialogRef} onClick={(e) => e.stopPropagation()}
+        <div role="dialog" aria-modal="true" aria-busy={loading || undefined} aria-label="Request" ref={dialogRef} tabIndex={-1} onKeyDown={onDialogKey} onClick={(e) => e.stopPropagation()}
           className={[DIALOG, isFull ? DIALOG_FULL : DIALOG_SHEET].join(" ")}
           style={{ animation: "agni-sheet-up var(--dur-normal) var(--ease-emphasized)", ...style }}>
           <div className={TITLE_BAR}>
@@ -645,7 +654,7 @@ export function RequestDetailModal({
   return (
     <div onClick={onClose} className={[SCRIM, isFull ? "items-stretch" : "items-end"].join(" ")}
       style={{ animation: "agni-fade-in var(--dur-fast) var(--ease-standard)", ...containerStyle }}>
-      <div role="dialog" aria-modal="true" aria-label={"Request " + record.id} ref={dialogRef} onClick={(e) => e.stopPropagation()}
+      <div role="dialog" aria-modal="true" aria-label={"Request " + record.id} ref={dialogRef} tabIndex={-1} onKeyDown={onDialogKey} onClick={(e) => e.stopPropagation()}
         className={[DIALOG, isFull ? DIALOG_FULL : DIALOG_SHEET].join(" ")}
         style={{ animation: "agni-sheet-up var(--dur-normal) var(--ease-emphasized)", ...style }}>
         {/* ── Title bar — record type · status · pane toggles · close ── */}
@@ -800,7 +809,8 @@ export function RequestDetailModal({
                         <Input size="sm" value={query} onChange={setQuery}
                           placeholder={searchCfg.placeholder || "Search…"}
                           prefixIcon={<i className="ph ph-magnifying-glass" />}
-                          suffixIcon={query ? <i className="ph ph-x cursor-pointer" onClick={() => setQuery("")} /> : undefined} />
+                          aria-label={searchCfg.placeholder || "Search"}
+                          suffixIcon={query ? <button type="button" aria-label="Clear search" onClick={() => setQuery("")} className="inline-flex border-none bg-transparent p-0 cursor-pointer text-inherit"><i aria-hidden="true" className="ph ph-x" /></button> : undefined} />
                       </div>
                     )}
                     {filterCfgs.map((f) => (
@@ -916,7 +926,7 @@ export function RequestDetailModal({
       <style>{`@keyframes agni-fade-in{from{opacity:0}}@keyframes agni-sheet-up{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}@keyframes agni-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}`}</style>
     </div>
   );
-}
+});
 
 /* ── Title-bar pane toggle (Activity log / Effort log) ───────────── */
 const PANE_TOGGLE = "inline-flex items-center h-[32px] justify-center rounded-md font-sans text-sm whitespace-nowrap shrink-0 border " +
@@ -972,12 +982,12 @@ function TimeField24({ value, disabled, onChange, style }) {
       "inline-flex items-center justify-center gap-px py-1 px-2 border border-line-default rounded-md box-border w-full",
       disabled ? "bg-surface-sunken" : "bg-surface-card",
     ].join(" ")} style={style}>
-      <input type="number" min={0} max={23} value={hh} disabled={disabled}
+      <input type="number" aria-label="Hours" min={0} max={23} value={hh} disabled={disabled}
         onFocus={(e) => e.target.select()}
         onChange={(e) => emit(Math.min(23, Math.max(0, parseInt(e.target.value) || 0)), mm)}
         className={numCls} style={NUM_RESET} />
-      <span className="text-sm text-fg-tertiary select-none leading-none">:</span>
-      <input type="number" min={0} max={59} value={mm} disabled={disabled}
+      <span aria-hidden="true" className="text-sm text-fg-tertiary select-none leading-none">:</span>
+      <input type="number" aria-label="Minutes" min={0} max={59} value={mm} disabled={disabled}
         onFocus={(e) => e.target.select()}
         onChange={(e) => emit(hh, Math.min(59, Math.max(0, parseInt(e.target.value) || 0)))}
         className={numCls} style={NUM_RESET} />
@@ -1026,6 +1036,10 @@ function EffortPanel({ entries, assignees, onAdd, onDelete, onEditNote, narrow }
   const [startedAt, setStartedAt] = useState(null);
   const [stoppedAt, setStoppedAt] = useState(null);
   const [noteModal, setNoteModal] = useState(null);   // index of entry being edited
+  /* The note editor is a dialog nested in the record dialog: its own trap sits
+     on top of the stack, so Tab stays inside it until it closes. */
+  const noteRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(noteRef, noteModal !== null);
   const [noteDraft, setNoteDraft] = useState("");
   const [activeSection, setActiveSection] = useState("form"); // "form" | "ledger" | null — mutual exclusion
   const [noteKey, setNoteKey] = useState(0);           // remounts the rich-text editor after a log
@@ -1123,7 +1137,7 @@ function EffortPanel({ entries, assignees, onAdd, onDelete, onEditNote, narrow }
           <div className="flex items-center gap-1 mb-3 pt-[2px]">
             <span className={FIELD_LABEL}>Timer</span>
             <button type="button"
-              title={running ? "Stop timer — stamps the end date & time" : "Start timer — stamps the start date & time"}
+              title={running ? "Stop timer — stamps the end date & time" : "Start timer — stamps the start date & time"} aria-label={running ? "Stop timer — stamps the end date & time" : "Start timer — stamps the start date & time"}
               onClick={running ? handleStop : handleStart}
               className={[TIMER_BTN, running ? TIMER_BTN_RUN : TIMER_BTN_IDLE].join(" ")}>
               <i className={"ph " + (running ? "ph-stop" : "ph-play") + " text-[13px]"} />
@@ -1152,7 +1166,7 @@ function EffortPanel({ entries, assignees, onAdd, onDelete, onEditNote, narrow }
           {assignees.length > 1 && (
             <div className="mb-3">
               <span className={fLbl}>Logged by</span>
-              <select value={by} onChange={(e) => setBy(e.target.value)}
+              <select aria-label="Logged by" value={by} onChange={(e) => setBy(e.target.value)}
                 className="w-full box-border p-2 rounded-md border border-line-default bg-surface-card font-sans text-sm text-fg-primary outline-none cursor-pointer [color-scheme:light_dark]">
                 {assignees.map((a) => <option key={a} value={a}>{a}</option>)}
               </select>
@@ -1204,7 +1218,7 @@ function EffortPanel({ entries, assignees, onAdd, onDelete, onEditNote, narrow }
                     <Avatar name={e.by || ""} size="xs" />
                     <span className="text-sm font-medium text-fg-primary min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">{e.by}</span>
                     <span className="ml-auto text-xs font-data font-bold text-fg-brand bg-surface-brand-soft rounded-full py-[2px] px-2 shrink-0 whitespace-nowrap">{fmtHours(e.hours)}</span>
-                    <button type="button" title="Delete this entry" onClick={() => onDelete && onDelete(i)}
+                    <button type="button" title="Delete this entry" aria-label="Delete this entry" onClick={() => onDelete && onDelete(i)}
                       className="inline-flex items-center justify-center size-6 rounded-sm border-none bg-transparent cursor-pointer text-fg-tertiary shrink-0 transition-[color,background-color] duration-fast ease-standard hover:text-status-error hover:bg-status-error-soft">
                       <i className="ph ph-trash text-[14px]" />
                     </button>
@@ -1221,7 +1235,7 @@ function EffortPanel({ entries, assignees, onAdd, onDelete, onEditNote, narrow }
                     <i className="ph ph-clock text-[12px]" />
                     <span>Logged on {e.loggedOn}</span>
                     {!e.note && (
-                      <button type="button" title="Add a note" onClick={() => { setNoteModal(i); setNoteDraft(""); }}
+                      <button type="button" title="Add a note" aria-label="Add a note" onClick={() => { setNoteModal(i); setNoteDraft(""); }}
                         className="ml-auto inline-flex items-center gap-1 border-none bg-transparent cursor-pointer text-fg-tertiary text-2xs py-[2px] px-1 rounded-sm transition-[color] duration-fast ease-standard hover:text-fg-brand">
                         <i className="ph ph-note-pencil text-[13px]" /> Add note
                       </button>
@@ -1235,7 +1249,7 @@ function EffortPanel({ entries, assignees, onAdd, onDelete, onEditNote, narrow }
                     <div className="py-2 px-3 flex items-start gap-2">
                       <i className="ph ph-note text-[13px] text-fg-brand shrink-0 mt-[2px]" />
                       <span className="text-xs text-fg-secondary leading-normal flex-1 min-w-0 [overflow-wrap:anywhere]" dangerouslySetInnerHTML={{ __html: e.note }} />
-                      <button type="button" title="Edit note" onClick={() => { setNoteModal(i); setNoteDraft(e.note); }}
+                      <button type="button" title="Edit note" aria-label="Edit note" onClick={() => { setNoteModal(i); setNoteDraft(e.note); }}
                         className="inline-flex border-none bg-transparent cursor-pointer text-fg-tertiary p-[2px] rounded-sm shrink-0 transition-[color] duration-fast ease-standard hover:text-fg-brand">
                         <i className="ph ph-pencil-simple text-[12px]" />
                       </button>
@@ -1253,10 +1267,12 @@ function EffortPanel({ entries, assignees, onAdd, onDelete, onEditNote, narrow }
       {noteModal !== null && (
         <div className="absolute inset-0 z-[20] flex flex-col justify-end bg-[rgba(0,0,0,0.32)] [backdrop-filter:blur(2px)]"
           onClick={(ev) => { if (ev.target === ev.currentTarget) setNoteModal(null); }}>
-          <div className="bg-surface-card rounded-t-lg pt-4 px-4 pb-6 flex flex-col gap-3">
+          <div role="dialog" aria-modal="true" aria-labelledby="agni-note-editor-title" ref={noteRef}
+            onKeyDown={(e) => { if (e.key === "Escape") { e.stopPropagation(); setNoteModal(null); } }}
+            className="bg-surface-card rounded-t-lg pt-4 px-4 pb-6 flex flex-col gap-3">
             <div className="flex items-center gap-2">
-              <i className="ph ph-note-pencil text-[18px] text-fg-brand" />
-              <span className="text-sm font-semibold text-fg-primary">
+              <i aria-hidden="true" className="ph ph-note-pencil text-[18px] text-fg-brand" />
+              <span id="agni-note-editor-title" className="text-sm font-semibold text-fg-primary">
                 {entries[noteModal] && entries[noteModal].note ? "Edit note" : "Add note"}
               </span>
               <button type="button" onClick={() => setNoteModal(null)} title="Cancel"

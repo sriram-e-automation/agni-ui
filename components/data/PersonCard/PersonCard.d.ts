@@ -42,4 +42,4 @@ export interface PersonCardProps {
  * detail panes. States: rest · hover (lift) · selected (brand) · dimmed · loading.
  * @version 1.1.0
  */
-export declare function PersonCard(props: PersonCardProps): JSX.Element;
+export declare const PersonCard: React.ForwardRefExoticComponent<PersonCardProps & React.RefAttributes<HTMLElement>>;

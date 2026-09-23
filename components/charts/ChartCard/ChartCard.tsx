@@ -1,8 +1,8 @@
 import React from "react";
 
-export function ChartCard({ title, subtitle, legend, actions, pad = "16px 18px 18px", children, style }) {
+export const ChartCard = React.forwardRef<HTMLDivElement, any>(function ChartCard({ title, subtitle, legend, actions, pad = "16px 18px 18px", children, style }, ref) {
   return (
-    <div style={{ background:"var(--surface-card)", border:"1px solid var(--border-subtle)", borderRadius:"var(--radius-lg)", padding:pad, display:"flex", flexDirection:"column", minWidth:0, ...style }}>
+    <div ref={ref as never} style={{ background:"var(--surface-card)", border:"1px solid var(--border-subtle)", borderRadius:"var(--radius-lg)", padding:pad, display:"flex", flexDirection:"column", minWidth:0, ...style }}>
       {(title || subtitle || legend || actions) && (
         <div style={{ display:"flex", alignItems:"baseline", justifyContent:"space-between", gap:"var(--space-2)", marginBottom:"var(--space-4)", flexWrap:"wrap" }}>
           <div>
@@ -24,4 +24,4 @@ export function ChartCard({ title, subtitle, legend, actions, pad = "16px 18px 1
       {children}
     </div>
   );
-}
+});

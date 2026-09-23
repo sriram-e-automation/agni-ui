@@ -3,11 +3,12 @@
  * API (no .d.ts, no specimen card). Use RecordCard with the matching preset.
  */
 import React, { useState } from "react";
-import { Avatar } from "../core/Avatar.tsx";
-import { Badge } from "../core/Badge.tsx";
-import { Button } from "../core/Button.tsx";
-import { Tooltip } from "../feedback/Tooltip.tsx";
-import { BulkActionConfirm } from "../workflow/BulkActionConfirm.tsx";
+import { pressableProps } from "../../utils/interaction.tsx";
+import { Avatar } from "../../primitives/Avatar/Avatar.tsx";
+import { Badge } from "../../primitives/Badge/Badge.tsx";
+import { Button } from "../../primitives/Button/Button.tsx";
+import { Tooltip } from "../../feedback/Tooltip/Tooltip.tsx";
+import { BulkActionConfirm } from "../../workflow/ConfirmModal/BulkActionConfirm.tsx";
 
 /* ── Types (mirrored in KanbanCard.d.ts) ── */
 export type KanbanStatus =
@@ -179,7 +180,7 @@ const CARD = "flex flex-col shrink-0 relative bg-surface-card rounded-lg overflo
 const CARD_SEL = "border-line-brand outline outline-1 outline-line-brand shadow-e-xs";
 const CARD_OFF = "border-line-subtle outline-none shadow-e-xs hover:border-line-default hover:shadow-e-md";
 
-export function KanbanCard({
+export const KanbanCard = React.forwardRef<HTMLDivElement, KanbanCardProps>(function KanbanCard({
   status = "Yet to start",
   app = null,
   showStatus = false,
@@ -201,16 +202,17 @@ export function KanbanCard({
   disabled = false,
   selected = false,
   style = {},
-}: KanbanCardProps) {
+}, ref) {
   const [modal, setModal] = useState(null);   // null | "approve" | "reject"
   const people = assignees || [];
 
   return (
     <>
       <div
-        onClick={onClick}
+        ref={ref}
+        {...pressableProps(onClick, { pressed: onClick ? !!selected : undefined })}
         aria-busy={busy || undefined}
-        className={[CARD, selected ? CARD_SEL : CARD_OFF, onClick ? "cursor-pointer" : "cursor-default"].join(" ")}
+        className={[CARD, selected ? CARD_SEL : CARD_OFF, onClick ? "cursor-pointer outline-none focus-visible:focus-ring" : "cursor-default"].join(" ")}
         style={{ opacity: busy ? 0.86 : 1, ...style }}>
         <div className="p-3 flex flex-col gap-3">
 
@@ -285,4 +287,4 @@ export function KanbanCard({
       />
     </>
   );
-}
+});

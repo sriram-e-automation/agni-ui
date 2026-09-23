@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
-import { ChartKit } from "./ChartKit.tsx";
+import { mergeRefs } from "../../utils/interaction.tsx";
+import { ChartKit } from "../../utils/ChartKit.tsx";
 
 /* ── Types (mirrored in BarChart.d.ts) ── */
 export interface BarSeries {
@@ -62,11 +63,11 @@ function norm(series, xAxis, data) {
   return { cats: d.map((x) => x.label), series: [{ label: "Value", data: d.map((x) => x.value), perPoint: d.map((x) => x.color) }] };
 }
 
-function BarChartBody({
+function BarChartBody({ forwardedRef,
   series, xAxis, data, layout = "vertical", height,
   showGrid = true, showValues, hideLegend = false, hideTooltip = false,
   color: singleColor, style = {},
-}: BarChartProps) {
+}: BarChartProps & { forwardedRef?: React.Ref<HTMLElement> }) {
   const ref = useRef(null);
   const W = useSize(ref, 460);
   const [hidden, setHidden] = useState(() => new Set());
@@ -110,7 +111,7 @@ function BarChartBody({
     .filter((r) => !r.hide).map((r) => ({ label: model.series[r.si].label, color: colorOf(model.series[r.si], r.si, ci), value: fmt(model.series[r.si].data[ci] || 0) }));
 
   return (
-    <div ref={ref} style={{ width: "100%", minWidth: 0, position: "relative", fontFamily: "var(--font-sans)", ...style }}>
+    <div ref={mergeRefs(forwardedRef, ref)} style={{ width: "100%", minWidth: 0, position: "relative", fontFamily: "var(--font-sans)", ...style }}>
       <Anim />
       <svg viewBox={`0 0 ${W} ${H}`} style={{ width: "100%", height: "auto", display: "block" }}>
         {/* value gridlines + ticks */}
@@ -191,7 +192,7 @@ function BarChartBody({
 /* State contract — error → loading → empty → chart, resolved once in ChartKit
    (see chartState). The body mounts only when there is data, so hook order
    never changes between states. */
-export function BarChart(props) {
+export const BarChart = React.forwardRef<HTMLElement, any>(function BarChart(props, ref) {
   const state = ChartKit.chartState(props, { icon: "ph-chart-bar" });
   if (state !== false) {
     return (
@@ -200,5 +201,5 @@ export function BarChart(props) {
       </div>
     );
   }
-  return <BarChartBody {...props} />;
-}
+  return <BarChartBody {...props} forwardedRef={ref} />;
+});

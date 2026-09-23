@@ -1,4 +1,5 @@
 import React from "react";
+import { useRovingFocus, useStableId } from "../../utils/interaction.tsx";
 
 /* ── Types (mirrored in WorkspacePane.d.ts) ── */
 export interface WorkspaceItem {
@@ -61,7 +62,7 @@ const LABEL = "flex-1 min-w-0 text-left text-sm font-medium whitespace-nowrap ov
 const LIST = "flex-1 min-w-0 flex flex-col min-h-0 overflow-y-auto overflow-x-hidden";
 const DIVIDER = "h-px bg-line-subtle my-[6px] mx-3";
 
-export function WorkspacePane({
+export const WorkspacePane = React.forwardRef<HTMLDivElement, WorkspacePaneProps>(function WorkspacePane({
   items = [],
   open = false,
   onToggleOpen,
@@ -69,47 +70,57 @@ export function WorkspacePane({
   title = "Workspace",
   activeKey = null,
   style = {},
-}: WorkspacePaneProps) {
-  const Row = (item) => {
+}, ref) {
+  const base = useStableId(null, "agni-workspace");
+  const tools = items.filter((it): it is WorkspaceItem => typeof it === "object");
+  /* A vertical toolbar: one Tab stop, ↑ / ↓ between tools (focus only — Enter /
+     Space open one), Home / End. */
+  const [focusIdx, setFocusIdx] = React.useState(Math.max(0, tools.findIndex((it) => it.key === activeKey)));
+  const roving = useRovingFocus({ count: tools.length, current: focusIdx, orientation: "vertical", onMove: setFocusIdx });
+  const Row = (item: WorkspaceItem) => {
     const isActive = item.key === activeKey;
+    const ti = tools.indexOf(item);
     return (
       <button
-        key={item.key} type="button" aria-label={item.label}
-        onClick={() => onSelect && onSelect(item.key)}
+        key={item.key} {...roving.getItemProps(ti)} type="button"
+        aria-label={item.badge != null ? `${item.label}, ${item.badge}` : item.label}
+        aria-pressed={isActive}
+        onClick={() => { setFocusIdx(ti); onSelect && onSelect(item.key); }}
         className={[ROW_BASE, open ? ROW_OPEN : ROW_SHUT, isActive ? ROW_ON : ROW_OFF].join(" ")}
       >
-        <span className={ICON}>
+        <span aria-hidden="true" className={ICON}>
           <i className={(isActive ? "ph-fill " : "ph ") + item.icon} />
           {item.badge != null && <span className={BADGE}>{item.badge}</span>}
         </span>
         {open && <span className={LABEL}>{item.label}</span>}
-        {open && item.launch && <i className="ph ph-arrow-up-right text-[13px] opacity-[0.5] shrink-0" />}
+        {open && item.launch && <i aria-hidden="true" className="ph ph-arrow-up-right text-[13px] opacity-[0.5] shrink-0" />}
       </button>
     );
   };
 
   return (
-    <div className={SHELL} style={{ width: open ? 232 : "var(--workspace-rail-w)", ...style }}>
+    <div ref={ref as never} className={SHELL} style={{ width: open ? 232 : "var(--workspace-rail-w)", ...style }}>
       {/* Toggle + title */}
       <div className={open ? HEAD_OPEN : HEAD_SHUT}>
-        {open && <span className={EYEBROW}>{title}</span>}
+        {open && <span id={base + "-title"} className={EYEBROW}>{title}</span>}
         <button
-          type="button" aria-label={open ? "Collapse" : "Expand"}
+          type="button" aria-label={open ? "Collapse " + title : "Expand " + title}
+          aria-expanded={open} aria-controls={base + "-list"}
           onClick={() => onToggleOpen && onToggleOpen(!open)}
           className={TOGGLE}
         >
-          <i className={open ? "ph ph-caret-line-right" : "ph ph-caret-line-left"} />
+          <i aria-hidden="true" className={open ? "ph ph-caret-line-right" : "ph ph-caret-line-left"} />
         </button>
       </div>
 
       {/* Items */}
-      <div className={LIST}>
+      <div id={base + "-list"} role="toolbar" aria-orientation="vertical" aria-label={title} onKeyDown={roving.onKeyDown} className={LIST}>
         {items.map((item, i) => {
-          if (item === "divider") return <div key={"d" + i} className={DIVIDER} />;
+          if (item === "divider") return <div key={"d" + i} role="separator" className={DIVIDER} />;
           if (item === "spacer") return <div key={"s" + i} className="flex-1 min-w-0" />;
           return Row(item);
         })}
       </div>
     </div>
   );
-}
+});

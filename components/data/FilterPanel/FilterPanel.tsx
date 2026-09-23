@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Button } from "../core/Button.tsx";
-import { IconButton } from "../core/IconButton.tsx";
+import { mergeRefs, useFocusTrap, useStableId } from "../../utils/interaction.tsx";
+import { Button } from "../../primitives/Button/Button.tsx";
+import { IconButton } from "../../primitives/Button/IconButton.tsx";
 
 export interface FilterSection {
   /** Key in the value object, e.g. "status". */
@@ -55,12 +56,17 @@ const PILL_OFF = "border-line-subtle bg-surface-card text-fg-secondary font-medi
 const PANEL_FOOT = "sticky bottom-0 flex items-center justify-between gap-2 px-3 py-3 border-t border-line-subtle bg-surface-card";
 const CLEAR_LINK = "border-none bg-transparent text-fg-tertiary font-sans text-sm font-medium cursor-pointer py-1 px-[2px]";
 
-export function FilterPanel({ sections = [], value, onChange, isPhone }: FilterPanelProps) {
+export const FilterPanelBase = React.forwardRef<HTMLDivElement, FilterPanelProps>(function FilterPanel({ sections = [], value, onChange, isPhone }, ref) {
   const [open, setOpen] = useState(false);
   const [rect, setRect] = useState(null);
   const [draft, setDraft] = useState({});
-  const wrapRef = useRef(null);
-  const panelRef = useRef(null);
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const dialogId = useStableId(null, "agni-filters");
+  /* Non-modal popover dialog: focus moves in on open, Tab stays inside while
+     it's open, and focus returns to the trigger on close. */
+  useFocusTrap(panelRef, open);
+  const expander = { "aria-haspopup": "dialog" as const, "aria-expanded": open, "aria-controls": open ? dialogId : undefined };
 
   const reposition = () => { if (wrapRef.current) setRect(wrapRef.current.getBoundingClientRect()); };
 
@@ -95,7 +101,7 @@ export function FilterPanel({ sections = [], value, onChange, isPhone }: FilterP
         const on = isOn(field, opt);
         const dot = dotMap ? dotMap[opt] : null;
         return (
-          <button key={opt} type="button" onClick={() => toggle(field, opt)} className={[PILL, on ? PILL_ON : PILL_OFF].join(" ")}>
+          <button key={opt} type="button" aria-pressed={on} onClick={() => toggle(field, opt)} className={[PILL, on ? PILL_ON : PILL_OFF].join(" ")}>
             {dot && <span className="size-[7px] rounded-full shrink-0" style={{ background: dot }} />}
             {opt}
             {on && <i className="ph-fill ph-check text-[11px]" />}
@@ -107,21 +113,21 @@ export function FilterPanel({ sections = [], value, onChange, isPhone }: FilterP
 
   return (
     <>
-      <div ref={wrapRef} className="inline-flex shrink-0">
+      <div ref={mergeRefs(ref, wrapRef)} className="inline-flex shrink-0">
         {active ? (
           <div className={TRIGGER_ACTIVE_SHELL}>
-            <button type="button" title="Filters" onClick={() => setOpen(o => !o)}
+            <button type="button" title="Filters" aria-label={"Filters, " + count + " active"} {...expander} onClick={() => setOpen(o => !o)}
               className={[TRIGGER_ACTIVE_BTN, open ? TRIGGER_ACTIVE_OPEN : TRIGGER_ACTIVE_SHUT].join(" ")}>
               <i className="ph-fill ph-funnel" />
-              <span className={COUNT_BADGE}>{count}</span>
+              <span aria-hidden="true" className={COUNT_BADGE}>{count}</span>
             </button>
             <span className="w-px h-[20px] bg-line-brand shrink-0" />
-            <button type="button" title="Clear filters" onClick={() => clear()} className={CLEAR_BTN}>
-              <i className="ph ph-x" />
+            <button type="button" title="Clear filters" aria-label="Clear filters" onClick={() => clear()} className={CLEAR_BTN}>
+              <i aria-hidden="true" className="ph ph-x" />
             </button>
           </div>
         ) : (
-          <button type="button" title="Filter" onClick={() => setOpen(o => !o)}
+          <button type="button" title="Filter" aria-label="Filter" {...expander} onClick={() => setOpen(o => !o)}
             className={[TRIGGER_IDLE, open ? TRIGGER_IDLE_OPEN : TRIGGER_IDLE_SHUT].join(" ")}>
             <i className="ph ph-funnel" />
           </button>
@@ -130,18 +136,20 @@ export function FilterPanel({ sections = [], value, onChange, isPhone }: FilterP
 
       {open && (
         <>
-          {isPhone && <div onClick={() => setOpen(false)} className="fixed inset-0 bg-[var(--scrim)] z-overlay" />}
-          <div ref={panelRef} className={PANEL} style={panelPos}>
+          {isPhone && <div aria-hidden="true" onClick={() => setOpen(false)} className="fixed inset-0 bg-[var(--scrim)] z-overlay" />}
+          <div ref={panelRef} id={dialogId} role="dialog" aria-modal={isPhone || undefined} aria-labelledby={dialogId + "-title"}
+            onKeyDown={(e) => { if (e.key === "Escape") { e.preventDefault(); setOpen(false); } }}
+            className={PANEL} style={panelPos}>
             <div className={PANEL_HEAD}>
-              <span className="inline-flex items-center gap-2 text-sm font-semibold text-fg-primary">
+              <span id={dialogId + "-title"} className="inline-flex items-center gap-2 text-sm font-semibold text-fg-primary">
                 <i className="ph ph-funnel text-[15px] text-fg-brand" /> Filters
               </span>
               <IconButton icon={<i className="ph ph-x" />} variant="ghost" size="sm" onClick={() => setOpen(false)} title="Close" />
             </div>
             <div className="p-3 flex flex-col gap-3">
               {sections.map(sec => (
-                <div key={sec.key}>
-                  <div className={SECTION_LABEL}>{sec.label}</div>
+                <div key={sec.key} role="group" aria-labelledby={dialogId + "-" + sec.key}>
+                  <div id={dialogId + "-" + sec.key} className={SECTION_LABEL}>{sec.label}</div>
                   {renderPills(sec.key, sec.options, sec.dots || null)}
                 </div>
               ))}
@@ -158,4 +166,6 @@ export function FilterPanel({ sections = [], value, onChange, isPhone }: FilterP
       )}
     </>
   );
-}
+});
+
+export const FilterPanel = FilterPanelBase;

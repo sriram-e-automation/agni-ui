@@ -1,5 +1,6 @@
-import { resolveDataState } from "../feedback/DataState.tsx";
+import { resolveDataState } from "../../utils/DataState.tsx";
 import React from "react";
+import { pressableProps } from "../../utils/interaction.tsx";
 
 /* Tailwind v4 (migrated Aug 2026, tranche 7a). `tone` also accepts a raw CSS
    colour (the old escape hatch), so the icon/dot tint stays an inline value
@@ -18,15 +19,14 @@ const SHELL = "bg-surface-card border rounded-lg p-3 flex flex-col gap-2";
 const SHELL_ON = "border-line-brand shadow-e-sm";
 const SHELL_OFF = "border-line-subtle shadow-e-xs";
 
-function StatCardBody({ label, value, total, tone = "brand", icon, captions, remainingLabel, onClick, selected, style }) {
+function StatCardBody({ forwardedRef, label, value, total, tone = "brand", icon, captions, remainingLabel, onClick, selected, style }) {
   const c = TONES[tone] || tone;
   const rows = captions || (total != null && remainingLabel
     ? [{ label: "Taken", value: value }, { label: remainingLabel, value: Math.max(Number(total) - Number(value), 0) }]
     : null);
   const interactive = !!onClick;
   return (
-    <div onClick={onClick} role={interactive ? "button" : undefined} tabIndex={interactive ? 0 : undefined}
-      onKeyDown={interactive ? (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onClick(); } } : undefined}
+    <div ref={forwardedRef as never} {...pressableProps(interactive ? onClick : null)}
       className={[SHELL, selected ? SHELL_ON : SHELL_OFF, interactive ? "cursor-pointer hover:border-line-brand transition-[border-color,box-shadow] duration-fast" : "cursor-default"].join(" ")}
       style={style}>
       <div className="flex items-center gap-2">
@@ -51,11 +51,11 @@ function StatCardBody({ label, value, total, tone = "brand", icon, captions, rem
 }
 
 /* State contract — a single value has no "empty", so loading and error only. */
-export function StatCard(props) {
+export const StatCard = React.forwardRef<HTMLElement, any>(function StatCard(props, ref) {
   const state = resolveDataState({
     loading: props.loading, error: props.error, onRetry: props.onRetry,
     shape: "stat", height: 86,
   });
-  if (state !== false) return <div className="w-full" style={props.style || {}}>{state}</div>;
-  return <StatCardBody {...props} />;
-}
+  if (state !== false) return <div ref={ref as never} className="w-full" style={props.style || {}}>{state}</div>;
+  return <StatCardBody {...props} forwardedRef={ref} />;
+});

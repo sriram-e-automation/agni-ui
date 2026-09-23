@@ -2,11 +2,13 @@
  * @internal Renderer behind the public <Button> — not part of the documented API
  * (no .d.ts, no specimen card). Import the public component instead.
  */
-import React from "react";
-import { TipBubble, useTip } from "../feedback/Tooltip.tsx";
+import React, { forwardRef } from "react";
+import { TipBubble, useTip } from "../../feedback/Tooltip/Tooltip.tsx";
+import { composeHandlers, useStableId } from "../../utils/interaction.tsx";
 
 /* ── Types (mirrored in Button.d.ts) ── */
-export interface ButtonProps {
+export interface ButtonProps
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "type" | "title"> {
   children?: React.ReactNode;
   /** Visual intent. @default "primary" */
   category?: "primary" | "secondary" | "tertiary" | "ghost" | "danger" | "brand-soft";
@@ -28,7 +30,6 @@ export interface ButtonProps {
   title?: string;
   /** Tooltip side. @default "top" */
   tooltipSide?: "top" | "bottom" | "left" | "right";
-  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   /** Escape hatch for runtime-computed values only — not for theming. */
   style?: React.CSSProperties;
   className?: string;
@@ -107,7 +108,7 @@ const BASE =
  * Fully interactive: hover, active(press-scale), focus-visible, disabled, loading.
  * States are pure CSS — no hover/press React state, so no re-render on pointer move.
  */
-export function ButtonBase({
+export const ButtonBase = forwardRef<HTMLButtonElement, ButtonProps>(function ButtonBase({
   children,
   variant,                       // alias for category (DS-wide prop vocabulary)
   category = "primary",          // primary | secondary | tertiary | ghost | danger | brand-soft
@@ -120,11 +121,11 @@ export function ButtonBase({
   type = "button",
   title,
   tooltipSide = "top",
-  onClick,
+  onClick, onMouseEnter, onMouseLeave, onMouseDown, onFocus, onBlur,
   style,
   className = "",
   ...rest
-}: ButtonProps) {
+}, ref) {
   /* One vocabulary: `variant` is the DS-wide word; `category` stays valid. */
   category = variant || category;
   const tip = useTip(300);
@@ -133,6 +134,9 @@ export function ButtonBase({
      a wrapper. This is the `disabledReason` contract: a withheld action stays
      visible and explains itself. */
   const offTip = !!title && disabled && !loading;
+  const tipId = useStableId(null, "agni-tip");
+  /* A labelled button's tooltip is a description; an unlabelled one's is its name. */
+  const describes = hasTip && tip.open && !!children;
 
   const cls = [
     BASE,
@@ -144,20 +148,23 @@ export function ButtonBase({
 
   const btn = (
     <button
+      {...rest}
+      ref={ref}
       type={type}
       disabled={disabled || loading}
-      aria-label={!children && title ? title : undefined}
+      aria-label={rest["aria-label"] ?? (!children && title ? title : undefined)}
+      aria-describedby={[rest["aria-describedby"], describes ? tipId : null].filter(Boolean).join(" ") || undefined}
       aria-busy={loading || undefined}
       title={offTip ? title : undefined}
       className={cls}
       style={style}
-      onClick={(e) => { tip.bind.onClick(); onClick && onClick(e); }}
-      onMouseEnter={() => { if (hasTip) tip.bind.onMouseEnter(); }}
-      onMouseLeave={() => { if (hasTip) tip.bind.onMouseLeave(); }}
-      onMouseDown={() => { if (hasTip) tip.bind.onMouseDown(); }}
-      onFocus={() => { if (hasTip) tip.bind.onFocus(); }}
-      onBlur={() => { if (hasTip) tip.bind.onBlur(); }}
-      {...rest}
+      onClick={composeHandlers(onClick, () => tip.bind.onClick())}
+      onMouseEnter={composeHandlers(onMouseEnter, () => { if (hasTip) tip.bind.onMouseEnter(); })}
+      onMouseLeave={composeHandlers(onMouseLeave, () => { if (hasTip) tip.bind.onMouseLeave(); })}
+      onMouseDown={composeHandlers(onMouseDown, () => { if (hasTip) tip.bind.onMouseDown(); })}
+      onFocus={composeHandlers(onFocus, () => { if (hasTip) tip.bind.onFocus(); })}
+      onBlur={composeHandlers(onBlur, () => { if (hasTip) tip.bind.onBlur(); })}
+      onKeyDown={composeHandlers(rest.onKeyDown, (e) => { if (e.key === "Escape" && tip.open) tip.bind.onBlur(); })}
     >
       {loading && (
         <span
@@ -171,7 +178,7 @@ export function ButtonBase({
       {!loading && iconTrailing && (
         <span className={[ICON_SIZE[size] || ICON_SIZE.md, "inline-flex shrink-0"].join(" ")}>{iconTrailing}</span>
       )}
-      {hasTip && tip.open && <TipBubble label={title} side={tooltipSide} />}
+      {hasTip && tip.open && <TipBubble id={tipId} label={title} side={tooltipSide} />}
     </button>
   );
   if (!offTip) return btn;
@@ -183,4 +190,4 @@ export function ButtonBase({
       {tip.open && <TipBubble label={title} side={tooltipSide} />}
     </span>
   );
-}
+});

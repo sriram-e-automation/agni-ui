@@ -20,6 +20,6 @@ export interface SettingsMenuProps {
   style?: React.CSSProperties;
 }
 /** Appearance popover: dark-mode toggle + accent swatches + optional background picker.
- *  @version 1.0.0
+ *  @version 1.1.0
  */
-export declare function SettingsMenu(props: SettingsMenuProps): JSX.Element;
+export declare const SettingsMenu: React.ForwardRefExoticComponent<SettingsMenuProps & React.RefAttributes<HTMLDivElement>>;

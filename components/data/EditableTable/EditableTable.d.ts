@@ -32,4 +32,4 @@ export interface EditableTableProps {
  *  States: loading · error · empty.
  *  @version 1.1.0
  */
-export declare function EditableTable(props: EditableTableProps): JSX.Element;
+export declare const EditableTable: React.ForwardRefExoticComponent<EditableTableProps & React.RefAttributes<HTMLDivElement>>;

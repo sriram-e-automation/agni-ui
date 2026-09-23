@@ -1,6 +1,6 @@
 import * as React from "react";
 
-export interface PanelProps {
+export interface PanelProps extends Omit<React.HTMLAttributes<HTMLElement>, "title"> {
   /** Where the panel sits. @default "inline" */
   variant?: "inline" | "sheet" | "drawer";
   title?: React.ReactNode;
@@ -14,9 +14,13 @@ export interface PanelProps {
   footer?: React.ReactNode;
   children?: React.ReactNode;
 
-  /** inline — collapse toggle in the header. */
+  /** inline — collapse toggle in the header (a disclosure button). */
   collapsible?: boolean;
+  /** inline — controlled expanded state. */
+  expanded?: boolean;
+  /** inline — initial expanded state. @default true */
   defaultOpen?: boolean;
+  onExpandedChange?: (expanded: boolean) => void;
   /** inline — body padding. @default true */
   pad?: boolean;
   /* ── The state contract — all three variants (Aug 2026) ──────────────────
@@ -47,8 +51,16 @@ export interface PanelProps {
   width?: number;
   /** sheet — max width of the centred sheet. */
   maxWidth?: number | string;
-  /** sheet — dismiss on scrim click. @default true */
+  /** sheet / drawer — dismiss on scrim click. @default true */
   closeOnScrim?: boolean;
+  /** sheet / drawer — dismiss on Escape. @default true */
+  closeOnEscape?: boolean;
+  /** sheet / drawer — element to focus on open. */
+  initialFocus?: React.RefObject<HTMLElement | null>;
+  /** sheet / drawer — return focus to the opener on close. @default true */
+  restoreFocus?: boolean;
+  /** sheet / drawer — accessible name of the close button. @default "Close" */
+  closeLabel?: string;
 
   style?: React.CSSProperties;
 }
@@ -61,7 +73,12 @@ export interface PanelProps {
  * Merged Aug 2026 — supersedes Sheet (`variant="sheet"`) and Drawer
  * (`variant="drawer"`), which remain as internal renderers and are no longer
  * part of the documented API.
- * @version 1.0.0
+ *
+ * inline — a named region; collapsible panels use a disclosure button.
+ * sheet / drawer — modal dialogs: labelled, focus trapped and returned to the
+ * opener, Escape on the dialog, page scroll locked.
+ * The ref is the section (inline) or the dialog panel (overlays).
+ * @version 1.1.0
   * States: loading · error · empty · open.
 */
-export declare function Panel(props: PanelProps): JSX.Element;
+export declare const Panel: React.ForwardRefExoticComponent<PanelProps & React.RefAttributes<HTMLElement>>;

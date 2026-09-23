@@ -43,12 +43,12 @@ export interface RecordFormProps {
 }
 /** Canonical create-record Sheet: full advanced form kit, validation, discard guard, review → submit flow.  * States: error · busy · open · submitting · submitError.
 */
-export declare function RecordForm(props: RecordFormProps): JSX.Element;
+export declare const RecordForm: React.ForwardRefExoticComponent<RecordFormProps & React.RefAttributes<HTMLElement>>;
 /** Maps an in-progress form value to ReviewSubmitModal summary rows. */
 export declare function buildReviewSummary(data: Partial<RecordFormValue>, opts?: any): { label: string; value: React.ReactNode }[];
 /** Default option catalogs (types · priorities · categories · sites · people · units)
  *  a module overrides per desk. Read, not rendered.
- *  @version 1.0.0
+ *  @version 1.1.0
  */
 export declare const REQUEST_FORM_DEFAULTS: { types: RequestOption[]; priorities: RequestOption[]; categories: string[]; sites: RequestOption[]; people: RequestPerson[]; units: string[] };
 

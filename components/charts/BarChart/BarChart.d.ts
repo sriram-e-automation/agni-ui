@@ -42,7 +42,7 @@ export interface BarChartProps {
   empty?: React.ReactNode;
 }
 /** Categorical bar chart — grouped/stacked, vertical/horizontal, hover + legend.
- *  @version 1.0.0
+ *  @version 1.1.0
   * States: loading · error · empty.
 */
-export declare function BarChart(props: BarChartProps): JSX.Element;
+export declare const BarChart: React.ForwardRefExoticComponent<BarChartProps & React.RefAttributes<HTMLElement>>;

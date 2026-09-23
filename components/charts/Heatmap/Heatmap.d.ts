@@ -35,7 +35,7 @@ export interface HeatmapProps {
   empty?: React.ReactNode;
 }
 /** Grid heatmap — value→colour intensity ramp, scale bar, hover lift + tooltip.
- *  @version 1.0.0
+ *  @version 1.1.0
   * States: loading · error · empty.
 */
-export declare function Heatmap(props: HeatmapProps): JSX.Element;
+export declare const Heatmap: React.ForwardRefExoticComponent<HeatmapProps & React.RefAttributes<HTMLElement>>;

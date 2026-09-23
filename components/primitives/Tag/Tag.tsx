@@ -1,9 +1,9 @@
-import React from "react";
+import React, { forwardRef } from "react";
 
 /* ── Types (mirrored in Tag.d.ts) ── */
 export type TagTone = "done" | "doing" | "todo" | "error" | "warning" | "pending" | "blocked" | "brand" | "neutral";
 
-export interface TagProps {
+export interface TagProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "color"> {
   children?: React.ReactNode;
   /** "status" — tone pill · "chip" — removable token. Inferred from tone/status/onRemove. */
   variant?: "status" | "chip";
@@ -18,7 +18,9 @@ export interface TagProps {
   /** chip only — accent hex for the leading dot. */
   color?: string | null;
   /** chip only — renders the close button. */
-  onRemove?: (() => void) | null;
+  onRemove?: ((e: React.MouseEvent<HTMLButtonElement>) => void) | null;
+  /** Accessible name of the close button. @default "Remove <text>" */
+  removeLabel?: string;
   style?: React.CSSProperties;
   className?: string;
 }
@@ -79,7 +81,7 @@ const REMOVE_CLS =
   "transition-[background-color,color] duration-fast " +
   "hover:bg-state-press hover:text-fg-primary";
 
-export function Tag({
+const TagBase = forwardRef<HTMLSpanElement, TagProps>(function Tag({
   children,
   variant,
   tone,
@@ -88,10 +90,11 @@ export function Tag({
   size = "md",
   color = null,
   onRemove = null,
+  removeLabel,
   style = {},
   className = "",
   ...rest
-}: TagProps) {
+}, ref) {
   const kind = variant || (tone || status ? "status" : "chip");
 
   if (kind === "status") {
@@ -99,11 +102,12 @@ export function Tag({
     const showDot = dot ?? !!status;
     return (
       <span
+        ref={ref}
         className={[STATUS_BASE, STATUS_SIZE[size] || STATUS_SIZE.md, TONE_CLS[t] || TONE_CLS.neutral, className].join(" ")}
         style={style}
         {...rest}
       >
-        {showDot && <span className={[DOT_SIZE[size] || DOT_SIZE.md, "rounded-full bg-current shrink-0"].join(" ")} />}
+        {showDot && <span aria-hidden="true" className={[DOT_SIZE[size] || DOT_SIZE.md, "rounded-full bg-current shrink-0"].join(" ")} />}
         {children || status}
       </span>
     );
@@ -111,12 +115,14 @@ export function Tag({
 
   return (
     <span
+      ref={ref}
       className={[CHIP_BASE, onRemove ? "pr-1" : "pr-2", className].join(" ")}
       style={style}
       {...rest}
     >
       {(dot ?? !!color) && (
         <span
+          aria-hidden="true"
           className="size-[7px] rounded-full shrink-0"
           /* Runtime-computed accent — cannot be a static class. */
           style={{ background: color || "var(--text-secondary)" }}
@@ -124,15 +130,21 @@ export function Tag({
       )}
       {children}
       {onRemove && (
-        <button type="button" onClick={onRemove} aria-label="Remove" className={REMOVE_CLS}>
-          <i className="ph ph-x" />
+        <button type="button" onClick={onRemove}
+          aria-label={removeLabel ?? (typeof children === "string" || typeof children === "number" ? "Remove " + children : "Remove")}
+          className={REMOVE_CLS}>
+          <i aria-hidden="true" className="ph ph-x" />
         </button>
       )}
     </span>
   );
-}
+});
 
-/** Resolve a record status to its tone. Exposed so apps can extend / inspect the map. */
-Tag.toneFor = (status: string): TagTone => STATUS_TONE[status] || "neutral";
-/** The shared status → tone map. */
-Tag.statusTones = STATUS_TONE;
+/* Static helpers ride on the forwardRef object. */
+export const Tag = Object.assign(TagBase, {
+  /** Resolve a record status to its tone. Exposed so apps can extend / inspect the map. */
+  toneFor: (status: string): TagTone => STATUS_TONE[status] || "neutral",
+  /** The shared status → tone map. */
+  statusTones: STATUS_TONE,
+});
+

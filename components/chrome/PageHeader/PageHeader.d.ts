@@ -1,7 +1,7 @@
 import * as React from "react";
-import { PageTitleBarProps } from "./PageTitleBar";
-import { PageControlsProps } from "../data/PageControls";
-import { QuickStatsProps } from "../data/QuickStats";
+import { PageTitleBarProps } from "../PageTitleBar/PageTitleBar";
+import { PageControlsProps } from "../../data/PageControls/PageControls";
+import { QuickStatsProps } from "../../data/QuickStats/QuickStats";
 
 export interface PageHeaderProps {
   /** The heading row. Required — a page header without a title is a toolbar. */
@@ -60,6 +60,6 @@ export interface PageHeaderProps {
  * Per-row values on `titleBar` / `controls` still win where they are stricter.
  *
  * States: idle · loading (both rows shimmer) · disabled · sticky.
- * @version 1.0.0
+ * @version 1.1.0
  */
-export declare function PageHeader(props: PageHeaderProps): JSX.Element;
+export declare const PageHeader: React.ForwardRefExoticComponent<PageHeaderProps & React.RefAttributes<HTMLDivElement>>;

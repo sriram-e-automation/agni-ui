@@ -3,9 +3,9 @@
  * (no .d.ts, no specimen card). Import the public component instead.
  */
 import React, { useState } from "react";
-import { Modal } from "../feedback/Modal.tsx";
-import { Button } from "../core/Button.tsx";
-import { FileUpload } from "../forms/FileUpload.tsx";
+import { Modal } from "../../feedback/Modal/Modal.tsx";
+import { Button } from "../../primitives/Button/Button.tsx";
+import { FileUpload } from "../../forms/FileUpload/FileUpload.tsx";
 
 export interface ImportColumn { name: string; type: string; req: boolean; eg?: string; }
 export interface ImportRecordsModalProps {
@@ -58,7 +58,7 @@ const LBL_2XS = "text-2xs font-semibold tracking-wide uppercase text-fg-tertiary
    header cell emits exactly one alignment utility (rule 5). */
 const TH = "py-2 px-2 text-xs font-semibold text-fg-tertiary bg-surface-soft border-b border-line-subtle whitespace-nowrap";
 const TD = "py-2 px-2 text-xs";
-export function ImportRecordsModal({ open, onClose, title = "Import records", columns = DEFAULT_COLUMNS, intro, templateCsv = DEFAULT_CSV, templateFilename = "records-import-template.csv", accept = ".csv,.xlsx,.xls", onImported, error = null }: ImportRecordsModalProps) {
+export const ImportRecordsModal = React.forwardRef<HTMLElement, ImportRecordsModalProps>(function ImportRecordsModal({ open, onClose, title = "Import records", columns = DEFAULT_COLUMNS, intro, templateCsv = DEFAULT_CSV, templateFilename = "records-import-template.csv", accept = ".csv,.xlsx,.xls", onImported, error = null }, ref) {
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [done, setDone] = useState(false);
@@ -81,7 +81,7 @@ export function ImportRecordsModal({ open, onClose, title = "Import records", co
   const lbl2xs = LBL_2XS;
 
   return (
-    <Modal open={open} onClose={handleClose} title={title} size="md"
+    <Modal ref={ref as never} open={open} onClose={handleClose} title={title} size="md"
       footer={<>
         <Button category="secondary" onClick={handleClose}>Cancel</Button>
         <Button category="primary" icon={<i className="ph ph-upload-simple" />}
@@ -161,4 +161,4 @@ export function ImportRecordsModal({ open, onClose, title = "Import records", co
       </div>
     </Modal>
   );
-}
+});

@@ -1,6 +1,6 @@
 import * as React from "react";
 
-export interface NoticeProps {
+export interface NoticeProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
   /** "inline" — full-width banner in the page · "toast" — floating card. @default "inline" */
   variant?: "inline" | "toast";
   /** @default "info" */
@@ -18,6 +18,11 @@ export interface NoticeProps {
   onClose?: () => void;
   /** Override the Phosphor icon class. */
   icon?: string;
+  /** Accessible names of the dismiss / close buttons. @default "Dismiss" */
+  dismissLabel?: string;
+  closeLabel?: string;
+  /** Live-region role. @default "alert" for error (and inline warning), else "status" */
+  role?: "alert" | "status" | string;
   style?: React.CSSProperties;
 }
 
@@ -28,6 +33,9 @@ export interface NoticeProps {
  * Merged Aug 2026 — supersedes Banner (`variant="inline"`) and Toast
  * (`variant="toast"`), which remain as internal renderers and are no longer
  * part of the documented API.
- * @version 1.0.0
+ *
+ * A live region: errors (and inline warnings) are announced assertively, the
+ * rest politely. Dismiss / close buttons are labelled. The ref is the notice.
+ * @version 1.1.0
  */
-export declare function Notice(props: NoticeProps): JSX.Element;
+export declare const Notice: React.ForwardRefExoticComponent<NoticeProps & React.RefAttributes<HTMLDivElement>>;

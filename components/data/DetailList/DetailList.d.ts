@@ -39,10 +39,10 @@ export interface DetailListProps {
 export interface CopyButtonProps { value: React.ReactNode; title?: string; }
 /** Copy-to-clipboard icon button with a 1.6s confirmation.  * States: loading · error · empty.
 */
-export declare function CopyButton(props: CopyButtonProps): JSX.Element;
+export declare const CopyButton: React.ForwardRefExoticComponent<CopyButtonProps & React.RefAttributes<HTMLButtonElement>>;
 /** One label + value pair, optionally copyable, mono or a link. */
-export declare function KeyValueRow(props: KeyValueRowProps): JSX.Element;
+export declare const KeyValueRow: React.ForwardRefExoticComponent<KeyValueRowProps & React.RefAttributes<HTMLDivElement>>;
 /** Stack of KeyValueRows — the read-only field display for record-detail pages.
- *  @version 1.0.0
+ *  @version 1.1.0
  */
-export declare function DetailList(props: DetailListProps): JSX.Element;
+export declare const DetailList: React.ForwardRefExoticComponent<DetailListProps & React.RefAttributes<HTMLElement>>;

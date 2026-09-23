@@ -30,11 +30,17 @@ export interface NavRailProps {
   /** Current viewer's role, matched against each `roles` list. Same contract
    *  as core/RoleGate. Omit to show everything. */
   role?: string;
+  /** Accessible name of the navigation landmark. @default "Main" */
+  label?: string;
+  id?: string;
   /* A parent whose every sub-item is withheld is withheld too, so the rail
      never shows an empty group. */
 }
 /** Desk-app left nav: items-driven with sub-groups, drawer ⇄ icon-rail collapse, overlay mode with its own scrim.
- *  @version 1.0.0
+ *  A navigation landmark of real buttons: aria-current="page" on the current
+ *  item, disclosure buttons for groups, named icons when collapsed. Overlay
+ *  mode is a modal dialog (focus trapped, Escape closes). The ref is the rail.
+ *  @version 1.1.0
   * States: active · open.
 */
-export declare function NavRail(props: NavRailProps): JSX.Element;
+export declare const NavRail: React.ForwardRefExoticComponent<NavRailProps & React.RefAttributes<HTMLDivElement>>;

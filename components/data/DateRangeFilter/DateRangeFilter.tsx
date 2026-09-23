@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Button } from "../core/Button.tsx";
-import { IconButton } from "../core/IconButton.tsx";
-import { DatePicker } from "../forms/DatePicker.tsx";
+import { mergeRefs, useFocusTrap, useStableId } from "../../utils/interaction.tsx";
+import { Button } from "../../primitives/Button/Button.tsx";
+import { IconButton } from "../../primitives/Button/IconButton.tsx";
+import { DatePicker } from "../../forms/DatePicker/DatePicker.tsx";
 
 /* ── Types (mirrored in DateRangeFilter.d.ts) ── */
 export interface DateRange {
@@ -75,7 +76,7 @@ const NAV_BTN = "size-[30px] shrink-0 inline-flex items-center justify-center bo
 const PANEL_FOOT = "sticky bottom-0 flex items-center justify-between gap-2 px-3 py-3 border-t border-line-subtle bg-surface-card";
 const CLEAR_LINK = "border-none bg-transparent text-fg-tertiary font-sans text-sm font-medium cursor-pointer py-1 px-[2px]";
 
-export function DateRangeFilter({ value, onChange, isPhone }: DateRangeFilterProps) {
+export const DateRangeFilterBase = React.forwardRef<HTMLDivElement, DateRangeFilterProps>(function DateRangeFilter({ value, onChange, isPhone }, ref) {
   const [open,    setOpen]    = useState(false);
   const [rect,    setRect]    = useState(null);
   const [gran,    setGran]    = useState("month");
@@ -83,8 +84,13 @@ export function DateRangeFilter({ value, onChange, isPhone }: DateRangeFilterPro
   const [dStart,  setDStart]  = useState(null);
   const [dEnd,    setDEnd]    = useState(null);
   const [custom,  setCustom]  = useState(false);
-  const wrapRef  = useRef(null);
-  const panelRef = useRef(null);
+  const wrapRef  = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const dialogId = useStableId(null, "agni-daterange");
+  /* Non-modal popover dialog: focus moves in on open, Tab stays inside while
+     it's open, and focus returns to the trigger on close. */
+  useFocusTrap(panelRef, open);
+  const expander = { "aria-haspopup": "dialog" as const, "aria-expanded": open, "aria-controls": open ? dialogId : undefined };
   const now = new Date();
 
   const reposition = () => { if(wrapRef.current) setRect(wrapRef.current.getBoundingClientRect()); };
@@ -129,20 +135,20 @@ export function DateRangeFilter({ value, onChange, isPhone }: DateRangeFilterPro
 
   return (
     <>
-      <div ref={wrapRef} className="inline-flex shrink-0">
+      <div ref={mergeRefs(ref, wrapRef)} className="inline-flex shrink-0">
         {active ? (
           <div className={TRIGGER_ACTIVE_SHELL}>
-            <button type="button" title="Date range" onClick={() => setOpen(o=>!o)}
+            <button type="button" title="Date range" aria-label="Date range" {...expander} onClick={() => setOpen(o=>!o)}
               className={[TRIGGER_ACTIVE_BTN, open ? TRIGGER_ACTIVE_OPEN : TRIGGER_ACTIVE_SHUT].join(" ")}>
               <i className="ph-fill ph-calendar-check" />
             </button>
             <span className="w-px h-[20px] bg-line-brand shrink-0" />
-            <button type="button" title="Clear selected range" onClick={() => clear()} className={CLEAR_BTN}>
-              <i className="ph ph-x" />
+            <button type="button" title="Clear selected range" aria-label="Clear selected range" onClick={() => clear()} className={CLEAR_BTN}>
+              <i aria-hidden="true" className="ph ph-x" />
             </button>
           </div>
         ) : (
-          <button type="button" title="Date range" onClick={() => setOpen(o=>!o)}
+          <button type="button" title="Date range" aria-label="Date range" {...expander} onClick={() => setOpen(o=>!o)}
             className={[TRIGGER_IDLE, open ? TRIGGER_IDLE_OPEN : TRIGGER_IDLE_SHUT].join(" ")}>
             <i className="ph ph-calendar-blank" />
           </button>
@@ -151,10 +157,12 @@ export function DateRangeFilter({ value, onChange, isPhone }: DateRangeFilterPro
 
       {open && (
         <>
-          {isPhone && <div onClick={() => setOpen(false)} className="fixed inset-0 bg-[var(--scrim)] z-overlay" />}
-          <div ref={panelRef} className={PANEL} style={panelPos}>
+          {isPhone && <div aria-hidden="true" onClick={() => setOpen(false)} className="fixed inset-0 bg-[var(--scrim)] z-overlay" />}
+          <div ref={panelRef} id={dialogId} role="dialog" aria-modal={isPhone || undefined} aria-labelledby={dialogId + "-title"}
+            onKeyDown={(e) => { if (e.key === "Escape") { e.preventDefault(); setOpen(false); } }}
+            className={PANEL} style={panelPos}>
             <div className={PANEL_HEAD}>
-              <span className="inline-flex items-center gap-2 text-sm font-semibold text-fg-primary">
+              <span id={dialogId + "-title"} className="inline-flex items-center gap-2 text-sm font-semibold text-fg-primary">
                 <i className="ph ph-calendar-blank text-[15px] text-fg-brand" /> Date range
               </span>
               <IconButton icon={<i className="ph ph-x" />} variant="ghost" size="sm" onClick={() => setOpen(false)} title="Close" />
@@ -163,34 +171,34 @@ export function DateRangeFilter({ value, onChange, isPhone }: DateRangeFilterPro
               <div className={SECTION_LABEL}>Period</div>
               <div className="flex gap-1 mb-3">
                 {GRANS.map(g => { const on=gran===g&&!custom; return (
-                  <button key={g} type="button" onClick={() => selectGran(g)} className={[GRAN_BTN, on ? GRAN_ON : GRAN_OFF].join(" ")}>
+                  <button key={g} type="button" aria-pressed={on} onClick={() => selectGran(g)} className={[GRAN_BTN, on ? GRAN_ON : GRAN_OFF].join(" ")}>
                     {g.charAt(0).toUpperCase()+g.slice(1)}
                   </button>
                 ); })}
               </div>
               <div className="flex items-center gap-2 py-2 border-t border-b border-line-subtle mb-3">
-                <button type="button" onClick={() => navigate(-1)} className={NAV_BTN}><i className="ph ph-caret-left" /></button>
-                <div className={["flex-1 min-w-0 text-center transition-opacity duration-fast", custom ? "opacity-[0.38]" : "opacity-100"].join(" ")}>
+                <button type="button" aria-label="Previous period" onClick={() => navigate(-1)} className={NAV_BTN}><i aria-hidden="true" className="ph ph-caret-left" /></button>
+                <div aria-live="polite" className={["flex-1 min-w-0 text-center transition-opacity duration-fast", custom ? "opacity-[0.38]" : "opacity-100"].join(" ")}>
                   <div className="text-md font-semibold text-fg-primary leading-[1.2]">{curPeriod.lbl}</div>
                   <div className="text-xs text-fg-tertiary mt-[3px]">{fmt(curPeriod.start)} – {fmt(curPeriod.end)}</div>
                 </div>
-                <button type="button" onClick={() => navigate(+1)} className={NAV_BTN}><i className="ph ph-caret-right" /></button>
+                <button type="button" aria-label="Next period" onClick={() => navigate(+1)} className={NAV_BTN}><i aria-hidden="true" className="ph ph-caret-right" /></button>
               </div>
               <div>
                 <div className={SECTION_LABEL}>Custom range</div>
                 <div className="flex items-end gap-2">
                   <label className="flex-1 min-w-0">
                     <span className="block text-xs text-fg-tertiary mb-1">From</span>
-                    <DatePicker value={dStart} max={dEnd||undefined} onChange={(d) => onManual("start",d)} size="sm" />
+                    <DatePicker value={dStart} max={dEnd||undefined} onChange={(d) => onManual("start",d)} size="sm" aria-label="From" />
                   </label>
                   <i className="ph ph-arrow-right text-[13px] text-fg-tertiary shrink-0 mb-2" />
                   <label className="flex-1 min-w-0">
                     <span className="block text-xs text-fg-tertiary mb-1">To</span>
-                    <DatePicker value={dEnd} min={dStart||undefined} onChange={(d) => onManual("end",d)} size="sm" />
+                    <DatePicker value={dEnd} min={dStart||undefined} onChange={(d) => onManual("end",d)} size="sm" aria-label="To" />
                   </label>
                 </div>
                 {custom && !invalid && <div className="mt-1 text-xs text-fg-brand inline-flex items-center gap-1"><i className="ph ph-pencil-simple text-[11px]" /> Custom range</div>}
-                {invalid && <div className="mt-1 text-xs text-status-error">End date must be on or after start date.</div>}
+                {invalid && <div role="alert" className="mt-1 text-xs text-status-error">End date must be on or after start date.</div>}
               </div>
             </div>
             <div className={PANEL_FOOT}>
@@ -205,11 +213,11 @@ export function DateRangeFilter({ value, onChange, isPhone }: DateRangeFilterPro
       )}
     </>
   );
-}
+});
 
 /* Attached as a static — same pattern as Tag.toneFor / StageList — so callers
    (specimen cards, consuming pages precomputing a default range) can reach it
    as DateRangeFilter.computePeriod without a second, lowercase named export
    that the bundle namespace never exposes (only capitalised exports land on
    window.<Namespace>). */
-DateRangeFilter.computePeriod = computePeriod;
+export const DateRangeFilter = Object.assign(DateRangeFilterBase, { computePeriod });

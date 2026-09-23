@@ -18,6 +18,6 @@ export interface ChartCardProps {
  * Framing for one chart: title, subtitle, legend and body.
  * Every dashboard chart sits in one of these so titles, spacing and legends
  * stay identical across modules. Use Card for non-chart content.
- * @version 1.0.0
+ * @version 1.1.0
  */
-export declare function ChartCard(props: ChartCardProps): JSX.Element;
+export declare const ChartCard: React.ForwardRefExoticComponent<ChartCardProps & React.RefAttributes<HTMLDivElement>>;

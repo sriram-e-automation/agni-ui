@@ -1,8 +1,8 @@
 import React from "react";
-import { Tag } from "../core/Tag.tsx";
-import { Button } from "../core/Button.tsx";
-import { resolveDataState } from "../feedback/DataState.tsx";
-import { roleAllows } from "../core/RoleGate.tsx";
+import { Tag } from "../../primitives/Tag/Tag.tsx";
+import { Button } from "../../primitives/Button/Button.tsx";
+import { resolveDataState } from "../../utils/DataState.tsx";
+import { roleAllows } from "../../utils/RoleGate.tsx";
 
 /* ── Types (mirrored in StageList.d.ts) ── */
 export type StageState = "todo" | "active" | "done" | "blocked" | "skipped";
@@ -67,7 +67,7 @@ const SEQ = {
   fontFamily: "var(--font-data)", fontSize: "var(--text-2xs)", fontWeight: "var(--fw-semibold)",
 };
 
-export function StageList({ stages = [], onAction, loading = false, empty = "No stages yet", error = null, onRetry, role = "", style = {} }: StageListProps) {
+export const StageList = React.forwardRef<HTMLOListElement, StageListProps>(function StageList({ stages = [], onAction, loading = false, empty = "No stages yet", error = null, onRetry, role = "", style = {} }, ref) {
   const state = resolveDataState({
     loading, error, onRetry,
     isEmpty: !stages.length, empty,
@@ -76,7 +76,7 @@ export function StageList({ stages = [], onAction, loading = false, empty = "No 
   if (state !== false) return <React.Fragment>{state}</React.Fragment>;
 
   return (
-    <ol style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "var(--space-2)", ...style }}>
+    <ol ref={ref as never} style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "var(--space-2)", ...style }}>
       {stages.map((s, i) => {
         const meta = STATE_META[s.state] || STATE_META.todo;
         const muted = s.state === "skipped";
@@ -118,4 +118,4 @@ export function StageList({ stages = [], onAction, loading = false, empty = "No 
       })}
     </ol>
   );
-}
+});

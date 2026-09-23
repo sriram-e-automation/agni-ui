@@ -36,7 +36,11 @@ export interface RoleGateProps {
    (RoleGate itself takes `role` as a REQUIRED prop, so passing "" there is a
    programming error, and failing open is the safer of the two wrong answers —
    this gates VISIBILITY, never authority. The server authorises.) */
-export function roleAllows(role, allow = null, deny = null) {
+export function roleAllows(
+  role?: string | null,
+  allow: string | readonly string[] | null | undefined = null,
+  deny: string | readonly string[] | null | undefined = null,
+): boolean {
   if (!role) return true;
   let permitted = true;
   if (allow) permitted = allow.includes(role);

@@ -23,4 +23,4 @@ export interface EventRowProps {
  * States: loading (empty/error are the owning list's job — a single row has no "no results").
  * @version 1.1.0
  */
-export declare function EventRow(props: EventRowProps): JSX.Element;
+export declare const EventRow: React.ForwardRefExoticComponent<EventRowProps & React.RefAttributes<HTMLDivElement>>;

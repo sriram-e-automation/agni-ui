@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
-import { ChartKit } from "./ChartKit.tsx";
+import { mergeRefs } from "../../utils/interaction.tsx";
+import { ChartKit } from "../../utils/ChartKit.tsx";
 
 /* ── Types (mirrored in PieChart.d.ts) ── */
 export interface PieDatum {
@@ -58,11 +59,11 @@ function arc(cx, cy, rO, rI, a0, a1, corner = 0) {
   return `M ${ox0} ${oy0} A ${rO} ${rO} 0 ${large} 1 ${ox1} ${oy1} L ${ix1} ${iy1} A ${rI} ${rI} 0 ${large} 0 ${ix0} ${iy0} Z`;
 }
 
-function PieChartBody({
+function PieChartBody({ forwardedRef,
   series, data, innerRadius, outerRadius, paddingAngle = 1.5,
   centerLabel, centerValue, hideLegend = false, hideTooltip = false,
   height, legendAlign = "center", style = {},
-}: PieChartProps) {
+}: PieChartProps & { forwardedRef?: React.Ref<HTMLElement> }) {
   const ref = useRef(null);
   const W = useSize(ref, 320);
   const [hidden, setHidden] = useState(() => new Set());
@@ -95,7 +96,7 @@ function PieChartBody({
   const centerNum = centerValue != null ? centerValue : (donut ? total : null);
 
   return (
-    <div ref={ref} style={{ width: "100%", minWidth: 0, position: "relative", display: "flex", alignItems: "center", gap: "var(--space-4)", flexWrap: "wrap", fontFamily: "var(--font-sans)", ...style }}>
+    <div ref={mergeRefs(forwardedRef, ref)} style={{ width: "100%", minWidth: 0, position: "relative", display: "flex", alignItems: "center", gap: "var(--space-4)", flexWrap: "wrap", fontFamily: "var(--font-sans)", ...style }}>
       <Anim />
       <svg viewBox={`0 0 ${box} ${box}`} style={{ width: box, height: box, flexShrink: 0 }}
         onMouseLeave={() => setHover(null)}>
@@ -147,7 +148,7 @@ function PieChartBody({
 /* State contract — error → loading → empty → chart, resolved once in ChartKit
    (see chartState). The body mounts only when there is data, so hook order
    never changes between states. */
-export function PieChart(props) {
+export const PieChart = React.forwardRef<HTMLElement, any>(function PieChart(props, ref) {
   const state = ChartKit.chartState(props, { icon: "ph-chart-pie" });
   if (state !== false) {
     return (
@@ -156,5 +157,5 @@ export function PieChart(props) {
       </div>
     );
   }
-  return <PieChartBody {...props} />;
-}
+  return <PieChartBody {...props} forwardedRef={ref} />;
+});

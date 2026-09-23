@@ -7,7 +7,7 @@ export interface ApprovalStep {
   /** Optional detail line shown in the hover popover when `interactive`. */
   detail?: string;
 }
-export interface ApprovalStepperProps {
+export interface ApprovalStepperProps extends React.HTMLAttributes<HTMLOListElement> {
   steps?: ApprovalStep[];
   orientation?: "horizontal" | "vertical";
   /** Reveal a hover/focus popover (actor · ts · detail) on each node. */
@@ -15,6 +15,6 @@ export interface ApprovalStepperProps {
   style?: React.CSSProperties;
 }
 /** Multi-stage approval progress indicator.
- *  @version 1.0.0
+ *  @version 1.1.0
  */
-export declare function ApprovalStepper(props: ApprovalStepperProps): JSX.Element;
+export declare const ApprovalStepper: React.ForwardRefExoticComponent<ApprovalStepperProps & React.RefAttributes<HTMLOListElement>>;

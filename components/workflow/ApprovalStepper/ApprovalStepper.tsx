@@ -1,4 +1,5 @@
 import React from "react";
+import { useStableId } from "../../utils/interaction.tsx";
 
 /* ── Types (mirrored in ApprovalStepper.d.ts) ── */
 export interface ApprovalStep {
@@ -9,7 +10,7 @@ export interface ApprovalStep {
   /** Optional detail line shown in the hover popover when `interactive`. */
   detail?: string;
 }
-export interface ApprovalStepperProps {
+export interface ApprovalStepperProps extends React.HTMLAttributes<HTMLOListElement> {
   steps?: ApprovalStep[];
   orientation?: "horizontal" | "vertical";
   /** Reveal a hover/focus popover (actor · ts · detail) on each node. */
@@ -47,17 +48,31 @@ const TIP =
   "text-left whitespace-normal p-2 rounded-md bg-surface-inverse text-fg-inverse shadow-e-lg pointer-events-none";
 const STATUS_TEXT = { rejected: "Rejected", current: "Awaiting action", done: "Completed" };
 
-export function ApprovalStepper({ steps = [], orientation = "horizontal", interactive = false, style = {} }: ApprovalStepperProps) {
+/* An ordered list of steps: the current one carries aria-current="step", each
+   marker speaks its full state ("Step 2 of 4: Manager approval, Completed"),
+   and the interactive detail tip describes the focused marker and closes on
+   Escape. The ref is the list element. */
+export const ApprovalStepper = React.forwardRef<HTMLOListElement, ApprovalStepperProps>(function ApprovalStepper(
+  { steps = [], orientation = "horizontal", interactive = false, style = {}, ...rest },
+  ref,
+) {
   const vert = orientation === "vertical";
   const [hover, setHover] = React.useState(-1);
+  const base = useStableId(null, "agni-steps");
   return (
-    <div className={["flex", vert ? "flex-col items-stretch" : "flex-row items-start"].join(" ")} style={style}>
+    <ol {...rest} ref={ref} className={["flex m-0 p-0", vert ? "flex-col items-stretch" : "flex-row items-start"].join(" ")} style={{ listStyle: "none", ...style }}>
       {steps.map((s, i) => {
         const n = NODE[s.status] || NODE.pending;
         const last = i === steps.length - 1;
         const tipOpen = interactive && hover === i && (s.actor || s.ts || s.detail);
+        const tipId = `${base}-tip-${i}`;
+        const spoken = `Step ${i + 1} of ${steps.length}: ${typeof s.label === "string" ? s.label : ""}, ${STATUS_TEXT[s.status as keyof typeof STATUS_TEXT] || "Not started"}`;
         const circle = (
           <div
+            role="img"
+            aria-label={spoken}
+            aria-describedby={tipOpen ? tipId : undefined}
+            onKeyDown={interactive ? (e) => { if (e.key === "Escape" && hover === i) setHover(-1); } : undefined}
             tabIndex={interactive ? 0 : undefined}
             onMouseEnter={interactive ? () => setHover(i) : undefined}
             onMouseLeave={interactive ? () => setHover(-1) : undefined}
@@ -65,9 +80,9 @@ export function ApprovalStepper({ steps = [], orientation = "horizontal", intera
             onBlur={interactive ? () => setHover(-1) : undefined}
             className={[CIRCLE, n.cls, interactive ? "cursor-help" : "cursor-default", tipOpen ? "z-[5]" : "z-[1]"].join(" ")}
           >
-            {n.icon ? <i className={"ph-bold " + n.icon} /> : i + 1}
+            {n.icon ? <i aria-hidden="true" className={"ph-bold " + n.icon} /> : <span aria-hidden="true">{i + 1}</span>}
             {tipOpen && (
-              <span role="tooltip" className={TIP} style={{ animation: "agni-step-tip var(--dur-fast) var(--ease-standard)" }}>
+              <span id={tipId} role="tooltip" className={TIP} style={{ animation: "agni-step-tip var(--dur-fast) var(--ease-standard)" }}>
                 <span className="block font-sans text-xs font-semibold capitalize">
                   {STATUS_TEXT[s.status] || "Not started"}
                 </span>
@@ -80,7 +95,7 @@ export function ApprovalStepper({ steps = [], orientation = "horizontal", intera
           </div>
         );
         return (
-          <div key={i} className={["flex relative", vert ? "flex-row items-start flex-none gap-3" : "flex-col items-center flex-1 gap-0"].join(" ")}>
+          <li key={i} aria-current={s.status === "current" ? "step" : undefined} className={["flex relative", vert ? "flex-row items-start flex-none gap-3" : "flex-col items-center flex-1 gap-0"].join(" ")}>
             <div className={["flex items-center", vert ? "flex-col w-auto" : "flex-row w-full"].join(" ")}>
               {!vert && <div className={["flex-1 min-w-0 h-[2px]", i > 0 ? (NODE[steps[i-1].status] || NODE.pending).line : "bg-transparent"].join(" ")} />}
               {circle}
@@ -92,10 +107,10 @@ export function ApprovalStepper({ steps = [], orientation = "horizontal", intera
               {!interactive && s.actor && <div className="text-xs text-fg-tertiary mt-px">{s.actor}</div>}
               {!interactive && s.ts && <div className="text-2xs text-fg-tertiary font-data mt-px">{s.ts}</div>}
             </div>
-          </div>
+          </li>
         );
       })}
       <style>{`@keyframes agni-step-tip{from{opacity:0;transform:translateX(-50%) translateY(4px)}}`}</style>
-    </div>
+    </ol>
   );
-}
+});

@@ -3,9 +3,9 @@
  * Not part of the documented API.
  */
 import React from "react";
-import { Loading } from "../feedback/Loading.tsx";
-import { EmptyState } from "../feedback/EmptyState.tsx";
-import { ErrorState } from "../feedback/ErrorState.tsx";
+import { Loading } from "../feedback/Loading/Loading.tsx";
+import { EmptyState } from "../feedback/EmptyState/EmptyState.tsx";
+import { ErrorState } from "../feedback/ErrorState/ErrorState.tsx";
 
 /**
  * One implementation of the state contract for Panel, so the inline section,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef, useEffect, useRef } from "react";
 
 /* ── Types (mirrored in Loading.d.ts) ── */
 export type LoadingShape =
@@ -11,7 +11,7 @@ export type LoadingShape =
   | "auditTrail" | "orgTree" | "documentPreview" | "requestForm" | "eventRow" | "attachmentRow"
   | "navRail" | "shellHeader" | "pageTitleBar" | "pageControls" | "page";
 
-export interface LoadingProps {
+export interface LoadingProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "children"> {
   /** When false, children render normally. */
   loading?: boolean;
   /** Which component family the placeholder should mimic. */
@@ -34,7 +34,7 @@ export interface LoadingProps {
   children?: React.ReactNode;
 }
 
-export interface SpinnerProps {
+export interface SpinnerProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "color"> {
   size?: number;
   /** Stroke color. Defaults to the brand accent. */
   color?: string;
@@ -42,7 +42,7 @@ export interface SpinnerProps {
   style?: React.CSSProperties;
 }
 
-export interface LoadingOverlayProps {
+export interface LoadingOverlayProps extends React.HTMLAttributes<HTMLDivElement> {
   loading?: boolean;
   label?: string;
   /** Blur the underlying content as well as dimming it. */
@@ -361,10 +361,13 @@ const DEFAULTS: Record<string, { rows: number; columns: number }> = {
  * AgniUI · Spinner
  * Indeterminate circular indicator. Use inside buttons, inline, or in an overlay.
  */
-export function Spinner({ size = 20, color, label = "Loading", style = {} }: SpinnerProps) {
+export const Spinner = forwardRef<HTMLSpanElement, SpinnerProps>(function Spinner(
+  { size = 20, color, label = "Loading", style = {}, ...rest },
+  ref,
+) {
   return (
-    <span role="status" aria-label={label} style={{ display: "inline-flex", ...style }}>
-      <span style={{
+    <span {...rest} ref={ref} role="status" aria-label={label} style={{ display: "inline-flex", ...style }}>
+      <span aria-hidden="true" style={{
         width: size, height: size, borderRadius: "50%", display: "inline-block",
         border: `${Math.max(2, Math.round(size / 10))}px solid var(--border-subtle)`,
         borderTopColor: color || "var(--text-brand, currentColor)",
@@ -373,17 +376,28 @@ export function Spinner({ size = 20, color, label = "Loading", style = {} }: Spi
       {KEYS}
     </span>
   );
-}
+});
 
 /**
  * AgniUI · LoadingOverlay
  * Keeps existing content on screen and dims it while new data arrives.
  * Use for refresh-in-place; use Loading (skeleton) for first paint.
  */
-export function LoadingOverlay({ loading = true, label = "Loading", blur = false, style = {}, children }: LoadingOverlayProps) {
+export const LoadingOverlay = forwardRef<HTMLDivElement, LoadingOverlayProps>(function LoadingOverlay(
+  { loading = true, label = "Loading", blur = false, style = {}, children, ...rest },
+  ref,
+) {
+  /* Dimmed content must be unreachable by keyboard too, not just by pointer —
+     `inert` (set imperatively: React 18 has no boolean prop for it). */
+  const content = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = content.current;
+    if (!el) return;
+    if (loading) el.setAttribute("inert", ""); else el.removeAttribute("inert");
+  }, [loading]);
   return (
-    <div style={{ position: "relative", ...style }}>
-      <div aria-busy={loading || undefined} style={{
+    <div {...rest} ref={ref} style={{ position: "relative", ...style }}>
+      <div ref={content} aria-busy={loading || undefined} style={{
         opacity: loading ? 0.45 : 1,
         filter: loading && blur ? "blur(1.5px)" : "none",
         pointerEvents: loading ? "none" : "auto",
@@ -400,7 +414,7 @@ export function LoadingOverlay({ loading = true, label = "Loading", blur = false
       )}
     </div>
   );
-}
+});
 
 /**
  * AgniUI · Loading
@@ -408,12 +422,12 @@ export function LoadingOverlay({ loading = true, label = "Loading", blur = false
  * mirrors the real component's silhouette, so layout doesn't jump on data arrival.
  * Set `overlay` to dim existing children instead of replacing them.
  */
-export function Loading({
+export const Loading = forwardRef<HTMLDivElement, LoadingProps>(function Loading({
   loading = true, shape = "text", rows, columns, width, height, radius, lines,
-  overlay = false, label = "Loading", style = {}, children,
-}: LoadingProps) {
+  overlay = false, label = "Loading", style = {}, children, ...rest
+}, ref) {
   if (!loading) return <>{children}</>;
-  if (overlay) return <LoadingOverlay loading label={label} style={style}>{children}</LoadingOverlay>;
+  if (overlay) return <LoadingOverlay {...rest} ref={ref} loading label={label} style={style}>{children}</LoadingOverlay>;
 
   const d = DEFAULTS[shape] || { rows: 3, columns: 3 };
   const render = SHAPES[shape] || SHAPES.text;
@@ -423,11 +437,11 @@ export function Loading({
   if (shape === "circle") return <Dot d={(width || height || 36) as any} style={style} />;
 
   return (
-    <div role="status" aria-busy="true" aria-live="polite"
+    <div {...rest} ref={ref} role="status" aria-busy="true" aria-live="polite"
       style={{ width: width || "100%", height, ...style }}>
       <span style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0 0 0 0)", whiteSpace: "nowrap" }}>{label}</span>
       {render({ rows: rows ?? lines ?? d.rows, columns: columns ?? d.columns })}
       {KEYS}
     </div>
   );
-}
+});

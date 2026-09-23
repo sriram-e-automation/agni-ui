@@ -12,6 +12,6 @@ export interface FilterBuilderProps {
  * Compact AND-chained query / filter builder — the RULES half of the filter
  * pair. Use FilterPanel for quick facet narrowing, FilterBuilder for precise
  * or saved queries. Both mount inside PageControls.
- * @version 1.0.0
+ * @version 1.1.0
  */
-export declare function FilterBuilder(props: FilterBuilderProps): JSX.Element;
+export declare const FilterBuilder: React.ForwardRefExoticComponent<FilterBuilderProps & React.RefAttributes<HTMLDivElement>>;

@@ -29,6 +29,6 @@ export interface StatCardProps {
  * this is a standalone figure. Use QuickStats above a records region, StatCard
  * anywhere else.
  * States: loading · error (empty does not apply — single value, not a collection).
- * @version 1.0.0
+ * @version 1.1.0
  */
-export declare function StatCard(props: StatCardProps): JSX.Element;
+export declare const StatCard: React.ForwardRefExoticComponent<StatCardProps & React.RefAttributes<HTMLElement>>;

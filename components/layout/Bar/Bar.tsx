@@ -26,15 +26,15 @@ const VARIANT = {
 
 const SHELL = "flex items-center justify-between w-full px-[var(--bar-pad-x)] bg-surface-card shrink-0";
 
-export function Bar({
+export const Bar = React.forwardRef<HTMLDivElement, BarProps>(function Bar({
   position = "top",   // top | footer
   children,
   style = {},
   ...rest
-}: BarProps) {
+}, ref) {
   return (
-    <div className={[SHELL, VARIANT[position] || VARIANT.top].join(" ")} style={style} {...rest}>
+    <div ref={ref as never} className={[SHELL, VARIANT[position] || VARIANT.top].join(" ")} style={style} {...rest}>
       {children}
     </div>
   );
-}
+});

@@ -20,6 +20,16 @@ The rule behind all of it: **a change that is not written down is a change that 
 
 ## 1. Make the change
 
+**Where files go:** a component lives in `components/<family>/<Name>/` — `<Name>.tsx`, `<Name>.d.ts`, and an `index.ts` that re-exports the component and its contract types (types from `./<Name>.d`). An `@internal` renderer that only serves one component sits in that component's folder and is left out of its `index.ts`. Single-element controls go in `primitives/`. Logic with no visual of its own (contracts, resolvers, helpers) goes in `components/utils/` and its one barrel. Inside the library, import the other file's `.tsx` directly, never a barrel.
+
+**The interaction contract** (details and the pattern table: `readme.md` → *The interaction contract*). A new or changed interactive component must:
+- forward its ref (`React.forwardRef`) to the element a caller would focus or measure;
+- extend the matching `React.*HTMLAttributes` and pass the rest to that element, composing its own handlers with `composeHandlers`;
+- take `id` via `useStableId`, and read `useFieldControl` so a surrounding `FormField` can wire it;
+- support controlled (`value`) and uncontrolled (`defaultValue`) use with `useControllableState`, and keep `onChange` value-first;
+- pick its ARIA pattern by purpose (a value picker is a listbox, a command list is a menu, a view switch is a radio group), reusing the hooks in `components/utils/interaction.tsx` rather than re-implementing keys;
+- never use a clickable `<div>` / `<span>` where a `<button>` fits. When the content can't be a button, use `pressableProps`.
+
 **Component work:**
 
 1. Edit `<Name>.tsx`. Tailwind v4 classes over tokens — the rules are in [`tailwind/README.md`](tailwind/README.md), and rule 5 (a conditional class must *replace* the base class, never sit beside it) is the one that bites.
@@ -77,7 +87,7 @@ The reviewer checks four things, in this order:
 1. **`.d.ts` matches `.tsx`** — the published contract is the one people read.
 2. **The card shows the new state.** Not "the code supports it" — the card *shows* it.
 3. **The changeset says what a consumer must do**, and the bump level matches the table above.
-4. **`readme.md` names the component.** The readme is the index; a component absent from it does not exist as far as the next person is concerned.
+4. **`readme.md` names the component**, and its folder has an `index.ts` that `templates/repo-scaffold/src/index.ts` re-exports from. The readme is the index; a component absent from it does not exist as far as the next person is concerned.
 
 ## 5. Release
 

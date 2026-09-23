@@ -1,5 +1,5 @@
 import * as React from "react";
-import { LoadingShape } from "./Loading";
+import { LoadingShape } from "../feedback/Loading/Loading";
 
 export interface DataStateProps {
   /** Content in flight — renders the shape-matched Loading skeleton. */

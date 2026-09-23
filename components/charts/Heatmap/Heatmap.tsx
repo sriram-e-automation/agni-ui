@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
-import { ChartKit } from "./ChartKit.tsx";
+import { mergeRefs } from "../../utils/interaction.tsx";
+import { ChartKit } from "../../utils/ChartKit.tsx";
 
 /* ── Types (mirrored in Heatmap.d.ts) ── */
 export interface HeatmapAxis {
@@ -61,11 +62,11 @@ function ramp(stops, t) {
 const RAMP_LIGHT = ["#E8F1FE", "#1570EF", "#DC6803"];
 const RAMP_DARK  = ["#1B2C5F", "#6BB0FF", "#F5A65B"];
 
-function HeatmapBody({
+function HeatmapBody({ forwardedRef,
   series = [], xAxis, yAxis, min: minProp, max: maxProp,
   colors: colorsProp,
   height, showValues = false, hideTooltip = false, style = {},
-}: HeatmapProps) {
+}: HeatmapProps & { forwardedRef?: React.Ref<HTMLElement> }) {
   const ref = useRef(null);
   const dark = !!(ref.current && ref.current.closest && ref.current.closest('[data-theme="dark"]'));
   const colors = colorsProp || (dark ? RAMP_DARK : RAMP_LIGHT);
@@ -93,7 +94,7 @@ function HeatmapBody({
   const lo = colors[0], hi = colors[colors.length - 1];
 
   return (
-    <div ref={ref} style={{ width: "100%", minWidth: 0, position: "relative", fontFamily: "var(--font-sans)", ...style }}>
+    <div ref={mergeRefs(forwardedRef, ref)} style={{ width: "100%", minWidth: 0, position: "relative", fontFamily: "var(--font-sans)", ...style }}>
       <Anim />
       <svg viewBox={`0 0 ${W} ${H}`} style={{ width: "100%", height: "auto", display: "block" }} onMouseLeave={() => setHover(null)}>
         {/* scale bar */}
@@ -150,7 +151,7 @@ function HeatmapBody({
 /* State contract — error → loading → empty → chart, resolved once in ChartKit
    (see chartState). The body mounts only when there is data, so hook order
    never changes between states. */
-export function Heatmap(props) {
+export const Heatmap = React.forwardRef<HTMLElement, any>(function Heatmap(props, ref) {
   const state = ChartKit.chartState(props, { icon: "ph-grid-four" });
   if (state !== false) {
     return (
@@ -159,5 +160,5 @@ export function Heatmap(props) {
       </div>
     );
   }
-  return <HeatmapBody {...props} />;
-}
+  return <HeatmapBody {...props} forwardedRef={ref} />;
+});

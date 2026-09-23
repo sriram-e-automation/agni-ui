@@ -20,6 +20,6 @@ export interface BulkActionToolbarProps {
   style?: React.CSSProperties;
 }
 /** Selection action bar for bulk operations over a table.
- *  @version 1.0.0
+ *  @version 1.1.0
  */
-export declare function BulkActionToolbar(props: BulkActionToolbarProps): JSX.Element;
+export declare const BulkActionToolbar: React.ForwardRefExoticComponent<BulkActionToolbarProps & React.RefAttributes<HTMLDivElement>>;

@@ -1,5 +1,6 @@
-import { resolveDataState } from "../feedback/DataState.tsx";
-import React from "react";
+import { resolveDataState } from "../../utils/DataState.tsx";
+import React, { forwardRef } from "react";
+import { isActivationKey } from "../../utils/interaction.tsx";
 
 /* ── Types (mirrored in List.d.ts) ── */
 export interface ListItem {
@@ -9,11 +10,18 @@ export interface ListItem {
   leading?: React.ReactNode;
   trailing?: React.ReactNode;
   meta?: React.ReactNode;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>) => void;
+  /** Accessible name for a clickable row when `title` is a node. */
+  label?: string;
 }
-export interface ListProps {
+export interface ListProps extends React.HTMLAttributes<HTMLUListElement> {
   items?: ListItem[];
   divided?: boolean;
+  loading?: boolean;
+  loadingRows?: number;
+  error?: React.ReactNode | boolean;
+  onRetry?: () => void;
+  empty?: React.ReactNode;
   style?: React.CSSProperties;
 }
 /** Vertical record list with leading/trailing slots. */
@@ -22,6 +30,9 @@ export interface ListProps {
  * AgniUI · List
  * Vertical record list. items: [{key,title,subtitle,leading,trailing,meta,onClick}].
  * `leading`/`trailing` are nodes (avatar, icon, badge, button).
+ * A real list (<ul>/<li>). A row with onClick is focusable and opens on
+ * Enter / Space — only when the key lands on the row itself, never on a
+ * control in its trailing slot. The ref is the <ul> (or the state wrapper).
  *
  * Tailwind v4 (migrated Aug 2026, tranche 7b). The two mouse handlers per row
  * are gone — hover is `hover:` on rows that have an onClick, guarded so a
@@ -37,12 +48,18 @@ const TITLE = "text-sm font-medium text-fg-primary whitespace-nowrap overflow-hi
 const SUBTITLE = "text-xs text-fg-tertiary mt-px whitespace-nowrap overflow-hidden text-ellipsis";
 const META = "text-xs text-fg-tertiary font-data shrink-0";
 
-function ListBody({ items = [], divided = true, style = {} }) {
+const ListBody = forwardRef<HTMLUListElement, ListProps>(function ListBody(
+  { items = [], divided = true, style = {}, loading, loadingRows, error, onRetry, empty, className = "", ...rest },
+  ref,
+) {
   return (
-    <div className={SHELL} style={style}>
+    <ul {...rest} ref={ref} className={[SHELL, "m-0 p-0", className].join(" ")} style={{ listStyle: "none", ...style }}>
       {items.map((it, i) => (
-        <div key={it.key ?? i} onClick={it.onClick}
-          className={[ROW, divided && i ? ROW_DIVIDED : ROW_FIRST, it.onClick ? ROW_CLICK : ROW_STATIC].join(" ")}>
+        <li key={it.key ?? i} onClick={it.onClick}
+          tabIndex={it.onClick ? 0 : undefined}
+          aria-label={it.onClick ? it.label : undefined}
+          onKeyDown={it.onClick ? (e) => { if (e.target === e.currentTarget && isActivationKey(e.key)) { e.preventDefault(); it.onClick?.(e); } } : undefined}
+          className={[ROW, divided && i ? ROW_DIVIDED : ROW_FIRST, it.onClick ? ROW_CLICK + " outline-none focus-visible:focus-ring" : ROW_STATIC].join(" ")}>
           {it.leading && <div className="shrink-0">{it.leading}</div>}
           <div className="flex-1 min-w-0">
             <div className={TITLE}>{it.title}</div>
@@ -50,15 +67,15 @@ function ListBody({ items = [], divided = true, style = {} }) {
           </div>
           {it.meta && <div className={META}>{it.meta}</div>}
           {it.trailing && <div className="shrink-0">{it.trailing}</div>}
-        </div>
+        </li>
       ))}
-    </div>
+    </ul>
   );
-}
+});
 
 /* State contract — error → loading → empty → content (resolveDataState owns the
    precedence). The body mounts only with content, so hook order is stable. */
-export function List(props) {
+export const List = forwardRef<HTMLUListElement, ListProps>(function List(props, ref) {
   const state = resolveDataState({
     loading: props.loading, error: props.error, onRetry: props.onRetry,
     isEmpty: !(props.items && props.items.length), empty: props.empty,
@@ -66,5 +83,5 @@ export function List(props) {
     emptyIcon: "ph-list-dashes", emptyTitle: "Nothing in this list",
   });
   if (state !== false) return <div className="w-full" style={props.style || {}}>{state}</div>;
-  return <ListBody {...props} />;
-}
+  return <ListBody ref={ref} {...props} />;
+});

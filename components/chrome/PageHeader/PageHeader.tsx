@@ -1,7 +1,7 @@
 import React from "react";
-import { PageTitleBar } from "./PageTitleBar.tsx";
-import { PageControls } from "../data/PageControls.tsx";
-import { QuickStats } from "../data/QuickStats.tsx";
+import { PageTitleBar } from "../PageTitleBar/PageTitleBar.tsx";
+import { PageControls } from "../../data/PageControls/PageControls.tsx";
+import { QuickStats } from "../../data/QuickStats/QuickStats.tsx";
 
 /**
  * AgniUI · PageHeader
@@ -19,14 +19,14 @@ import { QuickStats } from "../data/QuickStats.tsx";
  *
  * Tailwind v4 — no class strings of its own beyond the wrappers.
  */
-export function PageHeader({
+export const PageHeader = React.forwardRef<HTMLDivElement, any>(function PageHeader({
   titleBar, controls = null, stats = null,
   statsToggle, statsOpen, onStatsToggle, statsToggleLabel = "Quick stats",
   sticky = false, stickyTop = 0,
   bordered = true, background = "var(--surface-card)", blur = false,
   role = "", disabled = false, loading = false,
   gap = 8, style = {},
-}: any) {
+}, ref) {
   const tb = titleBar || {};
   const hasControls = controls !== null && controls !== false;
   const hasStats = stats !== null && stats !== false;
@@ -97,8 +97,8 @@ export function PageHeader({
 
   if (!sticky) return body;
   return (
-    <div style={{ position: "sticky", top: stickyTop, zIndex: "var(--z-sticky)", flexShrink: 0, ...style }}>
+    <div ref={ref as never} style={{ position: "sticky", top: stickyTop, zIndex: "var(--z-sticky)", flexShrink: 0, ...style }}>
       {body}
     </div>
   );
-}
+});

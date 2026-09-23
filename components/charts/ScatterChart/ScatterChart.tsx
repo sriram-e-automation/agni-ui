@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
-import { ChartKit } from "./ChartKit.tsx";
+import { mergeRefs } from "../../utils/interaction.tsx";
+import { ChartKit } from "../../utils/ChartKit.tsx";
 
 /* ── Types (mirrored in ScatterChart.d.ts) ── */
 export interface ScatterPoint { x: number; y: number; id?: string | number; }
@@ -27,10 +28,10 @@ export interface ScatterChartProps {
  */
 const { useSize, color, niceMax, ticks, fmt, Tooltip, Legend } = ChartKit;
 
-function ScatterChartBody({
+function ScatterChartBody({ forwardedRef,
   series = [], xAxis, yAxis, height, showGrid = true,
   hideLegend = false, hideTooltip = false, markerSize = 5, style = {},
-}: ScatterChartProps) {
+}: ScatterChartProps & { forwardedRef?: React.Ref<HTMLElement> }) {
   const ref = useRef(null);
   const W = useSize(ref, 480);
   const [hidden, setHidden] = useState(() => new Set());
@@ -52,7 +53,7 @@ function ScatterChartBody({
   const PY = (v) => pad.t + ih - ih * ((v - yMin) / (yMax - yMin || 1));
 
   return (
-    <div ref={ref} style={{ width: "100%", minWidth: 0, position: "relative", fontFamily: "var(--font-sans)", ...style }}>
+    <div ref={mergeRefs(forwardedRef, ref)} style={{ width: "100%", minWidth: 0, position: "relative", fontFamily: "var(--font-sans)", ...style }}>
       <svg viewBox={`0 0 ${W} ${H}`} style={{ width: "100%", height: "auto", display: "block" }}>
         {showGrid && ticks(yMax - yMin, tickN).map((t, i) => { const v = yMin + t; const y = PY(v); return (
           <g key={"y" + i}>
@@ -80,7 +81,7 @@ function ScatterChartBody({
 /* State contract — error → loading → empty → chart, resolved once in ChartKit
    (see chartState). The body mounts only when there is data, so hook order
    never changes between states. */
-export function ScatterChart(props) {
+export const ScatterChart = React.forwardRef<HTMLElement, any>(function ScatterChart(props, ref) {
   const state = ChartKit.chartState(props, { icon: "ph-chart-scatter" });
   if (state !== false) {
     return (
@@ -89,5 +90,5 @@ export function ScatterChart(props) {
       </div>
     );
   }
-  return <ScatterChartBody {...props} />;
-}
+  return <ScatterChartBody {...props} forwardedRef={ref} />;
+});

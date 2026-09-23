@@ -26,7 +26,35 @@ The SOP for producing an entry here is in [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## [Unreleased]
 
-_Nothing yet._
+### Added
+
+- **The interaction contract, across every component** (component contracts → `@version 1.1.0`; all additive).
+  - **Ids:** `useStableId` (SSR-safe; a caller's `id` wins). `FormField` now provides `FieldContext`: its control gets the field id (real `<label for>`), `aria-describedby` → hint/error, `aria-invalid`, `required` and `disabled`. The error is announced (`role="alert"`).
+  - **Refs:** every public component forwards its ref, to the native input, the button, the Select combobox, the dialog panel, or the root element. `Tag.toneFor`, `Tabs.panelProps` and `DateRangeFilter.computePeriod` stay as statics.
+  - **Types and events:** props extend the matching `React.*HTMLAttributes`, so native attributes and `onFocus` / `onBlur` / `onKeyDown` reach the DOM and **compose** with internal handlers (the consumer runs first; `preventDefault()` opts out). `Button`, `Select`, `Tabs`, `Notice`, `Panel`, `FileUpload` are no longer typed `any`; `Select` is a `multiple`-discriminated union.
+  - **Controlled or uncontrolled:** `defaultValue` / `defaultChecked` / `defaultOpen` across the form controls, Select, DatePicker, Tabs, Accordion, TreeView, DropdownMenu, Tooltip and Rating.
+  - **Keyboard and ARIA patterns** chosen by purpose: combobox + listbox (Select), menu button (DropdownMenu, split Button, profile menu), tablist vs radio group (Tabs, pill tracks, PageTitleBar), spinbutton (QuantityStepper), date-picker dialog + grid (DatePicker), tree (TreeView), accordion/disclosure, toolbar (RichTextEditor, WorkspacePane). The full table is in `readme.md` → *The interaction contract*.
+  - **Focus management:** modal dialogs (Modal, Panel sheet/drawer, CommandPalette, AppSwitcher, RecordDetailModal, NavRail overlay) trap Tab, move focus in, restore it, lock scroll and handle Escape on the dialog, so nested dialogs close one at a time. Popovers (FilterPanel, DateRangeFilter, SettingsMenu, NotificationsMenu, PanelIconMenu) move focus in and back.
+  - **Form libraries:** `fieldProps()` in `components/utils/form` adapts React Hook Form `register()` and Formik `field` / `useField` helpers to the value-first `onChange`. RHF `<Controller>` works without it. Custom controls submit through hidden inputs when given a `name`.
+  - **`components/utils`:** new `interaction.tsx` (ids, refs, handler composition, controllable state, focus trap, list / roving navigation, typeahead, `pressableProps`), `field.tsx` and `form.ts`.
+  - **`tokens/base.css`:** state styling for the native-backed choice controls (`[data-agni-choice]` / `[data-agni-mark]`), keyboard-highlighted options (`[data-agni-option][data-active]`) and hover-revealed affordances shown on focus (`[data-agni-reveal]`). These are plain CSS, so no Tailwind rebuild is needed.
+
+### Fixed
+
+- **Controls:** `Checkbox`, `Radio` and `Switch` had no native input: unreachable by Tab, inert to Space, and absent from form submission. They are now real inputs.
+- **Invalid nesting:** `AppSwitcher` nested its pin button inside the tile button, had no way to launch an app (`onLaunch` added), and hid the pin with `display:none` until hover.
+- **Clickable elements:** `NavRail`, `Breadcrumbs`, `List`, `TreeView` rows, calendar cells, `Card` (interactive), kanban/task/approval cards, Gantt rows and notification items were clickable `<div>`s / `<span>`s with no keyboard access.
+- **Escape handling:** `Modal`, `Drawer`, `Sheet`, `CommandPalette`, `AppSwitcher` and `RecordDetailModal` listened for Escape on `document`, so one key press closed every open layer. The record dialog's note editor closed the whole record.
+- **Hover-only states:** the collapsed overlay `NavRail` stayed in the Tab order while off-screen, and `LoadingOverlay`'s dimmed content stayed keyboard-reachable (now `inert`).
+- **Unnamed controls:** icon-only buttons across data / chrome / workflow (clear, remove, retry, pagination, date navigation, filter rules, editable-table cells) had no accessible name.
+
+### Changed
+
+- **Source layout restructured (Sep 2026).** No export was added, removed or renamed. The package entry (`src/index.ts`) and the runtime bundle namespace expose exactly the same names as before. Only deep-import paths into `components/` changed.
+  - **One folder per component.** `components/<family>/<Name>/` holds `<Name>.tsx`, `<Name>.d.ts` and an `index.ts` that re-exports the component and its contract types. `@internal` renderers sit beside the component they serve (`ButtonBase` · `IconButton` · `SplitButton` in `primitives/Button/`; the seven select variants in `primitives/Select/`; `Sheet` · `Drawer` · `PanelBase` in `containment/Panel/`; and so on).
+  - **`components/utils/`** gathers the non-visual modules that were scattered across families: `actionSpec` (was `core/`), `DataState` (was `feedback/`), `ChartKit` (was `charts/`), `Theme` (was `chrome/`), `RoleGate` (was `core/`) and `panelState` (was `containment/`), with one barrel at `components/utils/index.ts`.
+  - **`components/primitives/`** replaces `core/`. It holds `Button` · `Badge` · `Tag` · `Avatar` · `AvatarStack` · `Rating` and the single-element form controls `Input` · `Textarea` · `Checkbox` · `Radio` · `Switch` · `Select` (previously in `forms/`). The rest of `core/` moved to other families: `Card` to `containment/`, `DropdownMenu` and `ActionTile` to `navigation/`, `OptionRow` to `data/`.
+  - `templates/repo-scaffold/src/index.ts` now imports from the folder barrels, grouped by the new families. It also fixes `buildReviewSummary` / `REQUEST_FORM_DEFAULTS`, which it previously re-exported from `RecordForm.tsx` even though they live in `RequestForm.tsx`.
 
 ---
 

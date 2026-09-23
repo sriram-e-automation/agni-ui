@@ -1,7 +1,8 @@
-import React from "react";
+import React, { forwardRef } from "react";
+import { useStableId } from "../../utils/interaction.tsx";
 
 /* ── Types (mirrored in Progress.d.ts) ── */
-export interface ProgressProps {
+export interface ProgressProps extends React.HTMLAttributes<HTMLDivElement> {
   /** 0–100 */
   value?: number;
   indeterminate?: boolean;
@@ -9,6 +10,8 @@ export interface ProgressProps {
   size?: "sm" | "md" | "lg";
   label?: React.ReactNode;
   showValue?: boolean;
+  /** Spoken value, e.g. "3 of 5 steps". Defaults to the percentage. */
+  valueText?: string;
   style?: React.CSSProperties;
 }
 /** Linear progress / loading bar. */
@@ -16,6 +19,8 @@ export interface ProgressProps {
 /**
  * AgniUI · Progress
  * Linear determinate/indeterminate bar. value 0–100. tone matches status set.
+ * A role="progressbar" labelled by `label` (or aria-label); indeterminate
+ * omits aria-valuenow and marks aria-busy.
  *
  * Tailwind v4 (migrated Aug 2026, tranche 4). The determinate fill's WIDTH is
  * the one inline declaration left: it is the value, computed per render, and a
@@ -35,18 +40,33 @@ const HEAD = "flex justify-between mb-1 text-xs";
 const TRACK = "w-full bg-surface-sunken rounded-full overflow-hidden";
 const FILL = "h-full rounded-full";
 
-export function Progress({ value = 0, indeterminate = false, tone = "brand", size = "md", label = null, showValue = false, style = {} }: ProgressProps) {
+export const Progress = forwardRef<HTMLDivElement, ProgressProps>(function Progress(
+  { value = 0, indeterminate = false, tone = "brand", size = "md", label = null, showValue = false, valueText, id, style = {}, className = "", ...rest },
+  ref,
+) {
   const color = TONE[tone] || TONE.brand;
   const pct = Math.max(0, Math.min(100, value));
+  const labelId = useStableId(id, "agni-progress") + "-label";
   return (
-    <div className="w-full" style={style}>
+    <div className={["w-full", className].join(" ")} style={style}>
       {(label || showValue) && (
         <div className={HEAD}>
-          {label && <span className="text-fg-secondary font-medium">{label}</span>}
-          {showValue && <span className="text-fg-tertiary font-data">{pct}%</span>}
+          {label && <span id={labelId} className="text-fg-secondary font-medium">{label}</span>}
+          {showValue && <span aria-hidden="true" className="text-fg-tertiary font-data">{pct}%</span>}
         </div>
       )}
-      <div className={[TRACK, TRACK_H[size] || TRACK_H.md].join(" ")}>
+      <div
+        {...rest}
+        ref={ref}
+        id={id}
+        role="progressbar"
+        aria-labelledby={rest["aria-labelledby"] ?? (label && !rest["aria-label"] ? labelId : undefined)}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={indeterminate ? undefined : pct}
+        aria-valuetext={indeterminate ? undefined : valueText}
+        aria-busy={indeterminate || undefined}
+        className={[TRACK, TRACK_H[size] || TRACK_H.md].join(" ")}>
         {indeterminate
           ? <div className={[FILL, color, "w-[40%]"].join(" ")} style={{ animation: "agni-prog 1.3s var(--ease-standard) infinite" }} />
           : <div className={[FILL, color, "transition-[width] duration-normal ease-standard"].join(" ")} style={{ width: pct + "%" }} />}
@@ -54,4 +74,4 @@ export function Progress({ value = 0, indeterminate = false, tone = "brand", siz
       <style>{`@keyframes agni-prog{0%{margin-left:-40%}100%{margin-left:100%}}`}</style>
     </div>
   );
-}
+});

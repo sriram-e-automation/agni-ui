@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
-import { ChartKit } from "./ChartKit.tsx";
+import { mergeRefs } from "../../utils/interaction.tsx";
+import { ChartKit } from "../../utils/ChartKit.tsx";
 
 /* ── Types (mirrored in RadarChart.d.ts) ── */
 export interface RadarSeries {
@@ -48,11 +49,11 @@ export interface RadarChartProps {
  */
 const { useSize, color, niceMax, fmt, Tooltip, Legend, Anim } = ChartKit;
 
-function RadarChartBody({
+function RadarChartBody({ forwardedRef,
   series = [], radar = {}, metrics: metricsProp, max: maxProp,
   height, levels = 4, hideLegend = false, hideTooltip = false,
   fillOpacity = 0.18, style = {},
-}: RadarChartProps) {
+}: RadarChartProps & { forwardedRef?: React.Ref<HTMLElement> }) {
   const ref = useRef(null);
   const W = useSize(ref, 360);
   const [hidden, setHidden] = useState(() => new Set());
@@ -75,10 +76,10 @@ function RadarChartBody({
 
   const colorOf = (s, i) => s.color || color(s, i);
 
-  if (!N) return <div ref={ref} style={{ width: "100%", minWidth: 0, ...style }} />;
+  if (!N) return <div ref={mergeRefs(forwardedRef, ref)} style={{ width: "100%", minWidth: 0, ...style }} />;
 
   return (
-    <div ref={ref} style={{ width: "100%", minWidth: 0, position: "relative", fontFamily: "var(--font-sans)", ...style }}>
+    <div ref={mergeRefs(forwardedRef, ref)} style={{ width: "100%", minWidth: 0, position: "relative", fontFamily: "var(--font-sans)", ...style }}>
       <Anim />
       <div style={{ display: "flex", justifyContent: "center" }}>
         <svg viewBox={`0 0 ${box} ${box}`} style={{ width: box, height: box, overflow: "visible" }} onMouseLeave={() => setHover(null)}>
@@ -138,7 +139,7 @@ function RadarChartBody({
 /* State contract — error → loading → empty → chart, resolved once in ChartKit
    (see chartState). The body mounts only when there is data, so hook order
    never changes between states. */
-export function RadarChart(props) {
+export const RadarChart = React.forwardRef<HTMLElement, any>(function RadarChart(props, ref) {
   const state = ChartKit.chartState(props, { icon: "ph-polygon" });
   if (state !== false) {
     return (
@@ -147,5 +148,5 @@ export function RadarChart(props) {
       </div>
     );
   }
-  return <RadarChartBody {...props} />;
-}
+  return <RadarChartBody {...props} forwardedRef={ref} />;
+});

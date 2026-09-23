@@ -11,8 +11,8 @@ export interface DateRangeFilterProps {
   isPhone?: boolean;
 }
 /** Compact toolbar date filter — granularity tabs + period navigator + custom From→To. */
-export declare function DateRangeFilter(props: DateRangeFilterProps): JSX.Element;
+export declare const DateRangeFilter: React.ForwardRefExoticComponent<DateRangeFilterProps & React.RefAttributes<HTMLDivElement>> & { computePeriod: typeof computePeriod };
 /** Compute {start,end,lbl} for a granularity + offset from `now`.
- *  @version 1.0.0
+ *  @version 1.1.0
  */
 export declare function computePeriod(gran: "week" | "month" | "quarter" | "year", offset: number, now: Date): { start: Date; end: Date; lbl: string };

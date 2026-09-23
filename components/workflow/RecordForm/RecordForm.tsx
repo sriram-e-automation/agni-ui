@@ -6,6 +6,6 @@ import { RequestForm } from "./RequestForm.tsx";
  * Renamed Aug 2026 from RequestForm — the library names the shape (a record),
  * never one business object. RequestForm remains as the internal renderer.
  */
-export function RecordForm(props: any) {
-  return <RequestForm {...props} />;
-}
+export const RecordForm = React.forwardRef<HTMLElement, any>(function RecordForm(props, ref) {
+  return <RequestForm ref={ref as never} {...props} />;
+});

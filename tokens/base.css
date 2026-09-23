@@ -93,4 +93,53 @@
     overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
   }
 
+  /* ── Native-backed choice controls (Checkbox · Radio · Switch) ──────────────
+     Each renders a real, visually-hidden <input data-agni-choice> followed by
+     its drawn mark. The mark's state is read from the INPUT's pseudo-classes,
+     not from React props, so it stays correct when a form library writes
+     `input.checked` directly (React Hook Form's reset/setValue do exactly that)
+     and keyboard focus lands on the real control. Colour lives here rather than
+     in Tailwind classes on the mark: the mark carries geometry only, so these
+     base-layer rules have nothing in the utilities layer to lose to. */
+  [data-agni-choice] {
+    position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; opacity: 0;
+  }
+  [data-agni-mark] {
+    background: var(--surface-card); border-color: var(--border-strong); color: var(--text-on-brand);
+  }
+  [data-agni-mark][data-invalid] { border-color: var(--status-error); }
+  [data-agni-choice]:focus-visible + [data-agni-mark] { box-shadow: var(--focus-ring); }
+  [data-agni-choice]:focus-visible + [data-agni-mark][data-invalid] { box-shadow: var(--focus-ring-error); }
+
+  /* checkbox — the glyphs are both rendered; state picks which one shows */
+  [data-agni-mark="checkbox"] > [data-glyph] { display: none; }
+  [data-agni-choice]:checked + [data-agni-mark="checkbox"],
+  [data-agni-choice]:indeterminate + [data-agni-mark="checkbox"] { background: var(--action-brand); border-color: var(--action-brand); }
+  [data-agni-choice]:checked:not(:indeterminate) + [data-agni-mark="checkbox"] > [data-glyph="check"],
+  [data-agni-choice]:indeterminate + [data-agni-mark="checkbox"] > [data-glyph="dash"] { display: inline; }
+
+  /* radio */
+  [data-agni-mark="radio"] > [data-glyph] { display: none; background: var(--action-brand); }
+  [data-agni-choice]:checked + [data-agni-mark="radio"] { border-color: var(--action-brand); }
+  [data-agni-choice]:checked + [data-agni-mark="radio"] > [data-glyph] { display: block; }
+
+  /* switch — knob travel comes from --agni-knob-on, set per size on the track */
+  [data-agni-mark="switch"] { background: var(--border-strong); border-color: transparent; }
+  [data-agni-mark="switch"] > [data-glyph] { left: 2px; }
+  [data-agni-choice]:checked + [data-agni-mark="switch"] { background: var(--action-brand); }
+  [data-agni-choice]:checked + [data-agni-mark="switch"] > [data-glyph] { left: var(--agni-knob-on, 2px); }
+
+  /* Hover-revealed affordances (a tile's pin button, a row's quick action)
+     must also appear for keyboard users — when anything in the group has
+     focus. Opacity, not display, so the control stays in the Tab order. */
+  [data-agni-reveal] { opacity: 0; transition: opacity var(--dur-fast) var(--ease-standard); }
+  .group:hover [data-agni-reveal],
+  .group:focus-within [data-agni-reveal],
+  [data-agni-reveal]:focus-visible { opacity: 1; }
+
+  /* Keyboard highlight for options driven by aria-activedescendant — the
+     pointer's hover and the keyboard's cursor must look the same. */
+  [data-agni-option][data-active]:not([aria-selected="true"]) { background: var(--surface-soft); }
+
 }

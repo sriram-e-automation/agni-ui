@@ -1,6 +1,6 @@
-import { resolveDataState } from "../feedback/DataState.tsx";
+import { resolveDataState } from "../../utils/DataState.tsx";
 import React from "react";
-import { PersonCard } from "./PersonCard.tsx";
+import { PersonCard } from "../PersonCard/PersonCard.tsx";
 
 /* ── Types (mirrored in OrgTree.d.ts) ── */
 export interface OrgPerson {
@@ -105,7 +105,7 @@ function isDescendantSelected(node: any, selectedId: string): boolean {
  * lines) stay inline — their position and length are computed per node from
  * the tree structure, not a themeable choice.
  */
-function OrgTreeBody({
+function OrgTreeBody({ forwardedRef,
   people = [],
   rootId,
   cardSize = "sm",
@@ -164,7 +164,7 @@ function OrgTreeBody({
   }
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", minHeight: 0, height: "100%", ...style }}>
+    <div ref={forwardedRef as never} style={{ display: "flex", flexDirection: "column", minHeight: 0, height: "100%", ...style }}>
       {legend && legend.length > 0 && (
         <div className="flex items-center gap-1 flex-wrap px-[2px] pb-3 shrink-0">
           {legend.map((l, i) => (
@@ -191,7 +191,7 @@ function OrgTreeBody({
 
 /* State contract — error → loading → empty → content, resolved by
    resolveDataState so the precedence matches every other data component. */
-export function OrgTree(props) {
+export const OrgTree = React.forwardRef<HTMLElement, any>(function OrgTree(props, ref) {
   const state = resolveDataState({
     loading: props.loading, error: props.error, onRetry: props.onRetry,
     isEmpty: !(props.people && props.people.length), empty: props.empty,
@@ -199,5 +199,5 @@ export function OrgTree(props) {
     emptyIcon: "ph-tree-structure", emptyTitle: "No reporting line to show",
   });
   if (state !== false) return <div style={{ width: "100%", ...(props.style || {}) }}>{state}</div>;
-  return <OrgTreeBody {...props} />;
-}
+  return <OrgTreeBody {...props} forwardedRef={ref} />;
+});

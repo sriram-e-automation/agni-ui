@@ -28,7 +28,7 @@ export interface QuickStatsProps {
   empty?: React.ReactNode;
 }
 /** Click-to-filter stat card strip for list pages.
- *  @version 1.0.0
+ *  @version 1.1.0
   * States: loading · error · empty.
 */
-export declare function QuickStats(props: QuickStatsProps): JSX.Element;
+export declare const QuickStats: React.ForwardRefExoticComponent<QuickStatsProps & React.RefAttributes<HTMLElement>>;

@@ -1,8 +1,8 @@
-import React from "react";
-import { Button } from "../core/Button.tsx";
+import React, { forwardRef } from "react";
+import { Button } from "../../primitives/Button/Button.tsx";
 
 /* ── Types (mirrored in ErrorState.d.ts) ── */
-export interface ErrorStateProps {
+export interface ErrorStateProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
   /** Phosphor icon class. @default "ph-warning-octagon" */
   icon?: string;
   title?: React.ReactNode;
@@ -45,15 +45,15 @@ const FLUSH = "bg-transparent";
 const RING = "rounded-full bg-status-error-soft flex items-center justify-center shrink-0";
 const DETAIL = "font-data text-2xs text-fg-tertiary mt-2 break-words max-w-[380px]";
 
-export function ErrorState({
+export const ErrorState = forwardRef<HTMLDivElement, ErrorStateProps>(function ErrorState({
   icon = "ph-warning-octagon", title = "Couldn't load this", message,
   detail, onRetry, retryLabel = "Try again", action = null,
-  size = "md", bordered = true, style = {},
-}: ErrorStateProps) {
+  size = "md", bordered = true, style = {}, className = "", role = "alert", ...rest
+}, ref) {
   const s = SIZE[size] || SIZE.md;
   return (
-    <div role="alert" className={[SHELL, s.pad, bordered ? BORDERED : FLUSH].join(" ")} style={style}>
-      <div className={[RING, s.ring].join(" ")}>
+    <div {...rest} ref={ref} role={role} className={[SHELL, s.pad, bordered ? BORDERED : FLUSH, className].join(" ")} style={style}>
+      <div aria-hidden="true" className={[RING, s.ring].join(" ")}>
         <i className={["ph", icon, s.glyph, "text-status-error"].join(" ")} />
       </div>
       <div>
@@ -63,10 +63,10 @@ export function ErrorState({
       </div>
       {(onRetry || action) && (
         <div className="flex items-center justify-center gap-2 flex-wrap">
-          {onRetry && <Button category="secondary" size={size === "sm" ? "sm" : "md"} icon={<i className="ph ph-arrow-clockwise" />} onClick={onRetry}>{retryLabel}</Button>}
+          {onRetry && <Button category="secondary" size={size === "sm" ? "sm" : "md"} icon={<i aria-hidden="true" className="ph ph-arrow-clockwise" />} onClick={onRetry}>{retryLabel}</Button>}
           {action}
         </div>
       )}
     </div>
   );
-}
+});

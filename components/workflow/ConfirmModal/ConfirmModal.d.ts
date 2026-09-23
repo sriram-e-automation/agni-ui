@@ -97,7 +97,7 @@ export interface ConfirmModalProps {
  * DiscardConfirmModal, BulkActionConfirm and ImportRecordsModal. All five remain
  * as internal renderers and are no longer part of the documented API. Names in
  * the library describe what a component *is*, not the verb a screen calls it for.
- * @version 1.0.0
+ * @version 1.1.0
   * States: error · open · submitting.
 */
-export declare function ConfirmModal(props: ConfirmModalProps): JSX.Element;
+export declare const ConfirmModal: React.ForwardRefExoticComponent<ConfirmModalProps & React.RefAttributes<HTMLElement>>;

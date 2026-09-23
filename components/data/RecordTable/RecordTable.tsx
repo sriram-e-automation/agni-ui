@@ -1,8 +1,8 @@
 import React from "react";
-import { DataTable } from "./DataTable.tsx";
-import { PageControls } from "./PageControls.tsx";
-import { Button } from "../core/Button.tsx";
-import { renderActions, visibleActions } from "../core/actionSpec.tsx";
+import { DataTable } from "../DataTable/DataTable.tsx";
+import { PageControls } from "../PageControls/PageControls.tsx";
+import { Button } from "../../primitives/Button/Button.tsx";
+import { renderActions, visibleActions } from "../../utils/actionSpec.tsx";
 
 /**
  * AgniUI · RecordTable
@@ -22,7 +22,7 @@ import { renderActions, visibleActions } from "../core/actionSpec.tsx";
  * Tailwind v4 — no class strings of its own beyond the two wrappers.
  */
 
-export function RecordTable({
+export const RecordTable = React.forwardRef<HTMLDivElement, any>(function RecordTable({
   columns = [], rows = [], rowKey = "id",
   selectable = false, selected, onSelect, onRowClick, sortAccessor,
   density, fillHeight = false, headerStyle, dark,
@@ -31,7 +31,7 @@ export function RecordTable({
   pagination = null,
   loading = false, loadingRows = 6, error, onRetry, empty,
   role = "", disabled = false, gap = "var(--space-3)", style = {},
-}: any) {
+}, ref) {
   const selCount = selected ? (selected.size || 0) : 0;
 
   /* Row actions → DataTable's trailing action column. Withheld entirely when
@@ -65,7 +65,7 @@ export function RecordTable({
   }, [rowActions, rowActionsMax, rowActionsLabel, rowActionsWidth, role, disabled, rows]);
 
   return (
-    <div className="flex flex-col min-h-0" style={{ gap, ...style }}>
+    <div ref={ref as never} className="flex flex-col min-h-0" style={{ gap, ...style }}>
       {controls !== null && controls !== false && (
         <PageControls
           {...(controls || {})}
@@ -87,4 +87,4 @@ export function RecordTable({
       />
     </div>
   );
-}
+});

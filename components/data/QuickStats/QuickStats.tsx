@@ -1,4 +1,4 @@
-import { resolveDataState } from "../feedback/DataState.tsx";
+import { resolveDataState } from "../../utils/DataState.tsx";
 import React, { useState } from "react";
 
 /* ── Types (mirrored in QuickStats.d.ts) ── */
@@ -27,11 +27,11 @@ export interface QuickStatsProps {
  * Click-to-filter stat card strip above a records table. Promoted from the
  * admin-ops scaffold & work-orders kit. Cards with key:null act as "all".
  */
-function QuickStatsBody({ items = [], value = null, onChange, showShare = false, style = {} }) {
+function QuickStatsBody({ forwardedRef, items = [], value = null, onChange, showShare = false, style = {} }) {
   const [hov, setHov] = useState(null);
   const total = Number((items.find(s => s.key === null) || {}).value) || 0;
   return (
-    <div style={{ display:"flex", gap:"var(--space-2)", flexWrap:"wrap", ...style }}>
+    <div ref={forwardedRef as never} style={{ display:"flex", gap:"var(--space-2)", flexWrap:"wrap", ...style }}>
       <style>{`@keyframes agni-stat-in { from { opacity:0; transform: translateY(6px); } to { opacity:1; transform: translateY(0); } }`}</style>
       {items.map((s, i) => {
         const accent = s.accent || "var(--text-brand)";
@@ -63,7 +63,7 @@ function QuickStatsBody({ items = [], value = null, onChange, showShare = false,
 
 /* State contract — error → loading → empty → content (resolveDataState owns the
    precedence). The body mounts only with content, so hook order is stable. */
-export function QuickStats(props) {
+export const QuickStats = React.forwardRef<HTMLElement, any>(function QuickStats(props, ref) {
   const state = resolveDataState({
     loading: props.loading, error: props.error, onRetry: props.onRetry,
     isEmpty: !(props.items && props.items.length), empty: props.empty,
@@ -71,5 +71,5 @@ export function QuickStats(props) {
     emptyIcon: "ph-chart-bar", emptyTitle: "No stats yet",
   });
   if (state !== false) return <div style={{ width: "100%", ...(props.style || {}) }}>{state}</div>;
-  return <QuickStatsBody {...props} />;
-}
+  return <QuickStatsBody {...props} forwardedRef={ref} />;
+});

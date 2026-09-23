@@ -1,4 +1,4 @@
-import { resolveDataState } from "../feedback/DataState.tsx";
+import { resolveDataState } from "../../utils/DataState.tsx";
 import React from "react";
 
 /* ── Types (mirrored in AuditTrail.d.ts) ── */
@@ -30,9 +30,9 @@ const TONE = {
   error: "text-status-error", info: "text-status-info",
 };
 
-function AuditTrailBody({ entries = [], style = {} }) {
+function AuditTrailBody({ forwardedRef, entries = [], style = {} }) {
   return (
-    <div style={style}>
+    <div ref={forwardedRef as never} style={style}>
       {entries.map((e, i) => {
         const last = i === entries.length - 1;
         return (
@@ -60,13 +60,13 @@ function AuditTrailBody({ entries = [], style = {} }) {
 
 /* State contract — error → loading → empty → content, resolved by
    resolveDataState so the precedence matches every other data component. */
-export function AuditTrail(props) {
+export const AuditTrail = React.forwardRef<HTMLElement, any>(function AuditTrail(props, ref) {
   const state = resolveDataState({
     loading: props.loading, error: props.error, onRetry: props.onRetry,
     isEmpty: !(props.entries && props.entries.length), empty: props.empty,
     shape: "list", rows: props.loadingRows || 5,
     emptyIcon: "ph-clock-counter-clockwise", emptyTitle: "No activity yet",
   });
-  if (state !== false) return <div className="w-full" style={props.style || {}}>{state}</div>;
-  return <AuditTrailBody {...props} />;
-}
+  if (state !== false) return <div ref={ref as never} className="w-full" style={props.style || {}}>{state}</div>;
+  return <AuditTrailBody {...props} forwardedRef={ref} />;
+});

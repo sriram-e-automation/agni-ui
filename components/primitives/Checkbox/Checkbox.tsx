@@ -1,23 +1,35 @@
-import React from "react";
+import React, { forwardRef, useEffect, useRef } from "react";
+import { useFieldControl } from "../../utils/field.tsx";
+import { useMergedRef, useStableId } from "../../utils/interaction.tsx";
 
 /* ── Types (mirrored in Checkbox.d.ts) ── */
-export interface CheckboxProps {
+export interface CheckboxProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange" | "size" | "type" | "checked" | "defaultChecked"> {
+  /** Controlled state. Omit (and use `defaultChecked`) for an uncontrolled box. */
   checked?: boolean;
+  defaultChecked?: boolean;
+  /** Mixed state — shows a dash and sets `aria-checked="mixed"`. */
   indeterminate?: boolean;
-  onChange?: (checked: boolean) => void;
+  /** Receives the next checked state, and the native change event. */
+  onChange?: (checked: boolean, e: React.ChangeEvent<HTMLInputElement>) => void;
   label?: React.ReactNode;
-  disabled?: boolean;
-  /** Validation failed — red border. Ignored when disabled. */
+  /** Validation failed — red border + `aria-invalid`. Ignored when disabled. */
   error?: boolean;
   size?: "sm" | "md";
+  /** Style for the outer <label>. */
   style?: React.CSSProperties;
+  /** Class for the outer <label>. */
   className?: string;
 }
-/** Controlled checkbox with optional label + indeterminate state. */
+/** Checkbox with optional label + indeterminate state. */
 
 /**
  * AgniUI · Checkbox
- * Controlled checkbox with label. Supports indeterminate + disabled + error.
+ * A real <input type="checkbox">, visually hidden, followed by the drawn box.
+ * The box's checked / indeterminate / focus look is driven by the input's own
+ * pseudo-classes (tokens/base.css → [data-agni-choice]), so Space toggles it,
+ * Tab reaches it, it submits with a <form>, and a form library that writes
+ * `input.checked` directly still repaints it. The ref is the native input.
  *
  * Tailwind v4 (migrated Aug 2026). The box is a fixed 16/18px mark, not a form-row
  * control, so it does NOT ride --density-control-h.
@@ -26,43 +38,66 @@ const BOX_SIZE = { sm: "size-[16px] text-[11px]", md: "size-[18px] text-[13px]" 
 
 const BOX =
   "inline-flex items-center justify-center shrink-0 rounded-xs border-[1.5px] " +
-  "text-fg-on-brand transition-[background-color,border-color] duration-fast";
+  "transition-[background-color,border-color] duration-fast";
 
-const BOX_ON = "bg-action-brand border-action-brand";
-const BOX_OFF = "bg-surface-card border-line-strong";
-const BOX_ERROR = "bg-surface-card border-status-error";
-
-export function Checkbox({
-  checked = false,
+export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox({
+  checked,
+  defaultChecked,
   indeterminate = false,
   onChange,
   label = null,
-  disabled = false,
-  error = false,
+  disabled,
+  error,
+  required,
+  id,
   size = "md",       // sm | md
   style = {},
   className = "",
   ...rest
-}: CheckboxProps) {
-  const on = checked || indeterminate;
-  const box = on ? BOX_ON : (error && !disabled) ? BOX_ERROR : BOX_OFF;
+}, ref) {
+  const local = useRef<HTMLInputElement>(null);
+  const merged = useMergedRef(ref, local);
+  const f = useFieldControl(
+    { id, error, disabled, required, "aria-describedby": rest["aria-describedby"], "aria-invalid": rest["aria-invalid"] },
+    useStableId(null, "agni-checkbox"),
+  );
+  /* `indeterminate` is a DOM property with no attribute — it must be set imperatively. */
+  useEffect(() => { if (local.current) local.current.indeterminate = !!indeterminate; }, [indeterminate]);
+
   return (
     <label
       className={[
-        "inline-flex items-center gap-2 select-none",
-        disabled ? "cursor-not-allowed opacity-[var(--state-disabled-opacity)]" : "cursor-pointer",
+        "relative inline-flex items-center gap-2 select-none",
+        f.disabled ? "cursor-not-allowed opacity-[var(--state-disabled-opacity)]" : "cursor-pointer",
         className,
       ].join(" ")}
       style={style}
-      {...rest}
     >
+      <input
+        {...rest}
+        ref={merged}
+        type="checkbox"
+        id={f.id}
+        checked={checked}
+        defaultChecked={defaultChecked}
+        disabled={f.disabled}
+        required={f.required}
+        aria-checked={indeterminate ? "mixed" : undefined}
+        aria-invalid={f.invalid || undefined}
+        aria-describedby={f.describedBy}
+        onChange={(e) => onChange?.(e.target.checked, e)}
+        data-agni-choice=""
+      />
       <span
-        onClick={() => !disabled && onChange && onChange(!checked)}
-        className={[BOX, BOX_SIZE[size] || BOX_SIZE.md, box].join(" ")}
+        aria-hidden="true"
+        data-agni-mark="checkbox"
+        data-invalid={f.invalid && !f.disabled ? "" : undefined}
+        className={[BOX, BOX_SIZE[size] || BOX_SIZE.md].join(" ")}
       >
-        {indeterminate ? <i className="ph-bold ph-minus" /> : checked ? <i className="ph-bold ph-check" /> : null}
+        <i data-glyph="check" className="ph-bold ph-check" />
+        <i data-glyph="dash" className="ph-bold ph-minus" />
       </span>
       {label && <span className="text-base text-fg-primary">{label}</span>}
     </label>
   );
-}
+});

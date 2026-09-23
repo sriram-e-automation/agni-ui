@@ -89,6 +89,6 @@ export declare function normalizeRecord(input?: any): RecordCardRecord;
  * task (app strip + effort logging). Reach for this rather than KanbanCard /
  * ApprovalCard / TaskCard directly — those remain exported as the preset
  * renderers. PersonCard stays separate: a crew member is not a record.
- * @version 1.0.0
+ * @version 1.1.0
  */
-export declare function RecordCard(props: RecordCardProps): JSX.Element;
+export declare const RecordCard: React.ForwardRefExoticComponent<RecordCardProps & React.RefAttributes<HTMLDivElement>>;

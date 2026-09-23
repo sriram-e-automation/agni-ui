@@ -1,4 +1,4 @@
-import { resolveDataState } from "../feedback/DataState.tsx";
+import { resolveDataState } from "../../utils/DataState.tsx";
 import React from "react";
 import { KanbanCard } from "./KanbanCard.tsx";
 import { ApprovalCard } from "./ApprovalCard.tsx";
@@ -92,6 +92,7 @@ export function normalizeRecord(input: any = {}): RecordCardRecord {
  * (viewer role). PersonCard stays separate: a crew member is not a record.
  */
 function RecordCardBody({
+  forwardedRef,
   record, preset = "kanban", status, people = null, showStatus,
   onView, onApprove, onReject, onComplete, onStartLogging, onStopLogging,
   selected = false, busy = false, disabled = false,
@@ -102,7 +103,7 @@ function RecordCardBody({
 
   if (preset === "approval") {
     return (
-      <ApprovalCard
+      <ApprovalCard ref={forwardedRef}
         row={{ id: rec.id, owner: rec.requestedBy, category: rec.category, group: rec.requestedFor, status: lane, date: rec.date }}
         onView={onView}
         onQuickReject={disabled ? undefined : () => onReject && onReject({ remark: "" })}
@@ -115,7 +116,7 @@ function RecordCardBody({
 
   if (preset === "task") {
     return (
-      <TaskCard
+      <TaskCard ref={forwardedRef}
         card={{
           id: rec.id, requestType: rec.requestType, requestedBy: rec.requestedBy, requestedFor: rec.requestedFor,
           app: rec.app as any, assignee: nameOf(rec.assignee) || undefined,
@@ -135,7 +136,7 @@ function RecordCardBody({
   }
 
   return (
-    <KanbanCard
+    <KanbanCard ref={forwardedRef}
       status={lane as any}
       app={rec.app as any}
       showStatus={showStatus}
@@ -167,13 +168,13 @@ function RecordCardBody({
 /* A single record has no "empty" — but a board or grid needs to render
    placeholders through the same component it renders records with, so
    loading and error are part of the contract. */
-export function RecordCard(props) {
+export const RecordCard = React.forwardRef<HTMLDivElement, any>(function RecordCard(props, ref) {
   const state = resolveDataState({
     loading: props.loading, error: props.error, onRetry: props.onRetry,
     isEmpty: !props.loading && !props.error && !props.record,
     empty: props.empty, shape: "card", height: 168,
     emptyIcon: "ph-file-dashed", emptyTitle: "No record",
   });
-  if (state !== false) return <div style={{ width: "100%", ...(props.style || {}) }}>{state}</div>;
-  return <RecordCardBody {...props} />;
-}
+  if (state !== false) return <div ref={ref} style={{ width: "100%", ...(props.style || {}) }}>{state}</div>;
+  return <RecordCardBody {...props} forwardedRef={ref} />;
+});

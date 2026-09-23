@@ -3,10 +3,11 @@
  * API (no .d.ts, no specimen card). Use RecordCard with the matching preset.
  */
 import React, { useState } from "react";
-import { Modal } from "../feedback/Modal.tsx";
-import { Button } from "../core/Button.tsx";
-import { Avatar } from "../core/Avatar.tsx";
-import { AvatarStack } from "../core/AvatarStack.tsx";
+import { pressableProps } from "../../utils/interaction.tsx";
+import { Modal } from "../../feedback/Modal/Modal.tsx";
+import { Button } from "../../primitives/Button/Button.tsx";
+import { Avatar } from "../../primitives/Avatar/Avatar.tsx";
+import { AvatarStack } from "../../primitives/AvatarStack/AvatarStack.tsx";
 
 export interface TaskEffort { total?: string; intervals?: number; running?: boolean; current?: string; startedAt?: string; }
 export interface TaskCardData {
@@ -41,7 +42,7 @@ const DEFAULT_APP_COLORS = { Procurement: "var(--text-brand)", Fabrication: "var
  * session or logged-total row) and quick actions: ✓ complete, start/stop
  * logging (stop opens a save-log dialog with notes).
  */
-export function TaskCard({ card, lane = "Yet to start", onView, onQuickComplete, onStopLogging, onStartLogging, selected, laneTones, appColors }: TaskCardProps) {
+export const TaskCard = React.forwardRef<HTMLDivElement, TaskCardProps>(function TaskCard({ card, lane = "Yet to start", onView, onQuickComplete, onStopLogging, onStartLogging, selected, laneTones, appColors }, ref) {
   const [hov, setHov] = useState(false);
   const [stopOpen, setStopOpen] = useState(false);
   const [endAt, setEndAt] = useState(null);
@@ -64,7 +65,9 @@ export function TaskCard({ card, lane = "Yet to start", onView, onQuickComplete,
   const openStop = (e) => { e.stopPropagation(); setEndAt(new Date()); setNotes(""); setStopOpen(true); };
   const confirmStop = () => { onStopLogging && onStopLogging(card, notes); setStopOpen(false); };
   return (
-    <div onClick={onView} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+    <div ref={ref as never} {...pressableProps(onView, { label: [card.id, card.requestType].filter(Boolean).join(" — ") })}
+      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+      className="outline-none focus-visible:focus-ring"
       style={{ background: selected ? "var(--surface-brand-soft)" : "var(--surface-card)",
         border: "1.5px solid " + (running ? "var(--status-success)" : (selected || hov) ? "var(--action-brand)" : "var(--border-subtle)"),
         borderRadius: "var(--radius-lg)", overflow: "hidden", cursor: "pointer", flexShrink: 0,
@@ -161,8 +164,8 @@ export function TaskCard({ card, lane = "Yet to start", onView, onQuickComplete,
                 <div><div style={fLbl}>Duration</div><div style={{ ...fMono, color: "var(--status-success)", fontWeight: "var(--fw-semibold)" }}>{effort && effort.current}</div></div>
               </div>
               <div>
-                <div style={{ ...fLbl, marginBottom: "var(--space-1)" }}>Notes</div>
-                <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={4} placeholder="What did you work on during this session?"
+                <label htmlFor={"agni-effort-notes-" + card.id} style={{ ...fLbl, marginBottom: "var(--space-1)", display: "block" }}>Notes</label>
+                <textarea id={"agni-effort-notes-" + card.id} value={notes} onChange={(e) => setNotes(e.target.value)} rows={4} placeholder="What did you work on during this session?"
                   style={{ width: "100%", boxSizing: "border-box", resize: "vertical", padding: "var(--space-2) var(--space-3)", borderRadius: "var(--radius-md)", border: "1px solid var(--border-default)", fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", color: "var(--text-primary)", background: "var(--surface-card)" }} />
               </div>
             </div>
@@ -171,4 +174,4 @@ export function TaskCard({ card, lane = "Yet to start", onView, onQuickComplete,
       )}
     </div>
   );
-}
+});

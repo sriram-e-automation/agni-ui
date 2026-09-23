@@ -1,5 +1,5 @@
 import * as React from "react";
-import { PersonInfo } from "./PersonCard";
+import { PersonInfo } from "../PersonCard/PersonCard";
 
 /** A crew member with a reporting link. Extra fields are legal. */
 export interface OrgPerson extends PersonInfo {
@@ -43,7 +43,7 @@ export interface OrgTreeProps {
  * the left, reports fanning right through elbow connectors — PersonCard nodes,
  * collapsible branches with report counts, and a brand-highlighted path from
  * the selected person up to the root. Scrolls both axes inside its container.
- * @version 1.0.0
+ * @version 1.1.0
   * States: loading · error · empty.
 */
-export declare function OrgTree(props: OrgTreeProps): JSX.Element;
+export declare const OrgTree: React.ForwardRefExoticComponent<OrgTreeProps & React.RefAttributes<HTMLElement>>;

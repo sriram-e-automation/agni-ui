@@ -12,6 +12,6 @@ export interface ShellFooterProps {
   style?: React.CSSProperties;
 }
 /** Canonical Desk-app footer bar — signature left, copyright right. Pairs with ShellHeader.
- *  @version 1.0.0
+ *  @version 1.1.0
  */
-export declare function ShellFooter(props: ShellFooterProps): JSX.Element;
+export declare const ShellFooter: React.ForwardRefExoticComponent<ShellFooterProps & React.RefAttributes<HTMLElement>>;

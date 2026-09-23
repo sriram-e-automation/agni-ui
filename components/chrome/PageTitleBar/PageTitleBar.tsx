@@ -1,9 +1,10 @@
 import React from "react";
-import { Cluster } from "../layout/Cluster.tsx";
-import { IconButton } from "../core/IconButton.tsx";
-import { Tag } from "../core/Tag.tsx";
-import { renderActions, exportToAction, visibleActions } from "../core/actionSpec.tsx";
-import { Loading } from "../feedback/Loading.tsx";
+import { useRovingFocus } from "../../utils/interaction.tsx";
+import { Cluster } from "../../layout/Cluster/Cluster.tsx";
+import { IconButton } from "../../primitives/Button/IconButton.tsx";
+import { Tag } from "../../primitives/Tag/Tag.tsx";
+import { renderActions, exportToAction, visibleActions } from "../../utils/actionSpec.tsx";
+import { Loading } from "../../feedback/Loading/Loading.tsx";
 
 export interface PageTab {
   key: string;
@@ -83,9 +84,19 @@ const TILE = "size-[28px] rounded-sm bg-surface-brand-soft text-fg-brand inline-
 const SUB = "m-0 mt-[2px] font-sans text-xs text-fg-tertiary";
 const BACK = "inline-flex items-center gap-1 h-[26px] px-2 -ml-2 border-none bg-transparent rounded-sm font-sans text-xs font-medium text-fg-tertiary cursor-pointer hover:text-fg-brand hover:bg-surface-brand-soft transition-[background-color,color] duration-fast";
 
-export function PageTitleBar({ title, icon, tabs = [], tab, onTabChange, viewModes = [], viewMode, onViewModeChange, subtitle, badge = null, back = null, primaryAction, secondaryActions, exportAction, role, actions, disabled = false, loading = false, countsLoading = false }: PageTitleBarProps) {
+export const PageTitleBar = React.forwardRef<HTMLElement, PageTitleBarProps>(function PageTitleBar({ title, icon, tabs = [], tab, onTabChange, viewModes = [], viewMode, onViewModeChange, subtitle, badge = null, back = null, primaryAction, secondaryActions, exportAction, role, actions, disabled = false, loading = false, countsLoading = false }, ref) {
   const showViewModes = onViewModeChange && viewModes.length > 0;
-  if (loading) return <Loading loading shape="pageTitleBar" />;
+  /* Scope tabs and the view switch are single-choice tracks with no panels:
+     radio groups with roving focus — the same model as Tabs' pill track. */
+  const scopeRoving = useRovingFocus({
+    count: tabs.length, current: tabs.findIndex((t) => t.key === tab), orientation: "horizontal",
+    isDisabled: (i) => !!tabs[i]?.disabled, onMove: (i) => onTabChange && onTabChange(tabs[i].key),
+  });
+  const viewRoving = useRovingFocus({
+    count: viewModes.length, current: viewModes.findIndex((v) => v.key === viewMode), orientation: "horizontal",
+    onMove: (i) => onViewModeChange && onViewModeChange(viewModes[i].key),
+  });
+  if (loading) return <Loading ref={ref as never} loading shape="pageTitleBar" />;
 
   const exp = exportToAction(exportAction, role);
   const specs = [...(exp ? [exp] : []), ...(secondaryActions || []), ...(primaryAction ? [{ kind: "primary", ...primaryAction }] : [])];
@@ -96,15 +107,15 @@ export function PageTitleBar({ title, icon, tabs = [], tab, onTabChange, viewMod
     : actions;
 
   return (
-    <Cluster wrap justify="space-between" gap="default" style={{ alignItems: "center", rowGap: "var(--space-2)", opacity: disabled ? 0.55 : 1, pointerEvents: disabled ? "none" : "auto" }}>
+    <Cluster ref={ref as never} wrap justify="space-between" gap="default" style={{ alignItems: "center", rowGap: "var(--space-2)", opacity: disabled ? 0.55 : 1, pointerEvents: disabled ? "none" : "auto" }}>
       <div className="min-w-0">
         {back && (
           <button type="button" className={BACK} onClick={back.onClick}>
-            <i className="ph-bold ph-arrow-left" />{back.label || "Back"}
+            <i aria-hidden="true" className="ph-bold ph-arrow-left" />{back.label || "Back"}
           </button>
         )}
         <h1 className={TITLE}>
-          {icon && <span className={TILE}><i className={"ph-bold " + icon} /></span>}
+          {icon && <span aria-hidden="true" className={TILE}><i className={"ph-bold " + icon} /></span>}
           {title}
           {badge && <Tag variant="status" status={badge.status} tone={badge.tone as any} size="sm">{badge.label}</Tag>}
         </h1>
@@ -112,12 +123,12 @@ export function PageTitleBar({ title, icon, tabs = [], tab, onTabChange, viewMod
       </div>
       <Cluster gap="tight" style={{ alignItems: "center" }}>
         {tabs.length > 0 && (
-          <div className={TRACK}>
-            {tabs.map((t) => {
+          <div role="radiogroup" aria-label="Scope" onKeyDown={scopeRoving.onKeyDown} className={TRACK}>
+            {tabs.map((t, i) => {
               const on = tab === t.key;
               const dis = !!t.disabled;
               return (
-                <button key={t.key} type="button" disabled={dis}
+                <button key={t.key} {...scopeRoving.getItemProps(i)} type="button" role="radio" aria-checked={on} aria-disabled={dis || undefined}
                   title={dis ? "Not available for your role" : undefined}
                   onClick={() => !dis && onTabChange && onTabChange(t.key)}
                   className={[TAB, dis ? TAB_DIS : on ? TAB_ON : TAB_OFF].join(" ")}>
@@ -133,13 +144,14 @@ export function PageTitleBar({ title, icon, tabs = [], tab, onTabChange, viewMod
         )}
         {showViewModes && <>
           {tabs.length > 0 && <span className="w-px h-[22px] bg-line-subtle shrink-0" />}
-          <div className={VIEW_TRACK}>
-            {viewModes.map((v) => {
+          <div role="radiogroup" aria-label="View" onKeyDown={viewRoving.onKeyDown} className={VIEW_TRACK}>
+            {viewModes.map((v, i) => {
               const on = viewMode === v.key;
               return (
-                <button key={v.key} type="button" title={v.title} onClick={() => onViewModeChange(v.key)}
+                <button key={v.key} {...viewRoving.getItemProps(i)} type="button" role="radio" aria-checked={on}
+                  title={v.title} aria-label={v.title ?? v.key} onClick={() => onViewModeChange!(v.key)}
                   className={[VIEW_BTN, on ? VIEW_ON : VIEW_OFF].join(" ")}>
-                  <i className={"ph " + v.icon} />
+                  <i aria-hidden="true" className={"ph " + v.icon} />
                 </button>
               );
             })}
@@ -154,4 +166,4 @@ export function PageTitleBar({ title, icon, tabs = [], tab, onTabChange, viewMod
       </Cluster>
     </Cluster>
   );
-}
+});

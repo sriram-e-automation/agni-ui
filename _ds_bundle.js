@@ -1,4 +1,4 @@
-/* @ds-bundle: {"format":4,"namespace":"AgniUIAgnikulERPDesignSystem_153d9e","components":[{"name":"BarChart","sourcePath":"components/charts/BarChart.tsx"},{"name":"ChartCard","sourcePath":"components/charts/ChartCard.tsx"},{"name":"ChartKit","sourcePath":"components/charts/ChartKit.tsx"},{"name":"DonutChart","sourcePath":"components/charts/DonutChart.tsx"},{"name":"Gauge","sourcePath":"components/charts/Gauge.tsx"},{"name":"Heatmap","sourcePath":"components/charts/Heatmap.tsx"},{"name":"LineChart","sourcePath":"components/charts/LineChart.tsx"},{"name":"PieChart","sourcePath":"components/charts/PieChart.tsx"},{"name":"RadarChart","sourcePath":"components/charts/RadarChart.tsx"},{"name":"ScatterChart","sourcePath":"components/charts/ScatterChart.tsx"},{"name":"SparkLineChart","sourcePath":"components/charts/SparkLineChart.tsx"},{"name":"AppSwitcher","sourcePath":"components/chrome/AppSwitcher.tsx"},{"name":"NavRail","sourcePath":"components/chrome/NavRail.tsx"},{"name":"NotificationsMenu","sourcePath":"components/chrome/NotificationsMenu.tsx"},{"name":"PageHeader","sourcePath":"components/chrome/PageHeader.tsx"},{"name":"PageTitleBar","sourcePath":"components/chrome/PageTitleBar.tsx"},{"name":"PanelIconMenu","sourcePath":"components/chrome/PanelKit.tsx"},{"name":"MenuRow","sourcePath":"components/chrome/PanelKit.tsx"},{"name":"PanelEmpty","sourcePath":"components/chrome/PanelKit.tsx"},{"name":"PanelKit","sourcePath":"components/chrome/PanelKit.tsx"},{"name":"SettingsMenu","sourcePath":"components/chrome/SettingsMenu.tsx"},{"name":"ShellFooter","sourcePath":"components/chrome/ShellFooter.tsx"},{"name":"ShellHeader","sourcePath":"components/chrome/ShellHeader.tsx"},{"name":"Theme","sourcePath":"components/chrome/Theme.tsx"},{"name":"WorkspacePane","sourcePath":"components/chrome/WorkspacePane.tsx"},{"name":"Accordion","sourcePath":"components/containment/Accordion.tsx"},{"name":"Drawer","sourcePath":"components/containment/Drawer.tsx"},{"name":"Panel","sourcePath":"components/containment/Panel.tsx"},{"name":"PanelBase","sourcePath":"components/containment/PanelBase.tsx"},{"name":"Sheet","sourcePath":"components/containment/Sheet.tsx"},{"name":"ActionTile","sourcePath":"components/core/ActionTile.tsx"},{"name":"Avatar","sourcePath":"components/core/Avatar.tsx"},{"name":"AvatarStack","sourcePath":"components/core/AvatarStack.tsx"},{"name":"Badge","sourcePath":"components/core/Badge.tsx"},{"name":"Button","sourcePath":"components/core/Button.tsx"},{"name":"ButtonBase","sourcePath":"components/core/ButtonBase.tsx"},{"name":"Card","sourcePath":"components/core/Card.tsx"},{"name":"DropdownMenu","sourcePath":"components/core/DropdownMenu.tsx"},{"name":"IconButton","sourcePath":"components/core/IconButton.tsx"},{"name":"OptionRow","sourcePath":"components/core/OptionRow.tsx"},{"name":"Rating","sourcePath":"components/core/Rating.tsx"},{"name":"RoleGate","sourcePath":"components/core/RoleGate.tsx"},{"name":"SplitButton","sourcePath":"components/core/SplitButton.tsx"},{"name":"Tag","sourcePath":"components/core/Tag.tsx"},{"name":"ApprovalCard","sourcePath":"components/data/ApprovalCard.tsx"},{"name":"AttachmentRow","sourcePath":"components/data/AttachmentRow.tsx"},{"name":"BulkActionToolbar","sourcePath":"components/data/BulkActionToolbar.tsx"},{"name":"Calendar","sourcePath":"components/data/Calendar.tsx"},{"name":"DataTable","sourcePath":"components/data/DataTable.tsx"},{"name":"DateRangeFilter","sourcePath":"components/data/DateRangeFilter.tsx"},{"name":"CopyButton","sourcePath":"components/data/DetailList.tsx"},{"name":"KeyValueRow","sourcePath":"components/data/DetailList.tsx"},{"name":"DetailList","sourcePath":"components/data/DetailList.tsx"},{"name":"DetailSection","sourcePath":"components/data/DetailSection.tsx"},{"name":"DocumentPreview","sourcePath":"components/data/DocumentPreview.tsx"},{"name":"EditableTable","sourcePath":"components/data/EditableTable.tsx"},{"name":"EventRow","sourcePath":"components/data/EventRow.tsx"},{"name":"FilterBuilder","sourcePath":"components/data/FilterBuilder.tsx"},{"name":"FilterPanel","sourcePath":"components/data/FilterPanel.tsx"},{"name":"GanttTimeline","sourcePath":"components/data/GanttTimeline.tsx"},{"name":"KanbanBoard","sourcePath":"components/data/KanbanBoard.tsx"},{"name":"KanbanCard","sourcePath":"components/data/KanbanCard.tsx"},{"name":"List","sourcePath":"components/data/List.tsx"},{"name":"OrgTree","sourcePath":"components/data/OrgTree.tsx"},{"name":"PageControls","sourcePath":"components/data/PageControls.tsx"},{"name":"Pagination","sourcePath":"components/data/Pagination.tsx"},{"name":"PersonCard","sourcePath":"components/data/PersonCard.tsx"},{"name":"QuickStats","sourcePath":"components/data/QuickStats.tsx"},{"name":"RecordCard","sourcePath":"components/data/RecordCard.tsx"},{"name":"RecordTable","sourcePath":"components/data/RecordTable.tsx"},{"name":"StageList","sourcePath":"components/data/StageList.tsx"},{"name":"StatCard","sourcePath":"components/data/StatCard.tsx"},{"name":"StatsOverview","sourcePath":"components/data/StatsOverview.tsx"},{"name":"StatusChip","sourcePath":"components/data/StatusChip.tsx"},{"name":"TaskCard","sourcePath":"components/data/TaskCard.tsx"},{"name":"TreeView","sourcePath":"components/data/TreeView.tsx"},{"name":"Banner","sourcePath":"components/feedback/Banner.tsx"},{"name":"DataState","sourcePath":"components/feedback/DataState.tsx"},{"name":"EmptyState","sourcePath":"components/feedback/EmptyState.tsx"},{"name":"ErrorState","sourcePath":"components/feedback/ErrorState.tsx"},{"name":"LoadingShapes","sourcePath":"components/feedback/Loading.tsx"},{"name":"Spinner","sourcePath":"components/feedback/Loading.tsx"},{"name":"LoadingOverlay","sourcePath":"components/feedback/Loading.tsx"},{"name":"Loading","sourcePath":"components/feedback/Loading.tsx"},{"name":"Modal","sourcePath":"components/feedback/Modal.tsx"},{"name":"Notice","sourcePath":"components/feedback/Notice.tsx"},{"name":"Progress","sourcePath":"components/feedback/Progress.tsx"},{"name":"Skeleton","sourcePath":"components/feedback/Skeleton.tsx"},{"name":"Toast","sourcePath":"components/feedback/Toast.tsx"},{"name":"TipBubble","sourcePath":"components/feedback/Tooltip.tsx"},{"name":"Tooltip","sourcePath":"components/feedback/Tooltip.tsx"},{"name":"Checkbox","sourcePath":"components/forms/Checkbox.tsx"},{"name":"CreatableSelect","sourcePath":"components/forms/CreatableSelect.tsx"},{"name":"DatePicker","sourcePath":"components/forms/DatePicker.tsx"},{"name":"FileDropzone","sourcePath":"components/forms/FileDropzone.tsx"},{"name":"FileUpload","sourcePath":"components/forms/FileUpload.tsx"},{"name":"FileUploadBasic","sourcePath":"components/forms/FileUploadBasic.tsx"},{"name":"FormField","sourcePath":"components/forms/FormField.tsx"},{"name":"FormSection","sourcePath":"components/forms/FormSection.tsx"},{"name":"Input","sourcePath":"components/forms/Input.tsx"},{"name":"MultiSelect","sourcePath":"components/forms/MultiSelect.tsx"},{"name":"MultiUserSelect","sourcePath":"components/forms/MultiUserSelect.tsx"},{"name":"QuantityStepper","sourcePath":"components/forms/QuantityStepper.tsx"},{"name":"Radio","sourcePath":"components/forms/Radio.tsx"},{"name":"RadioGroup","sourcePath":"components/forms/Radio.tsx"},{"name":"RichTextEditor","sourcePath":"components/forms/RichTextEditor.tsx"},{"name":"SearchSelect","sourcePath":"components/forms/SearchSelect.tsx"},{"name":"Select","sourcePath":"components/forms/Select.tsx"},{"name":"SelectBasic","sourcePath":"components/forms/SelectBasic.tsx"},{"name":"Switch","sourcePath":"components/forms/Switch.tsx"},{"name":"Textarea","sourcePath":"components/forms/Textarea.tsx"},{"name":"UserSelect","sourcePath":"components/forms/UserSelect.tsx"},{"name":"AppShell","sourcePath":"components/layout/AppShell.tsx"},{"name":"Bar","sourcePath":"components/layout/Bar.tsx"},{"name":"Cluster","sourcePath":"components/layout/Cluster.tsx"},{"name":"Stack","sourcePath":"components/layout/Cluster.tsx"},{"name":"Breadcrumbs","sourcePath":"components/navigation/Breadcrumbs.tsx"},{"name":"CommandPalette","sourcePath":"components/navigation/CommandPalette.tsx"},{"name":"SegmentedControl","sourcePath":"components/navigation/SegmentedControl.tsx"},{"name":"Tabs","sourcePath":"components/navigation/Tabs.tsx"},{"name":"TabsStrip","sourcePath":"components/navigation/TabsStrip.tsx"},{"name":"ApprovalPanel","sourcePath":"components/workflow/ApprovalPanel.tsx"},{"name":"ApprovalStepper","sourcePath":"components/workflow/ApprovalStepper.tsx"},{"name":"AuditTrail","sourcePath":"components/workflow/AuditTrail.tsx"},{"name":"BulkActionConfirm","sourcePath":"components/workflow/BulkActionConfirm.tsx"},{"name":"ConfirmModal","sourcePath":"components/workflow/ConfirmModal.tsx"},{"name":"DiscardConfirmModal","sourcePath":"components/workflow/DiscardConfirmModal.tsx"},{"name":"ImportRecordsModal","sourcePath":"components/workflow/ImportRecordsModal.tsx"},{"name":"RecordDetailModal","sourcePath":"components/workflow/RecordDetailModal.tsx"},{"name":"RecordForm","sourcePath":"components/workflow/RecordForm.tsx"},{"name":"RequestDetailModal","sourcePath":"components/workflow/RequestDetailModal.tsx"},{"name":"REQUEST_FORM_DEFAULTS","sourcePath":"components/workflow/RequestForm.tsx"},{"name":"RequestForm","sourcePath":"components/workflow/RequestForm.tsx"},{"name":"ReviewSubmitModal","sourcePath":"components/workflow/ReviewSubmitModal.tsx"},{"name":"SubmitConfirmModal","sourcePath":"components/workflow/SubmitConfirmModal.tsx"}],"sourceHashes":{"components/charts/BarChart.tsx":"d6c9a0402940","components/charts/ChartCard.tsx":"3214494a53c3","components/charts/ChartKit.tsx":"64e249079058","components/charts/DonutChart.tsx":"b64373d84757","components/charts/Gauge.tsx":"f449d3f5f9a3","components/charts/Heatmap.tsx":"5145e9652c1c","components/charts/LineChart.tsx":"e8704f4b98ac","components/charts/PieChart.tsx":"a828744d1b3f","components/charts/RadarChart.tsx":"0b8e1c0d2dbc","components/charts/ScatterChart.tsx":"1f067821fa10","components/charts/SparkLineChart.tsx":"7ba6d859b34e","components/chrome/AppSwitcher.tsx":"3002d7e22625","components/chrome/NavRail.tsx":"98f465300a21","components/chrome/NotificationsMenu.tsx":"86e359298adb","components/chrome/PageHeader.tsx":"6c80626c9c24","components/chrome/PageTitleBar.tsx":"ad4c85dd5932","components/chrome/PanelKit.tsx":"a7c7494409c2","components/chrome/SettingsMenu.tsx":"a05fba1da401","components/chrome/ShellFooter.tsx":"27279f143e34","components/chrome/ShellHeader.tsx":"9aa540b3961c","components/chrome/Theme.tsx":"d5c812424cd5","components/chrome/WorkspacePane.tsx":"6b3ef8e9c260","components/containment/Accordion.tsx":"148104a44a38","components/containment/Drawer.tsx":"aebbf378d565","components/containment/Panel.tsx":"fc6bacd06f56","components/containment/PanelBase.tsx":"8bd59386f405","components/containment/Sheet.tsx":"064571dd9852","components/containment/panelState.tsx":"5288c8cc0639","components/core/ActionTile.tsx":"0d6b4e541082","components/core/Avatar.tsx":"d781ecab9626","components/core/AvatarStack.tsx":"b7d9141805f4","components/core/Badge.tsx":"5c0808c7ad45","components/core/Button.tsx":"47a2e76bfe9d","components/core/ButtonBase.tsx":"e6cab4aa1485","components/core/Card.tsx":"989aebf0f2ab","components/core/DropdownMenu.tsx":"cd881c635136","components/core/IconButton.tsx":"a6116d942acb","components/core/OptionRow.tsx":"84c559cdf1ac","components/core/Rating.tsx":"07e25939b7a4","components/core/RoleGate.tsx":"e714defe877a","components/core/SplitButton.tsx":"004784ede636","components/core/Tag.tsx":"e682c63c7a8d","components/core/actionSpec.tsx":"e52da9b39073","components/data/ApprovalCard.tsx":"5e7745c982df","components/data/AttachmentRow.tsx":"08716b5534cd","components/data/BulkActionToolbar.tsx":"2c77515b02fa","components/data/Calendar.tsx":"b49e26f08adf","components/data/DataTable.tsx":"8b5ecd59bbf0","components/data/DateRangeFilter.tsx":"43c8a1c5ebdb","components/data/DetailList.tsx":"5e94a95883db","components/data/DetailSection.tsx":"b2be8e003270","components/data/DocumentPreview.tsx":"fb3a1641dbe4","components/data/EditableTable.tsx":"19a855eb0f1d","components/data/EventRow.tsx":"1984a814cb29","components/data/FilterBuilder.tsx":"6548d6e5bebe","components/data/FilterPanel.tsx":"5c26f4f3e452","components/data/GanttTimeline.tsx":"21e562bdd8f0","components/data/KanbanBoard.tsx":"eb949ac3e923","components/data/KanbanCard.tsx":"5e27df310df5","components/data/List.tsx":"90c84d6651b2","components/data/OrgTree.tsx":"eb993e2ff5f6","components/data/PageControls.tsx":"3bfd31d71011","components/data/Pagination.tsx":"ba3fdb3fdf65","components/data/PersonCard.tsx":"6ba312fbd949","components/data/QuickStats.tsx":"b69dccc799f8","components/data/RecordCard.tsx":"d1ebc05f14ec","components/data/RecordTable.tsx":"e0b64d10d4c1","components/data/StageList.tsx":"d857283a22f5","components/data/StatCard.tsx":"d1eef70f1c09","components/data/StatsOverview.tsx":"feae506b29bf","components/data/StatusChip.tsx":"2557e4ef5ccd","components/data/TaskCard.tsx":"6006f73d2bcb","components/data/TreeView.tsx":"f74ad0f987b4","components/feedback/Banner.tsx":"f60c30d87f36","components/feedback/DataState.tsx":"156e774dc68c","components/feedback/EmptyState.tsx":"8f62d70421fc","components/feedback/ErrorState.tsx":"e4bdd5f9b4db","components/feedback/Loading.tsx":"fed2c7fdc99b","components/feedback/Modal.tsx":"abb58d10fb9c","components/feedback/Notice.tsx":"d468c32e5710","components/feedback/Progress.tsx":"8beb93dc222e","components/feedback/Skeleton.tsx":"268e2d395bc6","components/feedback/Toast.tsx":"64d8b19e9afa","components/feedback/Tooltip.tsx":"37f266cbda71","components/forms/Checkbox.tsx":"abf4c6a7606f","components/forms/CreatableSelect.tsx":"a4eaa78a2550","components/forms/DatePicker.tsx":"d84d0e7016a5","components/forms/FileDropzone.tsx":"69010ee98c63","components/forms/FileUpload.tsx":"40f34fecd9f6","components/forms/FileUploadBasic.tsx":"24120e9fc2a2","components/forms/FormField.tsx":"747979be7446","components/forms/FormSection.tsx":"b4c36c13d2dc","components/forms/Input.tsx":"2d1ed777bad7","components/forms/MultiSelect.tsx":"c53a7c544d65","components/forms/MultiUserSelect.tsx":"8ae729926cb0","components/forms/QuantityStepper.tsx":"22a69b4fc4cd","components/forms/Radio.tsx":"7e845aeb9811","components/forms/RichTextEditor.tsx":"78f0855e15a5","components/forms/SearchSelect.tsx":"c76c6b4468cd","components/forms/Select.tsx":"3e0621fffc37","components/forms/SelectBasic.tsx":"b175dfec9ba8","components/forms/Switch.tsx":"e95c13843b88","components/forms/Textarea.tsx":"224264f3691b","components/forms/UserSelect.tsx":"7b500f3df507","components/layout/AppShell.tsx":"9ca2a2a8d456","components/layout/Bar.tsx":"c41c1fc5ca7a","components/layout/Cluster.tsx":"80de5a0f134d","components/navigation/Breadcrumbs.tsx":"7ee420811938","components/navigation/CommandPalette.tsx":"8a7c2d26d689","components/navigation/SegmentedControl.tsx":"ce83762ebd64","components/navigation/Tabs.tsx":"f144b6860f76","components/navigation/TabsStrip.tsx":"fad3ff0fcf9b","components/workflow/ApprovalPanel.tsx":"e2a4ae07db3e","components/workflow/ApprovalStepper.tsx":"e40a77129c0f","components/workflow/AuditTrail.tsx":"5660bde43892","components/workflow/BulkActionConfirm.tsx":"29935a43d369","components/workflow/ConfirmModal.tsx":"0148949d34b4","components/workflow/DiscardConfirmModal.tsx":"fb7ef0c24e76","components/workflow/ImportRecordsModal.tsx":"046089d40e6e","components/workflow/RecordDetailModal.tsx":"5ceac18cd1d2","components/workflow/RecordForm.tsx":"77892add5d53","components/workflow/RequestDetailModal.tsx":"1fd6cde6829e","components/workflow/RequestForm.tsx":"41b16918405c","components/workflow/ReviewSubmitModal.tsx":"76a48baba69d","components/workflow/SubmitConfirmModal.tsx":"07b97dc45b47","doc-page.js":"f52ae9c02fca"},"inlinedExternals":[],"unexposedExports":[{"name":"buildReviewSummary","sourcePath":"components/workflow/RequestForm.tsx"},{"name":"chartState","sourcePath":"components/charts/ChartKit.tsx"},{"name":"computePeriod","sourcePath":"components/data/DateRangeFilter.tsx"},{"name":"exportToAction","sourcePath":"components/core/actionSpec.tsx"},{"name":"isEmptyChart","sourcePath":"components/charts/ChartKit.tsx"},{"name":"menuItemCls","sourcePath":"components/core/DropdownMenu.tsx"},{"name":"menuItemDangerCls","sourcePath":"components/core/DropdownMenu.tsx"},{"name":"menuPanelCls","sourcePath":"components/core/DropdownMenu.tsx"},{"name":"normalizeRecord","sourcePath":"components/data/RecordCard.tsx"},{"name":"panelMenuLabelCls","sourcePath":"components/chrome/PanelKit.tsx"},{"name":"panelMenuLabelStyle","sourcePath":"components/chrome/PanelKit.tsx"},{"name":"renderActions","sourcePath":"components/core/actionSpec.tsx"},{"name":"resolveDataState","sourcePath":"components/feedback/DataState.tsx"},{"name":"resolvePanelBody","sourcePath":"components/containment/panelState.tsx"},{"name":"roleAllows","sourcePath":"components/core/RoleGate.tsx"},{"name":"useTip","sourcePath":"components/feedback/Tooltip.tsx"},{"name":"visibleActions","sourcePath":"components/core/actionSpec.tsx"}]} */
+/* @ds-bundle: {"format":4,"namespace":"AgniUIAgnikulERPDesignSystem_153d9e","components":[{"name":"BarChart","sourcePath":"components/charts/BarChart/BarChart.tsx"},{"name":"ChartCard","sourcePath":"components/charts/ChartCard/ChartCard.tsx"},{"name":"ChartKit","sourcePath":"components/utils/ChartKit.tsx"},{"name":"DonutChart","sourcePath":"components/charts/DonutChart/DonutChart.tsx"},{"name":"Gauge","sourcePath":"components/charts/Gauge/Gauge.tsx"},{"name":"Heatmap","sourcePath":"components/charts/Heatmap/Heatmap.tsx"},{"name":"LineChart","sourcePath":"components/charts/LineChart/LineChart.tsx"},{"name":"PieChart","sourcePath":"components/charts/PieChart/PieChart.tsx"},{"name":"RadarChart","sourcePath":"components/charts/RadarChart/RadarChart.tsx"},{"name":"ScatterChart","sourcePath":"components/charts/ScatterChart/ScatterChart.tsx"},{"name":"SparkLineChart","sourcePath":"components/charts/SparkLineChart/SparkLineChart.tsx"},{"name":"AppSwitcher","sourcePath":"components/chrome/AppSwitcher/AppSwitcher.tsx"},{"name":"NavRail","sourcePath":"components/chrome/NavRail/NavRail.tsx"},{"name":"NotificationsMenu","sourcePath":"components/chrome/NotificationsMenu/NotificationsMenu.tsx"},{"name":"PageHeader","sourcePath":"components/chrome/PageHeader/PageHeader.tsx"},{"name":"PageTitleBar","sourcePath":"components/chrome/PageTitleBar/PageTitleBar.tsx"},{"name":"PanelIconMenu","sourcePath":"components/chrome/PanelKit/PanelKit.tsx"},{"name":"MenuRow","sourcePath":"components/chrome/PanelKit/PanelKit.tsx"},{"name":"PanelEmpty","sourcePath":"components/chrome/PanelKit/PanelKit.tsx"},{"name":"PanelKit","sourcePath":"components/chrome/PanelKit/PanelKit.tsx"},{"name":"SettingsMenu","sourcePath":"components/chrome/SettingsMenu/SettingsMenu.tsx"},{"name":"ShellFooter","sourcePath":"components/chrome/ShellFooter/ShellFooter.tsx"},{"name":"ShellHeader","sourcePath":"components/chrome/ShellHeader/ShellHeader.tsx"},{"name":"Theme","sourcePath":"components/utils/Theme.tsx"},{"name":"WorkspacePane","sourcePath":"components/chrome/WorkspacePane/WorkspacePane.tsx"},{"name":"Accordion","sourcePath":"components/containment/Accordion/Accordion.tsx"},{"name":"Drawer","sourcePath":"components/containment/Panel/Drawer.tsx"},{"name":"Panel","sourcePath":"components/containment/Panel/Panel.tsx"},{"name":"PanelBase","sourcePath":"components/containment/Panel/PanelBase.tsx"},{"name":"Sheet","sourcePath":"components/containment/Panel/Sheet.tsx"},{"name":"ActionTile","sourcePath":"components/navigation/ActionTile/ActionTile.tsx"},{"name":"Avatar","sourcePath":"components/primitives/Avatar/Avatar.tsx"},{"name":"AvatarStack","sourcePath":"components/primitives/AvatarStack/AvatarStack.tsx"},{"name":"Badge","sourcePath":"components/primitives/Badge/Badge.tsx"},{"name":"Button","sourcePath":"components/primitives/Button/Button.tsx"},{"name":"ButtonBase","sourcePath":"components/primitives/Button/ButtonBase.tsx"},{"name":"Card","sourcePath":"components/containment/Card/Card.tsx"},{"name":"DropdownMenu","sourcePath":"components/navigation/DropdownMenu/DropdownMenu.tsx"},{"name":"IconButton","sourcePath":"components/primitives/Button/IconButton.tsx"},{"name":"OptionRow","sourcePath":"components/data/OptionRow/OptionRow.tsx"},{"name":"Rating","sourcePath":"components/primitives/Rating/Rating.tsx"},{"name":"RoleGate","sourcePath":"components/utils/RoleGate.tsx"},{"name":"SplitButton","sourcePath":"components/primitives/Button/SplitButton.tsx"},{"name":"Tag","sourcePath":"components/primitives/Tag/Tag.tsx"},{"name":"ApprovalCard","sourcePath":"components/data/RecordCard/ApprovalCard.tsx"},{"name":"AttachmentRow","sourcePath":"components/data/AttachmentRow/AttachmentRow.tsx"},{"name":"BulkActionToolbar","sourcePath":"components/data/BulkActionToolbar/BulkActionToolbar.tsx"},{"name":"Calendar","sourcePath":"components/data/Calendar/Calendar.tsx"},{"name":"DataTable","sourcePath":"components/data/DataTable/DataTable.tsx"},{"name":"DateRangeFilter","sourcePath":"components/data/DateRangeFilter/DateRangeFilter.tsx"},{"name":"CopyButton","sourcePath":"components/data/DetailList/DetailList.tsx"},{"name":"KeyValueRow","sourcePath":"components/data/DetailList/DetailList.tsx"},{"name":"DetailList","sourcePath":"components/data/DetailList/DetailList.tsx"},{"name":"DetailSection","sourcePath":"components/data/DetailSection/DetailSection.tsx"},{"name":"DocumentPreview","sourcePath":"components/data/DocumentPreview/DocumentPreview.tsx"},{"name":"EditableTable","sourcePath":"components/data/EditableTable/EditableTable.tsx"},{"name":"EventRow","sourcePath":"components/data/EventRow/EventRow.tsx"},{"name":"FilterBuilder","sourcePath":"components/data/FilterBuilder/FilterBuilder.tsx"},{"name":"FilterPanel","sourcePath":"components/data/FilterPanel/FilterPanel.tsx"},{"name":"GanttTimeline","sourcePath":"components/data/GanttTimeline/GanttTimeline.tsx"},{"name":"KanbanBoard","sourcePath":"components/data/KanbanBoard/KanbanBoard.tsx"},{"name":"KanbanCard","sourcePath":"components/data/RecordCard/KanbanCard.tsx"},{"name":"List","sourcePath":"components/data/List/List.tsx"},{"name":"OrgTree","sourcePath":"components/data/OrgTree/OrgTree.tsx"},{"name":"PageControls","sourcePath":"components/data/PageControls/PageControls.tsx"},{"name":"Pagination","sourcePath":"components/data/Pagination/Pagination.tsx"},{"name":"PersonCard","sourcePath":"components/data/PersonCard/PersonCard.tsx"},{"name":"QuickStats","sourcePath":"components/data/QuickStats/QuickStats.tsx"},{"name":"RecordCard","sourcePath":"components/data/RecordCard/RecordCard.tsx"},{"name":"RecordTable","sourcePath":"components/data/RecordTable/RecordTable.tsx"},{"name":"StageList","sourcePath":"components/data/StageList/StageList.tsx"},{"name":"StatCard","sourcePath":"components/data/StatCard/StatCard.tsx"},{"name":"StatsOverview","sourcePath":"components/data/StatsOverview/StatsOverview.tsx"},{"name":"StatusChip","sourcePath":"components/data/StatusChip/StatusChip.tsx"},{"name":"TaskCard","sourcePath":"components/data/RecordCard/TaskCard.tsx"},{"name":"TreeView","sourcePath":"components/data/TreeView/TreeView.tsx"},{"name":"Banner","sourcePath":"components/feedback/Notice/Banner.tsx"},{"name":"DataState","sourcePath":"components/utils/DataState.tsx"},{"name":"EmptyState","sourcePath":"components/feedback/EmptyState/EmptyState.tsx"},{"name":"ErrorState","sourcePath":"components/feedback/ErrorState/ErrorState.tsx"},{"name":"LoadingShapes","sourcePath":"components/feedback/Loading/Loading.tsx"},{"name":"Spinner","sourcePath":"components/feedback/Loading/Loading.tsx"},{"name":"LoadingOverlay","sourcePath":"components/feedback/Loading/Loading.tsx"},{"name":"Loading","sourcePath":"components/feedback/Loading/Loading.tsx"},{"name":"Modal","sourcePath":"components/feedback/Modal/Modal.tsx"},{"name":"Notice","sourcePath":"components/feedback/Notice/Notice.tsx"},{"name":"Progress","sourcePath":"components/feedback/Progress/Progress.tsx"},{"name":"Skeleton","sourcePath":"components/feedback/Loading/Skeleton.tsx"},{"name":"Toast","sourcePath":"components/feedback/Notice/Toast.tsx"},{"name":"TipBubble","sourcePath":"components/feedback/Tooltip/Tooltip.tsx"},{"name":"Tooltip","sourcePath":"components/feedback/Tooltip/Tooltip.tsx"},{"name":"Checkbox","sourcePath":"components/primitives/Checkbox/Checkbox.tsx"},{"name":"CreatableSelect","sourcePath":"components/primitives/Select/CreatableSelect.tsx"},{"name":"DatePicker","sourcePath":"components/forms/DatePicker/DatePicker.tsx"},{"name":"FileDropzone","sourcePath":"components/forms/FileUpload/FileDropzone.tsx"},{"name":"FileUpload","sourcePath":"components/forms/FileUpload/FileUpload.tsx"},{"name":"FileUploadBasic","sourcePath":"components/forms/FileUpload/FileUploadBasic.tsx"},{"name":"FormField","sourcePath":"components/forms/FormField/FormField.tsx"},{"name":"FormSection","sourcePath":"components/forms/FormSection/FormSection.tsx"},{"name":"Input","sourcePath":"components/primitives/Input/Input.tsx"},{"name":"MultiSelect","sourcePath":"components/primitives/Select/MultiSelect.tsx"},{"name":"MultiUserSelect","sourcePath":"components/primitives/Select/MultiUserSelect.tsx"},{"name":"QuantityStepper","sourcePath":"components/forms/QuantityStepper/QuantityStepper.tsx"},{"name":"Radio","sourcePath":"components/primitives/Radio/Radio.tsx"},{"name":"RadioGroup","sourcePath":"components/primitives/Radio/Radio.tsx"},{"name":"RichTextEditor","sourcePath":"components/forms/RichTextEditor/RichTextEditor.tsx"},{"name":"SearchSelect","sourcePath":"components/primitives/Select/SearchSelect.tsx"},{"name":"Select","sourcePath":"components/primitives/Select/Select.tsx"},{"name":"SelectBasic","sourcePath":"components/primitives/Select/SelectBasic.tsx"},{"name":"Switch","sourcePath":"components/primitives/Switch/Switch.tsx"},{"name":"Textarea","sourcePath":"components/primitives/Textarea/Textarea.tsx"},{"name":"UserSelect","sourcePath":"components/primitives/Select/UserSelect.tsx"},{"name":"AppShell","sourcePath":"components/layout/AppShell/AppShell.tsx"},{"name":"Bar","sourcePath":"components/layout/Bar/Bar.tsx"},{"name":"Cluster","sourcePath":"components/layout/Cluster/Cluster.tsx"},{"name":"Stack","sourcePath":"components/layout/Cluster/Cluster.tsx"},{"name":"Breadcrumbs","sourcePath":"components/navigation/Breadcrumbs/Breadcrumbs.tsx"},{"name":"CommandPalette","sourcePath":"components/navigation/CommandPalette/CommandPalette.tsx"},{"name":"SegmentedControl","sourcePath":"components/navigation/Tabs/SegmentedControl.tsx"},{"name":"Tabs","sourcePath":"components/navigation/Tabs/Tabs.tsx"},{"name":"TabsStrip","sourcePath":"components/navigation/Tabs/TabsStrip.tsx"},{"name":"ApprovalPanel","sourcePath":"components/workflow/ApprovalPanel/ApprovalPanel.tsx"},{"name":"ApprovalStepper","sourcePath":"components/workflow/ApprovalStepper/ApprovalStepper.tsx"},{"name":"AuditTrail","sourcePath":"components/workflow/AuditTrail/AuditTrail.tsx"},{"name":"BulkActionConfirm","sourcePath":"components/workflow/ConfirmModal/BulkActionConfirm.tsx"},{"name":"ConfirmModal","sourcePath":"components/workflow/ConfirmModal/ConfirmModal.tsx"},{"name":"DiscardConfirmModal","sourcePath":"components/workflow/ConfirmModal/DiscardConfirmModal.tsx"},{"name":"ImportRecordsModal","sourcePath":"components/workflow/ConfirmModal/ImportRecordsModal.tsx"},{"name":"RecordDetailModal","sourcePath":"components/workflow/RecordDetailModal/RecordDetailModal.tsx"},{"name":"RecordForm","sourcePath":"components/workflow/RecordForm/RecordForm.tsx"},{"name":"RequestDetailModal","sourcePath":"components/workflow/RecordDetailModal/RequestDetailModal.tsx"},{"name":"REQUEST_FORM_DEFAULTS","sourcePath":"components/workflow/RecordForm/RequestForm.tsx"},{"name":"RequestForm","sourcePath":"components/workflow/RecordForm/RequestForm.tsx"},{"name":"ReviewSubmitModal","sourcePath":"components/workflow/ConfirmModal/ReviewSubmitModal.tsx"},{"name":"SubmitConfirmModal","sourcePath":"components/workflow/ConfirmModal/SubmitConfirmModal.tsx"}],"sourceHashes":{"components/charts/BarChart/BarChart.tsx":"d6c9a0402940","components/charts/ChartCard/ChartCard.tsx":"3214494a53c3","components/utils/ChartKit.tsx":"64e249079058","components/charts/DonutChart/DonutChart.tsx":"b64373d84757","components/charts/Gauge/Gauge.tsx":"f449d3f5f9a3","components/charts/Heatmap/Heatmap.tsx":"5145e9652c1c","components/charts/LineChart/LineChart.tsx":"e8704f4b98ac","components/charts/PieChart/PieChart.tsx":"a828744d1b3f","components/charts/RadarChart/RadarChart.tsx":"0b8e1c0d2dbc","components/charts/ScatterChart/ScatterChart.tsx":"1f067821fa10","components/charts/SparkLineChart/SparkLineChart.tsx":"7ba6d859b34e","components/chrome/AppSwitcher/AppSwitcher.tsx":"3002d7e22625","components/chrome/NavRail/NavRail.tsx":"98f465300a21","components/chrome/NotificationsMenu/NotificationsMenu.tsx":"86e359298adb","components/chrome/PageHeader/PageHeader.tsx":"6c80626c9c24","components/chrome/PageTitleBar/PageTitleBar.tsx":"ad4c85dd5932","components/chrome/PanelKit/PanelKit.tsx":"a7c7494409c2","components/chrome/SettingsMenu/SettingsMenu.tsx":"a05fba1da401","components/chrome/ShellFooter/ShellFooter.tsx":"27279f143e34","components/chrome/ShellHeader/ShellHeader.tsx":"9aa540b3961c","components/utils/Theme.tsx":"d5c812424cd5","components/chrome/WorkspacePane/WorkspacePane.tsx":"6b3ef8e9c260","components/containment/Accordion/Accordion.tsx":"148104a44a38","components/containment/Panel/Drawer.tsx":"aebbf378d565","components/containment/Panel/Panel.tsx":"fc6bacd06f56","components/containment/Panel/PanelBase.tsx":"8bd59386f405","components/containment/Panel/Sheet.tsx":"064571dd9852","components/utils/panelState.tsx":"5288c8cc0639","components/navigation/ActionTile/ActionTile.tsx":"0d6b4e541082","components/primitives/Avatar/Avatar.tsx":"d781ecab9626","components/primitives/AvatarStack/AvatarStack.tsx":"b7d9141805f4","components/primitives/Badge/Badge.tsx":"5c0808c7ad45","components/primitives/Button/Button.tsx":"47a2e76bfe9d","components/primitives/Button/ButtonBase.tsx":"e6cab4aa1485","components/containment/Card/Card.tsx":"989aebf0f2ab","components/navigation/DropdownMenu/DropdownMenu.tsx":"cd881c635136","components/primitives/Button/IconButton.tsx":"a6116d942acb","components/data/OptionRow/OptionRow.tsx":"84c559cdf1ac","components/primitives/Rating/Rating.tsx":"07e25939b7a4","components/utils/RoleGate.tsx":"e714defe877a","components/primitives/Button/SplitButton.tsx":"004784ede636","components/primitives/Tag/Tag.tsx":"e682c63c7a8d","components/utils/actionSpec.tsx":"e52da9b39073","components/data/RecordCard/ApprovalCard.tsx":"5e7745c982df","components/data/AttachmentRow/AttachmentRow.tsx":"08716b5534cd","components/data/BulkActionToolbar/BulkActionToolbar.tsx":"2c77515b02fa","components/data/Calendar/Calendar.tsx":"b49e26f08adf","components/data/DataTable/DataTable.tsx":"8b5ecd59bbf0","components/data/DateRangeFilter/DateRangeFilter.tsx":"43c8a1c5ebdb","components/data/DetailList/DetailList.tsx":"5e94a95883db","components/data/DetailSection/DetailSection.tsx":"b2be8e003270","components/data/DocumentPreview/DocumentPreview.tsx":"fb3a1641dbe4","components/data/EditableTable/EditableTable.tsx":"19a855eb0f1d","components/data/EventRow/EventRow.tsx":"1984a814cb29","components/data/FilterBuilder/FilterBuilder.tsx":"6548d6e5bebe","components/data/FilterPanel/FilterPanel.tsx":"5c26f4f3e452","components/data/GanttTimeline/GanttTimeline.tsx":"21e562bdd8f0","components/data/KanbanBoard/KanbanBoard.tsx":"eb949ac3e923","components/data/RecordCard/KanbanCard.tsx":"5e27df310df5","components/data/List/List.tsx":"90c84d6651b2","components/data/OrgTree/OrgTree.tsx":"eb993e2ff5f6","components/data/PageControls/PageControls.tsx":"3bfd31d71011","components/data/Pagination/Pagination.tsx":"ba3fdb3fdf65","components/data/PersonCard/PersonCard.tsx":"6ba312fbd949","components/data/QuickStats/QuickStats.tsx":"b69dccc799f8","components/data/RecordCard/RecordCard.tsx":"d1ebc05f14ec","components/data/RecordTable/RecordTable.tsx":"e0b64d10d4c1","components/data/StageList/StageList.tsx":"d857283a22f5","components/data/StatCard/StatCard.tsx":"d1eef70f1c09","components/data/StatsOverview/StatsOverview.tsx":"feae506b29bf","components/data/StatusChip/StatusChip.tsx":"2557e4ef5ccd","components/data/RecordCard/TaskCard.tsx":"6006f73d2bcb","components/data/TreeView/TreeView.tsx":"f74ad0f987b4","components/feedback/Notice/Banner.tsx":"f60c30d87f36","components/utils/DataState.tsx":"156e774dc68c","components/feedback/EmptyState/EmptyState.tsx":"8f62d70421fc","components/feedback/ErrorState/ErrorState.tsx":"e4bdd5f9b4db","components/feedback/Loading/Loading.tsx":"fed2c7fdc99b","components/feedback/Modal/Modal.tsx":"abb58d10fb9c","components/feedback/Notice/Notice.tsx":"d468c32e5710","components/feedback/Progress/Progress.tsx":"8beb93dc222e","components/feedback/Loading/Skeleton.tsx":"268e2d395bc6","components/feedback/Notice/Toast.tsx":"64d8b19e9afa","components/feedback/Tooltip/Tooltip.tsx":"37f266cbda71","components/primitives/Checkbox/Checkbox.tsx":"abf4c6a7606f","components/primitives/Select/CreatableSelect.tsx":"a4eaa78a2550","components/forms/DatePicker/DatePicker.tsx":"d84d0e7016a5","components/forms/FileUpload/FileDropzone.tsx":"69010ee98c63","components/forms/FileUpload/FileUpload.tsx":"40f34fecd9f6","components/forms/FileUpload/FileUploadBasic.tsx":"24120e9fc2a2","components/forms/FormField/FormField.tsx":"747979be7446","components/forms/FormSection/FormSection.tsx":"b4c36c13d2dc","components/primitives/Input/Input.tsx":"2d1ed777bad7","components/primitives/Select/MultiSelect.tsx":"c53a7c544d65","components/primitives/Select/MultiUserSelect.tsx":"8ae729926cb0","components/forms/QuantityStepper/QuantityStepper.tsx":"22a69b4fc4cd","components/primitives/Radio/Radio.tsx":"7e845aeb9811","components/forms/RichTextEditor/RichTextEditor.tsx":"78f0855e15a5","components/primitives/Select/SearchSelect.tsx":"c76c6b4468cd","components/primitives/Select/Select.tsx":"3e0621fffc37","components/primitives/Select/SelectBasic.tsx":"b175dfec9ba8","components/primitives/Switch/Switch.tsx":"e95c13843b88","components/primitives/Textarea/Textarea.tsx":"224264f3691b","components/primitives/Select/UserSelect.tsx":"7b500f3df507","components/layout/AppShell/AppShell.tsx":"9ca2a2a8d456","components/layout/Bar/Bar.tsx":"c41c1fc5ca7a","components/layout/Cluster/Cluster.tsx":"80de5a0f134d","components/navigation/Breadcrumbs/Breadcrumbs.tsx":"7ee420811938","components/navigation/CommandPalette/CommandPalette.tsx":"8a7c2d26d689","components/navigation/Tabs/SegmentedControl.tsx":"ce83762ebd64","components/navigation/Tabs/Tabs.tsx":"f144b6860f76","components/navigation/Tabs/TabsStrip.tsx":"fad3ff0fcf9b","components/workflow/ApprovalPanel/ApprovalPanel.tsx":"e2a4ae07db3e","components/workflow/ApprovalStepper/ApprovalStepper.tsx":"e40a77129c0f","components/workflow/AuditTrail/AuditTrail.tsx":"5660bde43892","components/workflow/ConfirmModal/BulkActionConfirm.tsx":"29935a43d369","components/workflow/ConfirmModal/ConfirmModal.tsx":"0148949d34b4","components/workflow/ConfirmModal/DiscardConfirmModal.tsx":"fb7ef0c24e76","components/workflow/ConfirmModal/ImportRecordsModal.tsx":"046089d40e6e","components/workflow/RecordDetailModal/RecordDetailModal.tsx":"5ceac18cd1d2","components/workflow/RecordForm/RecordForm.tsx":"77892add5d53","components/workflow/RecordDetailModal/RequestDetailModal.tsx":"1fd6cde6829e","components/workflow/RecordForm/RequestForm.tsx":"41b16918405c","components/workflow/ConfirmModal/ReviewSubmitModal.tsx":"76a48baba69d","components/workflow/ConfirmModal/SubmitConfirmModal.tsx":"07b97dc45b47","doc-page.js":"f52ae9c02fca"},"inlinedExternals":[],"unexposedExports":[{"name":"buildReviewSummary","sourcePath":"components/workflow/RecordForm/RequestForm.tsx"},{"name":"chartState","sourcePath":"components/utils/ChartKit.tsx"},{"name":"computePeriod","sourcePath":"components/data/DateRangeFilter/DateRangeFilter.tsx"},{"name":"exportToAction","sourcePath":"components/utils/actionSpec.tsx"},{"name":"isEmptyChart","sourcePath":"components/utils/ChartKit.tsx"},{"name":"menuItemCls","sourcePath":"components/navigation/DropdownMenu/DropdownMenu.tsx"},{"name":"menuItemDangerCls","sourcePath":"components/navigation/DropdownMenu/DropdownMenu.tsx"},{"name":"menuPanelCls","sourcePath":"components/navigation/DropdownMenu/DropdownMenu.tsx"},{"name":"normalizeRecord","sourcePath":"components/data/RecordCard/RecordCard.tsx"},{"name":"panelMenuLabelCls","sourcePath":"components/chrome/PanelKit/PanelKit.tsx"},{"name":"panelMenuLabelStyle","sourcePath":"components/chrome/PanelKit/PanelKit.tsx"},{"name":"renderActions","sourcePath":"components/utils/actionSpec.tsx"},{"name":"resolveDataState","sourcePath":"components/utils/DataState.tsx"},{"name":"resolvePanelBody","sourcePath":"components/utils/panelState.tsx"},{"name":"roleAllows","sourcePath":"components/utils/RoleGate.tsx"},{"name":"useTip","sourcePath":"components/feedback/Tooltip/Tooltip.tsx"},{"name":"visibleActions","sourcePath":"components/utils/actionSpec.tsx"}]} */
 
 (() => {
 
@@ -8,7 +8,7 @@ const __ds_scope = {};
 
 (__ds_ns.__errors = __ds_ns.__errors || []);
 
-// components/charts/ChartCard.tsx
+// components/charts/ChartCard/ChartCard.tsx
 try { (() => {
 function ChartCard({
   title,
@@ -76,9 +76,9 @@ function ChartCard({
   }), l.label))), actions), children);
 }
 Object.assign(__ds_scope, { ChartCard });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/charts/ChartCard.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/charts/ChartCard/ChartCard.tsx", error: String((e && e.message) || e) }); }
 
-// components/chrome/Theme.tsx
+// components/utils/Theme.tsx
 try { (() => {
 /* ── Types (mirrored in Theme.d.ts) ── */
 
@@ -241,9 +241,9 @@ const Theme = {
   }
 };
 Object.assign(__ds_scope, { Theme });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/chrome/Theme.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/utils/Theme.tsx", error: String((e && e.message) || e) }); }
 
-// components/chrome/WorkspacePane.tsx
+// components/chrome/WorkspacePane/WorkspacePane.tsx
 try { (() => {
 /* ── Types (mirrored in WorkspacePane.d.ts) ── */
 
@@ -341,9 +341,9 @@ function WorkspacePane({
   })));
 }
 Object.assign(__ds_scope, { WorkspacePane });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/chrome/WorkspacePane.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/chrome/WorkspacePane/WorkspacePane.tsx", error: String((e && e.message) || e) }); }
 
-// components/containment/Accordion.tsx
+// components/containment/Accordion/Accordion.tsx
 try { (() => {
 const {
   useState
@@ -405,9 +405,9 @@ function Accordion({
   }));
 }
 Object.assign(__ds_scope, { Accordion });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/containment/Accordion.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/containment/Accordion/Accordion.tsx", error: String((e && e.message) || e) }); }
 
-// components/containment/Drawer.tsx
+// components/containment/Panel/Drawer.tsx
 try { (() => {
 /**
  * @internal Renderer behind the public <Panel> — not part of the documented API
@@ -486,9 +486,9 @@ function Drawer({
   }, footer)), /*#__PURE__*/React.createElement("style", null, `@keyframes agni-fade-in{from{opacity:0}}@keyframes agni-drawer-right{from{transform:translateX(100%)}}@keyframes agni-drawer-left{from{transform:translateX(-100%)}}`));
 }
 Object.assign(__ds_scope, { Drawer });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/containment/Drawer.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/containment/Panel/Drawer.tsx", error: String((e && e.message) || e) }); }
 
-// components/core/ActionTile.tsx
+// components/navigation/ActionTile/ActionTile.tsx
 try { (() => {
 /**
  * AgniUI · ActionTile
@@ -547,9 +547,9 @@ function ActionTile({
   }));
 }
 Object.assign(__ds_scope, { ActionTile });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/core/ActionTile.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/navigation/ActionTile/ActionTile.tsx", error: String((e && e.message) || e) }); }
 
-// components/core/Avatar.tsx
+// components/primitives/Avatar/Avatar.tsx
 try { (() => {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 const {
@@ -630,9 +630,9 @@ function Avatar({
   }));
 }
 Object.assign(__ds_scope, { Avatar });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/core/Avatar.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/primitives/Avatar/Avatar.tsx", error: String((e && e.message) || e) }); }
 
-// components/core/AvatarStack.tsx
+// components/primitives/AvatarStack/AvatarStack.tsx
 try { (() => {
 /**
  * AgniUI · AvatarStack
@@ -695,9 +695,9 @@ function AvatarStack({
   }, "+", extra));
 }
 Object.assign(__ds_scope, { AvatarStack });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/core/AvatarStack.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/primitives/AvatarStack/AvatarStack.tsx", error: String((e && e.message) || e) }); }
 
-// components/core/OptionRow.tsx
+// components/data/OptionRow/OptionRow.tsx
 try { (() => {
 /**
  * AgniUI · OptionRow
@@ -777,9 +777,9 @@ function OptionRow({
   }), value)));
 }
 Object.assign(__ds_scope, { OptionRow });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/core/OptionRow.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/OptionRow/OptionRow.tsx", error: String((e && e.message) || e) }); }
 
-// components/core/Rating.tsx
+// components/primitives/Rating/Rating.tsx
 try { (() => {
 const {
   useState
@@ -849,9 +849,9 @@ function Rating({
   }, value, "/", max));
 }
 Object.assign(__ds_scope, { Rating });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/core/Rating.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/primitives/Rating/Rating.tsx", error: String((e && e.message) || e) }); }
 
-// components/core/RoleGate.tsx
+// components/utils/RoleGate.tsx
 try { (() => {
 /* ── Types (mirrored in RoleGate.d.ts) ── */
 
@@ -895,9 +895,9 @@ function RoleGate({
   return roleAllows(role, allow, deny) ? /*#__PURE__*/React.createElement(React.Fragment, null, children) : /*#__PURE__*/React.createElement(React.Fragment, null, fallback);
 }
 Object.assign(__ds_scope, { roleAllows, RoleGate });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/core/RoleGate.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/utils/RoleGate.tsx", error: String((e && e.message) || e) }); }
 
-// components/core/DropdownMenu.tsx
+// components/navigation/DropdownMenu/DropdownMenu.tsx
 try { (() => {
 const {
   useState,
@@ -985,9 +985,9 @@ function DropdownMenu({
   }), it.label))), /*#__PURE__*/React.createElement("style", null, `@keyframes agni-menu-in{from{opacity:0;transform:translateY(-4px)}}`));
 }
 Object.assign(__ds_scope, { menuPanelCls, menuItemCls, menuItemDangerCls, DropdownMenu });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/core/DropdownMenu.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/navigation/DropdownMenu/DropdownMenu.tsx", error: String((e && e.message) || e) }); }
 
-// components/core/Tag.tsx
+// components/primitives/Tag/Tag.tsx
 try { (() => {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 /* ── Types (mirrored in Tag.d.ts) ── */
@@ -1097,9 +1097,9 @@ Tag.toneFor = status => STATUS_TONE[status] || "neutral";
 /** The shared status → tone map. */
 Tag.statusTones = STATUS_TONE;
 Object.assign(__ds_scope, { Tag });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/core/Tag.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/primitives/Tag/Tag.tsx", error: String((e && e.message) || e) }); }
 
-// components/core/Badge.tsx
+// components/primitives/Badge/Badge.tsx
 try { (() => {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 /**
@@ -1125,9 +1125,9 @@ function Badge({
   }, rest), children);
 }
 Object.assign(__ds_scope, { Badge });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/core/Badge.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/primitives/Badge/Badge.tsx", error: String((e && e.message) || e) }); }
 
-// components/data/ApprovalCard.tsx
+// components/data/RecordCard/ApprovalCard.tsx
 try { (() => {
 /**
  * @internal Preset renderer behind the public <RecordCard> — not part of the documented
@@ -1382,9 +1382,9 @@ function ApprovalCard({
   }), " Approve & assign")));
 }
 Object.assign(__ds_scope, { ApprovalCard });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/ApprovalCard.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/RecordCard/ApprovalCard.tsx", error: String((e && e.message) || e) }); }
 
-// components/data/DetailSection.tsx
+// components/data/DetailSection/DetailSection.tsx
 try { (() => {
 /* ── Types (mirrored in DetailSection.d.ts) ── */
 
@@ -1437,9 +1437,9 @@ function DetailSection({
   }, children));
 }
 Object.assign(__ds_scope, { DetailSection });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/DetailSection.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/DetailSection/DetailSection.tsx", error: String((e && e.message) || e) }); }
 
-// components/data/Pagination.tsx
+// components/data/Pagination/Pagination.tsx
 try { (() => {
 /* ── Types (mirrored in Pagination.d.ts) ── */
 
@@ -1502,9 +1502,9 @@ function Pagination({
   }))));
 }
 Object.assign(__ds_scope, { Pagination });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/Pagination.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/Pagination/Pagination.tsx", error: String((e && e.message) || e) }); }
 
-// components/data/StatusChip.tsx
+// components/data/StatusChip/StatusChip.tsx
 try { (() => {
 /**
  * @internal Retired Aug 2026 — merged into <Tag status="…">.
@@ -1531,9 +1531,9 @@ function StatusChip({
 }
 StatusChip.toneFor = status => __ds_scope.Tag.toneFor(status);
 Object.assign(__ds_scope, { StatusChip });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/StatusChip.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/StatusChip/StatusChip.tsx", error: String((e && e.message) || e) }); }
 
-// components/feedback/Banner.tsx
+// components/feedback/Notice/Banner.tsx
 try { (() => {
 /**
  * @internal Renderer behind the public <Notice> — not part of the documented API
@@ -1615,9 +1615,9 @@ function Banner({
   })));
 }
 Object.assign(__ds_scope, { Banner });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/feedback/Banner.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/feedback/Notice/Banner.tsx", error: String((e && e.message) || e) }); }
 
-// components/feedback/EmptyState.tsx
+// components/feedback/EmptyState/EmptyState.tsx
 try { (() => {
 /* ── Types (mirrored in EmptyState.d.ts) ── */
 
@@ -1681,9 +1681,9 @@ function EmptyState({
   }, message)), action);
 }
 Object.assign(__ds_scope, { EmptyState });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/feedback/EmptyState.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/feedback/EmptyState/EmptyState.tsx", error: String((e && e.message) || e) }); }
 
-// components/chrome/PanelKit.tsx
+// components/chrome/PanelKit/PanelKit.tsx
 try { (() => {
 const {
   useState,
@@ -1806,9 +1806,9 @@ const PanelKit = {
   panelMenuLabelCls
 };
 Object.assign(__ds_scope, { panelMenuLabelStyle, panelMenuLabelCls, PanelIconMenu, MenuRow, PanelEmpty, PanelKit });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/chrome/PanelKit.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/chrome/PanelKit/PanelKit.tsx", error: String((e && e.message) || e) }); }
 
-// components/feedback/Loading.tsx
+// components/feedback/Loading/Loading.tsx
 try { (() => {
 /* ── Types (mirrored in Loading.d.ts) ── */
 
@@ -3424,9 +3424,9 @@ function Loading({
   }), KEYS);
 }
 Object.assign(__ds_scope, { LoadingShapes, Spinner, LoadingOverlay, Loading });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/feedback/Loading.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/feedback/Loading/Loading.tsx", error: String((e && e.message) || e) }); }
 
-// components/feedback/Modal.tsx
+// components/feedback/Modal/Modal.tsx
 try { (() => {
 const {
   useEffect
@@ -3513,9 +3513,9 @@ function Modal({
   }, footer)), /*#__PURE__*/React.createElement("style", null, `@keyframes agni-fade-in{from{opacity:0}}@keyframes agni-scale-pop{from{opacity:0;transform:scale(.96) translateY(8px)}}`));
 }
 Object.assign(__ds_scope, { Modal });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/feedback/Modal.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/feedback/Modal/Modal.tsx", error: String((e && e.message) || e) }); }
 
-// components/feedback/Progress.tsx
+// components/feedback/Progress/Progress.tsx
 try { (() => {
 /* ── Types (mirrored in Progress.d.ts) ── */
 
@@ -3580,9 +3580,9 @@ function Progress({
   })), /*#__PURE__*/React.createElement("style", null, `@keyframes agni-prog{0%{margin-left:-40%}100%{margin-left:100%}}`));
 }
 Object.assign(__ds_scope, { Progress });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/feedback/Progress.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/feedback/Progress/Progress.tsx", error: String((e && e.message) || e) }); }
 
-// components/feedback/Skeleton.tsx
+// components/feedback/Loading/Skeleton.tsx
 try { (() => {
 /**
  * @internal Renderer behind the public <Loading> — not part of the documented API
@@ -3608,9 +3608,9 @@ function Skeleton({
   });
 }
 Object.assign(__ds_scope, { Skeleton });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/feedback/Skeleton.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/feedback/Loading/Skeleton.tsx", error: String((e && e.message) || e) }); }
 
-// components/feedback/Toast.tsx
+// components/feedback/Notice/Toast.tsx
 try { (() => {
 /**
  * @internal Renderer behind the public <Notice> — not part of the documented API
@@ -3694,9 +3694,9 @@ function Toast({
   })), /*#__PURE__*/React.createElement("style", null, `@keyframes agni-toast-in { from { opacity: 0; transform: translateY(8px) scale(0.98); } }`));
 }
 Object.assign(__ds_scope, { Toast });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/feedback/Toast.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/feedback/Notice/Toast.tsx", error: String((e && e.message) || e) }); }
 
-// components/feedback/Notice.tsx
+// components/feedback/Notice/Notice.tsx
 try { (() => {
 /**
  * AgniUI · Notice
@@ -3712,9 +3712,9 @@ function Notice({
   return /*#__PURE__*/React.createElement(__ds_scope.Banner, p);
 }
 Object.assign(__ds_scope, { Notice });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/feedback/Notice.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/feedback/Notice/Notice.tsx", error: String((e && e.message) || e) }); }
 
-// components/feedback/Tooltip.tsx
+// components/feedback/Tooltip/Tooltip.tsx
 try { (() => {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 const {
@@ -3849,9 +3849,9 @@ function Tooltip({
   }));
 }
 Object.assign(__ds_scope, { TipBubble, useTip, Tooltip });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/feedback/Tooltip.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/feedback/Tooltip/Tooltip.tsx", error: String((e && e.message) || e) }); }
 
-// components/chrome/NotificationsMenu.tsx
+// components/chrome/NotificationsMenu/NotificationsMenu.tsx
 try { (() => {
 const {
   useRef,
@@ -4083,9 +4083,9 @@ function NotificationsMenu({
   }, "Mark all as read")), /*#__PURE__*/React.createElement("style", null, `@keyframes agni-pop-in { from { transform: translateY(-6px) scale(0.98); } to { transform: translateY(0) scale(1); } }`));
 }
 Object.assign(__ds_scope, { NotificationsMenu });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/chrome/NotificationsMenu.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/chrome/NotificationsMenu/NotificationsMenu.tsx", error: String((e && e.message) || e) }); }
 
-// components/containment/Sheet.tsx
+// components/containment/Panel/Sheet.tsx
 try { (() => {
 /**
  * @internal Renderer behind the public <Panel> — not part of the documented API
@@ -4189,9 +4189,9 @@ function Sheet({
   }, footer)), /*#__PURE__*/React.createElement("style", null, `@keyframes agni-fade-in{from{opacity:0}}@keyframes agni-sheet-up{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}`));
 }
 Object.assign(__ds_scope, { Sheet });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/containment/Sheet.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/containment/Panel/Sheet.tsx", error: String((e && e.message) || e) }); }
 
-// components/core/ButtonBase.tsx
+// components/primitives/Button/ButtonBase.tsx
 try { (() => {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 /**
@@ -4344,9 +4344,9 @@ function ButtonBase({
   }));
 }
 Object.assign(__ds_scope, { ButtonBase });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/core/ButtonBase.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/primitives/Button/ButtonBase.tsx", error: String((e && e.message) || e) }); }
 
-// components/core/IconButton.tsx
+// components/primitives/Button/IconButton.tsx
 try { (() => {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 /**
@@ -4439,9 +4439,9 @@ function IconButton({
   }));
 }
 Object.assign(__ds_scope, { IconButton });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/core/IconButton.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/primitives/Button/IconButton.tsx", error: String((e && e.message) || e) }); }
 
-// components/chrome/NavRail.tsx
+// components/chrome/NavRail/NavRail.tsx
 try { (() => {
 const {
   useState
@@ -4593,9 +4593,9 @@ function NavRail({
   return rail;
 }
 Object.assign(__ds_scope, { NavRail });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/chrome/NavRail.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/chrome/NavRail/NavRail.tsx", error: String((e && e.message) || e) }); }
 
-// components/core/SplitButton.tsx
+// components/primitives/Button/SplitButton.tsx
 try { (() => {
 /**
  * @internal Renderer behind the public <Button> — not part of the documented API
@@ -4695,9 +4695,9 @@ function SplitButton({
   }), it.label))));
 }
 Object.assign(__ds_scope, { SplitButton });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/core/SplitButton.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/primitives/Button/SplitButton.tsx", error: String((e && e.message) || e) }); }
 
-// components/core/Button.tsx
+// components/primitives/Button/Button.tsx
 try { (() => {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 /**
@@ -4738,9 +4738,9 @@ function Button({
   return /*#__PURE__*/React.createElement(__ds_scope.ButtonBase, p);
 }
 Object.assign(__ds_scope, { Button });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/core/Button.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/primitives/Button/Button.tsx", error: String((e && e.message) || e) }); }
 
-// components/core/actionSpec.tsx
+// components/utils/actionSpec.tsx
 try { (() => {
 /* AgniUI · actionSpec (internal)
    The one declarative action contract shared by the grouped components
@@ -4818,9 +4818,9 @@ function exportToAction(x, role) {
   };
 }
 Object.assign(__ds_scope, { visibleActions, renderActions, exportToAction });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/core/actionSpec.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/utils/actionSpec.tsx", error: String((e && e.message) || e) }); }
 
-// components/data/BulkActionToolbar.tsx
+// components/data/BulkActionToolbar/BulkActionToolbar.tsx
 try { (() => {
 /* ── Types (mirrored in BulkActionToolbar.d.ts) ── */
 
@@ -4883,9 +4883,9 @@ function BulkActionToolbar({
   }))), /*#__PURE__*/React.createElement("style", null, `@keyframes agni-bulk-in{from{opacity:0;transform:translateY(8px)}}`));
 }
 Object.assign(__ds_scope, { BulkActionToolbar });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/BulkActionToolbar.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/BulkActionToolbar/BulkActionToolbar.tsx", error: String((e && e.message) || e) }); }
 
-// components/data/FilterBuilder.tsx
+// components/data/FilterBuilder/FilterBuilder.tsx
 try { (() => {
 const {
   useState
@@ -4985,9 +4985,9 @@ function FilterBuilder({
   }, "Add condition")));
 }
 Object.assign(__ds_scope, { FilterBuilder });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/FilterBuilder.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/FilterBuilder/FilterBuilder.tsx", error: String((e && e.message) || e) }); }
 
-// components/data/FilterPanel.tsx
+// components/data/FilterPanel/FilterPanel.tsx
 try { (() => {
 const {
   useState,
@@ -5184,9 +5184,9 @@ function FilterPanel({
   }, "Apply"))))));
 }
 Object.assign(__ds_scope, { FilterPanel });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/FilterPanel.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/FilterPanel/FilterPanel.tsx", error: String((e && e.message) || e) }); }
 
-// components/data/TaskCard.tsx
+// components/data/RecordCard/TaskCard.tsx
 try { (() => {
 /**
  * @internal Preset renderer behind the public <RecordCard> — not part of the documented
@@ -5691,9 +5691,9 @@ function TaskCard({
   }))))));
 }
 Object.assign(__ds_scope, { TaskCard });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/TaskCard.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/RecordCard/TaskCard.tsx", error: String((e && e.message) || e) }); }
 
-// components/feedback/ErrorState.tsx
+// components/feedback/ErrorState/ErrorState.tsx
 try { (() => {
 /* ── Types (mirrored in ErrorState.d.ts) ── */
 
@@ -5773,9 +5773,9 @@ function ErrorState({
   }, retryLabel), action));
 }
 Object.assign(__ds_scope, { ErrorState });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/feedback/ErrorState.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/feedback/ErrorState/ErrorState.tsx", error: String((e && e.message) || e) }); }
 
-// components/containment/panelState.tsx
+// components/utils/panelState.tsx
 try { (() => {
 /**
  * @internal The state-body resolver shared by every Panel variant.
@@ -5842,9 +5842,9 @@ function resolvePanelBody({
   };
 }
 Object.assign(__ds_scope, { resolvePanelBody });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/containment/panelState.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/utils/panelState.tsx", error: String((e && e.message) || e) }); }
 
-// components/containment/PanelBase.tsx
+// components/containment/Panel/PanelBase.tsx
 try { (() => {
 /**
  * @internal Renderer behind the public <Panel> — not part of the documented API
@@ -5921,9 +5921,9 @@ function PanelBase({
   }, body));
 }
 Object.assign(__ds_scope, { PanelBase });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/containment/PanelBase.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/containment/Panel/PanelBase.tsx", error: String((e && e.message) || e) }); }
 
-// components/containment/Panel.tsx
+// components/containment/Panel/Panel.tsx
 try { (() => {
 /**
  * AgniUI · Panel
@@ -5980,9 +5980,9 @@ function Panel({
   return /*#__PURE__*/React.createElement(__ds_scope.Drawer, shared);
 }
 Object.assign(__ds_scope, { Panel });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/containment/Panel.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/containment/Panel/Panel.tsx", error: String((e && e.message) || e) }); }
 
-// components/core/Card.tsx
+// components/containment/Card/Card.tsx
 try { (() => {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 /* ── Types (mirrored in Card.d.ts) ── */
@@ -6052,9 +6052,9 @@ function Card({
   }, body));
 }
 Object.assign(__ds_scope, { Card });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/core/Card.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/containment/Card/Card.tsx", error: String((e && e.message) || e) }); }
 
-// components/feedback/DataState.tsx
+// components/utils/DataState.tsx
 try { (() => {
 /* One implementation of the state contract, so every data component resolves
    error → loading → empty → content in the same order with the same defaults.
@@ -6112,9 +6112,9 @@ function DataState(props) {
   return state === false ? props.children ?? null : state;
 }
 Object.assign(__ds_scope, { resolveDataState, DataState });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/feedback/DataState.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/utils/DataState.tsx", error: String((e && e.message) || e) }); }
 
-// components/charts/ChartKit.tsx
+// components/utils/ChartKit.tsx
 try { (() => {
 const {
   useState,
@@ -6415,9 +6415,9 @@ const ChartKit = {
   chartState
 };
 Object.assign(__ds_scope, { isEmptyChart, chartState, ChartKit });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/charts/ChartKit.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/utils/ChartKit.tsx", error: String((e && e.message) || e) }); }
 
-// components/charts/BarChart.tsx
+// components/charts/BarChart/BarChart.tsx
 try { (() => {
 const {
   useState,
@@ -6798,9 +6798,9 @@ function BarChart(props) {
   return /*#__PURE__*/React.createElement(BarChartBody, props);
 }
 Object.assign(__ds_scope, { BarChart });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/charts/BarChart.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/charts/BarChart/BarChart.tsx", error: String((e && e.message) || e) }); }
 
-// components/charts/Gauge.tsx
+// components/charts/Gauge/Gauge.tsx
 try { (() => {
 const {
   useRef
@@ -6925,9 +6925,9 @@ function Gauge(props) {
   return /*#__PURE__*/React.createElement(GaugeBody, props);
 }
 Object.assign(__ds_scope, { Gauge });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/charts/Gauge.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/charts/Gauge/Gauge.tsx", error: String((e && e.message) || e) }); }
 
-// components/charts/Heatmap.tsx
+// components/charts/Heatmap/Heatmap.tsx
 try { (() => {
 const {
   useState,
@@ -7160,9 +7160,9 @@ function Heatmap(props) {
   return /*#__PURE__*/React.createElement(HeatmapBody, props);
 }
 Object.assign(__ds_scope, { Heatmap });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/charts/Heatmap.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/charts/Heatmap/Heatmap.tsx", error: String((e && e.message) || e) }); }
 
-// components/charts/LineChart.tsx
+// components/charts/LineChart/LineChart.tsx
 try { (() => {
 const {
   useState,
@@ -7447,9 +7447,9 @@ function LineChart(props) {
   return /*#__PURE__*/React.createElement(LineChartBody, props);
 }
 Object.assign(__ds_scope, { LineChart });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/charts/LineChart.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/charts/LineChart/LineChart.tsx", error: String((e && e.message) || e) }); }
 
-// components/charts/PieChart.tsx
+// components/charts/PieChart/PieChart.tsx
 try { (() => {
 const {
   useState,
@@ -7720,9 +7720,9 @@ function PieChart(props) {
   return /*#__PURE__*/React.createElement(PieChartBody, props);
 }
 Object.assign(__ds_scope, { PieChart });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/charts/PieChart.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/charts/PieChart/PieChart.tsx", error: String((e && e.message) || e) }); }
 
-// components/charts/DonutChart.tsx
+// components/charts/DonutChart/DonutChart.tsx
 try { (() => {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 /* ── Types (mirrored in DonutChart.d.ts) ── */
@@ -7759,9 +7759,9 @@ function DonutChart({
    here — but they must be forwarded, or a loading donut would fall through to
    PieChart's emptiness test and misreport as "No data for this period". */
 Object.assign(__ds_scope, { DonutChart });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/charts/DonutChart.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/charts/DonutChart/DonutChart.tsx", error: String((e && e.message) || e) }); }
 
-// components/charts/RadarChart.tsx
+// components/charts/RadarChart/RadarChart.tsx
 try { (() => {
 const {
   useState,
@@ -7988,9 +7988,9 @@ function RadarChart(props) {
   return /*#__PURE__*/React.createElement(RadarChartBody, props);
 }
 Object.assign(__ds_scope, { RadarChart });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/charts/RadarChart.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/charts/RadarChart/RadarChart.tsx", error: String((e && e.message) || e) }); }
 
-// components/charts/ScatterChart.tsx
+// components/charts/ScatterChart/ScatterChart.tsx
 try { (() => {
 const {
   useState,
@@ -8180,9 +8180,9 @@ function ScatterChart(props) {
   return /*#__PURE__*/React.createElement(ScatterChartBody, props);
 }
 Object.assign(__ds_scope, { ScatterChart });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/charts/ScatterChart.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/charts/ScatterChart/ScatterChart.tsx", error: String((e && e.message) || e) }); }
 
-// components/charts/SparkLineChart.tsx
+// components/charts/SparkLineChart/SparkLineChart.tsx
 try { (() => {
 const {
   useState,
@@ -8369,9 +8369,9 @@ function SparkLineChart(props) {
   return /*#__PURE__*/React.createElement(SparkLineChartBody, props);
 }
 Object.assign(__ds_scope, { SparkLineChart });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/charts/SparkLineChart.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/charts/SparkLineChart/SparkLineChart.tsx", error: String((e && e.message) || e) }); }
 
-// components/data/AttachmentRow.tsx
+// components/data/AttachmentRow/AttachmentRow.tsx
 try { (() => {
 /* Tailwind v4 (migrated Aug 2026, tranche 7a). The row's `hov` useState is
    gone (hover: on the row); the upload bar's width is the live percentage and
@@ -8490,9 +8490,9 @@ function AttachmentRow({
   }))));
 }
 Object.assign(__ds_scope, { AttachmentRow });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/AttachmentRow.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/AttachmentRow/AttachmentRow.tsx", error: String((e && e.message) || e) }); }
 
-// components/data/Calendar.tsx
+// components/data/Calendar/Calendar.tsx
 try { (() => {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 /* ── Types (mirrored in Calendar.d.ts) ── */
@@ -9078,9 +9078,9 @@ function Calendar(props) {
   }));
 }
 Object.assign(__ds_scope, { Calendar });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/Calendar.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/Calendar/Calendar.tsx", error: String((e && e.message) || e) }); }
 
-// components/data/DetailList.tsx
+// components/data/DetailList/DetailList.tsx
 try { (() => {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 const {
@@ -9285,9 +9285,9 @@ function DetailList(props) {
   return /*#__PURE__*/React.createElement(DetailListBody, props);
 }
 Object.assign(__ds_scope, { CopyButton, KeyValueRow, DetailList });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/DetailList.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/DetailList/DetailList.tsx", error: String((e && e.message) || e) }); }
 
-// components/data/DocumentPreview.tsx
+// components/data/DocumentPreview/DocumentPreview.tsx
 try { (() => {
 /* ── Types (mirrored in DocumentPreview.d.ts) ── */
 
@@ -9402,9 +9402,9 @@ function DocumentPreview(props) {
   return /*#__PURE__*/React.createElement(DocumentPreviewBody, props);
 }
 Object.assign(__ds_scope, { DocumentPreview });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/DocumentPreview.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/DocumentPreview/DocumentPreview.tsx", error: String((e && e.message) || e) }); }
 
-// components/data/EditableTable.tsx
+// components/data/EditableTable/EditableTable.tsx
 try { (() => {
 const {
   useState
@@ -9578,9 +9578,9 @@ function EditableTable({
   }), " ", addLabel));
 }
 Object.assign(__ds_scope, { EditableTable });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/EditableTable.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/EditableTable/EditableTable.tsx", error: String((e && e.message) || e) }); }
 
-// components/data/EventRow.tsx
+// components/data/EventRow/EventRow.tsx
 try { (() => {
 /* Tone vocabulary matches StatusChip / Badge, so an event's colour and a
    record's status colour never drift apart.
@@ -9659,9 +9659,9 @@ function EventRow({
   }, time && /*#__PURE__*/React.createElement("span", null, time), meta && /*#__PURE__*/React.createElement("span", null, meta))), trailing);
 }
 Object.assign(__ds_scope, { EventRow });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/EventRow.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/EventRow/EventRow.tsx", error: String((e && e.message) || e) }); }
 
-// components/data/GanttTimeline.tsx
+// components/data/GanttTimeline/GanttTimeline.tsx
 try { (() => {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 /* ── Types (mirrored in GanttTimeline.d.ts) ── */
@@ -10364,9 +10364,9 @@ function GanttTimeline(props) {
   }));
 }
 Object.assign(__ds_scope, { GanttTimeline });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/GanttTimeline.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/GanttTimeline/GanttTimeline.tsx", error: String((e && e.message) || e) }); }
 
-// components/data/List.tsx
+// components/data/List/List.tsx
 try { (() => {
 /* ── Types (mirrored in List.d.ts) ── */
 
@@ -10438,9 +10438,9 @@ function List(props) {
   return /*#__PURE__*/React.createElement(ListBody, props);
 }
 Object.assign(__ds_scope, { List });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/List.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/List/List.tsx", error: String((e && e.message) || e) }); }
 
-// components/data/PersonCard.tsx
+// components/data/PersonCard/PersonCard.tsx
 try { (() => {
 /* ── Types (mirrored in PersonCard.d.ts) ── */
 
@@ -10539,9 +10539,9 @@ function PersonCard({
   }, person.id)), suffix);
 }
 Object.assign(__ds_scope, { PersonCard });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/PersonCard.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/PersonCard/PersonCard.tsx", error: String((e && e.message) || e) }); }
 
-// components/data/OrgTree.tsx
+// components/data/OrgTree/OrgTree.tsx
 try { (() => {
 /* ── Types (mirrored in OrgTree.d.ts) ── */
 
@@ -10813,9 +10813,9 @@ function OrgTree(props) {
   return /*#__PURE__*/React.createElement(OrgTreeBody, props);
 }
 Object.assign(__ds_scope, { OrgTree });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/OrgTree.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/OrgTree/OrgTree.tsx", error: String((e && e.message) || e) }); }
 
-// components/data/QuickStats.tsx
+// components/data/QuickStats/QuickStats.tsx
 try { (() => {
 const {
   useState
@@ -10952,9 +10952,9 @@ function QuickStats(props) {
   return /*#__PURE__*/React.createElement(QuickStatsBody, props);
 }
 Object.assign(__ds_scope, { QuickStats });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/QuickStats.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/QuickStats/QuickStats.tsx", error: String((e && e.message) || e) }); }
 
-// components/data/StageList.tsx
+// components/data/StageList/StageList.tsx
 try { (() => {
 /* ── Types (mirrored in StageList.d.ts) ── */
 
@@ -11126,9 +11126,9 @@ function StageList({
   }));
 }
 Object.assign(__ds_scope, { StageList });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/StageList.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/StageList/StageList.tsx", error: String((e && e.message) || e) }); }
 
-// components/data/StatCard.tsx
+// components/data/StatCard/StatCard.tsx
 try { (() => {
 /* Tailwind v4 (migrated Aug 2026, tranche 7a). `tone` also accepts a raw CSS
    colour (the old escape hatch), so the icon/dot tint stays an inline value
@@ -11223,9 +11223,9 @@ function StatCard(props) {
   return /*#__PURE__*/React.createElement(StatCardBody, props);
 }
 Object.assign(__ds_scope, { StatCard });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/StatCard.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/StatCard/StatCard.tsx", error: String((e && e.message) || e) }); }
 
-// components/data/TreeView.tsx
+// components/data/TreeView/TreeView.tsx
 try { (() => {
 const {
   useState
@@ -11331,9 +11331,9 @@ function TreeView(props) {
   return /*#__PURE__*/React.createElement(TreeViewBody, props);
 }
 Object.assign(__ds_scope, { TreeView });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/TreeView.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/TreeView/TreeView.tsx", error: String((e && e.message) || e) }); }
 
-// components/forms/Checkbox.tsx
+// components/primitives/Checkbox/Checkbox.tsx
 try { (() => {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 /* ── Types (mirrored in Checkbox.d.ts) ── */
@@ -11385,9 +11385,9 @@ function Checkbox({
   }, label));
 }
 Object.assign(__ds_scope, { Checkbox });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/Checkbox.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/primitives/Checkbox/Checkbox.tsx", error: String((e && e.message) || e) }); }
 
-// components/data/DataTable.tsx
+// components/data/DataTable/DataTable.tsx
 try { (() => {
 const {
   useState,
@@ -11735,9 +11735,9 @@ function DataTable({
   }, cgEl, /*#__PURE__*/React.createElement("tbody", null, bodyContent)), shimmerKeys)));
 }
 Object.assign(__ds_scope, { DataTable });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/DataTable.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/DataTable/DataTable.tsx", error: String((e && e.message) || e) }); }
 
-// components/forms/CreatableSelect.tsx
+// components/primitives/Select/CreatableSelect.tsx
 try { (() => {
 /**
  * @internal Renderer behind the public <Select> — not part of the documented API
@@ -11894,9 +11894,9 @@ function CreatableSelect({
   }), /*#__PURE__*/React.createElement("span", null, createLabel, " \u201C", /*#__PURE__*/React.createElement("strong", null, q.trim()), "\u201D"))));
 }
 Object.assign(__ds_scope, { CreatableSelect });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/CreatableSelect.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/primitives/Select/CreatableSelect.tsx", error: String((e && e.message) || e) }); }
 
-// components/forms/DatePicker.tsx
+// components/forms/DatePicker/DatePicker.tsx
 try { (() => {
 const {
   useState,
@@ -12198,9 +12198,9 @@ function DatePicker({
   }, "Clear"))));
 }
 Object.assign(__ds_scope, { DatePicker });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/DatePicker.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/DatePicker/DatePicker.tsx", error: String((e && e.message) || e) }); }
 
-// components/data/DateRangeFilter.tsx
+// components/data/DateRangeFilter/DateRangeFilter.tsx
 try { (() => {
 const {
   useState,
@@ -12532,9 +12532,9 @@ function DateRangeFilter({
    window.<Namespace>). */
 DateRangeFilter.computePeriod = computePeriod;
 Object.assign(__ds_scope, { computePeriod, DateRangeFilter });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/DateRangeFilter.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/DateRangeFilter/DateRangeFilter.tsx", error: String((e && e.message) || e) }); }
 
-// components/data/StatsOverview.tsx
+// components/data/StatsOverview/StatsOverview.tsx
 try { (() => {
 /**
  * AgniUI · StatsOverview
@@ -12638,9 +12638,9 @@ function StatsOverview({
   }, c.children))));
 }
 Object.assign(__ds_scope, { StatsOverview });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/StatsOverview.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/StatsOverview/StatsOverview.tsx", error: String((e && e.message) || e) }); }
 
-// components/forms/FileDropzone.tsx
+// components/forms/FileUpload/FileDropzone.tsx
 try { (() => {
 /**
  * @internal Renderer behind the public <FileUpload> — not part of the documented API
@@ -12928,9 +12928,9 @@ function FileDropzone({
   })))))));
 }
 Object.assign(__ds_scope, { FileDropzone });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/FileDropzone.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/FileUpload/FileDropzone.tsx", error: String((e && e.message) || e) }); }
 
-// components/forms/FileUploadBasic.tsx
+// components/forms/FileUpload/FileUploadBasic.tsx
 try { (() => {
 /**
  * @internal Renderer behind the public <FileUpload> — not part of the documented API
@@ -13010,9 +13010,9 @@ function FileUploadBasic({
   }));
 }
 Object.assign(__ds_scope, { FileUploadBasic });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/FileUploadBasic.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/FileUpload/FileUploadBasic.tsx", error: String((e && e.message) || e) }); }
 
-// components/forms/FileUpload.tsx
+// components/forms/FileUpload/FileUpload.tsx
 try { (() => {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 /**
@@ -13051,9 +13051,9 @@ function FileUpload({
   }, p));
 }
 Object.assign(__ds_scope, { FileUpload });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/FileUpload.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/FileUpload/FileUpload.tsx", error: String((e && e.message) || e) }); }
 
-// components/forms/FormField.tsx
+// components/forms/FormField/FormField.tsx
 try { (() => {
 /* ── Types (mirrored in FormField.d.ts) ── */
 
@@ -13091,9 +13091,9 @@ function FormField({
   }, hint));
 }
 Object.assign(__ds_scope, { FormField });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/FormField.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/FormField/FormField.tsx", error: String((e && e.message) || e) }); }
 
-// components/forms/FormSection.tsx
+// components/forms/FormSection/FormSection.tsx
 try { (() => {
 /* ── Types (mirrored in FormSection.d.ts) ── */
 
@@ -13147,9 +13147,9 @@ function FormSection({
   }, children));
 }
 Object.assign(__ds_scope, { FormSection });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/FormSection.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/FormSection/FormSection.tsx", error: String((e && e.message) || e) }); }
 
-// components/forms/Input.tsx
+// components/primitives/Input/Input.tsx
 try { (() => {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 /* ── Types (mirrored in Input.d.ts) ── */
@@ -13217,9 +13217,9 @@ function Input({
   }, suffixIcon));
 }
 Object.assign(__ds_scope, { Input });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/Input.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/primitives/Input/Input.tsx", error: String((e && e.message) || e) }); }
 
-// components/chrome/AppSwitcher.tsx
+// components/chrome/AppSwitcher/AppSwitcher.tsx
 try { (() => {
 const {
   useState,
@@ -13441,9 +13441,9 @@ function AppSwitcher({
       `));
 }
 Object.assign(__ds_scope, { AppSwitcher });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/chrome/AppSwitcher.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/chrome/AppSwitcher/AppSwitcher.tsx", error: String((e && e.message) || e) }); }
 
-// components/forms/MultiSelect.tsx
+// components/primitives/Select/MultiSelect.tsx
 try { (() => {
 /**
  * @internal Renderer behind the public <Select> — not part of the documented API
@@ -13571,9 +13571,9 @@ function MultiSelect({
   })));
 }
 Object.assign(__ds_scope, { MultiSelect });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/MultiSelect.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/primitives/Select/MultiSelect.tsx", error: String((e && e.message) || e) }); }
 
-// components/forms/MultiUserSelect.tsx
+// components/primitives/Select/MultiUserSelect.tsx
 try { (() => {
 /**
  * @internal Renderer behind the public <Select> — not part of the documented API
@@ -13815,9 +13815,9 @@ function MultiUserSelect({
   }, "Done"))));
 }
 Object.assign(__ds_scope, { MultiUserSelect });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/MultiUserSelect.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/primitives/Select/MultiUserSelect.tsx", error: String((e && e.message) || e) }); }
 
-// components/forms/QuantityStepper.tsx
+// components/forms/QuantityStepper/QuantityStepper.tsx
 try { (() => {
 /* ── Types (mirrored in QuantityStepper.d.ts) ── */
 
@@ -13915,9 +13915,9 @@ function QuantityStepper({
   }));
 }
 Object.assign(__ds_scope, { QuantityStepper });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/QuantityStepper.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/QuantityStepper/QuantityStepper.tsx", error: String((e && e.message) || e) }); }
 
-// components/forms/Radio.tsx
+// components/primitives/Radio/Radio.tsx
 try { (() => {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 /* ── Types (mirrored in Radio.d.ts) ── */
@@ -13998,9 +13998,9 @@ function RadioGroup({
   })));
 }
 Object.assign(__ds_scope, { Radio, RadioGroup });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/Radio.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/primitives/Radio/Radio.tsx", error: String((e && e.message) || e) }); }
 
-// components/forms/RichTextEditor.tsx
+// components/forms/RichTextEditor/RichTextEditor.tsx
 try { (() => {
 const {
   useRef,
@@ -14183,9 +14183,9 @@ function RichTextEditor({
   }, placeholder)));
 }
 Object.assign(__ds_scope, { RichTextEditor });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/RichTextEditor.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/RichTextEditor/RichTextEditor.tsx", error: String((e && e.message) || e) }); }
 
-// components/forms/SearchSelect.tsx
+// components/primitives/Select/SearchSelect.tsx
 try { (() => {
 /**
  * @internal Renderer behind the public <Select> — not part of the documented API
@@ -14319,9 +14319,9 @@ function SearchSelect({
   }))));
 }
 Object.assign(__ds_scope, { SearchSelect });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/SearchSelect.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/primitives/Select/SearchSelect.tsx", error: String((e && e.message) || e) }); }
 
-// components/forms/SelectBasic.tsx
+// components/primitives/Select/SelectBasic.tsx
 try { (() => {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 /**
@@ -14432,9 +14432,9 @@ function SelectBasic({
   })));
 }
 Object.assign(__ds_scope, { SelectBasic });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/SelectBasic.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/primitives/Select/SelectBasic.tsx", error: String((e && e.message) || e) }); }
 
-// components/forms/Switch.tsx
+// components/primitives/Switch/Switch.tsx
 try { (() => {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 /* ── Types (mirrored in Switch.d.ts) ── */
@@ -14495,9 +14495,9 @@ function Switch({
   }, label));
 }
 Object.assign(__ds_scope, { Switch });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/Switch.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/primitives/Switch/Switch.tsx", error: String((e && e.message) || e) }); }
 
-// components/chrome/SettingsMenu.tsx
+// components/chrome/SettingsMenu/SettingsMenu.tsx
 try { (() => {
 const {
   useRef,
@@ -14670,9 +14670,9 @@ function SettingsMenu({
   }))), /*#__PURE__*/React.createElement("style", null, `@keyframes agni-pop-in { from { transform: translateY(-6px) scale(0.98); } to { transform: translateY(0) scale(1); } }`));
 }
 Object.assign(__ds_scope, { SettingsMenu });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/chrome/SettingsMenu.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/chrome/SettingsMenu/SettingsMenu.tsx", error: String((e && e.message) || e) }); }
 
-// components/forms/Textarea.tsx
+// components/primitives/Textarea/Textarea.tsx
 try { (() => {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 /* ── Types (mirrored in Textarea.d.ts) ── */
@@ -14711,9 +14711,9 @@ function Textarea({
   }, rest));
 }
 Object.assign(__ds_scope, { Textarea });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/Textarea.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/primitives/Textarea/Textarea.tsx", error: String((e && e.message) || e) }); }
 
-// components/forms/UserSelect.tsx
+// components/primitives/Select/UserSelect.tsx
 try { (() => {
 /**
  * @internal Renderer behind the public <Select> — not part of the documented API
@@ -14882,9 +14882,9 @@ function UserSelect({
   }))));
 }
 Object.assign(__ds_scope, { UserSelect });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/UserSelect.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/primitives/Select/UserSelect.tsx", error: String((e && e.message) || e) }); }
 
-// components/forms/Select.tsx
+// components/primitives/Select/Select.tsx
 try { (() => {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 /**
@@ -14912,9 +14912,9 @@ function Select({
   return /*#__PURE__*/React.createElement(__ds_scope.SelectBasic, p);
 }
 Object.assign(__ds_scope, { Select });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/Select.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/primitives/Select/Select.tsx", error: String((e && e.message) || e) }); }
 
-// components/data/PageControls.tsx
+// components/data/PageControls/PageControls.tsx
 try { (() => {
 /* ── Types (mirrored in PageControls.d.ts) ── */
 
@@ -15187,9 +15187,9 @@ function PageControls({
   }, /*#__PURE__*/React.createElement(__ds_scope.Pagination, pagination)), /*#__PURE__*/React.createElement("style", null, `@keyframes agni-spin{to{transform:rotate(360deg)}}`));
 }
 Object.assign(__ds_scope, { PageControls });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/PageControls.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/PageControls/PageControls.tsx", error: String((e && e.message) || e) }); }
 
-// components/data/RecordTable.tsx
+// components/data/RecordTable/RecordTable.tsx
 try { (() => {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 /**
@@ -15326,9 +15326,9 @@ function RecordTable({
   }));
 }
 Object.assign(__ds_scope, { RecordTable });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/RecordTable.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/RecordTable/RecordTable.tsx", error: String((e && e.message) || e) }); }
 
-// components/layout/AppShell.tsx
+// components/layout/AppShell/AppShell.tsx
 try { (() => {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 /* ── Types (mirrored in AppShell.d.ts) ── */
@@ -15391,9 +15391,9 @@ function AppShell({
   }, footer));
 }
 Object.assign(__ds_scope, { AppShell });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/layout/AppShell.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/layout/AppShell/AppShell.tsx", error: String((e && e.message) || e) }); }
 
-// components/layout/Bar.tsx
+// components/layout/Bar/Bar.tsx
 try { (() => {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 /* ── Types (mirrored in Bar.d.ts) ── */
@@ -15428,9 +15428,9 @@ function Bar({
   }, rest), children);
 }
 Object.assign(__ds_scope, { Bar });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/layout/Bar.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/layout/Bar/Bar.tsx", error: String((e && e.message) || e) }); }
 
-// components/chrome/ShellFooter.tsx
+// components/chrome/ShellFooter/ShellFooter.tsx
 try { (() => {
 /**
  * AgniUI · ShellFooter
@@ -15464,9 +15464,9 @@ function ShellFooter({
   }, copyright ?? `© ${new Date().getFullYear()} Agnikul Cosmos`)));
 }
 Object.assign(__ds_scope, { ShellFooter });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/chrome/ShellFooter.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/chrome/ShellFooter/ShellFooter.tsx", error: String((e && e.message) || e) }); }
 
-// components/chrome/ShellHeader.tsx
+// components/chrome/ShellHeader/ShellHeader.tsx
 try { (() => {
 const {
   useState,
@@ -15753,9 +15753,9 @@ function ShellHeader({
   })))));
 }
 Object.assign(__ds_scope, { ShellHeader });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/chrome/ShellHeader.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/chrome/ShellHeader/ShellHeader.tsx", error: String((e && e.message) || e) }); }
 
-// components/layout/Cluster.tsx
+// components/layout/Cluster/Cluster.tsx
 try { (() => {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 /* ── Types (mirrored in Cluster.d.ts) ── */
@@ -15858,9 +15858,9 @@ function Stack({
   }, rest), children);
 }
 Object.assign(__ds_scope, { Cluster, Stack });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/layout/Cluster.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/layout/Cluster/Cluster.tsx", error: String((e && e.message) || e) }); }
 
-// components/chrome/PageTitleBar.tsx
+// components/chrome/PageTitleBar/PageTitleBar.tsx
 try { (() => {
 /**
  * AgniUI · PageTitleBar
@@ -16015,9 +16015,9 @@ function PageTitleBar({
   }), rendered), trailing, countsLoading && /*#__PURE__*/React.createElement("style", null, `@keyframes agni-shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}`)));
 }
 Object.assign(__ds_scope, { PageTitleBar });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/chrome/PageTitleBar.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/chrome/PageTitleBar/PageTitleBar.tsx", error: String((e && e.message) || e) }); }
 
-// components/chrome/PageHeader.tsx
+// components/chrome/PageHeader/PageHeader.tsx
 try { (() => {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 /**
@@ -16163,9 +16163,9 @@ function PageHeader({
   }, body);
 }
 Object.assign(__ds_scope, { PageHeader });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/chrome/PageHeader.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/chrome/PageHeader/PageHeader.tsx", error: String((e && e.message) || e) }); }
 
-// components/navigation/Breadcrumbs.tsx
+// components/navigation/Breadcrumbs/Breadcrumbs.tsx
 try { (() => {
 /* ── Types (mirrored in Breadcrumbs.d.ts) ── */
 
@@ -16212,9 +16212,9 @@ function Breadcrumbs({
   }));
 }
 Object.assign(__ds_scope, { Breadcrumbs });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/navigation/Breadcrumbs.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/navigation/Breadcrumbs/Breadcrumbs.tsx", error: String((e && e.message) || e) }); }
 
-// components/navigation/CommandPalette.tsx
+// components/navigation/CommandPalette/CommandPalette.tsx
 try { (() => {
 const {
   useState,
@@ -16362,9 +16362,9 @@ function CommandPalette({
   }, c.hint))))), /*#__PURE__*/React.createElement("style", null, `@keyframes agni-fade-in{from{opacity:0}}@keyframes agni-scale-pop{from{opacity:0;transform:scale(.97) translateY(-6px)}}@keyframes agni-spin{to{transform:rotate(360deg)}}`));
 }
 Object.assign(__ds_scope, { CommandPalette });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/navigation/CommandPalette.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/navigation/CommandPalette/CommandPalette.tsx", error: String((e && e.message) || e) }); }
 
-// components/navigation/SegmentedControl.tsx
+// components/navigation/Tabs/SegmentedControl.tsx
 try { (() => {
 /**
  * @internal Renderer behind the public <Tabs> — not part of the documented API
@@ -16429,9 +16429,9 @@ function SegmentedControl({
   }));
 }
 Object.assign(__ds_scope, { SegmentedControl });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/navigation/SegmentedControl.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/navigation/Tabs/SegmentedControl.tsx", error: String((e && e.message) || e) }); }
 
-// components/navigation/TabsStrip.tsx
+// components/navigation/Tabs/TabsStrip.tsx
 try { (() => {
 /**
  * @internal Renderer behind the public <Tabs> — not part of the documented API
@@ -16518,9 +16518,9 @@ function TabsStrip({
   }));
 }
 Object.assign(__ds_scope, { TabsStrip });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/navigation/TabsStrip.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/navigation/Tabs/TabsStrip.tsx", error: String((e && e.message) || e) }); }
 
-// components/navigation/Tabs.tsx
+// components/navigation/Tabs/Tabs.tsx
 try { (() => {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 /**
@@ -16539,9 +16539,9 @@ function Tabs({
   return /*#__PURE__*/React.createElement(__ds_scope.TabsStrip, p);
 }
 Object.assign(__ds_scope, { Tabs });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/navigation/Tabs.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/navigation/Tabs/Tabs.tsx", error: String((e && e.message) || e) }); }
 
-// components/workflow/ApprovalStepper.tsx
+// components/workflow/ApprovalStepper/ApprovalStepper.tsx
 try { (() => {
 /* ── Types (mirrored in ApprovalStepper.d.ts) ── */
 
@@ -16656,9 +16656,9 @@ function ApprovalStepper({
   }), /*#__PURE__*/React.createElement("style", null, `@keyframes agni-step-tip{from{opacity:0;transform:translateX(-50%) translateY(4px)}}`));
 }
 Object.assign(__ds_scope, { ApprovalStepper });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/workflow/ApprovalStepper.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/workflow/ApprovalStepper/ApprovalStepper.tsx", error: String((e && e.message) || e) }); }
 
-// components/workflow/AuditTrail.tsx
+// components/workflow/AuditTrail/AuditTrail.tsx
 try { (() => {
 /* ── Types (mirrored in AuditTrail.d.ts) ── */
 
@@ -16735,9 +16735,9 @@ function AuditTrail(props) {
   return /*#__PURE__*/React.createElement(AuditTrailBody, props);
 }
 Object.assign(__ds_scope, { AuditTrail });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/workflow/AuditTrail.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/workflow/AuditTrail/AuditTrail.tsx", error: String((e && e.message) || e) }); }
 
-// components/workflow/ApprovalPanel.tsx
+// components/workflow/ApprovalPanel/ApprovalPanel.tsx
 try { (() => {
 /**
  * AgniUI · ApprovalPanel
@@ -16854,9 +16854,9 @@ function ApprovalPanel({
   }, body));
 }
 Object.assign(__ds_scope, { ApprovalPanel });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/workflow/ApprovalPanel.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/workflow/ApprovalPanel/ApprovalPanel.tsx", error: String((e && e.message) || e) }); }
 
-// components/workflow/BulkActionConfirm.tsx
+// components/workflow/ConfirmModal/BulkActionConfirm.tsx
 try { (() => {
 /**
  * @internal Renderer behind the public <ConfirmModal> — not part of the documented API
@@ -16985,9 +16985,9 @@ function BulkActionConfirm({
   }), " A reason is required.")));
 }
 Object.assign(__ds_scope, { BulkActionConfirm });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/workflow/BulkActionConfirm.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/workflow/ConfirmModal/BulkActionConfirm.tsx", error: String((e && e.message) || e) }); }
 
-// components/data/KanbanCard.tsx
+// components/data/RecordCard/KanbanCard.tsx
 try { (() => {
 /**
  * @internal Preset renderer behind the public <RecordCard> — not part of the documented
@@ -17373,9 +17373,9 @@ function KanbanCard({
   }));
 }
 Object.assign(__ds_scope, { KanbanCard });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/KanbanCard.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/RecordCard/KanbanCard.tsx", error: String((e && e.message) || e) }); }
 
-// components/data/KanbanBoard.tsx
+// components/data/KanbanBoard/KanbanBoard.tsx
 try { (() => {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 const DEFAULT_TONES = {
@@ -17559,9 +17559,9 @@ function KanbanBoard({
   })), loading && /*#__PURE__*/React.createElement("style", null, `@keyframes agni-shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}`));
 }
 Object.assign(__ds_scope, { KanbanBoard });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/KanbanBoard.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/KanbanBoard/KanbanBoard.tsx", error: String((e && e.message) || e) }); }
 
-// components/data/RecordCard.tsx
+// components/data/RecordCard/RecordCard.tsx
 try { (() => {
 /* ── Types (mirrored in RecordCard.d.ts) ── */
 
@@ -17722,9 +17722,9 @@ function RecordCard(props) {
   return /*#__PURE__*/React.createElement(RecordCardBody, props);
 }
 Object.assign(__ds_scope, { normalizeRecord, RecordCard });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/RecordCard.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/RecordCard/RecordCard.tsx", error: String((e && e.message) || e) }); }
 
-// components/workflow/DiscardConfirmModal.tsx
+// components/workflow/ConfirmModal/DiscardConfirmModal.tsx
 try { (() => {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 /**
@@ -17821,9 +17821,9 @@ function DiscardConfirmModal({
   }, c)))));
 }
 Object.assign(__ds_scope, { DiscardConfirmModal });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/workflow/DiscardConfirmModal.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/workflow/ConfirmModal/DiscardConfirmModal.tsx", error: String((e && e.message) || e) }); }
 
-// components/workflow/ImportRecordsModal.tsx
+// components/workflow/ConfirmModal/ImportRecordsModal.tsx
 try { (() => {
 /**
  * @internal Renderer behind the public <ConfirmModal> — not part of the documented API
@@ -18031,9 +18031,9 @@ function ImportRecordsModal({
   })));
 }
 Object.assign(__ds_scope, { ImportRecordsModal });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/workflow/ImportRecordsModal.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/workflow/ConfirmModal/ImportRecordsModal.tsx", error: String((e && e.message) || e) }); }
 
-// components/workflow/RequestDetailModal.tsx
+// components/workflow/RecordDetailModal/RequestDetailModal.tsx
 try { (() => {
 /**
  * @internal Renderer behind the public <RecordDetailModal> — not part of the documented API
@@ -19584,9 +19584,9 @@ function ResolutionBanner({
   }, "\u201C", resolution.remark, "\u201D")));
 }
 Object.assign(__ds_scope, { RequestDetailModal });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/workflow/RequestDetailModal.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/workflow/RecordDetailModal/RequestDetailModal.tsx", error: String((e && e.message) || e) }); }
 
-// components/workflow/RecordDetailModal.tsx
+// components/workflow/RecordDetailModal/RecordDetailModal.tsx
 try { (() => {
 /**
  * AgniUI · RecordDetailModal
@@ -19598,9 +19598,9 @@ function RecordDetailModal(props) {
   return /*#__PURE__*/React.createElement(__ds_scope.RequestDetailModal, props);
 }
 Object.assign(__ds_scope, { RecordDetailModal });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/workflow/RecordDetailModal.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/workflow/RecordDetailModal/RecordDetailModal.tsx", error: String((e && e.message) || e) }); }
 
-// components/workflow/ReviewSubmitModal.tsx
+// components/workflow/ConfirmModal/ReviewSubmitModal.tsx
 try { (() => {
 /**
  * @internal Renderer behind the public <ConfirmModal> — not part of the documented API
@@ -19696,9 +19696,9 @@ function ReviewSubmitModal({
   }, noteHint)));
 }
 Object.assign(__ds_scope, { ReviewSubmitModal });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/workflow/ReviewSubmitModal.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/workflow/ConfirmModal/ReviewSubmitModal.tsx", error: String((e && e.message) || e) }); }
 
-// components/workflow/RequestForm.tsx
+// components/workflow/RecordForm/RequestForm.tsx
 try { (() => {
 /**
  * @internal Renderer behind the public <RecordForm> — not part of the documented API
@@ -20224,9 +20224,9 @@ function RequestForm({
   }));
 }
 Object.assign(__ds_scope, { REQUEST_FORM_DEFAULTS, buildReviewSummary, RequestForm });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/workflow/RequestForm.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/workflow/RecordForm/RequestForm.tsx", error: String((e && e.message) || e) }); }
 
-// components/workflow/RecordForm.tsx
+// components/workflow/RecordForm/RecordForm.tsx
 try { (() => {
 /**
  * AgniUI · RecordForm
@@ -20237,9 +20237,9 @@ function RecordForm(props) {
   return /*#__PURE__*/React.createElement(__ds_scope.RequestForm, props);
 }
 Object.assign(__ds_scope, { RecordForm });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/workflow/RecordForm.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/workflow/RecordForm/RecordForm.tsx", error: String((e && e.message) || e) }); }
 
-// components/workflow/SubmitConfirmModal.tsx
+// components/workflow/ConfirmModal/SubmitConfirmModal.tsx
 try { (() => {
 /**
  * @internal Renderer behind the public <ConfirmModal> — not part of the documented API
@@ -20332,9 +20332,9 @@ function SubmitConfirmModal({
   })));
 }
 Object.assign(__ds_scope, { SubmitConfirmModal });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/workflow/SubmitConfirmModal.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/workflow/ConfirmModal/SubmitConfirmModal.tsx", error: String((e && e.message) || e) }); }
 
-// components/workflow/ConfirmModal.tsx
+// components/workflow/ConfirmModal/ConfirmModal.tsx
 try { (() => {
 /**
  * AgniUI · ConfirmModal
@@ -20357,7 +20357,7 @@ function ConfirmModal({
   return /*#__PURE__*/React.createElement(__ds_scope.ReviewSubmitModal, p);
 }
 Object.assign(__ds_scope, { ConfirmModal });
-})(); } catch (e) { __ds_ns.__errors.push({ path: "components/workflow/ConfirmModal.tsx", error: String((e && e.message) || e) }); }
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/workflow/ConfirmModal/ConfirmModal.tsx", error: String((e && e.message) || e) }); }
 
 // doc-page.js
 try { (() => {

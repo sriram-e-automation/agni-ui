@@ -19,132 +19,133 @@
    Add each component here as it is migrated.
 
    Point at the file that literally CONTAINS the class strings, not the public
-   entry point. core/Button.tsx is a three-line dispatcher since the Aug merge —
-   its classes live in ButtonBase / IconButton / SplitButton, so listing
-   Button.tsx alone silently dropped every button utility. */
+   entry point (and never a folder's index.ts barrel). primitives/Button/Button.tsx
+   is a three-line dispatcher since the Aug merge — its classes live in
+   ButtonBase / IconButton / SplitButton, so listing Button.tsx alone silently
+   dropped every button utility. */
 const MIGRATED = [
   /* core — tranche 1 */
-  "../components/core/ButtonBase.tsx",
-  "../components/core/IconButton.tsx",
-  "../components/core/SplitButton.tsx",
-  "../components/core/Tag.tsx",
-  "../components/core/Avatar.tsx",
-  "../components/core/AvatarStack.tsx",
-  "../components/core/Card.tsx",
-  "../components/core/DropdownMenu.tsx",
-  "../components/core/OptionRow.tsx",
-  "../components/core/ActionTile.tsx",
-  "../components/core/Rating.tsx",
+  "../components/primitives/Button/ButtonBase.tsx",
+  "../components/primitives/Button/IconButton.tsx",
+  "../components/primitives/Button/SplitButton.tsx",
+  "../components/primitives/Tag/Tag.tsx",
+  "../components/primitives/Avatar/Avatar.tsx",
+  "../components/primitives/AvatarStack/AvatarStack.tsx",
+  "../components/containment/Card/Card.tsx",
+  "../components/navigation/DropdownMenu/DropdownMenu.tsx",
+  "../components/data/OptionRow/OptionRow.tsx",
+  "../components/navigation/ActionTile/ActionTile.tsx",
+  "../components/primitives/Rating/Rating.tsx",
   /* forms — tranche 2 (the control family, migrated as ONE change) */
-  "../components/forms/Input.tsx",
-  "../components/forms/Textarea.tsx",
-  "../components/forms/SelectBasic.tsx",
-  "../components/forms/MultiSelect.tsx",
-  "../components/forms/SearchSelect.tsx",
-  "../components/forms/CreatableSelect.tsx",
-  "../components/forms/UserSelect.tsx",
-  "../components/forms/MultiUserSelect.tsx",
-  "../components/forms/DatePicker.tsx",
-  "../components/forms/QuantityStepper.tsx",
-  "../components/forms/Checkbox.tsx",
-  "../components/forms/Radio.tsx",
-  "../components/forms/Switch.tsx",
-  "../components/forms/FormField.tsx",
+  "../components/primitives/Input/Input.tsx",
+  "../components/primitives/Textarea/Textarea.tsx",
+  "../components/primitives/Select/SelectBasic.tsx",
+  "../components/primitives/Select/MultiSelect.tsx",
+  "../components/primitives/Select/SearchSelect.tsx",
+  "../components/primitives/Select/CreatableSelect.tsx",
+  "../components/primitives/Select/UserSelect.tsx",
+  "../components/primitives/Select/MultiUserSelect.tsx",
+  "../components/forms/DatePicker/DatePicker.tsx",
+  "../components/forms/QuantityStepper/QuantityStepper.tsx",
+  "../components/primitives/Checkbox/Checkbox.tsx",
+  "../components/primitives/Radio/Radio.tsx",
+  "../components/primitives/Switch/Switch.tsx",
+  "../components/forms/FormField/FormField.tsx",
   /* navigation — tranche 3. Tabs.tsx is a two-line dispatcher; the class
      strings live in TabsStrip / SegmentedControl, so those are what get listed. */
-  "../components/navigation/TabsStrip.tsx",
-  "../components/navigation/SegmentedControl.tsx",
-  "../components/navigation/Breadcrumbs.tsx",
-  "../components/navigation/CommandPalette.tsx",
+  "../components/navigation/Tabs/TabsStrip.tsx",
+  "../components/navigation/Tabs/SegmentedControl.tsx",
+  "../components/navigation/Breadcrumbs/Breadcrumbs.tsx",
+  "../components/navigation/CommandPalette/CommandPalette.tsx",
   /* feedback — tranche 4. Notice / Skeleton / DataState are dispatchers with no
      class strings of their own; Loading keeps inline styles by design (its 90
      declarations are per-shape skeleton geometry — the rule-4 runtime-computed
      exemption, same as chart SVG geometry). */
-  "../components/feedback/Banner.tsx",
-  "../components/feedback/Toast.tsx",
-  "../components/feedback/Tooltip.tsx",
-  "../components/feedback/Modal.tsx",
-  "../components/feedback/Progress.tsx",
-  "../components/feedback/EmptyState.tsx",
-  "../components/feedback/ErrorState.tsx",
+  "../components/feedback/Notice/Banner.tsx",
+  "../components/feedback/Notice/Toast.tsx",
+  "../components/feedback/Tooltip/Tooltip.tsx",
+  "../components/feedback/Modal/Modal.tsx",
+  "../components/feedback/Progress/Progress.tsx",
+  "../components/feedback/EmptyState/EmptyState.tsx",
+  "../components/feedback/ErrorState/ErrorState.tsx",
   /* containment + layout — tranche 5. Panel.tsx is a dispatcher; the classes are
      in PanelBase / Sheet / Drawer. Cluster and Stack stay inline BY DESIGN:
      their props (gap, align, justify, padding, overflow) are style VALUES the
      caller passes through — a class table would either restrict the API or need
      one entry per combination. */
-  "../components/containment/PanelBase.tsx",
-  "../components/containment/Accordion.tsx",
-  "../components/containment/Sheet.tsx",
-  "../components/containment/Drawer.tsx",
-  "../components/layout/AppShell.tsx",
-  "../components/layout/Bar.tsx",
+  "../components/containment/Panel/PanelBase.tsx",
+  "../components/containment/Accordion/Accordion.tsx",
+  "../components/containment/Panel/Sheet.tsx",
+  "../components/containment/Panel/Drawer.tsx",
+  "../components/layout/AppShell/AppShell.tsx",
+  "../components/layout/Bar/Bar.tsx",
   /* chrome — tranche 6a, the shell FRAME. The four header menus (ShellHeader,
      AppSwitcher, NotificationsMenu, SettingsMenu) are 6b: they are one
      cohesive group of header overlays, and splitting there keeps each half
      reviewable. Theme.tsx is token maps with no markup. */
-  "../components/chrome/ShellFooter.tsx",
-  "../components/chrome/PageTitleBar.tsx",
-  "../components/chrome/WorkspacePane.tsx",
-  "../components/chrome/PanelKit.tsx",
-  "../components/chrome/NavRail.tsx",
+  "../components/chrome/ShellFooter/ShellFooter.tsx",
+  "../components/chrome/PageTitleBar/PageTitleBar.tsx",
+  "../components/chrome/WorkspacePane/WorkspacePane.tsx",
+  "../components/chrome/PanelKit/PanelKit.tsx",
+  "../components/chrome/NavRail/NavRail.tsx",
   /* chrome — tranche 6b, the header overlays. */
-  "../components/chrome/ShellHeader.tsx",
-  "../components/chrome/SettingsMenu.tsx",
-  "../components/chrome/NotificationsMenu.tsx",
-  "../components/chrome/AppSwitcher.tsx",
+  "../components/chrome/ShellHeader/ShellHeader.tsx",
+  "../components/chrome/SettingsMenu/SettingsMenu.tsx",
+  "../components/chrome/NotificationsMenu/NotificationsMenu.tsx",
+  "../components/chrome/AppSwitcher/AppSwitcher.tsx",
   /* data — tranche 7a, the record-detail rows. */
-  "../components/data/EventRow.tsx",
-  "../components/data/DetailSection.tsx",
-  "../components/data/Pagination.tsx",
-  "../components/data/BulkActionToolbar.tsx",
-  "../components/data/StatCard.tsx",
-  "../components/data/AttachmentRow.tsx",
-  "../components/data/DocumentPreview.tsx",
+  "../components/data/EventRow/EventRow.tsx",
+  "../components/data/DetailSection/DetailSection.tsx",
+  "../components/data/Pagination/Pagination.tsx",
+  "../components/data/BulkActionToolbar/BulkActionToolbar.tsx",
+  "../components/data/StatCard/StatCard.tsx",
+  "../components/data/AttachmentRow/AttachmentRow.tsx",
+  "../components/data/DocumentPreview/DocumentPreview.tsx",
   /* data — tranche 7b, the record lists. */
-  "../components/data/List.tsx",
-  "../components/data/TreeView.tsx",
-  "../components/data/EditableTable.tsx",
+  "../components/data/List/List.tsx",
+  "../components/data/TreeView/TreeView.tsx",
+  "../components/data/EditableTable/EditableTable.tsx",
   /* data — tranche 7c, filters. QuickStats stays inline (see README) — its
      colours derive from a caller-supplied accent via color-mix at every
      render, the same runtime-value exemption as chart SVG geometry. */
-  "../components/data/FilterPanel.tsx",
-  "../components/data/FilterBuilder.tsx",
+  "../components/data/FilterPanel/FilterPanel.tsx",
+  "../components/data/FilterBuilder/FilterBuilder.tsx",
   /* data — tranche 7d. RecordCard is a dispatcher (see README); connector
      geometry in OrgTree stays inline (per-node layout math). */
-  "../components/data/PersonCard.tsx",
-  "../components/data/OrgTree.tsx",
-  "../components/data/KanbanCard.tsx",
-  "../components/data/DateRangeFilter.tsx",
-  "../components/data/PageControls.tsx",
+  "../components/data/PersonCard/PersonCard.tsx",
+  "../components/data/OrgTree/OrgTree.tsx",
+  "../components/data/RecordCard/KanbanCard.tsx",
+  "../components/data/DateRangeFilter/DateRangeFilter.tsx",
+  "../components/data/PageControls/PageControls.tsx",
   /* data — tranche 7e. KanbanBoard's tone lookups (bg/border/dot/label per
      lane, dark-mode blur) stay inline — runtime values keyed by the column's
      status group, not a fixed class set. */
-  "../components/data/KanbanBoard.tsx",
+  "../components/data/KanbanBoard/KanbanBoard.tsx",
   /* data — tranche 8, the schedule containers. Cell/bar geometry (widths,
      offsets, the repeating-gradient grid rules, the month grid's row
      template) and the --kanban-*-dot / tone-pair lookups stay inline. */
-  "../components/data/GanttTimeline.tsx",
-  "../components/data/Calendar.tsx",
+  "../components/data/GanttTimeline/GanttTimeline.tsx",
+  "../components/data/Calendar/Calendar.tsx",
   /* data — tranche 9. DataTable completes the family: per-column widths, the
      colgroup, the caller's headerStyle escape hatch, the dark picker surface
      and the bottom-fade gradient stay inline. */
-  "../components/data/DataTable.tsx",
+  "../components/data/DataTable/DataTable.tsx",
   /* workflow — tranche 10a, the confirm-and-commit family. ConfirmModal is the
      dispatcher (no classes of its own). */
-  "../components/workflow/DiscardConfirmModal.tsx",
-  "../components/workflow/SubmitConfirmModal.tsx",
-  "../components/workflow/ReviewSubmitModal.tsx",
-  "../components/workflow/BulkActionConfirm.tsx",
-  "../components/workflow/ImportRecordsModal.tsx",
+  "../components/workflow/ConfirmModal/DiscardConfirmModal.tsx",
+  "../components/workflow/ConfirmModal/SubmitConfirmModal.tsx",
+  "../components/workflow/ConfirmModal/ReviewSubmitModal.tsx",
+  "../components/workflow/ConfirmModal/BulkActionConfirm.tsx",
+  "../components/workflow/ConfirmModal/ImportRecordsModal.tsx",
   /* workflow — tranche 10b, the record-history pair. */
-  "../components/workflow/ApprovalStepper.tsx",
-  "../components/workflow/AuditTrail.tsx",
+  "../components/workflow/ApprovalStepper/ApprovalStepper.tsx",
+  "../components/workflow/AuditTrail/AuditTrail.tsx",
   /* workflow — tranche 10c. RecordForm is the dispatcher; RequestForm holds
      the strings. */
-  "../components/workflow/RequestForm.tsx",
+  "../components/workflow/RecordForm/RequestForm.tsx",
   /* workflow — tranche 10d, the detail modal. RecordDetailModal is the
      dispatcher; RequestDetailModal holds every string. */
-  "../components/workflow/RequestDetailModal.tsx",
+  "../components/workflow/RecordDetailModal/RequestDetailModal.tsx",
 ];
 
 const logEl = (m) => document.getElementById("log").textContent = m;

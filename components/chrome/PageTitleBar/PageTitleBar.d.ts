@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ActionSpec, ExportActionSpec } from "../core/actionSpec";
+import { ActionSpec, ExportActionSpec } from "../../utils/actionSpec";
 
 export interface PageTab {
   key: string;
@@ -61,6 +61,6 @@ export interface PageTitleBarProps {
  * action group (export · secondary · primary) with a ReactNode escape hatch.
  *
  * States: idle · tabs-loading (countsLoading) · disabled · loading.
- * @version 1.0.0
+ * @version 1.1.0
  */
-export declare function PageTitleBar(props: PageTitleBarProps): JSX.Element;
+export declare const PageTitleBar: React.ForwardRefExoticComponent<PageTitleBarProps & React.RefAttributes<HTMLElement>>;

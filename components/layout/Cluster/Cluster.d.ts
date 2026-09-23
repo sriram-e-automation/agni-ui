@@ -23,8 +23,8 @@ export interface StackProps {
   style?: React.CSSProperties;
 }
 /** Horizontal flex row with token gaps. */
-export declare function Cluster(props: ClusterProps): JSX.Element;
+export declare const Cluster: React.ForwardRefExoticComponent<ClusterProps & React.RefAttributes<HTMLDivElement>>;
 /** Vertical flex column with token gaps.
- *  @version 1.0.0
+ *  @version 1.1.0
  */
-export declare function Stack(props: StackProps): JSX.Element;
+export declare const Stack: React.ForwardRefExoticComponent<StackProps & React.RefAttributes<HTMLDivElement>>;

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { NotificationItem } from "./NotificationsMenu";
+import { NotificationItem } from "../NotificationsMenu/NotificationsMenu";
 export interface ShellUser { name: string; role?: string; avatarSrc?: string | null; }
 export interface ShellProfileItem { icon: string; label: string; danger?: boolean; onClick?: () => void; }
 export interface ShellWallpaper { key: string; label: string; src?: string; color?: string; }
@@ -39,6 +39,6 @@ export interface ShellHeaderProps {
   onMenu?: () => void;
 }
 /** Canonical Desk-app top bar: brand cell, module tile + breadcrumb, NotificationsMenu bell, SettingsMenu gear, AvatarStack presence, profile dropdown.
- *  @version 1.0.0
+ *  @version 1.1.0
  */
-export declare function ShellHeader(props: ShellHeaderProps): JSX.Element;
+export declare const ShellHeader: React.ForwardRefExoticComponent<ShellHeaderProps & React.RefAttributes<HTMLElement>>;

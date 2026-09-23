@@ -3,8 +3,8 @@
  * (no .d.ts, no specimen card). Import the public component instead.
  */
 import React from "react";
-import { Modal } from "../feedback/Modal.tsx";
-import { Button } from "../core/Button.tsx";
+import { Modal } from "../../feedback/Modal/Modal.tsx";
+import { Button } from "../../primitives/Button/Button.tsx";
 
 /* ── Types (mirrored in DiscardConfirmModal.d.ts) ── */
 export interface DiscardChoiceSpec {
@@ -67,16 +67,16 @@ function DiscardChoice({ icon, tone, title, desc, onClick }) {
   );
 }
 
-export function DiscardConfirmModal({
+export const DiscardConfirmModal = React.forwardRef<HTMLElement, DiscardConfirmModalProps>(function DiscardConfirmModal({
   open,
   title = "Leave without saving?",
   message = "You have unsaved changes. Pick what to do before you leave — this can’t be undone.",
   keepLabel = "Keep editing",
   onKeepEditing,
   choices = [],
-}: DiscardConfirmModalProps) {
+}, ref) {
   return (
-    <Modal open={open} onClose={onKeepEditing} title={title} size="sm"
+    <Modal ref={ref as never} open={open} onClose={onKeepEditing} title={title} size="sm"
       footer={<div className="flex w-full justify-center">
         <Button category="ghost" icon={<i className="ph ph-arrow-u-up-left" />} onClick={onKeepEditing}>{keepLabel}</Button>
       </div>}>
@@ -86,4 +86,4 @@ export function DiscardConfirmModal({
       </div>
     </Modal>
   );
-}
+});

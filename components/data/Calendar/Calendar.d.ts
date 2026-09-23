@@ -68,7 +68,7 @@ export interface CalendarProps {
  * tones per-day count chips by status (shared StatusChip status→tone map),
  * and lists the selected day's records in a searchable right-hand panel.
  * View · cursor · selected day are each controllable or uncontrolled.
- * @version 1.0.0
+ * @version 1.1.0
   * States: loading · error · empty.
 */
-export declare function Calendar(props: CalendarProps): JSX.Element;
+export declare const Calendar: React.ForwardRefExoticComponent<CalendarProps & React.RefAttributes<HTMLElement>>;

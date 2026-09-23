@@ -1,5 +1,5 @@
 import React from "react";
-import { Tag } from "../core/Tag.tsx";
+import { Tag } from "../../primitives/Tag/Tag.tsx";
 
 /**
  * @internal Retired Aug 2026 — merged into <Tag status="…">.
@@ -15,8 +15,8 @@ export interface StatusChipProps {
   style?: React.CSSProperties;
 }
 
-export function StatusChip({ status, tone, dot = true, size = "md", style = {}, children }: StatusChipProps) {
-  return <Tag variant="status" status={status} tone={tone} dot={dot} size={size} style={style}>{children || status}</Tag>;
-}
+const StatusChipBase = React.forwardRef<HTMLElement, StatusChipProps>(function StatusChip({ status, tone, dot = true, size = "md", style = {}, children }, ref) {
+  return <Tag ref={ref as never} variant="status" status={status} tone={tone} dot={dot} size={size} style={style}>{children || status}</Tag>;
+});
 
-StatusChip.toneFor = (status: string) => Tag.toneFor(status);
+export const StatusChip = Object.assign(StatusChipBase, { toneFor: (status: string) => Tag.toneFor(status) });

@@ -6,9 +6,12 @@ export interface ListItem {
   leading?: React.ReactNode;
   trailing?: React.ReactNode;
   meta?: React.ReactNode;
-  onClick?: () => void;
+  /** Makes the row focusable; Enter / Space activate. */
+  onClick?: (e: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>) => void;
+  /** Accessible name for a clickable row when `title` is a node. */
+  label?: string;
 }
-export interface ListProps {
+export interface ListProps extends React.HTMLAttributes<HTMLUListElement> {
   items?: ListItem[];
   divided?: boolean;
   style?: React.CSSProperties;
@@ -23,7 +26,7 @@ export interface ListProps {
   empty?: React.ReactNode;
 }
 /** Vertical record list with leading/trailing slots.
- *  @version 1.0.0
+ *  @version 1.1.0
   * States: loading · error · empty.
 */
-export declare function List(props: ListProps): JSX.Element;
+export declare const List: React.ForwardRefExoticComponent<ListProps & React.RefAttributes<HTMLUListElement>>;

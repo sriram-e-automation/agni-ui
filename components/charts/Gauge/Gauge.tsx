@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
-import { ChartKit } from "./ChartKit.tsx";
+import { mergeRefs } from "../../utils/interaction.tsx";
+import { ChartKit } from "../../utils/ChartKit.tsx";
 
 /* ── Types (mirrored in Gauge.d.ts) ── */
 export interface GaugeProps {
@@ -39,11 +40,11 @@ function arcPath(cx, cy, r, a0, a1) {
   return `M ${x0} ${y0} A ${r} ${r} 0 ${large} 1 ${x1} ${y1}`;
 }
 
-function GaugeBody({
+function GaugeBody({ forwardedRef,
   value = 0, valueMin = 0, valueMax = 100,
   startAngle = -110, endAngle = 110,
   color = "var(--chart-1)", thickness = 12, text, height, showValue = true, style = {},
-}: GaugeProps) {
+}: GaugeProps & { forwardedRef?: React.Ref<HTMLElement> }) {
   const ref = useRef(null);
   const W = useSize(ref, 200);
   const size = height ? Math.min(W, height * 1.6) : Math.min(W, 240);
@@ -54,7 +55,7 @@ function GaugeBody({
   const vh = size * 0.62;
 
   return (
-    <div ref={ref} style={{ width: "100%", minWidth: 0, display: "flex", justifyContent: "center", fontFamily: "var(--font-sans)", ...style }}>
+    <div ref={mergeRefs(forwardedRef, ref)} style={{ width: "100%", minWidth: 0, display: "flex", justifyContent: "center", fontFamily: "var(--font-sans)", ...style }}>
       <Anim />
       <svg viewBox={`0 0 ${size} ${vh}`} style={{ width: size, height: "auto", display: "block", overflow: "visible" }}>
         <path d={arcPath(cx, cy, r, startAngle, endAngle)} fill="none" style={{ stroke: "var(--chart-track)" }} strokeWidth={thickness} strokeLinecap="round" />
@@ -72,7 +73,7 @@ function GaugeBody({
 /* State contract — error → loading → empty → chart, resolved once in ChartKit
    (see chartState). The body mounts only when there is data, so hook order
    never changes between states. */
-export function Gauge(props) {
+export const Gauge = React.forwardRef<HTMLElement, any>(function Gauge(props, ref) {
   const state = ChartKit.chartState(props, { icon: "ph-gauge" });
   if (state !== false) {
     return (
@@ -81,5 +82,5 @@ export function Gauge(props) {
       </div>
     );
   }
-  return <GaugeBody {...props} />;
-}
+  return <GaugeBody {...props} forwardedRef={ref} />;
+});

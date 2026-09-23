@@ -1,7 +1,7 @@
 import * as React from "react";
-import { ApprovalStep } from "./ApprovalStepper";
-import { AuditEntry } from "./AuditTrail";
-import { ActionSpec } from "../core/actionSpec";
+import { ApprovalStep } from "../ApprovalStepper/ApprovalStepper";
+import { AuditEntry } from "../AuditTrail/AuditTrail";
+import { ActionSpec } from "../../utils/actionSpec";
 
 export interface ApprovalPanelProps {
   /** Eyebrow above the stage name. @default "Approval" */
@@ -63,6 +63,6 @@ export interface ApprovalPanelProps {
  * without audit · decisions-hidden (read-only viewer).
  * States: idle · comment-required (decisions blocked) · submitting ·
  * readOnly · loading · error · empty.
- * @version 1.0.0
+ * @version 1.1.0
  */
-export declare function ApprovalPanel(props: ApprovalPanelProps): JSX.Element;
+export declare const ApprovalPanel: React.ForwardRefExoticComponent<ApprovalPanelProps & React.RefAttributes<HTMLElement>>;

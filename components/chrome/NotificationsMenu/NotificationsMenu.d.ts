@@ -28,7 +28,7 @@ export interface NotificationsMenuProps {
   style?: React.CSSProperties;
 }
 /** Notification-bell popover: Unread/Read tabs + date-grouped list + footer actions.
- *  @version 1.0.0
+ *  @version 1.1.0
   * States: loading.
 */
-export declare function NotificationsMenu(props: NotificationsMenuProps): JSX.Element;
+export declare const NotificationsMenu: React.ForwardRefExoticComponent<NotificationsMenuProps & React.RefAttributes<HTMLDivElement>>;

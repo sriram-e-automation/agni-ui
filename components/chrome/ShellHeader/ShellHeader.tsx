@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Bar } from "../layout/Bar.tsx";
-import { Avatar } from "../core/Avatar.tsx";
-import { AvatarStack } from "../core/AvatarStack.tsx";
-import { NotificationsMenu, NotificationItem } from "./NotificationsMenu.tsx";
-import { SettingsMenu } from "./SettingsMenu.tsx";
+import { MenuPopup } from "../../navigation/DropdownMenu/MenuPopup.tsx";
+import { useOutsideClick, useStableId } from "../../utils/interaction.tsx";
+import { Bar } from "../../layout/Bar/Bar.tsx";
+import { Avatar } from "../../primitives/Avatar/Avatar.tsx";
+import { AvatarStack } from "../../primitives/AvatarStack/AvatarStack.tsx";
+import { NotificationsMenu, NotificationItem } from "../NotificationsMenu/NotificationsMenu.tsx";
+import { SettingsMenu } from "../SettingsMenu/SettingsMenu.tsx";
 
 export interface ShellUser { name: string; role?: string; avatarSrc?: string | null; }
 export interface ShellProfileItem { icon: string; label: string; danger?: boolean; onClick?: () => void; }
@@ -56,12 +58,16 @@ const COUNT_BADGE =
   "bg-status-error text-[#fff] text-2xs font-semibold font-data " +
   "inline-flex items-center justify-center border-2 border-surface-card";
 
-function RoundBtn({ icon, activeIcon, on, count, title, onClick }) {
+function RoundBtn({ icon, activeIcon, on, count, title, onClick, countLabel = "unread" }: {
+  icon: string; activeIcon?: string; on: boolean; count: number; title: string; onClick: () => void; countLabel?: string;
+}) {
   return (
     <button type="button" onClick={onClick} onMouseDown={(e) => e.stopPropagation()} title={title}
+      aria-label={count > 0 ? `${title}, ${count} ${countLabel}` : title}
+      aria-haspopup="dialog" aria-expanded={on}
       className={[ROUND, on ? ROUND_ON : ROUND_OFF].join(" ")}>
-      <i className={"ph " + (on && activeIcon ? activeIcon : icon)} />
-      {count > 0 && <span className={COUNT_BADGE}>{count > 9 ? "9+" : count}</span>}
+      <i aria-hidden="true" className={"ph " + (on && activeIcon ? activeIcon : icon)} />
+      {count > 0 && <span aria-hidden="true" className={COUNT_BADGE}>{count > 9 ? "9+" : count}</span>}
     </button>
   );
 }
@@ -75,32 +81,37 @@ const PROFILE_ROW =
 const PROFILE_ROW_NORMAL = "text-fg-primary hover:bg-surface-soft";
 const PROFILE_ROW_DANGER = "text-status-error hover:bg-status-error-soft";
 
-function ProfileMenu({ user, items, onClose }) {
-  const ref = useRef(null);
-  useEffect(() => {
-    const h = (e) => { if (ref.current && !ref.current.contains(e.target)) onClose && onClose(); };
-    const k = (e) => { if (e.key === "Escape") onClose && onClose(); };
-    document.addEventListener("mousedown", h);
-    document.addEventListener("keydown", k);
-    return () => { document.removeEventListener("mousedown", h); document.removeEventListener("keydown", k); };
-  }, [onClose]);
+/* The profile dropdown is a WAI-ARIA menu (shared MenuPopup): arrows, Home/End,
+   typeahead, Escape back to the profile button. The identity header above the
+   items is presentational context, outside the menu role. */
+function ProfileMenu({ user, items, onClose, menuId, labelledBy, initialFocus }: {
+  user: ShellUser; items: ShellProfileItem[]; onClose: (restore: boolean) => void;
+  menuId: string; labelledBy: string; initialFocus: "first" | "last";
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  useOutsideClick([ref], () => onClose(false));
   return (
     <div ref={ref} className={POPOVER} style={{ animation: "agni-shell-pop-in var(--dur-normal) var(--ease-standard)" }}>
-      <div className="flex items-center gap-2 px-2 pt-1 pb-2">
-        <Avatar name={user.name} src={user.avatarSrc} size="sm" online />
+      <div className="flex items-center gap-2 px-2 pt-1 pb-2" aria-hidden="true">
+        <Avatar name={user.name} src={user.avatarSrc} size="sm" online decorative />
         <div className="leading-tight min-w-0">
           <div className="text-sm font-semibold text-fg-primary overflow-hidden text-ellipsis whitespace-nowrap">{user.name}</div>
           {user.role && <div className="text-xs text-fg-tertiary">{user.role}</div>}
         </div>
       </div>
       <div className="h-px bg-line-subtle mx-2 mt-[2px] mb-1" />
-      {items.map((it, i) => (
-        <button key={i} type="button" onClick={() => { it.onClick && it.onClick(); onClose && onClose(); }}
-          className={[PROFILE_ROW, it.danger ? PROFILE_ROW_DANGER : PROFILE_ROW_NORMAL].join(" ")}>
-          <i className={["ph", it.icon, "text-[17px]", it.danger ? "text-status-error" : "text-fg-secondary"].join(" ")} />
-          {it.label}
-        </button>
-      ))}
+      <MenuPopup
+        id={menuId}
+        labelledBy={labelledBy}
+        initialFocus={initialFocus}
+        onClose={onClose}
+        items={items.map((it) => ({
+          label: it.label, icon: it.icon, danger: it.danger, onClick: () => it.onClick && it.onClick(),
+          iconClassName: ["text-[17px]", it.danger ? "text-status-error" : "text-fg-secondary"].join(" "),
+        }))}
+        itemClassName={[PROFILE_ROW, PROFILE_ROW_NORMAL].join(" ")}
+        itemDangerClassName={[PROFILE_ROW, PROFILE_ROW_DANGER].join(" ")}
+      />
       <style>{`@keyframes agni-shell-pop-in { from { transform: translateY(-6px) scale(0.98); } to { transform: translateY(0) scale(1); } }`}</style>
     </div>
   );
@@ -125,7 +136,7 @@ const HAMBURGER =
   "size-[38px] rounded-md border border-line-default bg-surface-soft text-fg-secondary " +
   "inline-flex items-center justify-center cursor-pointer text-[20px] shrink-0";
 
-export function ShellHeader({
+export const ShellHeader = React.forwardRef<HTMLElement, ShellHeaderProps>(function ShellHeader({
   logoSrc, monogramSrc, brandAlt = "Logo",
   moduleName = "Module Name", moduleIcon = "ph-squares-four", version,
   workspaceLabel = "Workspace", pageTitle,
@@ -135,22 +146,26 @@ export function ShellHeader({
   dark, onDarkChange, accent, onAccentChange,
   wallpaper, onWallpaperChange, wallpapers, scale, onScaleChange,
   navOpen = true, railW = "var(--rail-drawer-w-md)", isPhone = false, onMenu,
-}: ShellHeaderProps) {
+}, ref) {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
+  const [profileEdge, setProfileEdge] = useState<"first" | "last">("first");
+  const profileBtn = useRef<HTMLButtonElement>(null);
+  const profileMenuId = useStableId(null, "agni-profile-menu");
+  const openProfile = (edge: "first" | "last") => { setProfileEdge(edge); setProfileOpen(true); };
   const notifItems = notifications || [];
   const unreadCount = notifItems.filter((n) => !n.read).length;
-  const setNotif = (fn) => onNotificationsChange && onNotificationsChange(fn(notifItems));
+  const setNotif = (fn: (items: NotificationItem[]) => NotificationItem[]) => onNotificationsChange && onNotificationsChange(fn(notifItems));
   const hasNotifications = !!notifications;
   const hasSettings = !!onDarkChange || !!onAccentChange || !!onScaleChange;
   return (
-    <Bar position="top" style={{ padding: 0, gap: 0 }}>
+    <Bar ref={ref as never} position="top" style={{ padding: 0, gap: 0 }}>
       <div className="flex items-center w-full h-full">
         {isPhone ? (
           <div className="flex items-center gap-2 px-3 shrink-0 h-full">
-            <button type="button" onClick={onMenu} title="Menu" className={HAMBURGER}>
-              <i className="ph ph-list" />
+            <button type="button" onClick={onMenu} title="Menu" aria-label="Menu" className={HAMBURGER}>
+              <i aria-hidden="true" className="ph ph-list" />
             </button>
             {monogramSrc && <img src={monogramSrc} alt={brandAlt} className="h-[26px]" />}
           </div>
@@ -163,7 +178,7 @@ export function ShellHeader({
           </div>
         )}
         <div className={["flex items-center flex-1 min-w-0", isPhone ? "gap-[8px] px-[10px]" : "gap-[12px] px-[20px]"].join(" ")}>
-          <span className={[MODULE_TILE, isPhone ? "hidden" : "inline-flex"].join(" ")}>
+          <span aria-hidden="true" className={[MODULE_TILE, isPhone ? "hidden" : "inline-flex"].join(" ")}>
             <i className={"ph-bold " + moduleIcon} />
           </span>
           <div>
@@ -172,7 +187,7 @@ export function ShellHeader({
               {!isPhone && version && <span className="text-xs text-fg-tertiary font-data">{version}</span>}
             </div>
             {!isPhone && pageTitle && <div className="flex items-center gap-1 text-xs text-fg-tertiary mt-px">
-              <span>{workspaceLabel}</span><i className="ph ph-caret-right text-2xs" />
+              <span>{workspaceLabel}</span><i aria-hidden="true" className="ph ph-caret-right text-2xs" />
               <span className="text-fg-secondary font-medium">{pageTitle}</span>
             </div>}
           </div>
@@ -212,26 +227,35 @@ export function ShellHeader({
           {!isPhone && activeUsers.length > 0 && <>
             <span className={SEP} />
             <div title={"Active now · " + activeUsers.join(", ")}>
-              <AvatarStack names={activeUsers} max={4} size="md" />
+              <AvatarStack names={activeUsers} max={4} size="md" aria-label={"Active now: " + activeUsers.join(", ")} />
             </div>
           </>}
           {!isPhone && <span className={SEP} />}
           <div className="relative">
-            <button type="button" onClick={() => setProfileOpen(o => !o)} onMouseDown={(e) => e.stopPropagation()}
+            <button type="button" ref={profileBtn} id={profileMenuId + "-trigger"}
+              onClick={() => (profileOpen ? setProfileOpen(false) : openProfile("first"))}
+              onKeyDown={(e) => {
+                if (e.key === "ArrowDown") { e.preventDefault(); openProfile("first"); }
+                else if (e.key === "ArrowUp") { e.preventDefault(); openProfile("last"); }
+              }}
+              onMouseDown={(e) => e.stopPropagation()}
+              aria-haspopup="menu" aria-expanded={profileOpen} aria-controls={profileOpen ? profileMenuId : undefined}
+              aria-label={isPhone ? user.name : undefined}
               className="flex items-center gap-2 pl-1 border-none bg-transparent cursor-pointer text-inherit font-sans">
-              <Avatar name={user.name} src={user.avatarSrc} online />
+              <Avatar name={user.name} src={user.avatarSrc} online decorative={!isPhone} />
               {!isPhone && <>
                 <div className="leading-tight text-left">
                   <div className="text-sm font-semibold text-fg-primary">{user.name}</div>
                   {user.role && <div className="text-xs text-fg-tertiary">{user.role}</div>}
                 </div>
-                <i className={["ph", profileOpen ? "ph-caret-up" : "ph-caret-down", "text-fg-tertiary text-xs"].join(" ")} />
+                <i aria-hidden="true" className={["ph", profileOpen ? "ph-caret-up" : "ph-caret-down", "text-fg-tertiary text-xs"].join(" ")} />
               </>}
             </button>
-            {profileOpen && <ProfileMenu user={user} items={profileItems} onClose={() => setProfileOpen(false)} />}
+            {profileOpen && <ProfileMenu user={user} items={profileItems} menuId={profileMenuId} labelledBy={profileMenuId + "-trigger"} initialFocus={profileEdge}
+              onClose={(restore) => { setProfileOpen(false); if (restore) profileBtn.current?.focus(); }} />}
           </div>
         </div>
       </div>
     </Bar>
   );
-}
+});

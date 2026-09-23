@@ -9,9 +9,9 @@ const SHELL = "bg-surface-card border border-line-subtle rounded-lg shadow-e-xs 
 const HEAD = "flex items-center gap-2 px-4 py-3 border-b border-line-subtle bg-surface-soft";
 const EDIT = "border-none bg-transparent cursor-pointer p-[2px] inline-flex text-fg-tertiary text-[15px] hover:text-fg-brand transition-colors duration-fast";
 
-export function DetailSection({ icon, title, desc, actions, onEdit, grid = true, minCol = 200, pad = 16, children, style }) {
+export const DetailSection = React.forwardRef<HTMLDivElement, any>(function DetailSection({ icon, title, desc, actions, onEdit, grid = true, minCol = 200, pad = 16, children, style }, ref) {
   return (
-    <div className={SHELL} style={style}>
+    <div ref={ref as never} className={SHELL} style={style}>
       {(title || icon || actions || onEdit) && (
         <div className={HEAD}>
           {icon && <i className={["ph", icon, "text-[16px] text-fg-brand shrink-0"].join(" ")} />}
@@ -21,8 +21,8 @@ export function DetailSection({ icon, title, desc, actions, onEdit, grid = true,
           </div>
           {actions}
           {onEdit && (
-            <button type="button" title={"Edit " + (typeof title === "string" ? title : "section")} onClick={onEdit} className={EDIT}>
-              <i className="ph-fill ph-pencil-simple" />
+            <button type="button" title={"Edit " + (typeof title === "string" ? title : "section")} aria-label={"Edit " + (typeof title === "string" ? title : "section")} onClick={onEdit} className={EDIT}>
+              <i aria-hidden="true" className="ph-fill ph-pencil-simple" />
             </button>
           )}
         </div>
@@ -33,4 +33,4 @@ export function DetailSection({ icon, title, desc, actions, onEdit, grid = true,
       </div>
     </div>
   );
-}
+});

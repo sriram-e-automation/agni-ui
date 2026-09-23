@@ -38,7 +38,7 @@ Do **not** put the design system inside the ERP app's repo. A shared library nee
 ```
 agniui/
 ├─ src/
-│  ├─ components/       # exactly what is here today
+│  ├─ components/       # exactly what is here today — <family>/<Name>/index.ts, plus utils/
 │  ├─ tokens/           # the 3-layer CSS
 │  ├─ styles.css
 │  └─ index.ts          # NEW — the public surface (see below)
@@ -55,12 +55,12 @@ agniui/
 `src/index.ts` is the one file that decides what is public. Everything not exported from it is internal, and that is how `ButtonBase`, `IconButton` and the other retired renderers stay reachable inside the library while being absent from the published API:
 
 ```ts
-export { Button } from "./components/core/Button";
-export { Tag } from "./components/core/Tag";
+export { Button } from "./components/primitives/Button";   // the folder's index.ts
+export { Tag } from "./components/primitives/Tag";
 export { RecordTable } from "./components/data/RecordTable";
 export { ApprovalPanel } from "./components/workflow/ApprovalPanel";
 // … one line per documented component
-export type { ActionSpec, ExportActionSpec } from "./components/core/actionSpec";
+export type { ActionSpec, ExportActionSpec } from "./components/utils";
 ```
 
 ### `package.json`

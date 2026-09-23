@@ -1,6 +1,6 @@
 import React from "react";
-import { Avatar } from "../core/Avatar.tsx";
-import { resolveDataState } from "../feedback/DataState.tsx";
+import { Avatar } from "../../primitives/Avatar/Avatar.tsx";
+import { resolveDataState } from "../../utils/DataState.tsx";
 
 /* ── Types (mirrored in PersonCard.d.ts) ── */
 export interface PersonInfo {
@@ -65,15 +65,15 @@ const NAME = "font-semibold text-fg-primary overflow-hidden text-ellipsis whites
 const META = "text-fg-secondary mt-px overflow-hidden text-ellipsis whitespace-nowrap";
 const IDLINE = "text-2xs font-data text-fg-tertiary mt-[2px]";
 
-export function PersonCard({ person, size = "md", selected = false, dimmed = false, onClick, width, suffix, loading, style = {} }: PersonCardProps) {
+export const PersonCard = React.forwardRef<HTMLElement, PersonCardProps>(function PersonCard({ person, size = "md", selected = false, dimmed = false, onClick, width, suffix, loading, style = {} }, ref) {
   const state = resolveDataState({ loading, shape: "personCard" });
-  if (state !== false) return <div style={{ width: width ?? SIZES[size]?.w, ...style }}>{state}</div>;
+  if (state !== false) return <div ref={ref as never} style={{ width: width ?? SIZES[size]?.w, ...style }}>{state}</div>;
   const s = SIZES[size] || SIZES.md;
   const interactive = !!onClick;
   const meta = [person.crew, person.team].filter(Boolean).join(" · ");
   const Tag = interactive ? "button" : "div";
   return (
-    <Tag
+    <Tag ref={ref as never}
       type={interactive ? "button" : undefined}
       onClick={() => onClick?.(person)}
       className={[CARD, s.gap, s.pad, selected ? CARD_SEL : CARD_OFF, interactive ? "cursor-pointer" : "cursor-default", dimmed ? "opacity-[0.45]" : "opacity-100"].join(" ")}
@@ -88,4 +88,4 @@ export function PersonCard({ person, size = "md", selected = false, dimmed = fal
       {suffix}
     </Tag>
   );
-}
+});

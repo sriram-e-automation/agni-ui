@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
-import { EmptyState } from "../feedback/EmptyState.tsx";
+import React, { forwardRef, useState, useRef, useEffect } from "react";
+import { getFocusable, mergeRefs, useFocusTrap, useStableId } from "../../utils/interaction.tsx";
+import { EmptyState } from "../../feedback/EmptyState/EmptyState.tsx";
 
 export interface PanelIconMenuProps {
   /** Phosphor icon class (without "ph "). */
@@ -11,11 +12,10 @@ export interface PanelIconMenuProps {
   width?: number;
   children?: React.ReactNode;
 }
-export interface MenuRowProps {
+export interface MenuRowProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "type"> {
   type?: "radio" | "checkbox";
   label?: React.ReactNode;
   checked?: boolean;
-  onClick?: () => void;
 }
 export interface PanelEmptyProps { icon: string; text?: React.ReactNode; title?: React.ReactNode; action?: React.ReactNode; }
 
@@ -54,47 +54,67 @@ const MARK = "size-4 shrink-0 border-[1.5px] inline-flex items-center justify-ce
 const MARK_ON = "border-action-brand bg-action-brand";
 const MARK_OFF = "border-line-strong bg-transparent";
 
-export function PanelIconMenu({ icon, active, title, width = 224, children }: PanelIconMenuProps) {
+/* The popover is a small non-modal dialog (its content is free-form: labels,
+   rows, actions), labelled by its trigger: focus moves in on open and back on
+   close, ↑ / ↓ step between its controls, Escape closes. */
+export const PanelIconMenu = forwardRef<HTMLDivElement, PanelIconMenuProps>(function PanelIconMenu({ icon, active, title, width = 224, children }, fwd) {
   const [open, setOpen] = useState(false);
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement>(null);
+  const pop = useRef<HTMLDivElement>(null);
+  const base = useStableId(null, "agni-panel-menu");
+  useFocusTrap(pop, open);
   useEffect(() => {
     if (!open) return;
-    const h = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    const h = (e: MouseEvent) => { if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false); };
     document.addEventListener("mousedown", h);
     return () => document.removeEventListener("mousedown", h);
   }, [open]);
   return (
-    <div ref={ref} className="relative shrink-0">
+    <div ref={mergeRefs(fwd, ref)} className="relative shrink-0">
       <style>{`@keyframes agni-panel-menu-in { from { opacity:0; transform:scale(0.97) translateY(4px); } to { opacity:1; transform:scale(1) translateY(0); } }`}</style>
-      <button type="button" title={title} onClick={() => setOpen(o => !o)}
+      <button type="button" id={base + "-trigger"} title={title} aria-label={title}
+        aria-haspopup="dialog" aria-expanded={open} aria-controls={open ? base : undefined}
+        onClick={() => setOpen(o => !o)}
         className={[TRIGGER, open ? TRIGGER_OPEN : active ? TRIGGER_ACTIVE : TRIGGER_REST].join(" ")}>
-        <i className={"ph " + icon} />
-        {active && <span className={DOT} />}
+        <i aria-hidden="true" className={"ph " + icon} />
+        {active && <span className={DOT}><span className="sr-only">(active)</span></span>}
       </button>
       {open && (
-        <div className={POPOVER} style={{ width, animation: "agni-panel-menu-in var(--dur-fast) ease" }}>
+        <div ref={pop} id={base} role="dialog" aria-labelledby={base + "-trigger"}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); setOpen(false); return; }
+            if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
+            const items = getFocusable(pop.current);
+            const at = items.indexOf(document.activeElement as HTMLElement);
+            const next = items[(at + (e.key === "ArrowDown" ? 1 : -1) + items.length) % items.length];
+            if (next) { e.preventDefault(); next.focus(); }
+          }}
+          className={POPOVER} style={{ width, animation: "agni-panel-menu-in var(--dur-fast) ease" }}>
           {children}
         </div>
       )}
     </div>
   );
-}
+});
 
-export function MenuRow({ type, label, checked, onClick }: MenuRowProps) {
+export const MenuRow = forwardRef<HTMLButtonElement, MenuRowProps>(function MenuRow({ type, label, checked, className = "", ...rest }, ref) {
   return (
-    <button type="button" onClick={onClick} className={ROW}>
-      <span className={[MARK, type === "radio" ? "rounded-full" : "rounded-xs", checked ? MARK_ON : MARK_OFF].join(" ")}>
+    <button {...rest} ref={ref} type="button"
+      role={type === "radio" ? "radio" : type === "checkbox" ? "checkbox" : undefined}
+      aria-checked={type ? !!checked : undefined}
+      className={[ROW, className].join(" ")}>
+      <span aria-hidden="true" className={[MARK, type === "radio" ? "rounded-full" : "rounded-xs", checked ? MARK_ON : MARK_OFF].join(" ")}>
         {checked && <i className={type === "radio" ? "ph-bold ph-circle" : "ph-bold ph-check"}
           style={{ fontSize: type === "radio" ? 7 : 11 }} />}
       </span>
       {label}
     </button>
   );
-}
+});
 
 /** Side-panel empty state — the DS EmptyState at panel size, unbordered. */
-export function PanelEmpty({ icon, text, title, action }: PanelEmptyProps) {
-  return <EmptyState icon={icon} size="sm" bordered={false} title={title ?? text} message={title ? text : undefined} action={action} />;
-}
+export const PanelEmpty = forwardRef<HTMLDivElement, PanelEmptyProps>(function PanelEmpty({ icon, text, title, action }, ref) {
+  return <EmptyState ref={ref} icon={icon} size="sm" bordered={false} title={title ?? text} message={title ? text : undefined} action={action} />;
+});
 
 export const PanelKit = { PanelIconMenu, MenuRow, PanelEmpty, panelMenuLabelStyle, panelMenuLabelCls };

@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
-import { ChartKit } from "./ChartKit.tsx";
+import { mergeRefs } from "../../utils/interaction.tsx";
+import { ChartKit } from "../../utils/ChartKit.tsx";
 
 /* ── Types (mirrored in LineChart.d.ts) ── */
 export interface LineSeries {
@@ -58,10 +59,10 @@ function norm(series, xAxis, data, area) {
   return { cats: d.map((x) => x.label), series: [{ label: "Value", area, showMark: true, data: d.map((x) => x.value) }] };
 }
 
-function LineChartBody({
+function LineChartBody({ forwardedRef,
   series, xAxis, data, area, color: singleColor,
   height, showGrid = true, hideLegend = false, hideTooltip = false, style = {},
-}: LineChartProps) {
+}: LineChartProps & { forwardedRef?: React.Ref<HTMLElement> }) {
   const ref = useRef(null);
   const gid = useRef("agniLineFill_" + Math.random().toString(36).slice(2, 8)).current;
   const W = useSize(ref, 640);
@@ -90,7 +91,7 @@ function LineChartBody({
     .map(({ s, si }) => ({ label: s.label, color: colorOf(s, si), value: fmt(s.data[ci]) }));
 
   return (
-    <div ref={ref} style={{ width: "100%", minWidth: 0, position: "relative", fontFamily: "var(--font-sans)", ...style }}>
+    <div ref={mergeRefs(forwardedRef, ref)} style={{ width: "100%", minWidth: 0, position: "relative", fontFamily: "var(--font-sans)", ...style }}>
       <svg viewBox={`0 0 ${W} ${H}`} style={{ width: "100%", height: "auto", display: "block" }}>
         <defs>
           {model.series.map((s, si) => (
@@ -161,7 +162,7 @@ function LineChartBody({
 /* State contract — error → loading → empty → chart, resolved once in ChartKit
    (see chartState). The body mounts only when there is data, so hook order
    never changes between states. */
-export function LineChart(props) {
+export const LineChart = React.forwardRef<HTMLElement, any>(function LineChart(props, ref) {
   const state = ChartKit.chartState(props, { icon: "ph-chart-line" });
   if (state !== false) {
     return (
@@ -170,5 +171,5 @@ export function LineChart(props) {
       </div>
     );
   }
-  return <LineChartBody {...props} />;
-}
+  return <LineChartBody {...props} forwardedRef={ref} />;
+});

@@ -88,7 +88,7 @@ export interface GanttTimelineProps {
  * column, a two-tier sticky time header, status-toned bars (shared kanban
  * tokens), a today line, hover tooltips and a ‹ Today › navigator. Scales:
  * day · week · month · quarter · year.
- * @version 1.0.0
+ * @version 1.1.0
   * States: loading · error · empty.
 */
-export declare function GanttTimeline(props: GanttTimelineProps): JSX.Element;
+export declare const GanttTimeline: React.ForwardRefExoticComponent<GanttTimelineProps & React.RefAttributes<HTMLElement>>;

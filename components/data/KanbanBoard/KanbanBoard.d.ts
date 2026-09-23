@@ -35,7 +35,7 @@ export interface KanbanBoardProps {
   onRetry?: (column?: string) => void;
 }
 /** Kanban lane layout: tone-tinted sticky headers + count pills, scrolling lane bodies, DS KanbanCard by default.
- *  @version 1.0.0
+ *  @version 1.1.0
   * States: loading · error · empty.
 */
-export declare function KanbanBoard(props: KanbanBoardProps): JSX.Element;
+export declare const KanbanBoard: React.ForwardRefExoticComponent<KanbanBoardProps & React.RefAttributes<HTMLDivElement>>;

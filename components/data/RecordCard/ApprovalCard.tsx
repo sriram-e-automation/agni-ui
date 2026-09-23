@@ -3,7 +3,8 @@
  * API (no .d.ts, no specimen card). Use RecordCard with the matching preset.
  */
 import React, { useState } from "react";
-import { Avatar } from "../core/Avatar.tsx";
+import { pressableProps } from "../../utils/interaction.tsx";
+import { Avatar } from "../../primitives/Avatar/Avatar.tsx";
 
 export interface ApprovalCategoryMeta { dept: string; icon: string; clr: string; }
 export interface ApprovalCardProps {
@@ -36,7 +37,7 @@ const DEFAULT_TYPE_BY_CAT = { "Type A": "Purchase request", "Type B": "Service r
  * dot + request type, ID/date/requester grid, and ✗ quick-reject +
  * "Approve & assign" actions.
  */
-export function ApprovalCard({ row, onView, onQuickReject, highlight, selected, categoryMeta, typeByCategory }: ApprovalCardProps) {
+export const ApprovalCard = React.forwardRef<HTMLDivElement, ApprovalCardProps>(function ApprovalCard({ row, onView, onQuickReject, highlight, selected, categoryMeta, typeByCategory }, ref) {
   highlight = selected || highlight;   /* `selected` is the DS-wide word */
   const [hov, setHov] = useState(false);
   const cats = categoryMeta || DEFAULT_CAT_META;
@@ -48,7 +49,9 @@ export function ApprovalCard({ row, onView, onQuickReject, highlight, selected, 
   const fVal = { fontSize: "var(--text-xs)", color: "var(--text-primary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" };
   const fMono = { ...fVal, fontFamily: "var(--font-data)" };
   return (
-    <div onClick={onView} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+    <div ref={ref as never} {...pressableProps(onView)}
+      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+      className="outline-none focus-visible:focus-ring"
       style={{ background: highlight ? "var(--surface-brand-soft)" : "var(--surface-card)", border: "1.5px solid " + (active ? "var(--action-brand)" : "var(--border-subtle)"),
         borderRadius: "var(--radius-lg)", overflow: "hidden", cursor: "pointer", flexShrink: 0,
         transition: "border-color var(--dur-fast), box-shadow var(--dur-fast), background var(--dur-fast)",
@@ -88,4 +91,4 @@ export function ApprovalCard({ row, onView, onQuickReject, highlight, selected, 
       </div>
     </div>
   );
-}
+});

@@ -1,4 +1,4 @@
-import { resolveDataState } from "../feedback/DataState.tsx";
+import { resolveDataState } from "./DataState.tsx";
 import React, { useState, useRef, useEffect } from "react";
 
 /* ── Types (mirrored in ChartKit.d.ts) ── */

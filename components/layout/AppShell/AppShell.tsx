@@ -41,7 +41,7 @@ const RAIL = "shrink-0 min-h-0 transition-[width] duration-normal ease-standard"
 const CONTENT = "flex-1 min-w-0 min-h-0 overflow-auto";
 const FOOTER = "shrink-0 z-[20]";
 
-export function AppShell({
+export const AppShell = React.forwardRef<HTMLDivElement, AppShellProps>(function AppShell({
   header = null,
   sidebar = null,
   sidebarWidth = "var(--rail-drawer-w-md)",
@@ -51,9 +51,9 @@ export function AppShell({
   style = {},
   children,
   ...rest
-}: AppShellProps) {
+}, ref) {
   return (
-    <div className={SHELL} style={style} {...rest}>
+    <div ref={ref as never} className={SHELL} style={style} {...rest}>
       {header && <div className={HEADER}>{header}</div>}
 
       <div className={MID}>
@@ -66,4 +66,4 @@ export function AppShell({
       {footer && <div className={FOOTER}>{footer}</div>}
     </div>
   );
-}
+});

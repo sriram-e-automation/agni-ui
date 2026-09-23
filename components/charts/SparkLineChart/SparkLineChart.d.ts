@@ -23,7 +23,7 @@ export interface SparkLineChartProps {
   empty?: React.ReactNode;
 }
 /** Compact, axis-less trend (line or bar) for inline KPI / table use.
- *  @version 1.0.0
+ *  @version 1.1.0
   * States: loading · error · empty.
 */
-export declare function SparkLineChart(props: SparkLineChartProps): JSX.Element;
+export declare const SparkLineChart: React.ForwardRefExoticComponent<SparkLineChartProps & React.RefAttributes<HTMLElement>>;

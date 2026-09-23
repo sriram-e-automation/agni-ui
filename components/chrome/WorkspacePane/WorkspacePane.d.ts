@@ -19,7 +19,7 @@ export interface WorkspacePaneProps {
   style?: React.CSSProperties;
 }
 /** Right-hand collapsible utility rail.
- *  @version 1.0.0
+ *  @version 1.1.0
   * States: open.
 */
-export declare function WorkspacePane(props: WorkspacePaneProps): JSX.Element;
+export declare const WorkspacePane: React.ForwardRefExoticComponent<WorkspacePaneProps & React.RefAttributes<HTMLDivElement>>;

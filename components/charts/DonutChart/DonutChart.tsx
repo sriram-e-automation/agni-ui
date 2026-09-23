@@ -1,5 +1,5 @@
 import React from "react";
-import { PieChart } from "./PieChart.tsx";
+import { PieChart } from "../PieChart/PieChart.tsx";
 
 /* ── Types (mirrored in DonutChart.d.ts) ── */
 export interface DonutDatum {
@@ -29,11 +29,11 @@ export interface DonutChartProps {
  * `<DonutChart data={…} />` call sites keep working. New code can use
  * <PieChart series={[{ data, innerRadius }]} /> directly.
  */
-export function DonutChart({
+export const DonutChart = React.forwardRef<HTMLElement, DonutChartProps>(function DonutChart({
   data = [], legend = true, thickness = 0.4, centerLabel = "total", centerValue, style = {}, ...state
-}: DonutChartProps) {
+}, ref) {
   return (
-    <PieChart
+    <PieChart ref={ref as never}
       data={data}
       innerRadius={1 - Math.max(0.15, Math.min(0.7, thickness))}
       centerLabel={centerLabel}
@@ -43,7 +43,7 @@ export function DonutChart({
       {...state}
     />
   );
-}
+});
 
 /* State contract: loading · error · onRetry · empty pass straight through to
    PieChart, which resolves error → loading → empty → chart. No second wrapper

@@ -22,7 +22,7 @@ export interface ScatterChartProps {
   empty?: React.ReactNode;
 }
 /** Scatter / point chart — multiple x/y series, hover highlight + legend.
- *  @version 1.0.0
+ *  @version 1.1.0
   * States: loading · error · empty.
 */
-export declare function ScatterChart(props: ScatterChartProps): JSX.Element;
+export declare const ScatterChart: React.ForwardRefExoticComponent<ScatterChartProps & React.RefAttributes<HTMLElement>>;

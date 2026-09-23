@@ -1,5 +1,6 @@
-import { resolveDataState } from "../feedback/DataState.tsx";
+import { resolveDataState } from "../../utils/DataState.tsx";
 import React from "react";
+import { pressableProps } from "../../utils/interaction.tsx";
 
 /* ── Types (mirrored in GanttTimeline.d.ts) ── */
 /** One bar on the timeline. Extra fields are legal — `groupBy` reads any of them. */
@@ -300,7 +301,7 @@ function BarTip({ tip }) {
 }
 
 /* ══════════════════════════════════════════════════════════════ */
-function GanttTimelineBody({
+function GanttTimelineBody({ forwardedRef,
   items = [],
   groupOptions = [],
   groupBy: groupByProp, defaultGroupBy = null, onGroupByChange,
@@ -418,7 +419,7 @@ function GanttTimelineBody({
   const t1H = 26, t2H = 26;
 
   return (
-    <div className="flex flex-col min-h-0 min-w-0 border border-line-subtle rounded-lg bg-surface-card overflow-hidden font-sans" style={style}>
+    <div ref={forwardedRef as never} className="flex flex-col min-h-0 min-w-0 border border-line-subtle rounded-lg bg-surface-card overflow-hidden font-sans" style={style}>
 
       {/* ── Chrome — group-by toolbar (optional) + navigator w/ scale toggle ── */}
       {((showToolbar && groupOptions.length > 0) || (showNavigator && parsed.length > 0)) && (
@@ -486,10 +487,11 @@ function GanttTimelineBody({
               return (
                 <React.Fragment key={g.key == null ? "__flat" : g.key}>
                   {g.key != null && (
-                    <div onClick={() => setCollapsed((p) => ({ ...p, [g.key]: !p[g.key] }))}
-                      className="flex cursor-pointer select-none bg-[var(--gantt-group-bg)] border-b border-b-[var(--gantt-grid-line)]">
+                    <div {...pressableProps(() => setCollapsed((p) => ({ ...p, [g.key]: !p[g.key] })))}
+                      aria-expanded={!isCollapsed}
+                      className="flex cursor-pointer select-none outline-none focus-visible:focus-ring bg-[var(--gantt-group-bg)] border-b border-b-[var(--gantt-grid-line)]">
                       <div className="sticky left-0 z-[2] shrink-0 box-border flex items-center gap-2 px-3 h-[32px] bg-[var(--gantt-group-bg)] border-r border-r-[var(--gantt-grid-line)]" style={{ width: leftW }}>
-                        <i className={"ph text-[11px] text-fg-tertiary shrink-0 " + (isCollapsed ? "ph-caret-right" : "ph-caret-down")} />
+                        <i aria-hidden="true" className={"ph text-[11px] text-fg-tertiary shrink-0 " + (isCollapsed ? "ph-caret-right" : "ph-caret-down")} />
                         <span className="text-xs font-semibold text-fg-primary overflow-hidden text-ellipsis whitespace-nowrap">{g.label}</span>
                         <span className="text-2xs font-data text-fg-tertiary bg-surface-card border border-line-subtle rounded-full px-2 leading-[16px] shrink-0">{g.items.length}</span>
                       </div>
@@ -517,7 +519,7 @@ function GanttTimelineBody({
                           groupBy ? "pl-[30px] pr-[14px]" : "px-[14px]",
                           onItemClick ? "cursor-pointer" : "cursor-default",
                         ].join(" ")} style={{ width: leftW }}
-                          onClick={() => onItemClick && onItemClick(it)}>
+                          {...pressableProps(onItemClick ? () => onItemClick(it) : null, { label: typeof it.label === "string" ? `${it.id} ${it.label}` : String(it.id) })}>
                           <span className="size-[7px] rounded-full shrink-0" style={{ background: `var(--kanban-${tone}-dot)` }} />
                           <div className="min-w-0 leading-[1.25]">
                             <div className="text-xs font-data font-medium text-fg-primary overflow-hidden text-ellipsis whitespace-nowrap">{it.id}</div>
@@ -569,11 +571,11 @@ function GanttTimelineBody({
    lives inside the body, so replacing it would trap the user in a period they
    cannot page out of. The body already renders its own in-grid empty state
    beneath the navigator row — a string `empty` just retitles it. */
-export function GanttTimeline(props) {
+export const GanttTimeline = React.forwardRef<HTMLElement, any>(function GanttTimeline(props, ref) {
   const state = resolveDataState({
     loading: props.loading, error: props.error, onRetry: props.onRetry,
     shape: "gantt", height: props.height || 320,
   });
-  if (state !== false) return <div className="w-full" style={props.style || {}}>{state}</div>;
-  return <GanttTimelineBody {...props} emptyLabel={typeof props.empty === "string" ? props.empty : props.emptyLabel} />;
-}
+  if (state !== false) return <div ref={ref as never} className="w-full" style={props.style || {}}>{state}</div>;
+  return <GanttTimelineBody {...props} forwardedRef={ref} emptyLabel={typeof props.empty === "string" ? props.empty : props.emptyLabel} />;
+});

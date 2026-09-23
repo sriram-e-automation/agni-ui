@@ -21,7 +21,7 @@ export interface AuditTrailProps {
   empty?: React.ReactNode;
 }
 /** Read-only chronological activity / audit log.
- *  @version 1.0.0
+ *  @version 1.1.0
   * States: loading · error · empty.
 */
-export declare function AuditTrail(props: AuditTrailProps): JSX.Element;
+export declare const AuditTrail: React.ForwardRefExoticComponent<AuditTrailProps & React.RefAttributes<HTMLElement>>;

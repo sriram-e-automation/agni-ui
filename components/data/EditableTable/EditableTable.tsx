@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Tooltip } from "../feedback/Tooltip.tsx";
-import { resolveDataState } from "../feedback/DataState.tsx";
+import { Tooltip } from "../../feedback/Tooltip/Tooltip.tsx";
+import { resolveDataState } from "../../utils/DataState.tsx";
 
 /* ── Types (mirrored in EditableTable.d.ts) ── */
 export interface EditableColumn {
@@ -58,7 +58,7 @@ const ADD_BTN =
   "transition-[background-color,border-color] duration-fast " +
   "hover:bg-surface-brand-soft hover:border-line-brand";
 
-export function EditableTable({
+export const EditableTable = React.forwardRef<HTMLDivElement, EditableTableProps>(function EditableTable({
   columns = [],
   rows = [],
   onChange,
@@ -69,10 +69,10 @@ export function EditableTable({
   error,
   onRetry,
   style = {},
-}: EditableTableProps) {
+}, ref) {
   const [editing, setEditing] = useState(null); // row index in edit mode
   const state = resolveDataState({ loading, error, onRetry, shape: "editableTable" });
-  if (state !== false) return <div style={style}>{state}</div>;
+  if (state !== false) return <div ref={ref as never} style={style}>{state}</div>;
 
   const blank = () => newRow ? { ...newRow } : columns.reduce((a, c) => ({ ...a, [c.key]: c.type === "number" ? 0 : "" }), {});
   const setRow = (i, key, val) => onChange && onChange(rows.map((r, idx) => idx === i ? { ...r, [key]: val } : r));
@@ -80,7 +80,7 @@ export function EditableTable({
   const delRow = (i) => { onChange && onChange(rows.filter((_, idx) => idx !== i)); setEditing(null); };
 
   return (
-    <div className="font-sans" style={style}>
+    <div ref={ref as never} className="font-sans" style={style}>
       <div className="border border-line-subtle rounded-lg overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
@@ -104,14 +104,16 @@ export function EditableTable({
                           c.type === "select" ? (
                             <div className="relative">
                               <select value={row[c.key] ?? ""} onChange={(e) => setRow(i, c.key, e.target.value)}
+                                aria-label={`${typeof c.label === "string" ? c.label : c.key}, row ${i + 1}`}
                                 className={[CELL_INPUT, "appearance-none pr-6 cursor-pointer"].join(" ")}>
                                 <option value="" disabled>{c.placeholder || "Select…"}</option>
                                 {(c.options || []).map((o) => { const v = typeof o === "string" ? o : o.value, l = typeof o === "string" ? o : o.label; return <option key={v} value={v}>{l}</option>; })}
                               </select>
-                              <i className="ph ph-caret-down absolute right-2 top-1/2 [transform:translateY(-50%)] text-[13px] text-fg-tertiary pointer-events-none" />
+                              <i aria-hidden="true" className="ph ph-caret-down absolute right-2 top-1/2 [transform:translateY(-50%)] text-[13px] text-fg-tertiary pointer-events-none" />
                             </div>
                           ) : (
-                            <input type={c.type === "number" ? "number" : "text"} value={row[c.key] ?? ""} placeholder={c.placeholder || ""} onChange={(e) => setRow(i, c.key, c.type === "number" ? Number(e.target.value) : e.target.value)} data-agni-input=""
+                            <input type={c.type === "number" ? "number" : "text"} value={row[c.key] ?? ""} placeholder={c.placeholder || ""}
+                              aria-label={`${typeof c.label === "string" ? c.label : c.key}, row ${i + 1}`} onChange={(e) => setRow(i, c.key, c.type === "number" ? Number(e.target.value) : e.target.value)} data-agni-input=""
                               className={[CELL_INPUT, c.type === "number" ? "font-data" : "font-sans"].join(" ")} style={{ textAlign: c.align || "left" }} />
                           )
                         ) : (
@@ -135,4 +137,4 @@ export function EditableTable({
       </button>
     </div>
   );
-}
+});

@@ -15,6 +15,6 @@ export interface DocumentPreviewProps {
 }
 /** Attachment / document preview row with actions.
  *  States: loading · error (empty does not apply — single value, not a collection).
- *  @version 1.0.0
+ *  @version 1.1.0
  */
-export declare function DocumentPreview(props: DocumentPreviewProps): JSX.Element;
+export declare const DocumentPreview: React.ForwardRefExoticComponent<DocumentPreviewProps & React.RefAttributes<HTMLElement>>;

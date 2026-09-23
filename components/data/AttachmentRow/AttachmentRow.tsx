@@ -1,5 +1,5 @@
 import React from "react";
-import { resolveDataState } from "../feedback/DataState.tsx";
+import { resolveDataState } from "../../utils/DataState.tsx";
 
 /* Tailwind v4 (migrated Aug 2026, tranche 7a). The row's `hov` useState is
    gone (hover: on the row); the upload bar's width is the live percentage and
@@ -31,13 +31,13 @@ const ACT =
   "cursor-pointer text-fg-secondary text-[14px] p-0 transition-[border-color,color] duration-fast " +
   "hover:border-line-brand hover:text-fg-brand";
 
-export function AttachmentRow({ name, meta, kind, progress, error, loading, onView, onDownload, onRemove, onRetry, style }) {
+export const AttachmentRow = React.forwardRef<HTMLDivElement, any>(function AttachmentRow({ name, meta, kind, progress, error, loading, onView, onDownload, onRemove, onRetry, style }, ref) {
   const state = resolveDataState({ loading, shape: "attachmentRow" });
-  if (state !== false) return <div style={style}>{state}</div>;
+  if (state !== false) return <div ref={ref as never} style={style}>{state}</div>;
   const k = kindOf(name, kind);
   const uploading = progress != null && progress < 100 && !error;
   return (
-    <div className={ROW} style={style}>
+    <div ref={ref as never} className={ROW} style={style}>
       <i className={[error ? "ph-fill ph-warning-circle" : k.icon, "text-[20px] shrink-0", error ? "text-status-error" : k.tint].join(" ")} />
       <div className="flex-1 min-w-0">
         <p className={NAME}>{name}</p>
@@ -50,11 +50,11 @@ export function AttachmentRow({ name, meta, kind, progress, error, loading, onVi
             : <p className="m-0 text-2xs font-data text-fg-tertiary">{meta}</p>}
       </div>
       <div className="flex gap-1 shrink-0">
-        {error && onRetry && <button type="button" title="Retry" onClick={onRetry} className={ACT}><i className="ph ph-arrow-clockwise" /></button>}
-        {!uploading && !error && onView && <button type="button" title="View" onClick={onView} className={ACT}><i className="ph ph-eye" /></button>}
-        {!uploading && !error && onDownload && <button type="button" title="Download" onClick={onDownload} className={ACT}><i className="ph ph-download-simple" /></button>}
-        {onRemove && <button type="button" title="Remove" onClick={onRemove} className={ACT}><i className="ph ph-x" /></button>}
+        {error && onRetry && <button type="button" title="Retry" aria-label={"Retry " + name} onClick={onRetry} className={ACT}><i aria-hidden="true" className="ph ph-arrow-clockwise" /></button>}
+        {!uploading && !error && onView && <button type="button" title="View" aria-label={"View " + name} onClick={onView} className={ACT}><i aria-hidden="true" className="ph ph-eye" /></button>}
+        {!uploading && !error && onDownload && <button type="button" title="Download" aria-label={"Download " + name} onClick={onDownload} className={ACT}><i aria-hidden="true" className="ph ph-download-simple" /></button>}
+        {onRemove && <button type="button" title="Remove" aria-label={"Remove " + name} onClick={onRemove} className={ACT}><i aria-hidden="true" className="ph ph-x" /></button>}
       </div>
     </div>
   );
-}
+});

@@ -1,7 +1,10 @@
-import { resolveDataState } from "../feedback/DataState.tsx";
-import { EmptyState } from "../feedback/EmptyState.tsx";
+import { resolveDataState } from "../../utils/DataState.tsx";
+import { EmptyState } from "../../feedback/EmptyState/EmptyState.tsx";
 import React from "react";
-import { StatusChip } from "./StatusChip.tsx";
+import { pressableProps } from "../../utils/interaction.tsx";
+/* Spoken day names for the day cells. */
+const DAY_LABEL = new Intl.DateTimeFormat(undefined, { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+import { StatusChip } from "../StatusChip/StatusChip.tsx";
 
 /* ── Types (mirrored in Calendar.d.ts) ── */
 export interface CalendarRecord {
@@ -130,9 +133,10 @@ function MonthCell({ date, other, today, selected, records, order, onSelect }: a
   const extra = Object.keys(counts).filter((s) => !order.includes(s));
   const wknd = isWeekend(date);
   return (
-    <div onClick={() => onSelect(date)}
+    <div {...pressableProps(() => onSelect(date), { pressed: !!selected, label: DAY_LABEL.format(date) + (records.length ? `, ${records.length} record${records.length > 1 ? "s" : ""}` : "") })}
+      aria-current={isToday ? "date" : undefined}
       className={[
-        CELL_BASE,
+        CELL_BASE, "focus-visible:focus-ring",
         selected ? "bg-surface-brand-soft outline outline-2 outline-line-brand -outline-offset-2" : "outline-none",
         selected ? "" : (wknd && !other ? "bg-surface-soft" : "bg-transparent"),
         !other && !selected ? "hover:bg-surface-soft" : "",
@@ -212,7 +216,8 @@ function WeekView({ cursor, selected, today, byDate, order, onSelect }: any) {
           const shown = order.filter((s: string) => counts[s]);
           const sel = sameDay(d, selected);
           return (
-            <div key={+d} onClick={() => onSelect(d)} className={[
+            <div key={+d} {...pressableProps(() => onSelect(d), { pressed: sel, label: DAY_LABEL.format(d) })} className={[
+              "focus-visible:focus-ring",
               "border-r border-line-subtle p-2 flex flex-col gap-1 cursor-pointer",
               sel ? "bg-surface-brand-soft outline outline-2 outline-line-brand -outline-offset-2"
                   : (isWeekend(d) ? "bg-surface-soft outline-none" : "bg-transparent outline-none"),
@@ -248,7 +253,7 @@ function YearView({ cursor, selected, today, byDate, onSelect }: any) {
                   const sel = sameDay(date, selected);
                   const hasRec = recs.length > 0;
                   return (
-                    <div key={i} onClick={() => onSelect(date)} title={hasRec ? `${recs.length} record${recs.length > 1 ? "s" : ""}` : undefined} className="h-[26px] flex items-center justify-center cursor-pointer">
+                    <div key={i} {...pressableProps(() => onSelect(date), { pressed: sel, label: DAY_LABEL.format(date) + (hasRec ? `, ${recs.length} record${recs.length > 1 ? "s" : ""}` : "") })} title={hasRec ? `${recs.length} record${recs.length > 1 ? "s" : ""}` : undefined} className="h-[26px] flex items-center justify-center cursor-pointer">
                       <span className={[
                         "relative size-[22px] rounded-full flex items-center justify-center font-data text-2xs",
                         isToday ? "bg-surface-brand text-[#fff]" : "bg-transparent text-fg-secondary",
@@ -282,8 +287,8 @@ function DayPanel({ selected, records, onRecordClick, emptyLabel }: any) {
       <div className="py-2 px-3 border-b border-line-subtle shrink-0">
         <div className="flex items-center gap-2 bg-surface-soft border border-line-subtle rounded-md p-2">
           <i className="ph ph-magnifying-glass text-[15px] text-fg-tertiary" />
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search records…" className="flex-1 min-w-0 border-none bg-transparent outline-none font-sans text-sm text-fg-primary" />
-          {q && <i className="ph ph-x text-[14px] text-fg-tertiary cursor-pointer" onClick={() => setQ("")} />}
+          <input type="search" aria-label="Search records" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search records…" className="flex-1 min-w-0 border-none bg-transparent outline-none font-sans text-sm text-fg-primary" />
+          {q && <button type="button" aria-label="Clear search" onClick={() => setQ("")} className="inline-flex border-none bg-transparent p-0 cursor-pointer text-fg-tertiary"><i aria-hidden="true" className="ph ph-x text-[14px]" /></button>}
         </div>
       </div>
       <div className="flex-1 min-w-0 overflow-y-auto p-3 flex flex-col gap-2">
@@ -308,7 +313,8 @@ const DAY_ROW_OFF = "border-line-subtle bg-surface-card cursor-default";
 function DayRow({ r, onClick }: { r: CalendarRecord; onClick?: (r: CalendarRecord) => void }) {
   const clickable = !!onClick;
   return (
-    <div onClick={() => onClick?.(r)} className={[DAY_ROW, clickable ? DAY_ROW_ON : DAY_ROW_OFF].join(" ")}>
+    <div {...pressableProps(clickable ? () => onClick?.(r) : null, { label: [r.id, r.title].filter(Boolean).join(" — ") })}
+      className={[DAY_ROW, clickable ? DAY_ROW_ON + " outline-none focus-visible:focus-ring" : DAY_ROW_OFF].join(" ")}>
       <div className="flex items-center justify-between gap-2 mb-[3px]">
         <span className="font-data text-2xs text-fg-tertiary">{r.id}</span>
         {r.status && <StatusChip status={r.status} size="sm" />}
@@ -351,7 +357,7 @@ function SegToggle({ options, value, onChange }: { options: { k: string; label: 
  * stays inline: the month grid's computed row template and the CountChip tone
  * pair, which is a runtime lookup off the record's status string.
  */
-function CalendarBody({
+function CalendarBody({ forwardedRef,
   records = [],
   view,
   defaultView = "month",
@@ -410,7 +416,7 @@ function CalendarBody({
   const daySel = byDate[key(sel)] || [];
 
   return (
-    <div className="flex flex-col h-full min-h-0 bg-surface-card border border-line-subtle rounded-lg shadow-e-xs overflow-hidden" style={style}>
+    <div ref={forwardedRef as never} className="flex flex-col h-full min-h-0 bg-surface-card border border-line-subtle rounded-lg shadow-e-xs overflow-hidden" style={style}>
       {showToolbar && (
         <div className="flex items-center justify-between gap-3 flex-wrap py-2 px-3 border-b border-line-subtle shrink-0">
           <div className="flex items-center gap-1">
@@ -450,11 +456,11 @@ const NAV_BTN =
    period must NOT: the navigator lives inside the body, so replacing it would
    trap the user in a period they cannot page out of. Emptiness is forwarded and
    rendered inside the grid region, beneath the navigator row. */
-export function Calendar(props) {
+export const Calendar = React.forwardRef<HTMLElement, any>(function Calendar(props, ref) {
   const state = resolveDataState({
     loading: props.loading, error: props.error, onRetry: props.onRetry,
     shape: "calendar", height: props.height || 420,
   });
-  if (state !== false) return <div className="w-full" style={props.style || {}}>{state}</div>;
-  return <CalendarBody {...props} isEmpty={!(props.records && props.records.length)} />;
-}
+  if (state !== false) return <div ref={ref as never} className="w-full" style={props.style || {}}>{state}</div>;
+  return <CalendarBody {...props} forwardedRef={ref} isEmpty={!(props.records && props.records.length)} />;
+});

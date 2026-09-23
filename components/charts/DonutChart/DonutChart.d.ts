@@ -26,7 +26,7 @@ export interface DonutChartProps {
   empty?: React.ReactNode;
 }
 /** Responsive donut / proportion chart with legend (themes via --chart-* tokens).
- *  @version 1.0.0
+ *  @version 1.1.0
   * States: loading · error · empty.
 */
-export declare function DonutChart(props: DonutChartProps): JSX.Element;
+export declare const DonutChart: React.ForwardRefExoticComponent<DonutChartProps & React.RefAttributes<HTMLElement>>;

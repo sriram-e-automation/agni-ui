@@ -1,5 +1,5 @@
 import * as React from "react";
-export interface ErrorStateProps {
+export interface ErrorStateProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
   /** Phosphor icon class. @default "ph-warning-octagon" */
   icon?: string;
   /** @default "Couldn't load this" */
@@ -24,6 +24,7 @@ export interface ErrorStateProps {
  * The failure counterpart to EmptyState — what failed, and the way back.
  * Consumed internally by DataTable, KanbanBoard, Card and RequestDetailModal
  * through their `error` props.
- * @version 1.0.0
+ * role="alert" by default (override with `role`); the ref is the block.
+ * @version 1.1.0
  */
-export declare function ErrorState(props: ErrorStateProps): JSX.Element;
+export declare const ErrorState: React.ForwardRefExoticComponent<ErrorStateProps & React.RefAttributes<HTMLDivElement>>;

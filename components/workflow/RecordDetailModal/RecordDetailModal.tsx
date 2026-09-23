@@ -7,6 +7,6 @@ import { RequestDetailModal } from "./RequestDetailModal.tsx";
  * (a record), never one business object. RequestDetailModal remains as the
  * internal renderer.
  */
-export function RecordDetailModal(props: any) {
-  return <RequestDetailModal {...props} />;
-}
+export const RecordDetailModal = React.forwardRef<HTMLElement, any>(function RecordDetailModal(props, ref) {
+  return <RequestDetailModal ref={ref as never} {...props} />;
+});

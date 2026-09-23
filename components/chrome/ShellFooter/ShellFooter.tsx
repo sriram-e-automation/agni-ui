@@ -1,5 +1,5 @@
 import React from "react";
-import { Bar } from "../layout/Bar.tsx";
+import { Bar } from "../../layout/Bar/Bar.tsx";
 
 export interface ShellFooterProps {
   /** Text before the signature logo. @default "Designed & developed by" */
@@ -25,9 +25,9 @@ export interface ShellFooterProps {
  */
 const META = "text-xs text-fg-tertiary";
 
-export function ShellFooter({ signatureText = "Designed & developed by", signatureLogoSrc, signatureAlt = "", copyright, children, style }: ShellFooterProps) {
+export const ShellFooter = React.forwardRef<HTMLElement, ShellFooterProps>(function ShellFooter({ signatureText = "Designed & developed by", signatureLogoSrc, signatureAlt = "", copyright, children, style }, ref) {
   return (
-    <Bar position="footer" style={style}>
+    <Bar ref={ref as never} position="footer" style={style}>
       {children ?? <>
         <span className={["inline-flex items-center gap-1", META].join(" ")}>
           {signatureText}
@@ -37,4 +37,4 @@ export function ShellFooter({ signatureText = "Designed & developed by", signatu
       </>}
     </Bar>
   );
-}
+});

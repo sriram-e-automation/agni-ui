@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
-import { ChartKit } from "./ChartKit.tsx";
+import { mergeRefs } from "../../utils/interaction.tsx";
+import { ChartKit } from "../../utils/ChartKit.tsx";
 
 /* ── Types (mirrored in SparkLineChart.d.ts) ── */
 export interface SparkLineChartProps {
@@ -28,10 +29,10 @@ export interface SparkLineChartProps {
  */
 const { useSize, color, fmt, Tooltip, Anim } = ChartKit;
 
-function SparkLineChartBody({
+function SparkLineChartBody({ forwardedRef,
   data = [], plot = "line", area = false, color: c, height = 44,
   showTooltip = false, xLabels, style = {},
-}: SparkLineChartProps) {
+}: SparkLineChartProps & { forwardedRef?: React.Ref<HTMLElement> }) {
   const ref = useRef(null);
   const gid = useRef("agniSpark_" + Math.random().toString(36).slice(2, 8)).current;
   const W = useSize(ref, 120);
@@ -45,7 +46,7 @@ function SparkLineChartBody({
   const Y = (v) => H - padY - (H - padY * 2) * ((v - min) / (max - min || 1));
 
   return (
-    <div ref={ref} style={{ width: "100%", minWidth: 40, position: "relative", fontFamily: "var(--font-sans)", ...style }}>
+    <div ref={mergeRefs(forwardedRef, ref)} style={{ width: "100%", minWidth: 40, position: "relative", fontFamily: "var(--font-sans)", ...style }}>
       <Anim />
       <svg viewBox={`0 0 ${W} ${H}`} style={{ width: "100%", height: H, display: "block" }} onMouseLeave={() => setHover(null)}>
         {plot === "bar" ? (
@@ -71,7 +72,7 @@ function SparkLineChartBody({
 /* State contract — error → loading → empty → chart, resolved once in ChartKit
    (see chartState). The body mounts only when there is data, so hook order
    never changes between states. */
-export function SparkLineChart(props) {
+export const SparkLineChart = React.forwardRef<HTMLElement, any>(function SparkLineChart(props, ref) {
   const state = ChartKit.chartState(props, { icon: "ph-pulse" });
   if (state !== false) {
     return (
@@ -80,5 +81,5 @@ export function SparkLineChart(props) {
       </div>
     );
   }
-  return <SparkLineChartBody {...props} />;
-}
+  return <SparkLineChartBody {...props} forwardedRef={ref} />;
+});

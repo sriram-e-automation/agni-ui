@@ -9,7 +9,7 @@ export interface PanelIconMenuProps {
   width?: number;
   children?: React.ReactNode;
 }
-export interface MenuRowProps {
+export interface MenuRowProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "type"> {
   type?: "radio" | "checkbox";
   label?: React.ReactNode;
   checked?: boolean;
@@ -24,14 +24,14 @@ export interface PanelEmptyProps {
 }
 /** 38px icon trigger + anchored popover with active dot.  * States: active.
 */
-export declare function PanelIconMenu(props: PanelIconMenuProps): JSX.Element;
+export declare const PanelIconMenu: React.ForwardRefExoticComponent<PanelIconMenuProps & React.RefAttributes<HTMLDivElement>>;
 /** Radio/checkbox menu row for PanelIconMenu content. */
-export declare function MenuRow(props: MenuRowProps): JSX.Element;
+export declare const MenuRow: React.ForwardRefExoticComponent<MenuRowProps & React.RefAttributes<HTMLButtonElement>>;
 /** Side-panel empty state — delegates to EmptyState at size="sm", unbordered. */
-export declare function PanelEmpty(props: PanelEmptyProps): JSX.Element;
+export declare const PanelEmpty: React.ForwardRefExoticComponent<PanelEmptyProps & React.RefAttributes<HTMLDivElement>>;
 /** Uppercase section label style for menu content. */
 export declare const panelMenuLabelStyle: React.CSSProperties;
 /** Bundle object: { PanelIconMenu, MenuRow, PanelEmpty, panelMenuLabelStyle }.
- *  @version 1.0.0
+ *  @version 1.1.0
  */
 export declare const PanelKit: { PanelIconMenu: typeof PanelIconMenu; MenuRow: typeof MenuRow; PanelEmpty: typeof PanelEmpty; panelMenuLabelStyle: React.CSSProperties };

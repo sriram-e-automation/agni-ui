@@ -1,28 +1,40 @@
-import React from "react";
+import React, { forwardRef } from "react";
+import { useFieldControl } from "../../utils/field.tsx";
+import { useStableId } from "../../utils/interaction.tsx";
 
 /* ── Types (mirrored in Input.d.ts) ── */
-export interface InputProps {
-  value?: string;
-  /** Receives the raw value string (and the event as 2nd arg). */
-  onChange?: (value: string, e?: React.ChangeEvent<HTMLInputElement>) => void;
-  placeholder?: string;
-  type?: string;
+export interface InputProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange" | "size" | "value" | "defaultValue" | "prefix"> {
+  /** Controlled value. Omit (and use `defaultValue`) for an uncontrolled field. */
+  value?: string | number;
+  defaultValue?: string | number;
+  /** Receives the raw value string, and the native change event as 2nd arg. */
+  onChange?: (value: string, e: React.ChangeEvent<HTMLInputElement>) => void;
   /** @default "md" */
   size?: "sm" | "md" | "lg";
   prefixIcon?: React.ReactNode;
   suffixIcon?: React.ReactNode;
+  /** Invalid — red edge + `aria-invalid`. Inherited from a surrounding FormField's `error`. */
   error?: boolean;
-  disabled?: boolean;
+  /** Style for the outer shell. */
   style?: React.CSSProperties;
+  /** Style for the native <input>. */
   inputStyle?: React.CSSProperties;
+  /** Class for the outer shell. */
   className?: string;
+  /** Class for the native <input>. */
+  inputClassName?: string;
 }
 /** Text field with prefix/suffix icons + focus ring. */
 
 /**
  * AgniUI · Input
  * Text field with optional prefix/suffix icon, sizes, error + disabled states.
- * NOTE: onChange receives the raw VALUE (string), not the event.
+ * NOTE: onChange receives the raw VALUE (string) first, then the event.
+ *
+ * The ref, `id`, `name` and every native attribute and event (onFocus, onBlur,
+ * onKeyDown, autoComplete, inputMode, required, …) land on the real <input>, so
+ * it drops into a <form>, a label and a form library like a native input.
  *
  * Tailwind v4 (migrated Aug 2026). The focus useState is gone — the ring is
  * `focus-within:` on the shell, so typing no longer re-renders the wrapper.
@@ -53,36 +65,49 @@ const FIELD =
 
 const AFFIX = "inline-flex shrink-0 text-[17px] text-fg-tertiary";
 
-export function Input({
+export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
   value,
+  defaultValue,
   onChange,
   placeholder = "",
   type = "text",
   size = "md",          // sm | md | lg
   prefixIcon = null,
   suffixIcon = null,
-  error = false,
-  disabled = false,
+  error,
+  disabled,
+  required,
+  id,
   style = {},
   inputStyle = {},
   className = "",
+  inputClassName = "",
   ...rest
-}: InputProps) {
+}, ref) {
+  const f = useFieldControl(
+    { id, error, disabled, required, "aria-describedby": rest["aria-describedby"], "aria-invalid": rest["aria-invalid"] },
+    useStableId(null, "agni-input"),
+  );
   return (
     <div
-      className={[SHELL, SIZE[size] || SIZE.md, disabled ? DISABLED : error ? ERROR : IDLE, className].join(" ")}
+      className={[SHELL, SIZE[size] || SIZE.md, f.disabled ? DISABLED : f.invalid ? ERROR : IDLE, className].join(" ")}
       style={style}
     >
-      {prefixIcon && <span className={AFFIX}>{prefixIcon}</span>}
+      {prefixIcon && <span aria-hidden="true" className={AFFIX}>{prefixIcon}</span>}
       <input
-        type={type} value={value} placeholder={placeholder} disabled={disabled}
-        onChange={(e) => onChange && onChange(e.target.value, e)}
-        data-agni-input=""
-        className={FIELD}
-        style={inputStyle}
         {...rest}
+        ref={ref}
+        id={f.id}
+        type={type} value={value} defaultValue={defaultValue} placeholder={placeholder}
+        disabled={f.disabled} required={f.required}
+        aria-invalid={f.invalid || undefined}
+        aria-describedby={f.describedBy}
+        onChange={(e) => onChange?.(e.target.value, e)}
+        data-agni-input=""
+        className={[FIELD, inputClassName].join(" ")}
+        style={inputStyle}
       />
-      {suffixIcon && <span className={AFFIX}>{suffixIcon}</span>}
+      {suffixIcon && <span aria-hidden="true" className={AFFIX}>{suffixIcon}</span>}
     </div>
   );
-}
+});

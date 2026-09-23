@@ -1,4 +1,5 @@
 import React from "react";
+import { pressableProps } from "../../utils/interaction.tsx";
 
 /**
  * AgniUI · OptionRow
@@ -36,10 +37,10 @@ const CARD_HOVER = "hover:shadow-e-sm";
 const FLUSH_BASE = "border-none rounded-md px-3 py-[9px]";
 const FLUSH_HOVER = "hover:bg-surface-soft";
 
-export function OptionRow({
+export const OptionRow = React.forwardRef<HTMLDivElement, OptionRowProps>(function OptionRow({
   icon, iconTone, title, desc, note, value, valueIcon, trailing,
   variant = "card", onClick, disabled, selected, style, className = "",
-}: OptionRowProps) {
+}, ref) {
   const card = variant === "card";
   const clickable = !!onClick && !disabled;
 
@@ -54,13 +55,10 @@ export function OptionRow({
   ].join(" ");
 
   return (
-    <div
+    <div ref={ref as never}
       className={cls}
       style={style}
-      onClick={disabled ? undefined : onClick}
-      role={clickable ? "button" : undefined}
-      tabIndex={clickable ? 0 : undefined}
-      onKeyDown={clickable ? (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onClick(); } } : undefined}
+      {...pressableProps(onClick, { disabled })}
     >
       <div className="flex items-start gap-3">
         {icon && (
@@ -101,4 +99,4 @@ export function OptionRow({
       )}
     </div>
   );
-}
+});

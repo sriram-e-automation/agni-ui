@@ -3,27 +3,27 @@
  * (no .d.ts, no specimen card). Import the public component instead.
  */
 import React, { useState, useEffect } from "react";
-import { Sheet } from "../containment/Sheet.tsx";
-import { Button } from "../core/Button.tsx";
-import { Avatar } from "../core/Avatar.tsx";
-import { Badge } from "../core/Badge.tsx";
-import { FormField } from "../forms/FormField.tsx";
-import { FormSection } from "../forms/FormSection.tsx";
-import { Input } from "../forms/Input.tsx";
-import { Select } from "../forms/Select.tsx";
-import { CreatableSelect } from "../forms/CreatableSelect.tsx";
-import { SearchSelect } from "../forms/SearchSelect.tsx";
-import { RadioGroup } from "../forms/Radio.tsx";
-import { Checkbox } from "../forms/Checkbox.tsx";
-import { QuantityStepper } from "../forms/QuantityStepper.tsx";
-import { FileDropzone } from "../forms/FileDropzone.tsx";
-import { RichTextEditor } from "../forms/RichTextEditor.tsx";
-import { UserSelect } from "../forms/UserSelect.tsx";
-import { MultiUserSelect } from "../forms/MultiUserSelect.tsx";
-import { EditableTable } from "../data/EditableTable.tsx";
-import { DiscardConfirmModal } from "./DiscardConfirmModal.tsx";
-import { ReviewSubmitModal } from "./ReviewSubmitModal.tsx";
-import { Banner } from "../feedback/Banner.tsx";
+import { Sheet } from "../../containment/Panel/Sheet.tsx";
+import { Button } from "../../primitives/Button/Button.tsx";
+import { Avatar } from "../../primitives/Avatar/Avatar.tsx";
+import { Badge } from "../../primitives/Badge/Badge.tsx";
+import { FormField } from "../../forms/FormField/FormField.tsx";
+import { FormSection } from "../../forms/FormSection/FormSection.tsx";
+import { Input } from "../../primitives/Input/Input.tsx";
+import { Select } from "../../primitives/Select/Select.tsx";
+import { CreatableSelect } from "../../primitives/Select/CreatableSelect.tsx";
+import { SearchSelect } from "../../primitives/Select/SearchSelect.tsx";
+import { RadioGroup } from "../../primitives/Radio/Radio.tsx";
+import { Checkbox } from "../../primitives/Checkbox/Checkbox.tsx";
+import { QuantityStepper } from "../../forms/QuantityStepper/QuantityStepper.tsx";
+import { FileDropzone } from "../../forms/FileUpload/FileDropzone.tsx";
+import { RichTextEditor } from "../../forms/RichTextEditor/RichTextEditor.tsx";
+import { UserSelect } from "../../primitives/Select/UserSelect.tsx";
+import { MultiUserSelect } from "../../primitives/Select/MultiUserSelect.tsx";
+import { EditableTable } from "../../data/EditableTable/EditableTable.tsx";
+import { DiscardConfirmModal } from "../ConfirmModal/DiscardConfirmModal.tsx";
+import { ReviewSubmitModal } from "../ConfirmModal/ReviewSubmitModal.tsx";
+import { Banner } from "../../feedback/Notice/Banner.tsx";
 
 export interface RequestOption { value: string; label: string; icon?: string; }
 export interface RequestPerson { id: string; name: string; team?: string; }
@@ -136,11 +136,11 @@ export function buildReviewSummary(data, opts = REQUEST_FORM_DEFAULTS) {
  * inline value left is the priority dot's fill — a runtime lookup keyed by the
  * form's current priority.
  */
-export function RequestForm({ open, onClose, onSubmitted, cols = 2, title, subtitle,
+export const RequestForm = React.forwardRef<HTMLDivElement, RequestFormProps>(function RequestForm({ open, onClose, onSubmitted, cols = 2, title, subtitle,
   mode = "create", value = null, submitting, busy = false, submitError, error = null,
   types = REQUEST_FORM_DEFAULTS.types, priorities = REQUEST_FORM_DEFAULTS.priorities, categories = REQUEST_FORM_DEFAULTS.categories,
   sites = REQUEST_FORM_DEFAULTS.sites, people = REQUEST_FORM_DEFAULTS.people, units = REQUEST_FORM_DEFAULTS.units,
-  makeId = () => "REC-" + String(Math.floor(Math.random() * 900) + 100) }: RequestFormProps) {
+  makeId = () => "REC-" + String(Math.floor(Math.random() * 900) + 100) }, ref) {
   /* submitting/submitError are the names this component shipped with; busy/error
      are the DS-wide words for the same two ideas. Either spelling works. */
   submitting = submitting ?? busy;
@@ -172,7 +172,7 @@ export function RequestForm({ open, onClose, onSubmitted, cols = 2, title, subti
 
   return (
     <>
-      <Sheet open={open} onClose={requestClose} icon="ph-plus"
+      <Sheet ref={ref} open={open} onClose={requestClose} icon="ph-plus"
         maxWidth={cols === 3 ? "min(1180px, 96vw)" : "var(--sheet-max-w)"}
         title={heading} subtitle={subheading}
         footer={readOnly
@@ -269,4 +269,4 @@ export function RequestForm({ open, onClose, onSubmitted, cols = 2, title, subti
         onConfirm={confirmSubmit} />
     </>
   );
-}
+});

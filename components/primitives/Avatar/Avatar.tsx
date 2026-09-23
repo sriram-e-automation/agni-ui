@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { forwardRef, useState } from "react";
 
 /* ── Types (mirrored in Avatar.d.ts) ── */
-export interface AvatarProps {
-  /** Used for initials + deterministic color. */
+export interface AvatarProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
+  /** Used for initials + deterministic color — and the accessible name. */
   name?: string;
   /** Optional photo URL. */
   src?: string | null;
@@ -14,6 +14,10 @@ export interface AvatarProps {
   square?: boolean;
   /** Saturated identity-color fill + white text, instead of the pastel bg/tinted-text default. */
   solid?: boolean;
+  /** Accessible name override. @default name */
+  alt?: string;
+  /** Hide from assistive tech — when the name is already written next to it. */
+  decorative?: boolean;
   style?: React.CSSProperties;
   className?: string;
 }
@@ -55,23 +59,31 @@ const BASE =
   "relative inline-flex items-center justify-center shrink-0 overflow-hidden " +
   "font-sans font-semibold select-none";
 
-export function Avatar({
+export const Avatar = forwardRef<HTMLSpanElement, AvatarProps>(function Avatar({
   name = "",
   src = null,
   size = "md",     // xs | sm | md | lg
   online = false,
   square = false,
   solid = false,   // true = saturated identity-color fill + white text (opaque chip, no pastel wash)
+  alt,
+  decorative = false,
   style = {},
   className = "",
   ...rest
-}: AvatarProps) {
+}, ref) {
   const [broken, setBroken] = useState(false);
   const showPhoto = src && !broken;
   const [softBg, fg] = PALETTE[hash(name) % PALETTE.length];
 
   return (
     <span
+      ref={ref}
+      /* One image to AT: the name, not two initials spelled out, and not the
+         presence dot as a separate node. */
+      role={decorative ? undefined : "img"}
+      aria-label={decorative ? undefined : [alt ?? name, online ? "online" : ""].filter(Boolean).join(", ") || undefined}
+      aria-hidden={decorative || undefined}
       className={[
         BASE,
         SIZE_CLS[size] || SIZE_CLS.md,
@@ -88,11 +100,11 @@ export function Avatar({
       {...rest}
     >
       {showPhoto
-        ? <img src={src} alt={name} onError={() => setBroken(true)} className="size-full object-cover" />
-        : initials(name)}
+        ? <img src={src} alt="" onError={() => setBroken(true)} className="size-full object-cover" />
+        : <span aria-hidden="true">{initials(name)}</span>}
       {online && (
-        <span className={[DOT_CLS[size] || DOT_CLS.md, "absolute -right-px -bottom-px rounded-full bg-status-success border-2 border-surface-card"].join(" ")} />
+        <span aria-hidden="true" className={[DOT_CLS[size] || DOT_CLS.md, "absolute -right-px -bottom-px rounded-full bg-status-success border-2 border-surface-card"].join(" ")} />
       )}
     </span>
   );
-}
+});

@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { IconButton } from "../core/IconButton.tsx";
-import { roleAllows } from "../core/RoleGate.tsx";
+import React, { forwardRef, useRef, useState } from "react";
+import { mergeRefs, useFocusTrap, useStableId } from "../../utils/interaction.tsx";
+import { IconButton } from "../../primitives/Button/IconButton.tsx";
+import { roleAllows } from "../../utils/RoleGate.tsx";
 
 export interface NavRailItem { key: string; label: string; icon: string; roles?: string[]; sub?: { key: string; label: string; roles?: string[] }[]; }
 export interface NavRailProps {
@@ -22,6 +23,11 @@ export interface NavRailProps {
   footerLogoSrc?: string;
   /** Group keys expanded initially. */
   defaultExpanded?: string[];
+  /** Viewer's role — items whose `roles` exclude it are hidden. */
+  role?: string;
+  /** Accessible name of the navigation landmark. @default "Main" */
+  label?: string;
+  id?: string;
 }
 
 /**
@@ -30,6 +36,12 @@ export interface NavRailProps {
  * collapse toggle (drawer ⇄ icon rail), an overlay-drawer mode for
  * tablet/phone, and collapsed-state active tick + tooltips. Width comes
  * from the host container (--rail-drawer-w-md / --rail-w).
+ *
+ * A navigation landmark with a real list of buttons: the current page carries
+ * aria-current="page", groups are disclosure buttons (aria-expanded /
+ * aria-controls), and the collapsed icon rail names every item. Overlay mode
+ * is a modal dialog — focus trapped, Escape closes, focus returns — and the
+ * closed overlay is hidden from the Tab order. The ref is the rail element.
  */
 /* Light and dark are two tables of COMPLETE class strings. The `dark` prop is
    the documented explicit override (theming otherwise comes from the nearest
@@ -57,7 +69,10 @@ const SUB_OFF = {
 };
 const FOOT = "px-3 py-3 border-t border-line-subtle flex items-center justify-center shrink-0";
 
-export function NavRail({ items = [], active, onSelect, open = true, onToggleOpen, overlay = false, scrim = true, onClose, dark = false, footerLogoSrc, defaultExpanded = [], role = "" }: NavRailProps) {
+export const NavRail = forwardRef<HTMLDivElement, NavRailProps>(function NavRail({ items = [], active, onSelect, open = true, onToggleOpen, overlay = false, scrim = true, onClose, dark = false, footerLogoSrc, defaultExpanded = [], role = "", label = "Main", id }, ref) {
+  const base = useStableId(id, "agni-nav");
+  const railRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(railRef, overlay && open);
   /* A desk shows only the pages its role can reach. A parent whose every
      sub-item is withheld is withheld too, so no empty group is left behind. */
   const nav = items
@@ -68,45 +83,63 @@ export function NavRail({ items = [], active, onSelect, open = true, onToggleOpe
      pointer move and made a parent and its sub-item fight over one slot. Each
      row now owns its own :hover. */
   const [expanded, setExpanded] = useState(() => Object.fromEntries(defaultExpanded.map(k => [k, true])));
-  const isParentActive = (item) => active === item.key || (item.sub && item.sub.some(s => s.key === active));
+  const isParentActive = (item: NavRailItem) => active === item.key || (item.sub && item.sub.some(s => s.key === active));
   const mode = dark ? "dark" : "light";
-  const select = (key) => { onSelect && onSelect(key); overlay && onClose && onClose(); };
+  const select = (key: string) => { onSelect && onSelect(key); overlay && onClose && onClose(); };
   const rail = (
-    <div className={[RAIL, BED[mode]].join(" ")}>
+    <div ref={mergeRefs(ref, railRef)} id={base}
+      role={overlay ? "dialog" : undefined} aria-modal={overlay && open ? true : undefined} aria-label={overlay ? label : undefined}
+      onKeyDown={overlay ? (e) => { if (e.key === "Escape") { e.stopPropagation(); onClose && onClose(); } } : undefined}
+      className={[RAIL, BED[mode]].join(" ")}>
       <div className={open ? HEAD_OPEN : HEAD_SHUT}>
-        {open && <span className={MENU_LABEL}><i className="ph ph-list" /> Menu</span>}
-        <IconButton icon={<i className={overlay ? "ph ph-x" : (open ? "ph ph-sidebar-simple" : "ph ph-sidebar")} />} variant="ghost" size="sm" onClick={() => overlay ? (onClose && onClose()) : (onToggleOpen && onToggleOpen(!open))} title={overlay ? "Close" : (open ? "Collapse" : "Expand")} />
+        {open && <span className={MENU_LABEL}><i aria-hidden="true" className="ph ph-list" /> Menu</span>}
+        <IconButton icon={<i className={overlay ? "ph ph-x" : (open ? "ph ph-sidebar-simple" : "ph ph-sidebar")} />} variant="ghost" size="sm"
+          aria-expanded={overlay ? undefined : open} aria-controls={overlay ? undefined : base + "-list"}
+          onClick={() => overlay ? (onClose && onClose()) : (onToggleOpen && onToggleOpen(!open))} title={overlay ? "Close" : (open ? "Collapse" : "Expand")} />
       </div>
-      <div className="flex-1 min-w-0 py-2">
+      <nav aria-label={label} className="flex-1 min-w-0 py-2">
+        <ul id={base + "-list"} className="m-0 p-0" style={{ listStyle: "none" }}>
         {nav.map(item => {
-          const pActive = isParentActive(item), hasSub = item.sub && item.sub.length > 0, isOpen = expanded[item.key];
+          const pActive = isParentActive(item), hasSub = !!(item.sub && item.sub.length > 0), isOpen = !!expanded[item.key];
+          const subId = `${base}-sub-${item.key}`;
           return (
-            <div key={item.key}>
-              <div
+            <li key={item.key} className="grid">
+              <button
+                type="button"
                 onClick={() => hasSub ? setExpanded(p => ({ ...p, [item.key]: !p[item.key] })) : select(item.key)}
                 title={!open ? item.label : undefined}
-                className={[ROW, open ? ROW_OPEN : ROW_SHUT, pActive ? ROW_ON[mode] : ROW_OFF[mode]].join(" ")}>
-                <i className={["ph", item.icon, "text-[20px] shrink-0"].join(" ")} />
+                aria-label={!open ? item.label : undefined}
+                aria-current={!hasSub && active === item.key ? "page" : undefined}
+                aria-expanded={hasSub && open ? isOpen : undefined}
+                aria-controls={hasSub && open && isOpen ? subId : undefined}
+                className={[ROW, open ? ROW_OPEN : ROW_SHUT, pActive ? ROW_ON[mode] : ROW_OFF[mode], "border-none text-left"].join(" ")}
+                style={{ font: "inherit" }}>
+                <i aria-hidden="true" className={["ph", item.icon, "text-[20px] shrink-0"].join(" ")} />
                 {open && <>
                   <span className={["flex-1 min-w-0 text-sm", pActive ? "font-semibold" : "font-medium"].join(" ")}>{item.label}</span>
-                  {hasSub && <i className={["ph", isOpen ? "ph-caret-up" : "ph-caret-down", "text-xs opacity-[0.7]"].join(" ")} />}
+                  {hasSub && <i aria-hidden="true" className={["ph", isOpen ? "ph-caret-up" : "ph-caret-down", "text-xs opacity-[0.7]"].join(" ")} />}
                 </>}
-                {!open && pActive && <span className={TICK} />}
-              </div>
+                {!open && pActive && <span aria-hidden="true" className={TICK} />}
+              </button>
               {open && hasSub && isOpen && (
-                <div className="mb-1">
-                  {item.sub.map(sub => (
-                    <div key={sub.key} onClick={() => select(sub.key)}
-                      className={[SUB, active === sub.key ? SUB_ON : SUB_OFF[mode]].join(" ")}>
-                      {sub.label}
-                    </div>
+                <ul id={subId} className="mb-1 m-0 p-0" style={{ listStyle: "none" }}>
+                  {item.sub!.map(sub => (
+                    <li key={sub.key} className="grid">
+                      <button type="button" onClick={() => select(sub.key)}
+                        aria-current={active === sub.key ? "page" : undefined}
+                        className={[SUB, active === sub.key ? SUB_ON : SUB_OFF[mode], "border-none text-left"].join(" ")}
+                        style={{ font: "inherit" }}>
+                        {sub.label}
+                      </button>
+                    </li>
                   ))}
-                </div>
+                </ul>
               )}
-            </div>
+            </li>
           );
         })}
-      </div>
+        </ul>
+      </nav>
       {open && footerLogoSrc && (
         <div className={FOOT}>
           <img src={footerLogoSrc} alt="" className={["h-[18px]", dark ? "opacity-[0.4]" : "opacity-[0.5]"].join(" ")} />
@@ -120,8 +153,11 @@ export function NavRail({ items = [], active, onSelect, open = true, onToggleOpe
      rather than switching between two static looks. */
   if (overlay && scrim) {
     return (
-      <div className="fixed inset-0 z-overlay" style={{ pointerEvents: open ? "auto" : "none" }}>
-        <div onClick={onClose} className="absolute inset-0 bg-[var(--scrim)] [backdrop-filter:blur(2px)] transition-[opacity] duration-normal ease-standard"
+      <div className="fixed inset-0 z-overlay"
+        /* Closed, the rail is only translated off-screen — hide it from the Tab
+           order too, once the slide-out has finished. */
+        style={{ pointerEvents: open ? "auto" : "none", visibility: open ? "visible" : "hidden", transition: open ? "visibility 0s" : "visibility 0s linear var(--dur-normal)" }}>
+        <div aria-hidden="true" onClick={onClose} className="absolute inset-0 bg-[var(--scrim)] [backdrop-filter:blur(2px)] transition-[opacity] duration-normal ease-standard"
           style={{ opacity: open ? 1 : 0 }}></div>
         <div className="absolute left-0 top-0 bottom-0 w-[min(var(--rail-drawer-w-md),84vw)] shadow-e-xl transition-[transform] duration-normal ease-standard"
           style={{ transform: open ? "translateX(0)" : "translateX(-100%)" }}>
@@ -131,4 +167,4 @@ export function NavRail({ items = [], active, onSelect, open = true, onToggleOpe
     );
   }
   return rail;
-}
+});

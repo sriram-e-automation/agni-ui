@@ -1,13 +1,13 @@
 import React from "react";
-import { Input } from "../forms/Input.tsx";
-import { Select } from "../forms/Select.tsx";
-import { IconButton } from "../core/IconButton.tsx";
-import { FilterPanel } from "./FilterPanel.tsx";
-import { DateRangeFilter } from "./DateRangeFilter.tsx";
-import { Pagination } from "./Pagination.tsx";
-import { BulkActionToolbar } from "./BulkActionToolbar.tsx";
-import { renderActions, exportToAction } from "../core/actionSpec.tsx";
-import { Loading } from "../feedback/Loading.tsx";
+import { Input } from "../../primitives/Input/Input.tsx";
+import { Select } from "../../primitives/Select/Select.tsx";
+import { IconButton } from "../../primitives/Button/IconButton.tsx";
+import { FilterPanel } from "../FilterPanel/FilterPanel.tsx";
+import { DateRangeFilter } from "../DateRangeFilter/DateRangeFilter.tsx";
+import { Pagination } from "../Pagination/Pagination.tsx";
+import { BulkActionToolbar } from "../BulkActionToolbar/BulkActionToolbar.tsx";
+import { renderActions, exportToAction } from "../../utils/actionSpec.tsx";
+import { Loading } from "../../feedback/Loading/Loading.tsx";
 
 /* ── Types (mirrored in PageControls.d.ts) ── */
 export interface PageControlsColumn { key: string; label: React.ReactNode; }
@@ -131,7 +131,7 @@ function ColumnPicker({ columns, visible, onChange, max = 5, disabled }: any) {
   );
 }
 
-export function PageControls({
+export const PageControls = React.forwardRef<HTMLDivElement, PageControlsProps>(function PageControls({
   search, onSearch, searchPlaceholder = "Search…", searching = false,
   filterSections, filterValue = null, onFilterChange,
   dateRange, onDateRangeChange,
@@ -141,8 +141,8 @@ export function PageControls({
   selectionCount = 0, bulkActions = [], onClearSelection, onClearFilters, role = "",
   leading, primaryAction, secondaryActions, exportAction, actionSize = "md", actions, pagination = null,
   loading = false, disabled = false, isPhone = false, style = {},
-}: PageControlsProps) {
-  if (loading) return <div style={style}><Loading loading shape="pageControls" /></div>;
+}, ref) {
+  if (loading) return <div ref={ref as never} style={style}><Loading loading shape="pageControls" /></div>;
 
   /* Selection mode — the toolbar is replaced by the bulk bar so the row never
      grows and the destructive actions can't hide behind a filter popover. */
@@ -171,7 +171,7 @@ export function PageControls({
   };
 
   return (
-    <div className="flex flex-col gap-2" style={{ opacity: disabled ? 0.55 : 1, ...style }}>
+    <div ref={ref as never} className="flex flex-col gap-2" style={{ opacity: disabled ? 0.55 : 1, ...style }}>
       <div aria-disabled={disabled || undefined} className={["flex flex-wrap items-center justify-between gap-2", disabled ? "pointer-events-none" : "pointer-events-auto"].join(" ")}>
         <div className="flex flex-wrap items-center gap-2">
           {leading}
@@ -222,4 +222,4 @@ export function PageControls({
       <style>{`@keyframes agni-spin{to{transform:rotate(360deg)}}`}</style>
     </div>
   );
-}
+});

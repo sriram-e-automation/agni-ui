@@ -1364,7 +1364,7 @@ const DASH_DONUT = [
   { label:"Rejected",  value:3,  color:"var(--chart-6)" },
 ];
 
-/* ChartCard is a DS component (components/charts/ChartCard.tsx) — bound in bindDS. */
+/* ChartCard is a DS component (components/charts/ChartCard/ChartCard.tsx) — bound in bindDS. */
 
 function DashboardView({ dateRange, dark }) {
   const sub = dateRange ? dateRange.label : "All time";

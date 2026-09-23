@@ -1,5 +1,6 @@
 import React from "react";
-import { resolveDataState } from "../feedback/DataState.tsx";
+import { pressableProps } from "../../utils/interaction.tsx";
+import { resolveDataState } from "../../utils/DataState.tsx";
 
 /* Tone vocabulary matches StatusChip / Badge, so an event's colour and a
    record's status colour never drift apart.
@@ -16,13 +17,12 @@ const TONES = {
 };
 const ROW = "border-0 border-l-[3px] rounded-sm p-2 flex items-start gap-2";
 
-export function EventRow({ label, time, meta, tone = "brand", icon, trailing, onClick, loading, style }) {
+export const EventRow = React.forwardRef<HTMLDivElement, any>(function EventRow({ label, time, meta, tone = "brand", icon, trailing, onClick, loading, style }, ref) {
   const state = resolveDataState({ loading, shape: "eventRow" });
-  if (state !== false) return <div style={style}>{state}</div>;
+  if (state !== false) return <div ref={ref as never} style={style}>{state}</div>;
   const t = TONES[tone] || TONES.brand;
   return (
-    <div onClick={onClick} role={onClick ? "button" : undefined} tabIndex={onClick ? 0 : undefined}
-      onKeyDown={onClick ? (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onClick(); } } : undefined}
+    <div ref={ref as never} {...pressableProps(onClick)}
       className={[ROW, t.row, onClick ? "cursor-pointer" : "cursor-default"].join(" ")} style={style}>
       {icon && <i className={["ph", icon, "text-[15px] shrink-0 mt-px", t.tx].join(" ")} />}
       <div className="flex-1 min-w-0">
@@ -37,4 +37,4 @@ export function EventRow({ label, time, meta, tone = "brand", icon, trailing, on
       {trailing}
     </div>
   );
-}
+});

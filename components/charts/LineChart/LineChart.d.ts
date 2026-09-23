@@ -39,7 +39,7 @@ export interface LineChartProps {
   empty?: React.ReactNode;
 }
 /** Line / area trend chart — multi-series, hover crosshair + interactive legend.
- *  @version 1.0.0
+ *  @version 1.1.0
   * States: loading · error · empty.
 */
-export declare function LineChart(props: LineChartProps): JSX.Element;
+export declare const LineChart: React.ForwardRefExoticComponent<LineChartProps & React.RefAttributes<HTMLElement>>;

@@ -1,8 +1,18 @@
-import React from "react";
-import { PanelBase } from "./PanelBase.tsx";
-import { Sheet } from "./Sheet.tsx";
-import { Drawer } from "./Drawer.tsx";
-import { resolvePanelBody } from "./panelState.tsx";
+import React, { forwardRef } from "react";
+import { PanelBase, type PanelProps as InlineProps } from "./PanelBase.tsx";
+import { Sheet, type SheetProps } from "./Sheet.tsx";
+import { Drawer, type DrawerProps } from "./Drawer.tsx";
+import { resolvePanelBody } from "../../utils/panelState.tsx";
+
+/* ── Types (mirrored in Panel.d.ts) ── */
+export interface PanelProps
+  extends Omit<InlineProps, "title">,
+    Omit<SheetProps, keyof InlineProps | "title">,
+    Omit<DrawerProps, keyof InlineProps | keyof SheetProps | "title"> {
+  /** Where the panel sits. @default "inline" */
+  variant?: "inline" | "sheet" | "drawer";
+  title?: React.ReactNode;
+}
 
 /**
  * AgniUI · Panel
@@ -21,15 +31,24 @@ import { resolvePanelBody } from "./panelState.tsx";
  * a sticky Save above an ErrorState offers an action that cannot be performed.
  * `empty` keeps the footer, because the action beside an empty body is usually
  * the way out of it.
+ *
+ * inline → a named region (collapsible: a disclosure button); sheet / drawer →
+ * modal dialogs with the Modal focus contract. The ref is the outer element
+ * (inline) or the dialog panel (overlays).
  */
-export function Panel({ variant = "inline", ...p }: any) {
-  if (variant === "inline") return <PanelBase {...p} />;
+export const Panel = forwardRef<HTMLElement, PanelProps>(function Panel({ variant = "inline", ...p }, ref) {
+  if (variant === "inline") {
+    const { open, onClose, side, width, maxWidth, closeOnScrim, closeOnEscape, initialFocus, restoreFocus, closeLabel, subtitle, footer, ...inline } = p;
+    return <PanelBase ref={ref} {...inline} />;
+  }
 
-  const { loading, loadingShape, empty, error, onRetry, children, footer, ...rest } = p;
+  const { loading, loadingShape, empty, error, onRetry, children, footer, collapsible, expanded, defaultOpen, onExpandedChange, pad, actions, ...rest } = p;
   /* md sizing: an overlay body has far more room than an inline panel. */
   const { body, suppressFooter } = resolvePanelBody({ children, loading, loadingShape, empty, error, onRetry, size: "md" });
   const shared = { ...rest, footer: suppressFooter ? null : footer, children: body };
+  const dialogRef = ref as React.Ref<HTMLDivElement>;
 
-  if (variant === "sheet") return <Sheet {...shared} />;
-  return <Drawer {...shared} />;
-}
+  if (variant === "sheet") return <Sheet ref={dialogRef} {...(shared as SheetProps)} />;
+  const { subtitle, icon, maxWidth, ...drawer } = shared;
+  return <Drawer ref={dialogRef} {...(drawer as DrawerProps)} />;
+});

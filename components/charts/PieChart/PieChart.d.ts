@@ -41,7 +41,7 @@ export interface PieChartProps {
   empty?: React.ReactNode;
 }
 /** Pie / donut proportion chart — hover highlight, interactive legend, centre total.
- *  @version 1.0.0
+ *  @version 1.1.0
   * States: loading · error · empty.
 */
-export declare function PieChart(props: PieChartProps): JSX.Element;
+export declare const PieChart: React.ForwardRefExoticComponent<PieChartProps & React.RefAttributes<HTMLElement>>;

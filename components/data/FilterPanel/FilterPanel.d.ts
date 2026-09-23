@@ -20,6 +20,6 @@ export interface FilterPanelProps {
  * Toolbar funnel filter — compact trigger + popover of multi-select option
  * pills per section. The FACETS half of the filter pair; FilterBuilder is the
  * RULES half. Both mount inside PageControls.
- * @version 1.0.0
+ * @version 1.1.0
  */
-export declare function FilterPanel(props: FilterPanelProps): JSX.Element;
+export declare const FilterPanel: React.ForwardRefExoticComponent<FilterPanelProps & React.RefAttributes<HTMLDivElement>>;

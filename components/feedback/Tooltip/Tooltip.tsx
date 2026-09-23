@@ -1,12 +1,27 @@
-import React, { useState, useRef, useCallback, useEffect } from "react";
+import React, { forwardRef, useState, useRef, useCallback, useEffect } from "react";
+import { useStableId } from "../../utils/interaction.tsx";
 
 /* ── Types (mirrored in Tooltip.d.ts) ── */
 export interface TooltipProps {
   label: React.ReactNode;
+  /** The anchor. A single element receives `aria-describedby` while the tip is open. */
   children: React.ReactNode;
   side?: "top" | "bottom" | "left" | "right";
   /** Hover/focus open delay in ms. @default 300 */
   delay?: number;
+  /** Id of the bubble — generated when omitted. */
+  id?: string;
+  /** Controlled open state. */
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  style?: React.CSSProperties;
+}
+export interface TipBubbleProps {
+  label: React.ReactNode;
+  side?: "top" | "bottom" | "left" | "right";
+  id?: string;
+  /** The anchor already carries this text as its name — hide the bubble from AT. */
+  decorative?: boolean;
   style?: React.CSSProperties;
 }
 /** Hover/focus tooltip around a single child. */
@@ -57,10 +72,10 @@ const CARET =
  * The entrance animation stays inline: its keyframes interpolate the side's own
  * transform, so the rule is composed per side at runtime and cannot be a class.
  */
-export function TipBubble({ label, side = "top", style = {} }) {
+export function TipBubble({ label, side = "top", id, decorative = false, style = {} }: TipBubbleProps) {
   const s = SIDE[side] || SIDE.top;
   return (
-    <span role="tooltip" className={[BUBBLE, s.bubble].join(" ")}
+    <span id={id} role={decorative ? undefined : "tooltip"} aria-hidden={decorative || undefined} className={[BUBBLE, s.bubble].join(" ")}
       style={{ animation: "agni-tip-in var(--dur-fast) var(--ease-standard)", ...style }}>
       {label}
       <span aria-hidden="true" className={[CARET, s.caret].join(" ")} />
@@ -80,7 +95,7 @@ export function TipBubble({ label, side = "top", style = {} }) {
  */
 export function useTip(delay = 300) {
   const [open, setOpen] = useState(false);
-  const t = useRef(null);
+  const t = useRef<ReturnType<typeof setTimeout> | null>(null);
   const clear = () => { if (t.current) { clearTimeout(t.current); t.current = null; } };
   const show = useCallback(() => { clear(); t.current = setTimeout(() => setOpen(true), delay); }, [delay]);
   const hide = useCallback(() => { clear(); setOpen(false); }, []);
@@ -100,12 +115,26 @@ export function useTip(delay = 300) {
  * Hover/focus tooltip. Wraps a single child; `label` is the content. Themed via
  * --tooltip-* tokens (flips for dark). Adds a caret and an open delay.
  */
-export function Tooltip({ label, children, side = "top", delay = 300, style = {} }: TooltipProps) {
-  const { open, bind } = useTip(delay);
+export const Tooltip = forwardRef<HTMLSpanElement, TooltipProps>(function Tooltip({ label, children, side = "top", delay = 300, id, open: openProp, onOpenChange, style = {} }, ref) {
+  const tip = useTip(delay);
+  const tipId = useStableId(id, "agni-tooltip");
+  const controlled = openProp !== undefined;
+  const open = (controlled ? openProp : tip.open) && label != null && label !== "";
+  const lastOpen = useRef(open);
+  useEffect(() => { if (lastOpen.current !== open) { lastOpen.current = open; onOpenChange?.(open); } }, [open, onOpenChange]);
+  /* WCAG 1.4.13 — a tooltip must be dismissable without moving the pointer. */
+  const onKeyDown = (e: React.KeyboardEvent) => { if (e.key === "Escape" && open) tip.bind.onBlur(); };
+  /* Describe the anchor itself, not the wrapper, so AT reads the tip with it. */
+  const child = React.Children.count(children) === 1 ? React.Children.toArray(children)[0] : children;
+  const anchor = React.isValidElement<{ "aria-describedby"?: string }>(child)
+    ? React.cloneElement(child, {
+        "aria-describedby": [child.props["aria-describedby"], open ? tipId : null].filter(Boolean).join(" ") || undefined,
+      })
+    : child;
   return (
-    <span className="relative inline-flex" {...bind}>
-      {children}
-      {open && label != null && label !== "" && <TipBubble label={label} side={side} style={style} />}
+    <span ref={ref} className="relative inline-flex" {...tip.bind} onKeyDown={onKeyDown}>
+      {anchor}
+      {open && <TipBubble id={tipId} label={label} side={side} style={style} />}
     </span>
   );
-}
+});

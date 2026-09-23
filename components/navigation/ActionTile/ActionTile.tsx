@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 
 /**
  * AgniUI · ActionTile
@@ -9,7 +9,7 @@ import React from "react";
  * state is `enabled:`-guarded CSS and the hover useState is gone. The tone tint
  * stays inline: it is a caller-supplied colour fed through color-mix.
  */
-export interface ActionTileProps {
+export interface ActionTileProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "title"> {
   icon?: string;
   title?: React.ReactNode;
   desc?: React.ReactNode;
@@ -17,7 +17,8 @@ export interface ActionTileProps {
   tone?: string;
   /** Count badge on the icon. `false`/null hides it. */
   badge?: React.ReactNode | false | null;
-  onClick?: () => void;
+  /** What the badge counts, for assistive tech — e.g. "3 pending". Defaults to the badge text. */
+  badgeLabel?: string;
   disabled?: boolean;
   style?: React.CSSProperties;
   className?: string;
@@ -38,11 +39,16 @@ const IDLE =
      keeps the historic flat -2px instead of a --scale-multiplied step. */
   "enabled:hover:[translate:0_-2px]";
 
-export function ActionTile({ icon, title, desc, tone, badge, onClick, disabled, style, className = "" }: ActionTileProps) {
+export const ActionTile = forwardRef<HTMLButtonElement, ActionTileProps>(function ActionTile(
+  { icon, title, desc, tone, badge, badgeLabel, disabled, style, className = "", type = "button", ...rest },
+  ref,
+) {
   const c = tone || "var(--action-brand)";
   return (
     <button
-      type="button" disabled={disabled} onClick={onClick}
+      {...rest}
+      ref={ref}
+      type={type} disabled={disabled}
       className={[BASE, disabled ? "border-line-subtle" : IDLE, className].join(" ")}
       style={style}
     >
@@ -51,9 +57,9 @@ export function ActionTile({ icon, title, desc, tone, badge, onClick, disabled, 
         /* color-mix over a caller-supplied tone — runtime value. */
         style={{ background: "color-mix(in oklch, " + c + " 12%, transparent)", color: c }}
       >
-        <i className={"ph " + icon} />
+        <i aria-hidden="true" className={"ph " + icon} />
         {badge != null && badge !== false && (
-          <span className="absolute -top-[5px] -right-[5px] inline-flex items-center justify-center min-w-[17px] h-[17px] px-1 box-border rounded-full bg-status-error text-fg-on-brand text-[10px] font-bold border-2 border-surface-card">
+          <span aria-label={badgeLabel} className="absolute -top-[5px] -right-[5px] inline-flex items-center justify-center min-w-[17px] h-[17px] px-1 box-border rounded-full bg-status-error text-fg-on-brand text-[10px] font-bold border-2 border-surface-card">
             {badge}
           </span>
         )}
@@ -62,10 +68,10 @@ export function ActionTile({ icon, title, desc, tone, badge, onClick, disabled, 
         <span className="block text-sm font-semibold text-fg-primary mb-[3px]">{title}</span>
         {desc && <span className="block text-xs leading-snug text-fg-tertiary">{desc}</span>}
       </span>
-      <i className={[
+      <i aria-hidden="true" className={[
         "ph ph-arrow-right shrink-0 mt-0.5 text-[15px] transition-colors duration-fast",
         disabled ? "text-fg-tertiary" : "text-fg-tertiary group-hover:text-fg-brand",
       ].join(" ")} />
     </button>
   );
-}
+});

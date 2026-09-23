@@ -26,7 +26,8 @@ export interface ActionColumn {
   width?: number | string;
   render: (row: any) => React.ReactNode;
 }
-export interface DataTableProps {
+export interface DataSort { key: string | null; dir: 1 | -1; }
+export interface DataTableProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "role" | "onSelect"> {
   columns?: DataColumn[];
   rows?: any[];
   /** Field used as the unique row id. @default "id" */
@@ -35,7 +36,17 @@ export interface DataTableProps {
   /** Controlled selection set of rowKey values. */
   selected?: Set<any>;
   onSelect?: (next: Set<any>) => void;
-  onRowClick?: (row: any) => void;
+  /** Makes each row focusable and opens it on click / Enter. */
+  onRowClick?: (row: any, e?: React.MouseEvent | React.KeyboardEvent) => void;
+  /** Accessible name per row (checkbox + click target). @default the rowKey value */
+  getRowLabel?: (row: any) => string;
+  /** The table's accessible name — visually hidden unless `showCaption`. */
+  caption?: React.ReactNode;
+  showCaption?: boolean;
+  /** Controlled sort. */
+  sort?: DataSort;
+  defaultSort?: DataSort;
+  onSortChange?: (sort: DataSort) => void;
   density?: "compact" | "comfortable" | "spacious";
   /** @deprecated Use `empty` — kept working for existing consumers. */
   emptyText?: string;
@@ -70,7 +81,11 @@ export interface DataTableProps {
   style?: React.CSSProperties;
 }
 /** Sortable, selectable table with sticky header; fillHeight mode adds fixed header + scrolling body, column picker, action column.
- *  @version 1.0.0
+ *  Sortable headers are buttons with aria-sort on the column; checkboxes are
+ *  labelled and select-all goes indeterminate; clickable rows are focusable
+ *  (Enter opens); the column picker closes on Escape back to its button.
+ *  The ref is the outer container.
+ *  @version 1.1.0
   * States: loading · error · empty · selected.
 */
-export declare function DataTable(props: DataTableProps): JSX.Element;
+export declare const DataTable: React.ForwardRefExoticComponent<DataTableProps & React.RefAttributes<HTMLDivElement>>;

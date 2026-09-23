@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "./Button.tsx";
+import { Button } from "../primitives/Button/Button.tsx";
 
 /* AgniUI · actionSpec (internal)
    The one declarative action contract shared by the grouped components

@@ -26,7 +26,7 @@ export interface GaugeProps {
   empty?: React.ReactNode;
 }
 /** Single-value arc gauge with a centred readout. Themes light + dark.
- *  @version 1.0.0
+ *  @version 1.1.0
   * States: loading · error · empty.
 */
-export declare function Gauge(props: GaugeProps): JSX.Element;
+export declare const Gauge: React.ForwardRefExoticComponent<GaugeProps & React.RefAttributes<HTMLElement>>;

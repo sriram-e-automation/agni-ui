@@ -27,4 +27,4 @@ export interface AttachmentRowProps {
  * States: loading · error (upload failed, inline — not the fetch contract) · uploading (via progress).
  * @version 1.1.0
  */
-export declare function AttachmentRow(props: AttachmentRowProps): JSX.Element;
+export declare const AttachmentRow: React.ForwardRefExoticComponent<AttachmentRowProps & React.RefAttributes<HTMLDivElement>>;

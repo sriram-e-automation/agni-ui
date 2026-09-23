@@ -1,11 +1,11 @@
 import React from "react";
-import { Card } from "../core/Card.tsx";
-import { Tag } from "../core/Tag.tsx";
-import { ApprovalStepper } from "./ApprovalStepper.tsx";
-import { AuditTrail } from "./AuditTrail.tsx";
-import { Textarea } from "../forms/Textarea.tsx";
-import { renderActions, visibleActions } from "../core/actionSpec.tsx";
-import { DataState } from "../feedback/DataState.tsx";
+import { Card } from "../../containment/Card/Card.tsx";
+import { Tag } from "../../primitives/Tag/Tag.tsx";
+import { ApprovalStepper } from "../ApprovalStepper/ApprovalStepper.tsx";
+import { AuditTrail } from "../AuditTrail/AuditTrail.tsx";
+import { Textarea } from "../../primitives/Textarea/Textarea.tsx";
+import { renderActions, visibleActions } from "../../utils/actionSpec.tsx";
+import { DataState } from "../../utils/DataState.tsx";
 
 /**
  * AgniUI · ApprovalPanel
@@ -28,7 +28,7 @@ const STAGE = "font-sans text-base font-semibold text-fg-primary m-0";
 const SECTION = "flex flex-col gap-2 pt-4 mt-4 border-t border-line-subtle";
 const NOTE = "text-xs text-fg-tertiary m-0";
 
-export function ApprovalPanel({
+export const ApprovalPanel = React.forwardRef<HTMLElement, any>(function ApprovalPanel({
   title = "Approval",
   steps = [],
   orientation = "horizontal",
@@ -52,7 +52,7 @@ export function ApprovalPanel({
   onRetry,
   empty,
   style = {},
-}: any) {
+}, ref) {
   const [local, setLocal] = React.useState("");
   const value = comment !== undefined ? comment : local;
   const setValue = (v: string) => { onCommentChange ? onCommentChange(v) : setLocal(v); };
@@ -101,10 +101,10 @@ export function ApprovalPanel({
   );
 
   return (
-    <Card style={style}>
+    <Card ref={ref as never} style={style}>
       <DataState loading={loading} error={error} onRetry={onRetry} empty={empty} isEmpty={!!empty && steps.length === 0 && entries.length === 0} shape="approvalStepper">
         {body}
       </DataState>
     </Card>
   );
-}
+});

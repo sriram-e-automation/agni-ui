@@ -1,7 +1,7 @@
-import React from "react";
+import React, { forwardRef } from "react";
 
 /* ── Types (mirrored in EmptyState.d.ts) ── */
-export interface EmptyStateProps {
+export interface EmptyStateProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
   /** Phosphor icon class. @default "ph-tray" */
   icon?: string;
   title?: React.ReactNode;
@@ -38,11 +38,14 @@ const BORDERED = "border border-dashed border-line-default bg-surface-card";
 const FLUSH = "bg-transparent";
 const RING = "rounded-full bg-surface-brand-soft flex items-center justify-center shrink-0";
 
-export function EmptyState({ icon = "ph-tray", title = "Nothing here yet", message, action = null, size, bordered = true, compact = false, style = {} }: EmptyStateProps) {
+export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(function EmptyState(
+  { icon = "ph-tray", title = "Nothing here yet", message, action = null, size, bordered = true, compact = false, style = {}, className = "", ...rest },
+  ref,
+) {
   const s = SIZE[size || (compact ? "sm" : "md")] || SIZE.md;
   return (
-    <div className={[SHELL, s.pad, bordered ? BORDERED : FLUSH].join(" ")} style={style}>
-      <div className={[RING, s.ring].join(" ")}>
+    <div {...rest} ref={ref} className={[SHELL, s.pad, bordered ? BORDERED : FLUSH, className].join(" ")} style={style}>
+      <div aria-hidden="true" className={[RING, s.ring].join(" ")}>
         <i className={["ph", icon, s.glyph, "text-fg-brand"].join(" ")} />
       </div>
       <div>
@@ -52,4 +55,4 @@ export function EmptyState({ icon = "ph-tray", title = "Nothing here yet", messa
       {action}
     </div>
   );
-}
+});

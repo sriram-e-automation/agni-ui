@@ -1,5 +1,5 @@
 import * as React from "react";
-export interface EmptyStateProps {
+export interface EmptyStateProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
   /** Phosphor icon class. @default "ph-tray" */
   icon?: string;
   title?: React.ReactNode;
@@ -15,6 +15,7 @@ export interface EmptyStateProps {
   style?: React.CSSProperties;
 }
 /** Empty-state block — text + action, never a bare illustration.
- *  @version 1.0.0
+ *  The ref is the block; native attributes pass through.
+ *  @version 1.1.0
  */
-export declare function EmptyState(props: EmptyStateProps): JSX.Element;
+export declare const EmptyState: React.ForwardRefExoticComponent<EmptyStateProps & React.RefAttributes<HTMLDivElement>>;

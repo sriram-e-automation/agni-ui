@@ -3,9 +3,9 @@
  * (no .d.ts, no specimen card). Import the public component instead.
  */
 import React from "react";
-import { Modal } from "../feedback/Modal.tsx";
-import { Button } from "../core/Button.tsx";
-import { Textarea } from "../forms/Textarea.tsx";
+import { Modal } from "../../feedback/Modal/Modal.tsx";
+import { Button } from "../../primitives/Button/Button.tsx";
+import { Textarea } from "../../primitives/Textarea/Textarea.tsx";
 
 /* ── Types (mirrored in ReviewSubmitModal.d.ts) ── */
 export interface ReviewSummaryRow { label: React.ReactNode; value: React.ReactNode; }
@@ -49,7 +49,7 @@ export interface ReviewSubmitModalProps {
  */
 const ROW_LABEL = "text-xs text-fg-tertiary tracking-wide uppercase";
 const ROW_VAL = "text-sm text-fg-primary font-medium text-right inline-flex items-center justify-end gap-1";
-export function ReviewSubmitModal({
+export const ReviewSubmitModal = React.forwardRef<HTMLElement, ReviewSubmitModalProps>(function ReviewSubmitModal({
   open,
   title = "Review and submit",
   intro = "Confirm the details below, then submit.",
@@ -67,10 +67,10 @@ export function ReviewSubmitModal({
   onConfirm,
   submitting = false,
   error = null,
-}: ReviewSubmitModalProps) {
+}, ref) {
   if (!open) return null;
   return (
-    <Modal open={open} onClose={submitting ? undefined : onBack} title={title} size="md"
+    <Modal ref={ref as never} open={open} onClose={submitting ? undefined : onBack} title={title} size="md"
       footer={<>
         <Button category="secondary" icon={<i className="ph ph-arrow-left" />} onClick={onBack} disabled={submitting}>{backLabel}</Button>
         <Button category="primary" icon={<i className={"ph " + confirmIcon} />} loading={submitting} onClick={onConfirm}>{confirmLabel}</Button>
@@ -104,4 +104,4 @@ export function ReviewSubmitModal({
       )}
     </Modal>
   );
-}
+});

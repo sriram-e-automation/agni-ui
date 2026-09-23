@@ -1,5 +1,6 @@
-import React, { useRef, useEffect, useState } from "react";
-import { Tooltip } from "../feedback/Tooltip.tsx";
+import React, { forwardRef, useRef, useEffect, useState } from "react";
+import { mergeRefs, pressableProps, useFocusTrap, useRovingFocus, useStableId } from "../../utils/interaction.tsx";
+import { Tooltip } from "../../feedback/Tooltip/Tooltip.tsx";
 
 /* ── Types (mirrored in NotificationsMenu.d.ts) ── */
 export interface NotificationItem {
@@ -28,6 +29,7 @@ export interface NotificationsMenuProps {
   onOpenSettings?: () => void;
   onClose?: () => void;
   style?: React.CSSProperties;
+  id?: string;
 }
 /** Notification-bell popover: Unread/Read tabs + date-grouped list + footer actions. */
 
@@ -83,7 +85,7 @@ const SHIMMER = {
   backgroundSize: "200% 100%", animation: "agni-shimmer 1.4s var(--ease-standard) infinite",
 };
 
-export function NotificationsMenu({
+export const NotificationsMenu = forwardRef<HTMLDivElement, NotificationsMenuProps>(function NotificationsMenu({
   items = [],           // [{ id, icon, title?, message, time, date, read }]
   loading = false,
   onMarkRead,            // (id) => void
@@ -93,17 +95,19 @@ export function NotificationsMenu({
   onOpenSettings,        // () => void
   onClose,
   style = {},
-}: NotificationsMenuProps) {
-  const ref = useRef(null);
+  id,
+}, fwd) {
+  const ref = useRef<HTMLDivElement>(null);
+  const base = useStableId(id, "agni-notifs");
+  /* Non-modal popover dialog: focus moves in on open and back to the bell on close. */
+  useFocusTrap(ref, true);
   const [tab, setTab] = useState("unread");
   const [expanded, setExpanded] = useState(() => new Set());
 
   useEffect(() => {
-    const h = (e) => { if (ref.current && !ref.current.contains(e.target)) onClose && onClose(); };
-    const k = (e) => { if (e.key === "Escape") onClose && onClose(); };
+    const h = (e: MouseEvent) => { if (ref.current && !ref.current.contains(e.target as Node)) onClose && onClose(); };
     document.addEventListener("mousedown", h);
-    document.addEventListener("keydown", k);
-    return () => { document.removeEventListener("mousedown", h); document.removeEventListener("keydown", k); };
+    return () => { document.removeEventListener("mousedown", h); };
   }, [onClose]);
 
   const unread = items.filter((n) => !n.read);
@@ -118,20 +122,25 @@ export function NotificationsMenu({
     g.items.push(n);
   });
 
-  const toggleExpand = (id) => setExpanded((prev) => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; });
+  const TABS: [string, string, number][] = [["unread", "Unread", unread.length], ["read", "Read", read.length]];
+  const roving = useRovingFocus({ count: 2, current: tab === "unread" ? 0 : 1, orientation: "horizontal", onMove: (i) => setTab(TABS[i][0]) });
+  const toggleExpand = (id: string) => setExpanded((prev) => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; });
 
   return (
-    <div ref={ref} className={MENU} style={{ animation: "agni-pop-in var(--dur-normal) var(--ease-standard)", ...style }}>
+    <div ref={mergeRefs(fwd, ref)} id={base} role="dialog" aria-labelledby={base + "-title"}
+      onKeyDown={(e) => { if (e.key === "Escape") { e.stopPropagation(); onClose && onClose(); } }}
+      className={MENU} style={{ animation: "agni-pop-in var(--dur-normal) var(--ease-standard)", ...style }}>
       {/* Header */}
       <div className={HEAD}>
-        <span className="text-md font-semibold text-fg-primary">Notifications</span>
-        <button type="button" onClick={onClose} className={CLOSE}><i className="ph ph-x text-[15px]" /></button>
+        <span id={base + "-title"} className="text-md font-semibold text-fg-primary">Notifications</span>
+        <button type="button" onClick={onClose} aria-label="Close notifications" className={CLOSE}><i aria-hidden="true" className="ph ph-x text-[15px]" /></button>
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-[2px] px-4 pt-2 shrink-0">
-        {[["unread", "Unread", unread.length], ["read", "Read", read.length]].map(([key, label, count]) => (
-          <button key={key} type="button" onClick={() => setTab(key)}
+      <div role="tablist" aria-label="Notification filter" onKeyDown={roving.onKeyDown} className="flex gap-[2px] px-4 pt-2 shrink-0">
+        {TABS.map(([key, label, count], i) => (
+          <button key={key} {...roving.getItemProps(i)} type="button" role="tab" id={`${base}-tab-${key}`}
+            aria-selected={tab === key} aria-controls={base + "-list"} onClick={() => setTab(key)}
             className={[TAB, tab === key ? TAB_ON : TAB_OFF].join(" ")}>
             {label} ({count})
           </button>
@@ -139,7 +148,7 @@ export function NotificationsMenu({
       </div>
 
       {/* List */}
-      <div className="flex-1 min-h-0 min-w-0 overflow-y-auto pt-1 pb-2">
+      <div id={base + "-list"} role="tabpanel" aria-labelledby={`${base}-tab-${tab}`} tabIndex={0} className="flex-1 min-h-0 min-w-0 overflow-y-auto pt-1 pb-2 outline-none">
         {loading ? (
           <div className="flex flex-col gap-1 px-4 py-2">
             {Array.from({ length: 4 }).map((_, i) => (
@@ -172,11 +181,11 @@ export function NotificationsMenu({
               const isExpanded = expanded.has(n.id);
               const long = (n.message || "").length > 110;
               return (
-                <div key={n.id} onClick={() => onItemClick && onItemClick(n)}
-                  className={[ITEM, n.read ? ITEM_READ : ITEM_UNREAD, onItemClick ? "cursor-pointer" : "cursor-default"].join(" ")}>
+                <div key={n.id} {...pressableProps(onItemClick ? () => onItemClick(n) : null)}
+                  className={[ITEM, n.read ? ITEM_READ : ITEM_UNREAD, onItemClick ? "cursor-pointer outline-none focus-visible:focus-ring" : "cursor-default"].join(" ")}>
                   <span className={ITEM_ICON}>
-                    <i className={"ph " + (n.icon || "ph-bell")} />
-                    {!n.read && <span className={DOT} />}
+                    <i aria-hidden="true" className={"ph " + (n.icon || "ph-bell")} />
+                    {!n.read && <span className={DOT}><span className="sr-only">Unread</span></span>}
                   </span>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2">
@@ -187,7 +196,7 @@ export function NotificationsMenu({
                           {n.message}
                         </div>
                         {long && (
-                          <button type="button" onClick={(e) => { e.stopPropagation(); toggleExpand(n.id); }} className={READ_MORE}>
+                          <button type="button" aria-expanded={isExpanded} onClick={(e) => { e.stopPropagation(); toggleExpand(n.id); }} className={READ_MORE}>
                             {isExpanded ? "Show less" : "Read more"}
                           </button>
                         )}
@@ -219,4 +228,4 @@ export function NotificationsMenu({
       <style>{`@keyframes agni-pop-in { from { transform: translateY(-6px) scale(0.98); } to { transform: translateY(0) scale(1); } }`}</style>
     </div>
   );
-}
+});

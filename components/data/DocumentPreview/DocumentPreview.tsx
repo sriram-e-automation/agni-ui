@@ -1,6 +1,6 @@
-import { resolveDataState } from "../feedback/DataState.tsx";
+import { resolveDataState } from "../../utils/DataState.tsx";
 import React from "react";
-import { Tooltip } from "../feedback/Tooltip.tsx";
+import { Tooltip } from "../../feedback/Tooltip/Tooltip.tsx";
 
 /* ── Types (mirrored in DocumentPreview.d.ts) ── */
 export interface DocumentPreviewProps {
@@ -39,10 +39,10 @@ const ACT =
   "size-[32px] border border-line-default rounded-sm bg-surface-card text-fg-secondary cursor-pointer text-[16px] " +
   "transition-[border-color,color] duration-fast hover:border-line-brand hover:text-fg-brand";
 
-function DocumentPreviewBody({ name, type = "file", meta, onView, onDownload, style = {} }) {
+function DocumentPreviewBody({ forwardedRef, name, type = "file", meta, onView, onDownload, style = {} }) {
   const t = TYPE[type] || TYPE.file;
   return (
-    <div className={CARD} style={style}>
+    <div ref={forwardedRef as never} className={CARD} style={style}>
       <span className={ICON_WELL} style={{ background: t.color + "1A", color: t.color }}>
         <i className={"ph-fill " + t.icon} />
       </span>
@@ -59,11 +59,11 @@ function DocumentPreviewBody({ name, type = "file", meta, onView, onDownload, st
 }
 
 /* State contract — a single value has no "empty", so loading and error only. */
-export function DocumentPreview(props) {
+export const DocumentPreview = React.forwardRef<HTMLElement, any>(function DocumentPreview(props, ref) {
   const state = resolveDataState({
     loading: props.loading, error: props.error, onRetry: props.onRetry,
     shape: "card", height: 120,
   });
-  if (state !== false) return <div className="w-full" style={props.style || {}}>{state}</div>;
-  return <DocumentPreviewBody {...props} />;
-}
+  if (state !== false) return <div ref={ref as never} className="w-full" style={props.style || {}}>{state}</div>;
+  return <DocumentPreviewBody {...props} forwardedRef={ref} />;
+});

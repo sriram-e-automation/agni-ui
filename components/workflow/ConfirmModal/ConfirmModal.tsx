@@ -15,10 +15,10 @@ import { ImportRecordsModal } from "./ImportRecordsModal.tsx";
  *   bulk — N rows: optional remark and assignee, validated
  *   import — file import: expected columns, template, dropzone
  */
-export function ConfirmModal({ variant = "review", ...p }: any) {
-  if (variant === "submitted") return <SubmitConfirmModal {...p} />;
-  if (variant === "discard") return <DiscardConfirmModal {...p} />;
-  if (variant === "bulk") return <BulkActionConfirm {...p} />;
-  if (variant === "import") return <ImportRecordsModal {...p} />;
-  return <ReviewSubmitModal {...p} />;
-}
+export const ConfirmModal = React.forwardRef<HTMLElement, any>(function ConfirmModal({ variant = "review", ...p }, ref) {
+  if (variant === "submitted") return <SubmitConfirmModal ref={ref as never} {...p} />;
+  if (variant === "discard") return <DiscardConfirmModal ref={ref as never} {...p} />;
+  if (variant === "bulk") return <BulkActionConfirm ref={ref as never} {...p} />;
+  if (variant === "import") return <ImportRecordsModal ref={ref as never} {...p} />;
+  return <ReviewSubmitModal ref={ref as never} {...p} />;
+});

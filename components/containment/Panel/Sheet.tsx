@@ -2,11 +2,12 @@
  * @internal Renderer behind the public <Panel> — not part of the documented API
  * (no .d.ts, no specimen card). Import the public component instead.
  */
-import React, { useEffect } from "react";
-import { Tooltip } from "../feedback/Tooltip.tsx";
+import React, { forwardRef, useRef } from "react";
+import { mergeRefs, useFocusTrap, useScrollLock, useStableId } from "../../utils/interaction.tsx";
+import { Tooltip } from "../../feedback/Tooltip/Tooltip.tsx";
 
 /* ── Types (mirrored in Sheet.d.ts) ── */
-export interface SheetProps {
+export interface SheetProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
   open?: boolean;
   onClose?: () => void;
   title?: React.ReactNode;
@@ -21,6 +22,10 @@ export interface SheetProps {
   maxWidth?: number | string;
   /** Close when the scrim is clicked. Default true. */
   closeOnScrim?: boolean;
+  closeOnEscape?: boolean;
+  initialFocus?: React.RefObject<HTMLElement | null>;
+  restoreFocus?: boolean;
+  closeLabel?: string;
   style?: React.CSSProperties;
 }
 /** Bottom slide-up form shell: sticky header + scrollable body + sticky footer. */
@@ -62,7 +67,7 @@ const FOOT =
   "shrink-0 flex items-center justify-end gap-2 px-[var(--sheet-pad-x)] " +
   "min-h-[var(--sheet-footer-h)] border-t border-line-subtle bg-surface-card";
 
-export function Sheet({
+export const Sheet = forwardRef<HTMLDivElement, SheetProps>(function Sheet({
   open = false,
   onClose,
   title,
@@ -72,38 +77,50 @@ export function Sheet({
   children,
   maxWidth = "var(--sheet-max-w)",
   closeOnScrim = true,
+  closeOnEscape = true,
+  initialFocus,
+  restoreFocus = true,
+  closeLabel = "Close",
+  id,
+  onKeyDown,
   style = {},
-}: SheetProps) {
-  useEffect(() => {
-    if (!open) return;
-    const k = (e) => { if (e.key === "Escape") onClose && onClose(); };
-    document.addEventListener("keydown", k);
-    return () => document.removeEventListener("keydown", k);
-  }, [open, onClose]);
+  ...rest
+}, ref) {
+  const panel = useRef<HTMLDivElement>(null);
+  const base = useStableId(id, "agni-sheet");
+  useFocusTrap(panel, open, { initialFocus, restoreFocus });
+  useScrollLock(open);
 
   if (!open) return null;
 
   return (
     <div className={WRAP}>
-      <div onClick={() => closeOnScrim && onClose && onClose()} className={SCRIM}
+      <div aria-hidden="true" onClick={() => closeOnScrim && onClose && onClose()} className={SCRIM}
         style={{ animation: "agni-fade-in var(--dur-fast) var(--ease-standard)" }} />
       <div
+        {...rest}
+        ref={mergeRefs(ref, panel)}
+        id={base}
         role="dialog"
         aria-modal="true"
+        aria-labelledby={rest["aria-labelledby"] ?? (title ? base + "-title" : undefined)}
+        aria-describedby={rest["aria-describedby"] ?? (subtitle ? base + "-subtitle" : undefined)}
+        tabIndex={-1}
+        onKeyDown={(e) => { onKeyDown?.(e); if (!e.defaultPrevented && closeOnEscape && e.key === "Escape") { e.stopPropagation(); onClose?.(); } }}
         onClick={(e) => e.stopPropagation()}
         className={PANEL}
-        style={{ maxWidth, animation: "agni-sheet-up var(--dur-normal) var(--ease-emphasized)", ...style }}
+        style={{ maxWidth, animation: "agni-sheet-up var(--dur-normal) var(--ease-emphasized)", outline: "none", ...style }}
       >
         {/* Sticky header */}
         <div className={HEAD}>
-          {icon && <span className={ICON}><i className={"ph-bold " + icon} /></span>}
+          {icon && <span aria-hidden="true" className={ICON}><i className={"ph-bold " + icon} /></span>}
           <div className="flex-1 min-w-0 leading-tight">
-            {title && <div className={TITLE}>{title}</div>}
-            {subtitle && <div className={SUB}>{subtitle}</div>}
+            {title && <h2 id={base + "-title"} className={[TITLE, "m-0 font-sans"].join(" ")} style={{ letterSpacing: "normal", lineHeight: "inherit" }}>{title}</h2>}
+            {subtitle && <div id={base + "-subtitle"} className={SUB}>{subtitle}</div>}
           </div>
-          <Tooltip label="Close" side="bottom">
-            <button type="button" onClick={() => onClose && onClose()} aria-label="Close" className={CLOSE}>
-              <i className="ph ph-x" />
+          <Tooltip label={closeLabel} side="bottom">
+            <button type="button" onClick={() => onClose && onClose()} aria-label={closeLabel} className={CLOSE}>
+              <i aria-hidden="true" className="ph ph-x" />
             </button>
           </Tooltip>
         </div>
@@ -118,4 +135,4 @@ export function Sheet({
       <style>{`@keyframes agni-fade-in{from{opacity:0}}@keyframes agni-sheet-up{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}`}</style>
     </div>
   );
-}
+});

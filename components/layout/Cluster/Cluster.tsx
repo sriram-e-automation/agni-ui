@@ -42,7 +42,7 @@ const OVERFLOW: Record<string, React.CSSProperties> = {
  * AgniUI · Cluster
  * Horizontal flex row with token gaps + alignment. The workhorse for toolbars.
  */
-export function Cluster({
+export const Cluster = React.forwardRef<HTMLDivElement, ClusterProps>(function Cluster({
   children,
   gap = "default",        // tight | default | loose | <number>
   justify = "start",
@@ -52,9 +52,9 @@ export function Cluster({
   overflow = "visible",
   style = {},
   ...rest
-}: ClusterProps) {
+}, ref) {
   return (
-    <div
+    <div ref={ref as never}
       style={{
         display: "flex", flexDirection: "row",
         alignItems: align, justifyContent: JUSTIFY[justify] || justify,
@@ -67,12 +67,12 @@ export function Cluster({
       {children}
     </div>
   );
-}
+});
 
 /**
  * AgniUI · Stack — vertical sibling of Cluster.
  */
-export function Stack({
+export const Stack = React.forwardRef<HTMLDivElement, StackProps>(function Stack({
   children,
   gap = "default",
   align = "stretch",
@@ -82,9 +82,9 @@ export function Stack({
   overflow = "visible",
   style = {},
   ...rest
-}: StackProps) {
+}, ref) {
   return (
-    <div
+    <div ref={ref as never}
       style={{
         display: "flex", flexDirection: "column",
         alignItems: align, justifyContent: JUSTIFY[justify] || justify,
@@ -96,4 +96,4 @@ export function Stack({
       {children}
     </div>
   );
-}
+});

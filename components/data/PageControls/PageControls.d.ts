@@ -1,8 +1,8 @@
 import * as React from "react";
-import { FilterSection, FilterValue } from "./FilterPanel";
-import { DateRange } from "./DateRangeFilter";
-import { BulkAction } from "./BulkActionToolbar";
-import { ActionSpec, ExportActionSpec } from "../core/actionSpec";
+import { FilterSection, FilterValue } from "../FilterPanel/FilterPanel";
+import { DateRange } from "../DateRangeFilter/DateRangeFilter";
+import { BulkAction } from "../BulkActionToolbar/BulkActionToolbar";
+import { ActionSpec, ExportActionSpec } from "../../utils/actionSpec";
 
 export interface PageControlsColumn { key: string; label: React.ReactNode; }
 export interface PageControlsSort { value: string; label: string; }
@@ -105,6 +105,6 @@ export interface PageControlsProps {
  * column chooser, optional view switcher, primary action and pagination.
  * Composes FilterPanel · DateRangeFilter · BulkActionToolbar · Pagination.
  * States: idle · filtered · searching · selection-mode · disabled · loading.
- * @version 1.0.0
+ * @version 1.1.0
  */
-export declare function PageControls(props: PageControlsProps): JSX.Element;
+export declare const PageControls: React.ForwardRefExoticComponent<PageControlsProps & React.RefAttributes<HTMLDivElement>>;

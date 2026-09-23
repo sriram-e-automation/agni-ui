@@ -26,7 +26,7 @@ export interface OptionRowProps {
  * One component for tracker cards, support options, settings choices and
  * launcher rows. Use ActionTile for a role-aware page launchpad, DropdownMenu
  * for a menu of actions.
- * @version 1.0.0
+ * @version 1.1.0
   * States: disabled · selected.
 */
-export declare function OptionRow(props: OptionRowProps): JSX.Element;
+export declare const OptionRow: React.ForwardRefExoticComponent<OptionRowProps & React.RefAttributes<HTMLDivElement>>;

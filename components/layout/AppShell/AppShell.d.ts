@@ -17,6 +17,6 @@ export interface AppShellProps {
 /**
  * Full-height desk frame: header · sidebar · content · footer.
  * @startingPoint section="Layout" subtitle="Full desk frame: header, rail, content, footer" viewport="1280x720"
- * @version 1.0.0
+ * @version 1.1.0
  */
-export declare function AppShell(props: AppShellProps): JSX.Element;
+export declare const AppShell: React.ForwardRefExoticComponent<AppShellProps & React.RefAttributes<HTMLDivElement>>;

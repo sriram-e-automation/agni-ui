@@ -1,6 +1,6 @@
 import React from "react";
-import { Tooltip } from "../feedback/Tooltip.tsx";
-import { roleAllows } from "../core/RoleGate.tsx";
+import { Tooltip } from "../../feedback/Tooltip/Tooltip.tsx";
+import { roleAllows } from "../../utils/RoleGate.tsx";
 
 /* ── Types (mirrored in BulkActionToolbar.d.ts) ── */
 export interface BulkAction { label: React.ReactNode; icon?: string; onClick?: () => void; danger?: boolean; roles?: string[]; }
@@ -33,13 +33,13 @@ const CLEAR =
   "size-[28px] border-none bg-transparent text-inherit cursor-pointer text-[16px] rounded-sm opacity-[0.8] " +
   "transition-colors duration-fast hover:bg-[var(--state-hover-on-inverse)]";
 
-export function BulkActionToolbar({ count = 0, actions = [], onClear, role = "", style = {} }: BulkActionToolbarProps) {
+export const BulkActionToolbar = React.forwardRef<HTMLDivElement, BulkActionToolbarProps>(function BulkActionToolbar({ count = 0, actions = [], onClear, role = "", style = {} }, ref) {
   if (!count) return null;
   /* A bulk bar is the most destructive control in the system — an action the
      viewer may not perform must not be on it at all. */
   const allowed = actions.filter((a) => roleAllows(role, a.roles));
   return (
-    <div className={BAR} style={{ animation: "agni-bulk-in var(--dur-normal) var(--ease-spring)", ...style }}>
+    <div ref={ref as never} className={BAR} style={{ animation: "agni-bulk-in var(--dur-normal) var(--ease-spring)", ...style }}>
       <span className="text-sm font-semibold"><span className="font-data">{count}</span> selected</span>
       <span className="w-px h-[20px] bg-current opacity-[0.25]" />
       <div className="flex items-center gap-1 flex-1 min-w-0">
@@ -54,4 +54,4 @@ export function BulkActionToolbar({ count = 0, actions = [], onClear, role = "",
       <style>{`@keyframes agni-bulk-in{from{opacity:0;transform:translateY(8px)}}`}</style>
     </div>
   );
-}
+});

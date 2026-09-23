@@ -178,7 +178,7 @@ get named utilities instead: `h-control`, `h-row`, `py-cell`.
 1. **Full class strings only.** Never `bg-${tone}-100` or
    `` `text-${size}` ``. Tailwind scans source as plain text; an assembled name is
    invisible to it and will be missing from the CSS with no error. Use a lookup
-   table of complete strings (see `SIZE` / `CATEGORY` in `core/Button.tsx`).
+   table of complete strings (see `SIZE` / `CATEGORY` in `primitives/Button/ButtonBase.tsx`).
 2. **Delete hover/press React state.** `useState(false)` + `onMouseEnter` /
    `onMouseLeave` / `onMouseDown` / `onMouseUp` become `hover:` and `active:`.
    This is most of the win: no re-render per pointer move, no hover stuck on

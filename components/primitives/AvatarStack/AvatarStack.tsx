@@ -1,7 +1,7 @@
-import React from "react";
-import { Avatar } from "./Avatar.tsx";
+import React, { forwardRef } from "react";
+import { Avatar } from "../Avatar/Avatar.tsx";
 
-export interface AvatarStackProps {
+export interface AvatarStackProps extends React.HTMLAttributes<HTMLDivElement> {
   names?: string[];
   /** Avatars shown before collapsing into a +N chip. @default 3 */
   max?: number;
@@ -34,14 +34,23 @@ const CHIP_BASE =
   "bg-surface-soft text-fg-secondary font-data font-semibold " +
   "outline-2 outline-surface-card";
 
-export function AvatarStack({ names = [], max = 3, size = "xs", solid = false, style, className = "" }: AvatarStackProps) {
+export const AvatarStack = forwardRef<HTMLDivElement, AvatarStackProps>(function AvatarStack(
+  { names = [], max = 3, size = "xs", solid = false, style, className = "", ...rest },
+  ref,
+) {
   const dims = { xs: 22, sm: 28, md: 36, lg: 48 };
   const d = dims[size] || dims.xs;
   const overlap = -Math.round(d * 0.36);
   const shown = names.slice(0, max);
   const extra = names.length - shown.length;
   return (
-    <div className={["inline-flex items-center", className].join(" ")} style={style}>
+    <div
+      ref={ref}
+      /* One named group — "Asha Rao, Ben Ito and 2 more" — rather than N images. */
+      role="group"
+      aria-label={rest["aria-label"] ?? (names.length ? (extra > 0 ? shown.join(", ") + " and " + extra + " more" : names.join(", ")) : undefined)}
+      {...rest}
+      className={["inline-flex items-center", className].join(" ")} style={style}>
       {shown.map((n, i) => (
         <span
           key={n + i}
@@ -51,12 +60,13 @@ export function AvatarStack({ names = [], max = 3, size = "xs", solid = false, s
           style={{ marginLeft: i === 0 ? 0 : overlap, zIndex: shown.length - i }}
         >
           <span className="inline-flex rounded-full outline-2 outline-surface-card">
-            <Avatar name={n} size={size} solid={solid} />
+            <Avatar name={n} size={size} solid={solid} decorative />
           </span>
         </span>
       ))}
       {extra > 0 && (
         <span
+          aria-hidden="true"
           title={names.slice(max).join(", ")}
           className={[CHIP_BASE, CHIP_CLS[size] || CHIP_CLS.xs].join(" ")}
           style={{ marginLeft: overlap }}
@@ -66,4 +76,4 @@ export function AvatarStack({ names = [], max = 3, size = "xs", solid = false, s
       )}
     </div>
   );
-}
+});

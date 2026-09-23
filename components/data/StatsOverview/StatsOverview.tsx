@@ -1,8 +1,8 @@
 import React from "react";
-import { QuickStats } from "./QuickStats.tsx";
-import { ChartCard } from "../charts/ChartCard.tsx";
-import { DateRangeFilter } from "./DateRangeFilter.tsx";
-import { renderActions, exportToAction } from "../core/actionSpec.tsx";
+import { QuickStats } from "../QuickStats/QuickStats.tsx";
+import { ChartCard } from "../../charts/ChartCard/ChartCard.tsx";
+import { DateRangeFilter } from "../DateRangeFilter/DateRangeFilter.tsx";
+import { renderActions, exportToAction } from "../../utils/actionSpec.tsx";
 
 /**
  * AgniUI · StatsOverview
@@ -22,7 +22,7 @@ import { renderActions, exportToAction } from "../core/actionSpec.tsx";
 const EYEBROW = "text-2xs font-data font-semibold tracking-wide uppercase text-fg-tertiary";
 const TITLE = "font-sans text-lg font-semibold text-fg-primary m-0";
 
-export function StatsOverview({
+export const StatsOverview = React.forwardRef<HTMLDivElement, any>(function StatsOverview({
   title,
   subtitle,
   stats = [],
@@ -45,7 +45,7 @@ export function StatsOverview({
   empty,
   gap = "var(--space-4)",
   style = {},
-}: any) {
+}, ref) {
   const exp = exportToAction(exportAction, role);
   const specs = [
     ...(exp ? [exp] : []),
@@ -56,7 +56,7 @@ export function StatsOverview({
   const showHead = !!(title || subtitle || onDateRangeChange || rendered.length || actions);
 
   return (
-    <div className="agni-pane flex flex-col" style={{ gap, ...style }}>
+    <div ref={ref as never} className="agni-pane flex flex-col" style={{ gap, ...style }}>
       {showHead && (
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex flex-col gap-[2px] min-w-0">
@@ -93,4 +93,4 @@ export function StatsOverview({
       )}
     </div>
   );
-}
+});

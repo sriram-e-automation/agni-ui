@@ -39,7 +39,7 @@ export interface RadarChartProps {
   empty?: React.ReactNode;
 }
 /** Polar radar/spider chart — multi-series, hover-to-highlight, toggle legend.
- *  @version 1.0.0
+ *  @version 1.1.0
   * States: loading · error · empty.
 */
-export declare function RadarChart(props: RadarChartProps): JSX.Element;
+export declare const RadarChart: React.ForwardRefExoticComponent<RadarChartProps & React.RefAttributes<HTMLElement>>;

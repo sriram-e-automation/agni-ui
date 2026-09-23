@@ -3,9 +3,9 @@
  * (no .d.ts, no specimen card). Import the public component instead.
  */
 import React from "react";
-import { Modal } from "../feedback/Modal.tsx";
-import { Button } from "../core/Button.tsx";
-import { REQUEST_FORM_DEFAULTS } from "./RequestForm.tsx";
+import { Modal } from "../../feedback/Modal/Modal.tsx";
+import { Button } from "../../primitives/Button/Button.tsx";
+import { REQUEST_FORM_DEFAULTS } from "../RecordForm/RequestForm.tsx";
 
 export interface SubmitConfirmModalProps {
   /** The submitted record ({ id, ...RequestFormValue }); null hides the modal. */
@@ -27,7 +27,7 @@ export interface SubmitConfirmModalProps {
  * stays an inline animation: it references keyframes this component ships in
  * its own <style>, the same exemption CommandPalette's entrance has.
  */
-export function SubmitConfirmModal({ data, onClose, onView, options }: SubmitConfirmModalProps) {
+export const SubmitConfirmModal = React.forwardRef<HTMLElement, SubmitConfirmModalProps>(function SubmitConfirmModal({ data, onClose, onView, options }, ref) {
   if (!data) return null;
   const o = { ...REQUEST_FORM_DEFAULTS, ...options };
   const typeLabel = (o.types.find((t) => t.value === data.reqType) || {}).label;
@@ -36,7 +36,7 @@ export function SubmitConfirmModal({ data, onClose, onView, options }: SubmitCon
   const person = o.people.find((p) => p.id === data.assignee);
   const Row = ({ k, v }) => <><span className="text-xs text-fg-tertiary">{k}</span><span className="text-sm text-fg-primary font-medium text-right">{v}</span></>;
   return (
-    <Modal open={!!data} onClose={onClose} title={null} size="sm"
+    <Modal ref={ref as never} open={!!data} onClose={onClose} title={null} size="sm"
       footer={<>
         <Button category="secondary" onClick={onClose}>Done</Button>
         <Button category="primary" icon={<i className="ph ph-arrow-right" />} onClick={onView}>View request</Button>
@@ -62,4 +62,4 @@ export function SubmitConfirmModal({ data, onClose, onView, options }: SubmitCon
       </div>
     </Modal>
   );
-}
+});

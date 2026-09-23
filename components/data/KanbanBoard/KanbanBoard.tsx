@@ -1,7 +1,8 @@
 import React from "react";
-import { KanbanCard } from "./KanbanCard.tsx";
-import { EmptyState } from "../feedback/EmptyState.tsx";
-import { ErrorState } from "../feedback/ErrorState.tsx";
+import { mergeRefs } from "../../utils/interaction.tsx";
+import { KanbanCard } from "../RecordCard/KanbanCard.tsx";
+import { EmptyState } from "../../feedback/EmptyState/EmptyState.tsx";
+import { ErrorState } from "../../feedback/ErrorState/ErrorState.tsx";
 
 export interface KanbanPerson { id: string; name: string; team?: string; }
 export interface KanbanBoardProps {
@@ -45,9 +46,9 @@ const DEFAULT_TONES = { "Approvals": "approvals", "Yet to start": "todo", "In pr
  * region sized so `visibleLanes` lanes fill the width. Renders DS KanbanCard
  * per card by default; the host owns data + filtering.
  */
-export function KanbanBoard({ columns = [], board = {}, assignees = [], dark = false, onView, onApprove, onReject, toneMap, visibleLanes = 4, renderCard, loading = false, loadingCards = 3, empty, error = null, laneErrors, onRetry }: KanbanBoardProps) {
+export const KanbanBoard = React.forwardRef<HTMLDivElement, KanbanBoardProps>(function KanbanBoard({ columns = [], board = {}, assignees = [], dark = false, onView, onApprove, onReject, toneMap, visibleLanes = 4, renderCard, loading = false, loadingCards = 3, empty, error = null, laneErrors, onRetry }, ref) {
   /* Theming reads the nearest [data-theme] ancestor; `dark` is the override. */
-  const rootRef = React.useRef(null);
+  const rootRef = React.useRef<HTMLDivElement>(null);
   const [autoDark, setAutoDark] = React.useState(false);
   React.useEffect(() => {
     const el = rootRef.current;
@@ -61,7 +62,7 @@ export function KanbanBoard({ columns = [], board = {}, assignees = [], dark = f
   const gapCount = (visibleLanes - 1) * 12;
 
   if (error) return (
-    <div className="flex-1 min-h-0 min-w-0 grid place-items-center">
+    <div ref={ref as never} className="flex-1 min-h-0 min-w-0 grid place-items-center">
       {typeof error === "string" || error === true
         ? <ErrorState message={error === true ? undefined : error} onRetry={onRetry ? () => onRetry() : undefined} />
         : error}
@@ -96,7 +97,7 @@ export function KanbanBoard({ columns = [], board = {}, assignees = [], dark = f
   };
 
   return (
-    <div ref={rootRef} className="flex-1 min-h-0 min-w-0 flex flex-col">
+    <div ref={mergeRefs(ref, rootRef)} className="flex-1 min-h-0 min-w-0 flex flex-col">
       <div style={{ flex: 1, minHeight: 0, overflowX: "auto", overflowY: "hidden", display: "grid", gridAutoFlow: "column", gridAutoColumns: `minmax(300px, calc((100% - ${gapCount}px) / ${visibleLanes}))`, gap: "var(--pane-gap)", paddingBottom: "var(--space-2)" }}>
         {columns.map(col => { const t = tone(col); const cards = board[col] || []; const laneErr = laneErrors ? laneErrors[col] : null; return (
           <div key={col} className="flex flex-col min-h-0 h-full border border-line-subtle rounded-lg">
@@ -126,4 +127,4 @@ export function KanbanBoard({ columns = [], board = {}, assignees = [], dark = f
       {loading && <style>{`@keyframes agni-shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}`}</style>}
     </div>
   );
-}
+});

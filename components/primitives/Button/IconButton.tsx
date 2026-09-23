@@ -2,11 +2,13 @@
  * @internal Renderer behind the public <Button> — not part of the documented API
  * (no .d.ts, no specimen card). Import the public component instead.
  */
-import React from "react";
-import { TipBubble, useTip } from "../feedback/Tooltip.tsx";
+import React, { forwardRef } from "react";
+import { TipBubble, useTip } from "../../feedback/Tooltip/Tooltip.tsx";
+import { composeHandlers } from "../../utils/interaction.tsx";
 
 /* ── Types (mirrored in IconButton.d.ts) ── */
-export interface IconButtonProps {
+export interface IconButtonProps
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "title" | "children"> {
   icon: React.ReactNode;
   /** @default "ghost" */
   variant?: "solid" | "outline" | "ghost";
@@ -21,7 +23,6 @@ export interface IconButtonProps {
   title?: string;
   /** Tooltip side. @default "bottom" */
   tooltipSide?: "top" | "bottom" | "left" | "right";
-  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   style?: React.CSSProperties;
   className?: string;
 }
@@ -69,7 +70,7 @@ const BASE =
   "enabled:active:press-icon outline-none focus-visible:focus-ring " +
   "disabled:cursor-not-allowed disabled:opacity-[var(--state-disabled-opacity)]";
 
-export function IconButton({
+export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(function IconButton({
   icon,
   variant = "ghost",      // solid | outline | ghost
   size = "md",            // sm | md | lg
@@ -78,11 +79,12 @@ export function IconButton({
   disabled = false,
   title,
   tooltipSide = "bottom",
-  onClick,
+  onClick, onMouseEnter, onMouseLeave, onMouseDown, onFocus, onBlur, onKeyDown,
+  type = "button",
   style = {},
   className = "",
   ...rest
-}: IconButtonProps) {
+}, ref) {
   const tip = useTip(300);
   const hasTip = !!title && !disabled;
 
@@ -96,19 +98,26 @@ export function IconButton({
 
   return (
     <button
-      type="button" aria-label={title} aria-pressed={active || undefined} disabled={disabled}
+      {...rest}
+      ref={ref}
+      type={type}
+      /* The title is the accessible NAME of an icon-only control, so the bubble
+         is aria-hidden rather than a second announcement of the same words. */
+      aria-label={rest["aria-label"] ?? title}
+      aria-pressed={rest["aria-pressed"] ?? (active || undefined)}
+      disabled={disabled}
       className={cls}
       style={style}
-      onClick={(e) => { tip.bind.onClick(); onClick && onClick(e); }}
-      onMouseEnter={() => { if (hasTip) tip.bind.onMouseEnter(); }}
-      onMouseLeave={() => { if (hasTip) tip.bind.onMouseLeave(); }}
-      onMouseDown={() => { if (hasTip) tip.bind.onMouseDown(); }}
-      onFocus={() => { if (hasTip) tip.bind.onFocus(); }}
-      onBlur={() => { if (hasTip) tip.bind.onBlur(); }}
-      {...rest}
+      onClick={composeHandlers(onClick, () => tip.bind.onClick())}
+      onMouseEnter={composeHandlers(onMouseEnter, () => { if (hasTip) tip.bind.onMouseEnter(); })}
+      onMouseLeave={composeHandlers(onMouseLeave, () => { if (hasTip) tip.bind.onMouseLeave(); })}
+      onMouseDown={composeHandlers(onMouseDown, () => { if (hasTip) tip.bind.onMouseDown(); })}
+      onFocus={composeHandlers(onFocus, () => { if (hasTip) tip.bind.onFocus(); })}
+      onBlur={composeHandlers(onBlur, () => { if (hasTip) tip.bind.onBlur(); })}
+      onKeyDown={composeHandlers(onKeyDown, (e) => { if (e.key === "Escape" && tip.open) tip.bind.onBlur(); })}
     >
-      {icon}
-      {hasTip && tip.open && <TipBubble label={title} side={tooltipSide} />}
+      <span aria-hidden="true" className="inline-flex">{icon}</span>
+      {hasTip && tip.open && <TipBubble label={title} side={tooltipSide} decorative />}
     </button>
   );
-}
+});

@@ -19,13 +19,14 @@
               "components/charts/**",
               "components/chrome/**",
               "components/containment/**",
-              "components/core/**",
+              "components/primitives/**",
               "components/data/**",
               "components/feedback/**",
               "components/forms/**",
               "components/layout/**",
               "components/navigation/**",
               "components/workflow/**",
+              "components/utils/**",
               "doc-page.js"
             ],
             "message": "Import design-system components from 'index.js', not component internals."

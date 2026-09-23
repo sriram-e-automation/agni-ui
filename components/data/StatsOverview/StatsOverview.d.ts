@@ -1,8 +1,8 @@
 import * as React from "react";
-import { QuickStatItem } from "./QuickStats";
-import { ChartLegendEntry } from "../charts/ChartCard";
-import { DateRange } from "./DateRangeFilter";
-import { ActionSpec, ExportActionSpec } from "../core/actionSpec";
+import { QuickStatItem } from "../QuickStats/QuickStats";
+import { ChartLegendEntry } from "../../charts/ChartCard/ChartCard";
+import { DateRange } from "../DateRangeFilter/DateRangeFilter";
+import { ActionSpec, ExportActionSpec } from "../../utils/actionSpec";
 
 export interface StatsOverviewChart {
   key?: string;
@@ -69,6 +69,6 @@ export interface StatsOverviewProps {
  *
  * Variants: stats-only · charts-only · both · with/without heading row.
  * States: idle · filtered (a stat card selected) · loading · error · empty.
- * @version 1.0.0
+ * @version 1.1.0
  */
-export declare function StatsOverview(props: StatsOverviewProps): JSX.Element;
+export declare const StatsOverview: React.ForwardRefExoticComponent<StatsOverviewProps & React.RefAttributes<HTMLDivElement>>;

@@ -2,17 +2,34 @@
  * @internal Renderer behind the public <Tabs> — not part of the documented API
  * (no .d.ts, no specimen card). Import the public component instead.
  */
-import React from "react";
+import React, { forwardRef, useState } from "react";
+import { composeHandlers, useControllableState, useRovingFocus, useStableId } from "../../utils/interaction.tsx";
 
 /* ── Types (mirrored in Tabs.d.ts) ── */
-export interface TabItem { key: string; label: string; icon?: string; badge?: number; disabled?: boolean; }
-export interface TabsProps {
+export interface TabItem {
+  key: string;
+  label: string;
+  icon?: string;
+  badge?: number;
+  disabled?: boolean;
+  /** Tooltip while disabled. @default "Not available for your role" */
+  disabledReason?: string;
+}
+export interface TabsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "defaultValue"> {
   tabs?: TabItem[];
+  /** Controlled selected key. Omit (and use `defaultValue`) for uncontrolled. */
   value?: string;
+  defaultValue?: string;
   onChange?: (key: string) => void;
   /** @default "underline" */
   variant?: "underline" | "segmented";
   size?: "sm" | "md";
+  /** "automatic": arrows select as they move · "manual": arrows move, Enter/Space select. @default "automatic" */
+  activation?: "automatic" | "manual";
+  /** Id of the panel each tab controls — sets aria-controls. Implies tab semantics. */
+  getPanelId?: (key: string) => string;
+  /** ARIA pattern. Default: "tabs" for underline (or with getPanelId), "radio" for segmented. */
+  semantics?: "tabs" | "radio";
   style?: React.CSSProperties;
   className?: string;
 }
@@ -22,6 +39,12 @@ export interface TabsProps {
  * AgniUI · Tabs
  * Controlled tab strip. tabs: [{key,label,icon?,badge?}]. Two looks:
  * variant="underline" (page tabs) | "segmented" (filter toggle).
+ *
+ * Keyboard (roving focus — the strip is one Tab stop): ←/→ move, Home/End jump,
+ * disabled tabs are skipped. Page tabs are a WAI-ARIA tablist (tab ids are
+ * `${id}-tab-${key}`; pair with `getPanelId` for aria-controls); the
+ * segmented filter toggle is a radio group, since it switches a view rather
+ * than revealing a panel.
  *
  * Tailwind v4 (migrated Aug 2026, tranche 3). The underline variant's
  * onMouseEnter/Leave pair is gone; hover lives on the INACTIVE class block only,
@@ -62,32 +85,71 @@ const UL_BADGE = "text-2xs font-data font-semibold px-1 py-px rounded-full";
 const UL_BADGE_ON = "bg-surface-brand-soft text-fg-brand";
 const UL_BADGE_OFF = "bg-surface-sunken text-fg-tertiary";
 
-export function TabsStrip({
+export const TabsStrip = forwardRef<HTMLDivElement, TabsProps>(function TabsStrip({
   tabs = [],
   value,
+  defaultValue,
   onChange,
   variant = "underline",   // underline | segmented
   size = "md",
+  activation = "automatic",
+  getPanelId,
+  semantics,
+  id,
+  onKeyDown,
   style = {},
   className = "",
-}: TabsProps) {
+  ...rest
+}, ref) {
   const fs = FONT[size] || FONT.md;
   const seg = variant === "segmented";
+  const base = useStableId(id, "agni-tabs");
+  const asTabs = (semantics ?? (seg && !getPanelId ? "radio" : "tabs")) === "tabs";
+  const [selected, select] = useControllableState<string | undefined>({ value, defaultValue: defaultValue ?? tabs.find((t) => !t.disabled)?.key, onChange: (k) => { if (k !== undefined) onChange?.(k); } });
+  const selIdx = tabs.findIndex((t) => t.key === selected);
+  const [focusIdx, setFocusIdx] = useState(selIdx);
+  const manual = asTabs && activation === "manual";
+  const roving = useRovingFocus({
+    count: tabs.length,
+    current: manual ? (focusIdx >= 0 ? focusIdx : selIdx) : selIdx,
+    orientation: "horizontal",
+    isDisabled: (i) => !!tabs[i]?.disabled,
+    onMove: (i) => { setFocusIdx(i); if (!manual) select(tabs[i].key); },
+  });
 
   return (
-    <div className={[seg ? SEG_TRACK : UL_TRACK, className].join(" ")} style={style}>
-      {tabs.map((t) => {
-        const on = value === t.key;
+    <div
+      {...rest}
+      ref={ref}
+      id={id}
+      role={asTabs ? "tablist" : "radiogroup"}
+      aria-orientation={asTabs ? "horizontal" : undefined}
+      onKeyDown={composeHandlers(onKeyDown, roving.onKeyDown)}
+      className={[seg ? SEG_TRACK : UL_TRACK, className].join(" ")}
+      style={style}
+    >
+      {tabs.map((t, i) => {
+        const on = selected === t.key;
         const dis = !!t.disabled;
         const state = dis
           ? (seg ? SEG_DISABLED : UL_DISABLED)
           : on ? (seg ? SEG_ON : UL_ON) : (seg ? SEG_OFF : UL_OFF);
+        const { ref: itemRef, tabIndex } = roving.getItemProps(i);
         return (
-          <button key={t.key} type="button" disabled={dis}
-            title={dis ? "Not available for your role" : undefined}
-            onClick={() => !dis && onChange && onChange(t.key)}
+          <button key={t.key} ref={itemRef} tabIndex={tabIndex} type="button"
+            id={`${base}-tab-${t.key}`}
+            role={asTabs ? "tab" : "radio"}
+            aria-selected={asTabs ? on : undefined}
+            aria-checked={asTabs ? undefined : on}
+            aria-controls={asTabs && getPanelId ? getPanelId(t.key) : undefined}
+            aria-disabled={dis || undefined}
+            /* aria-disabled rather than disabled: a disabled tab stays discoverable
+               (and keeps its reason tooltip) — roving focus skips it. */
+            title={dis ? (t.disabledReason ?? "Not available for your role") : undefined}
+            onClick={() => { if (!dis) { setFocusIdx(i); select(t.key); } }}
+            onKeyDown={(e) => { if (manual && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); if (!dis) select(t.key); } }}
             className={[seg ? SEG_BASE : UL_BASE, fs, state].join(" ")}>
-            {t.icon && <i className={["ph", t.icon, "text-[16px]"].join(" ")} />}
+            {t.icon && <i aria-hidden="true" className={["ph", t.icon, "text-[16px]"].join(" ")} />}
             {t.label}
             {t.badge != null && (
               <span className={[
@@ -100,4 +162,9 @@ export function TabsStrip({
       })}
     </div>
   );
+});
+
+/** Props for the panel a tab controls: `<div {...tabPanelProps(tabsId, key)}>`. */
+export function tabPanelProps(tabsId: string, key: string) {
+  return { id: `${tabsId}-panel-${key}`, role: "tabpanel" as const, "aria-labelledby": `${tabsId}-tab-${key}`, tabIndex: 0 };
 }

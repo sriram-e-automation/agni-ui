@@ -1,7 +1,8 @@
-import React, { useRef, useEffect } from "react";
-import { Theme } from "./Theme.tsx";
-import { Switch } from "../forms/Switch.tsx";
-import { Tooltip } from "../feedback/Tooltip.tsx";
+import React, { forwardRef, useRef, useEffect } from "react";
+import { mergeRefs, useFocusTrap, useStableId } from "../../utils/interaction.tsx";
+import { Theme } from "../../utils/Theme.tsx";
+import { Switch } from "../../primitives/Switch/Switch.tsx";
+import { Tooltip } from "../../feedback/Tooltip/Tooltip.tsx";
 
 /* ── Types (mirrored in SettingsMenu.d.ts) ── */
 export interface SettingsMenuProps {
@@ -57,7 +58,7 @@ const WALL_ON = "border-2 border-action-brand [box-shadow:0_0_0_2px_var(--surfac
 const WALL_OFF = "border border-line-default shadow-e-xs";
 const WALL_TICK = "absolute right-[3px] bottom-[3px] size-[16px] rounded-full bg-action-brand text-fg-on-brand inline-flex items-center justify-center";
 
-export function SettingsMenu({
+export const SettingsMenu = forwardRef<HTMLDivElement, SettingsMenuProps>(function SettingsMenu({
   dark = false,
   onDarkChange,
   accent = "forest",
@@ -70,19 +71,23 @@ export function SettingsMenu({
   scaleOptions = [{ key: "sm", label: "S" }, { key: "md", label: "M" }, { key: "lg", label: "L" }, { key: "xl", label: "XL" }],
   onClose,
   style = {},
-}: SettingsMenuProps) {
-  const ref = useRef(null);
+}, fwd) {
+  const ref = useRef<HTMLDivElement>(null);
+  const base = useStableId(null, "agni-settings");
+  /* Non-modal popover dialog: focus in on open, back to the gear on close. */
+  useFocusTrap(ref, true);
   useEffect(() => {
-    const h = (e) => { if (ref.current && !ref.current.contains(e.target)) onClose && onClose(); };
-    const k = (e) => { if (e.key === "Escape") onClose && onClose(); };
+    const h = (e: MouseEvent) => { if (ref.current && !ref.current.contains(e.target as Node)) onClose && onClose(); };
     document.addEventListener("mousedown", h);
-    document.addEventListener("keydown", k);
-    return () => { document.removeEventListener("mousedown", h); document.removeEventListener("keydown", k); };
+    return () => { document.removeEventListener("mousedown", h); };
   }, [onClose]);
 
   return (
     <div
-      ref={ref}
+      ref={mergeRefs(fwd, ref)}
+      role="dialog"
+      aria-label="Settings"
+      onKeyDown={(e) => { if (e.key === "Escape") { e.stopPropagation(); onClose && onClose(); } }}
       className={MENU}
       /* Transform-only pop. Visibility must NOT depend on the animation reaching
          its end frame — if the animation engine stalls (play-pending in a
@@ -94,11 +99,11 @@ export function SettingsMenu({
 
       {/* Dark mode row */}
       <div className="flex items-center justify-between p-2 rounded-md">
-        <span className={ROW_LABEL}>
-          <i className={[dark ? "ph ph-moon-stars" : "ph ph-sun", "text-[18px] text-fg-secondary"].join(" ")} />
+        <span id={base + "-dark"} className={ROW_LABEL}>
+          <i aria-hidden="true" className={[dark ? "ph ph-moon-stars" : "ph ph-sun", "text-[18px] text-fg-secondary"].join(" ")} />
           Dark mode
         </span>
-        <Switch checked={dark} onChange={onDarkChange} size="sm" />
+        <Switch checked={dark} onChange={onDarkChange} size="sm" aria-labelledby={base + "-dark"} />
       </div>
 
       {/* Display size — fractional scale rungs. Sets data-scale on the app root. */}
@@ -178,4 +183,4 @@ export function SettingsMenu({
       <style>{`@keyframes agni-pop-in { from { transform: translateY(-6px) scale(0.98); } to { transform: translateY(0) scale(1); } }`}</style>
     </div>
   );
-}
+});

@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { forwardRef, useEffect, useMemo, useRef, useState } from "react";
+import { mergeRefs, scrollIntoViewIfNeeded, useFocusTrap, useListNavigation, useStableId } from "../../utils/interaction.tsx";
 
 /* ── Types (mirrored in CommandPalette.d.ts) ── */
 export interface Command { id?: string; label: string; icon?: string; group?: string; hint?: string; onRun?: () => void; disabled?: boolean; }
@@ -8,6 +9,11 @@ export interface CommandPaletteProps {
   commands?: Command[];
   placeholder?: string;
   loading?: boolean;
+  /** Accessible name of the dialog. @default "Command palette" */
+  label?: string;
+  id?: string;
+  /** Receives the query as the user types (e.g. to fetch remote commands). */
+  onQueryChange?: (q: string) => void;
 }
 /** ⌘K command launcher overlay with keyboard nav. */
 
@@ -15,6 +21,12 @@ export interface CommandPaletteProps {
  * AgniUI · CommandPalette
  * ⌘K-style command launcher. commands: [{id,label,icon?,group?,hint?,onRun}].
  * Filtered as you type; ↑/↓ to move, Enter to run, Esc to close.
+ *
+ * A modal dialog (aria-modal, focus trapped, focus returned to the opener on
+ * close) holding a combobox + listbox: the search box keeps focus and points at
+ * the highlighted command with aria-activedescendant. ↑/↓ PageUp/PageDown move
+ * (wrapping), disabled commands are skipped, Home/End stay with the text box.
+ * The ref is the dialog panel.
  *
  * Tailwind v4 (migrated Aug 2026, tranche 3). The `active` row index stays in
  * React state — it is shared by the pointer and the keyboard, so it cannot
@@ -55,63 +67,76 @@ const ROW_DISABLED = "bg-transparent text-fg-disabled cursor-not-allowed opacity
 const ROW_LABEL = "flex-1 min-w-0 text-sm font-medium";
 const ROW_GROUP = "text-2xs text-fg-tertiary uppercase tracking-wide";
 
-export function CommandPalette({ open = false, onClose, commands = [], placeholder = "Type a command or search…", loading = false }: CommandPaletteProps) {
+export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(function CommandPalette(
+  { open = false, onClose, commands = [], placeholder = "Type a command or search…", loading = false, label = "Command palette", id, onQueryChange },
+  ref,
+) {
   const [q, setQ] = useState("");
-  const [active, setActive] = useState(0);
+  const base = useStableId(id, "agni-cmdk");
+  const listId = base + "-list";
+  const optId = (i: number) => `${base}-opt-${i}`;
+  const panel = useRef<HTMLDivElement>(null);
+  const input = useRef<HTMLInputElement>(null);
 
   const filtered = useMemo(() => {
     const ql = q.trim().toLowerCase();
     return commands.filter((c) => !ql || c.label.toLowerCase().includes(ql) || (c.group || "").toLowerCase().includes(ql));
   }, [q, commands]);
+  const nav = useListNavigation({ items: filtered, isDisabled: (c) => !!c.disabled, typeahead: false });
 
-  useEffect(() => { if (open) { setQ(""); setActive(0); } }, [open]);
-  useEffect(() => { setActive(0); }, [q]);
-  useEffect(() => {
-    if (!open) return;
-    const k = (e) => {
-      if (e.key === "Escape") onClose && onClose();
-      else if (e.key === "ArrowDown") { e.preventDefault(); setActive((a) => Math.min(a + 1, filtered.length - 1)); }
-      else if (e.key === "ArrowUp") { e.preventDefault(); setActive((a) => Math.max(a - 1, 0)); }
-      else if (e.key === "Enter") { const c = filtered[active]; if (c && !c.disabled) { c.onRun && c.onRun(); onClose && onClose(); } }
-    };
-    document.addEventListener("keydown", k);
-    return () => document.removeEventListener("keydown", k);
-  }, [open, filtered, active, onClose]);
+  useFocusTrap(panel, open, { initialFocus: input });
+  useEffect(() => { if (open) { setQ(""); nav.focusEdge("first"); } }, [open]); // eslint-disable-line
+  useEffect(() => { nav.focusEdge("first"); }, [q, filtered.length]); // eslint-disable-line
+  useEffect(() => { if (nav.activeIndex >= 0) scrollIntoViewIfNeeded(document.getElementById(optId(nav.activeIndex))); }, [nav.activeIndex]); // eslint-disable-line
 
   if (!open) return null;
+
+  const run = (c: Command | undefined) => { if (c && !c.disabled) { c.onRun && c.onRun(); onClose && onClose(); } };
+  const onKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); onClose && onClose(); return; }
+    if (e.key === "Enter") { e.preventDefault(); run(filtered[nav.activeIndex]); return; }
+    /* Home/End belong to the text box (caret), so only vertical keys navigate. */
+    if (["ArrowDown", "ArrowUp", "PageDown", "PageUp"].includes(e.key)) nav.onNavigate(e);
+  };
+  const activeId = nav.activeIndex >= 0 && !loading ? optId(nav.activeIndex) : undefined;
 
   return (
     <div onClick={onClose} className={SCRIM}
       style={{ animation: "agni-fade-in var(--dur-fast) var(--ease-standard)" }}>
-      <div onClick={(e) => e.stopPropagation()} className={PANEL}
+      <div ref={mergeRefs(ref, panel)} onClick={(e) => e.stopPropagation()} className={PANEL}
+        id={base} role="dialog" aria-modal="true" aria-label={label}
         style={{ animation: "agni-scale-pop var(--dur-normal) var(--ease-spring)" }}>
         <div className={SEARCH_ROW}>
-          <i className="ph ph-magnifying-glass text-[19px] text-fg-tertiary" />
-          <input autoFocus value={q} onChange={(e) => setQ(e.target.value)} placeholder={placeholder} className={FIELD} />
-          <kbd className={KBD}>ESC</kbd>
+          <i aria-hidden="true" className="ph ph-magnifying-glass text-[19px] text-fg-tertiary" />
+          <input ref={input} value={q} onChange={(e) => { setQ(e.target.value); onQueryChange?.(e.target.value); }} placeholder={placeholder} className={FIELD}
+            role="combobox" aria-label={placeholder} aria-expanded="true" aria-controls={listId}
+            aria-autocomplete="list" aria-activedescendant={activeId} autoComplete="off" spellCheck={false}
+            onKeyDown={onKey} />
+          <kbd aria-hidden="true" className={KBD}>ESC</kbd>
         </div>
-        <div className={LIST}>
+        <div id={listId} role="listbox" aria-label={label} aria-busy={loading || undefined} className={LIST}>
           {loading && (
-            <div className={LOADING_ROW}>
-              <span className={SPINNER} style={{ animation: "agni-spin .7s linear infinite" }} />
+            <div role="status" className={LOADING_ROW}>
+              <span aria-hidden="true" className={SPINNER} style={{ animation: "agni-spin .7s linear infinite" }} />
               Loading commands…
             </div>
           )}
-          {!loading && filtered.length === 0 && <div className={MSG}>No commands match “{q}”</div>}
+          {!loading && filtered.length === 0 && <div role="status" className={MSG}>No commands match “{q}”</div>}
           {!loading && filtered.map((c, i) => (
-            <button key={c.id || i} type="button" disabled={c.disabled}
-              onClick={() => { if (c.disabled) return; c.onRun && c.onRun(); onClose && onClose(); }}
-              onMouseEnter={() => !c.disabled && setActive(i)}
-              className={[ROW, c.disabled ? ROW_DISABLED : i === active ? ROW_ACTIVE : ROW_IDLE].join(" ")}>
-              <i className={["ph", c.icon || "ph-arrow-right", "text-[18px] shrink-0"].join(" ")} />
+            <div key={c.id || i} id={optId(i)} role="option" aria-selected={i === nav.activeIndex} aria-disabled={c.disabled || undefined}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => run(c)}
+              onMouseEnter={() => !c.disabled && nav.setActiveIndex(i)}
+              className={[ROW, c.disabled ? ROW_DISABLED : i === nav.activeIndex ? ROW_ACTIVE : ROW_IDLE].join(" ")}>
+              <i aria-hidden="true" className={["ph", c.icon || "ph-arrow-right", "text-[18px] shrink-0"].join(" ")} />
               <span className={ROW_LABEL}>{c.label}</span>
               {c.group && <span className={ROW_GROUP}>{c.group}</span>}
               {c.hint && <kbd className={KBD_HINT}>{c.hint}</kbd>}
-            </button>
+            </div>
           ))}
         </div>
       </div>
       <style>{`@keyframes agni-fade-in{from{opacity:0}}@keyframes agni-scale-pop{from{opacity:0;transform:scale(.97) translateY(-6px)}}@keyframes agni-spin{to{transform:rotate(360deg)}}`}</style>
     </div>
   );
-}
+});
