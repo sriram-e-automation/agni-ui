@@ -7,7 +7,7 @@ versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 **Two levels of version live in this repo and they mean different things.**
 
-- **Package version** — the number consumers install (`@sriram-e-automation/agni-ui@1.0.0`). One number for the whole library. It is what this file logs.
+- **Package version** — the number consumers install (`@agnikul/agniui@1.0.0`). One number for the whole library. It is what this file logs.
 - **Component version** — the `@version` tag in each `<Name>.d.ts`. It answers "has *this* component's contract changed since I last read its card?" without diffing the whole release. Every component starts at `1.0.0`.
 
 Bump rules are identical at both levels:
@@ -79,7 +79,7 @@ Fourteen deliberate exemptions, not backlog: `charts` and `GanttTimeline` (runti
 ### Process
 
 - `@version` on every component contract; `CHANGELOG.md`; `CONTRIBUTING.md` (bump table, changeset format, four-check review gate, three-release retirement sequence); `guidelines/rules/versioning.card.html`.
-- `PACKAGING.md` — the path to a git repo and a registry as `@sriram-e-automation/agni-ui`.
+- `PACKAGING.md` — the path to a git repo and a registry as `@agnikul/agniui`.
 
 ### Known open items
 

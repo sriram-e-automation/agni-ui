@@ -25,8 +25,13 @@ The concepts behind all of this — registries, scopes, why GitHub Packages — 
 ## Step 1 — assemble the tree locally
 
 ```bash
+<<<<<<< HEAD
 git clone git@github.com:sriram-e-automation/agni-ui.git
 cd agni-ui
+=======
+git clone https://github.com/yashAGNIKUL/AgniUI.git
+cd AgniUI
+>>>>>>> 28b2ee8 (Initial commit of existing code)
 ```
 
 Copy from this design-system project into the clone:
@@ -81,20 +86,29 @@ npm run build
 NODE_AUTH_TOKEN=<your PAT with write:packages> npm publish
 ```
 
+<<<<<<< HEAD
 From then on you never run `npm publish` again — the bot does it. Verify at **github.com/sriram-e-automation/agni-ui → Packages**.
+=======
+From then on you never run `npm publish` again — the bot does it. Verify at **github.com/yashAGNIKUL/AgniUI → Packages**.
+>>>>>>> 28b2ee8 (Initial commit of existing code)
 
 ## Step 5 — install it in the ERP app
 
 `.npmrc` at the app root:
 
 ```
+<<<<<<< HEAD
 @sriram-e-automation:registry=https://npm.pkg.github.com
+=======
+@agnikul:registry=https://npm.pkg.github.com
+>>>>>>> 28b2ee8 (Initial commit of existing code)
 //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
 ```
 
 `GITHUB_TOKEN` is a classic personal access token with the single scope `read:packages`, in each developer's shell profile. The `${…}` form reads from the environment, so that file is safe to commit — a literal token is not.
 
 ```bash
+<<<<<<< HEAD
 npm i @sriram-e-automation/agni-ui
 ```
 
@@ -102,10 +116,20 @@ npm i @sriram-e-automation/agni-ui
 import "@sriram-e-automation/agni-ui/styles.css";   // the token closure
 import "@sriram-e-automation/agni-ui/agniui.css";   // the prebuilt utilities
 import { RecordTable, PageTitleBar } from "@sriram-e-automation/agni-ui";
+=======
+npm i @agnikul/agniui
+```
+
+```tsx
+import "@agnikul/agniui/styles.css";   // the token closure
+import "@agnikul/agniui/agniui.css";   // the prebuilt utilities
+import { RecordTable, PageTitleBar } from "@agnikul/agniui";
+>>>>>>> 28b2ee8 (Initial commit of existing code)
 ```
 
 ---
 
+<<<<<<< HEAD
 ## Scope — already settled
 
 The repo lives under the personal account `sriram-e-automation`, and the package scope matches it exactly: `@sriram-e-automation/agni-ui`. No org needed — GitHub Packages ties the scope to whichever account (user or org) owns the repo. `package.json` in this scaffold is already set to that name; nothing to decide before the first publish.
@@ -113,4 +137,18 @@ The repo lives under the personal account `sriram-e-automation`, and the package
 ## After it's live
 
 - **A `canary` tag for risky work** — `npx changeset publish --tag canary` publishes without moving `latest`, so an app can opt in with `npm i @sriram-e-automation/agni-ui@canary`.
+=======
+## One thing to decide now, not later
+
+**The package scope must match the GitHub org login exactly.** The repo lives under `yashAGNIKUL`, a personal account, so as written the package would have to be `@yashagnikul/agniui`. `package.json` says `@agnikul/agniui`, which assumes an **organisation** named `agnikul`.
+
+Pick one before the first publish — renaming afterwards means every consuming app changes its imports:
+
+- **Create the `agnikul` org** and transfer the repo into it. Recommended: the package is company infrastructure, and an org survives people leaving.
+- Or change `name` to `@yashagnikul/agniui` and the `@agnikul:registry` line in every consumer's `.npmrc` to match.
+
+## After it's live
+
+- **A `canary` tag for risky work** — `npx changeset publish --tag canary` publishes without moving `latest`, so an app can opt in with `npm i @agnikul/agniui@canary`.
+>>>>>>> 28b2ee8 (Initial commit of existing code)
 - **Keep the two in sync.** This project is where components are designed and their cards live; the repo is where they ship. Whichever you edit, the other follows in the same change — a component that exists in one and not the other is the exact failure this setup exists to prevent.

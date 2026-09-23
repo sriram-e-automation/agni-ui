@@ -219,11 +219,19 @@ How copy is written across AgniUI desks (derived from the reference app):
 
 Two levels of version live in this repo and they answer different questions:
 
+<<<<<<< HEAD
 - **Package version** — the number consumers install (`@sriram-e-automation/agni-ui@1.0.0`). One number for the whole library, logged in `CHANGELOG.md`.
+=======
+- **Package version** — the number consumers install (`@agnikul/agniui@1.0.0`). One number for the whole library, logged in `CHANGELOG.md`.
+>>>>>>> 28b2ee8 (Initial commit of existing code)
 - **Component version** — the `@version` tag in each `<Name>.d.ts`. Answers "has *this* component's contract changed since I last read its card?" without diffing a whole release.
 
 Bump rules are identical at both levels. **Major:** a prop removed or renamed, *a default changed*, a component renamed or retired, a token deleted. **Minor:** a prop, variant, state, component or token added. **Patch:** a visual fix inside the existing contract, docs, a class swap with no visual delta. A component major forces at least a package minor.
 
 The procedure — what to check before changing anything, how to write the changeset, the four-check review gate (`.d.ts` matches `.tsx` · the card *shows* the new state · the changeset says what a consumer must do · the readme names the component), and the three-release retirement sequence — is in **`CONTRIBUTING.md`**, with the at-the-keyboard summary on `guidelines/rules/versioning.card.html`.
 
+<<<<<<< HEAD
 Getting the system into a git repo and onto a registry as `@sriram-e-automation/agni-ui` — registries and scopes explained from scratch, the repo layout, `package.json`, the GitHub Actions release workflow, and how a consuming app installs it — is in **`PACKAGING.md`**.
+=======
+Getting the system into a git repo and onto a registry as `@agnikul/agniui` — registries and scopes explained from scratch, the repo layout, `package.json`, the GitHub Actions release workflow, and how a consuming app installs it — is in **`PACKAGING.md`**.
+>>>>>>> 28b2ee8 (Initial commit of existing code)

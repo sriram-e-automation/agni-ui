@@ -55,7 +55,7 @@ One file per change, in `.changeset/`, named after the change (`record-table.md`
 
 ```md
 ---
-"@sriram-e-automation/agni-ui": minor
+"@agnikul/agniui": minor
 ---
 
 PageControls: added `exportAction`, `primaryAction` and `secondaryActions`.
